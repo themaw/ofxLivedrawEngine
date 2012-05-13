@@ -1,0 +1,8 @@
+<streams>
+	<stream address="http://134.84.229.45:5000/" name="ipcam0" type="ipcam" username="admin" password="powerful"/>
+	<!--
+	<stream address="http://134.84.229.45:5001/" name="ipcam1" type="ipcam" username="admin" password="powerful"/>
+	<stream address="http://134.84.229.45:5002/" name="ipcam2" type="ipcam" username="admin" password="powerful"/>
+	<stream address="http://134.84.229.45:5003/" name="ipcam3" type="ipcam" username="admin" password="powerful"/>
+	-->
+</streams>

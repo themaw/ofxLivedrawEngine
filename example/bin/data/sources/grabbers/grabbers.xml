@@ -1,0 +1,4 @@
+<grabbers>
+	<grabber id="9" width="320" height="240" name="USB Video Class Video - Built-in iSight"/>
+	<!--<grabber id="10" width="320" height="240" name="USB Webcam"/>-->
+</grabbers>
