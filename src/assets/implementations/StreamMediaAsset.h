@@ -19,10 +19,22 @@ public:
 		createCache();
 	}
 	~StreamMediaAsset() {}
+
+    void update();
+    
+    // base video
+    bool isFrameNew() {};
+	void close() {};
+    
+    // has pixels
+    unsigned char * getPixels() {};
+	ofPixels & getPixelsRef() {};
         
     void createCache();
-    void close() {};
 
+    // username
+    // password
+    
     
 	//ofxVideoStreamer streamer;
 };

@@ -10,12 +10,15 @@
 
 //--------------------------------------------------------------
 
-void VideoMediaAsset::createCache() {
+
+//void VideoMediaAsset::createCache() {
     // TODO: generate or load previews here
     
+    /*
     ofImage* of = new ofImage(); // this must be deleted by the owner!
     of->loadImage("application/cache/media/videos/default_video.png");
     imageCache.push_back(of);
+    */
     
-    ofLog(OF_LOG_VERBOSE, "Creating video cache");
-}
+//    ofLog(OF_LOG_VERBOSE, "Creating video cache");
+//}

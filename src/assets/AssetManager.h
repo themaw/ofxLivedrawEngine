@@ -20,13 +20,6 @@
 #include "StreamMediaAsset.h"
 #include "SyphonMediaAsset.h"
 #include "OscNodeListener.h"
-
-/*
-#include "GrabberSource.h"
-#include "VideoSource.h"    
-#include "ImageSource.h"
-#include "StreamSource.h"
-*/
  
 class AssetManager : public OscNodeListener {
 	
@@ -34,12 +27,10 @@ public:
 	
 	AssetManager();
 	virtual ~AssetManager();
-
     void setup();
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
 
-    
     
 	// this is for sources (videos)
 	//void getSourceInstance(BaseMediaSource* source);
@@ -55,11 +46,11 @@ public:
     
 	
 	void loadAssets();
-	
-	void loadImages();
+//	
+//	void loadImages();
 	void loadVideos();
-	void loadGrabbers();
-	void loadStreams();
+//	void loadGrabbers();
+//	void loadStreams();
 	
 	
 	int getNumImageAssets();
@@ -75,22 +66,22 @@ public:
     
 	// TODO: this is strange.  we should be able to open this without having it passed in
 	
-    ofVideoGrabber* getGrabberSource(GrabberMediaAsset* grabberAsset);
+    //ofVideoGrabber* getGrabberSource(GrabberMediaAsset* grabberAsset);
     
     
-    ImageMediaAsset* getImageAsset(string id);
+    //ImageMediaAsset* getImageAsset(string id);
     VideoMediaAsset* getVideoAsset(string id);
-    GrabberMediaAsset* getGrabberAsset(string id);
-    StreamMediaAsset* getStreamAsset(string id);
+    //GrabberMediaAsset* getGrabberAsset(string id);
+    //StreamMediaAsset* getStreamAsset(string id);
     
     bool hasId(string id);
     
 private:
 	
-	vector<ImageMediaAsset*> images;
+	//vector<ImageMediaAsset*> images;
 	vector<VideoMediaAsset*> videos ;
-	vector<GrabberMediaAsset*> grabbers;
-	vector<StreamMediaAsset*> streams;
+	//vector<GrabberMediaAsset*> grabbers;
+	//vector<StreamMediaAsset*> streams;
 
 	//vector<GrabberSource*> activeGrabberSources;
 	//vector<GrabberSource*> activeStreamingSource;

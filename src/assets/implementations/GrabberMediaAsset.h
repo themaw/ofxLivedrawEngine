@@ -25,8 +25,18 @@ public:
 	}
 	~GrabberMediaAsset() {}
 	
+    void update();
+    
+    // base video
+    bool isFrameNew() {};
+	void close() {};
+    
+    // has pixels
+    unsigned char * getPixels() {};
+	ofPixels & getPixelsRef() {};
+
+    
 	void createCache();	
-    void close() {};
     
     ofVideoGrabber* getVideoGrabber() {
         
@@ -40,7 +50,6 @@ public:
         }
         
         return &vidGrabber; // return a pointer to the ini
-    
     }
     
     

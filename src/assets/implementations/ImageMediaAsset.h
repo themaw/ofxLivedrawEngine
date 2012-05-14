@@ -22,8 +22,18 @@ public:
 		ofLog(OF_LOG_VERBOSE, "Image asset " + assetID + " being destroyed");
 	};
     
+    void update() {}
+    
+    // base video
+    bool isFrameNew() {};
+	void close() {};
+    
+    // has pixels
+    unsigned char * getPixels() {};
+	ofPixels & getPixelsRef() {};
+
+    
     void createCache();
-    void close() {};
 
 };
 

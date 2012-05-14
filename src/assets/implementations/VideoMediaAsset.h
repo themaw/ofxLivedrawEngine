@@ -16,13 +16,26 @@ class VideoMediaAsset : public BaseMediaAsset {
 public:
 	
 	VideoMediaAsset(string assetURI) : BaseMediaAsset(MEDIA_ASSET_VIDEO, assetURI) {
-		createCache();
+	//	createCache();
 	}
-	~VideoMediaAsset() {}
-	
-	void createCache();
-    void close() {};
+    
+	virtual ~VideoMediaAsset() {}
+    
+    // feed the buffers if needed
+    void update() {};
+    
+    // base video
+    bool isFrameNew() {};
+	void close() {};
 
-	
+    // has pixels
+    unsigned char * getPixels() {};
+	ofPixels & getPixelsRef() {};
+
+	//void createCache();
+protected:
+    
+	ofVideoPlayer player;
+
 };
 
