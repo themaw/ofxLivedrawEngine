@@ -197,7 +197,10 @@ void CanvasRenderer::setMsaa(bool _useMSAA) {
     }
 }
 
-
+//--------------------------------------------------------------
+void CanvasRenderer::resize(int w, int h) {
+    fbo.allocate(w,h);
+}
 
 
 

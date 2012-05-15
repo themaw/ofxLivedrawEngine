@@ -63,6 +63,8 @@ public:
         return &fbo;
     }
     
+    void resize(int w, int h);
+    
 private:
 	
 	// canvas group is a kind of canvas layer

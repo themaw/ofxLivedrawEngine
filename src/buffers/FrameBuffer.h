@@ -9,9 +9,16 @@
 #pragma once
 
 #include "ofMain.h"
+#include <set>
+#include "BaseMediaAsset.h"
 #include "ofxVideoBuffer.h"
 
-class FrameBuffer : public ofxVideoBuffer {
+enum FrameBufferType {
+    FRAMEBUFFER_DISK,
+    FRAMEBUFFER_RAM
+};
+
+class FrameBuffer {
 public:
     FrameBuffer(FrameBuffer& mom);
     FrameBuffer(int _bufferSize = 1);
@@ -20,9 +27,19 @@ public:
     string getId();
     void   setId(string bufferId);
     
+    void setSource(BaseMediaAsset* _source);
+    BaseMediaAsset* getSource();
+    bool hasSource();
+    
 protected:
     
+    
+    
+    BaseMediaAsset* source; // only one source at a time
+    
     string bufferId;
+    
+    FrameBufferType bufferType;
     
 private:
 

@@ -1,5 +1,5 @@
 //
-//  ofxLivedrawEngine.h
+//  Header.h
 //  ofxLivedrawEngineExample
 //
 //  Created by Christopher Baker on 5/13/12.
@@ -9,28 +9,33 @@
 #pragma once
 
 #include "ofMain.h"
+#include <set>
+#include "BaseMediaAsset.h"
+#include "ofxVideoBuffer.h"
+
+#include "ofMain.h"
 #include "AssetManager.h"
 #include "OscManager.h"
-#include "FrameBuffer.h"
+#include "Sampler.h"
 
-class BufferManager : public OscNodeListener {
+class SamplerManager : public OscNodeListener {
 public:
     
-    BufferManager();
-    virtual ~BufferManager();
+    SamplerManager();
+    virtual ~SamplerManager();
     
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
-
-    FrameBuffer* getNewVideoBuffer(int _bufferSize = 1);
+    
+    Sampler* getNewSampler();
     
     //int getTotalFramesBuffered();
     //int getTotalBytesBuffered();
     
 protected:
     AssetManager*   assetManager;
-
+    
 private:
-    vector<ofxVideoBuffer> buffers;
+    vector<Sampler> samplers;
     
 };

@@ -24,7 +24,6 @@ public:
     void gotMessage(ofMessage msg);		
 
 private:
-
     
     ofxLivedrawEngine livedraw;
   

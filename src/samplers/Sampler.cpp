@@ -6,44 +6,38 @@
 //  Copyright (c) 2012 School of the Art Institute of Chicago. All rights reserved.
 //
 
-#include "FrameBuffer.h"
-
+#include "Sampler.h"
 
 //--------------------------------------------------------------
-FrameBuffer::FrameBuffer(FrameBuffer& mom) {
-    source = NULL;   
+Sampler::Sampler() {
+    buffer = NULL;
 }
 
 //--------------------------------------------------------------
-FrameBuffer::FrameBuffer(int _bufferSize) {
-    source = NULL;
-}
-
-//--------------------------------------------------------------
-FrameBuffer::~FrameBuffer() {
+Sampler::~Sampler() {
     
 }
 
 //--------------------------------------------------------------
-string FrameBuffer::getId() {
-    return bufferId;
+string Sampler::getId() {
+    return samplerId;
 }
 //--------------------------------------------------------------
-void   FrameBuffer::setId(string _bufferId) {
-    bufferId = _bufferId;
-}
-
-//--------------------------------------------------------------
-void FrameBuffer::setSource(BaseMediaAsset* _source) {
-    source = _source;
+void   Sampler::setId(string _samplerId) {
+    samplerId = _samplerId;
 }
 
 //--------------------------------------------------------------
-BaseMediaAsset* FrameBuffer::getSource() {
-    return source;
+void Sampler::setBuffer(FrameBuffer* _buffer) {
+    buffer = _buffer;
 }
 
 //--------------------------------------------------------------
-bool FrameBuffer::hasSource() {
-    return source == NULL;
+FrameBuffer* Sampler::getBuffer() {
+    return buffer;
+}
+
+//--------------------------------------------------------------
+bool Sampler::hasBuffer() {
+    return buffer == NULL;
 }

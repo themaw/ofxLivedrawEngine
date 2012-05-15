@@ -3,14 +3,11 @@
 
 //--------------------------------------------------------------
 ofxLivedrawEngine::ofxLivedrawEngine() {
-    
 }
 
 //--------------------------------------------------------------
 ofxLivedrawEngine::~ofxLivedrawEngine() {
-    
 }
-
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::setup() {
@@ -27,7 +24,6 @@ void ofxLivedrawEngine::setup() {
     oscManager.addOscChild(&canvas);
     oscManager.addOscChild(&effectsManager); 
     oscManager.addOscChild(&sessionManager); 
-
 }
 
 //--------------------------------------------------------------
@@ -53,21 +49,19 @@ void ofxLivedrawEngine::update() {
 }
 
 void ofxLivedrawEngine::draw() {
-    
-    
     ofSetColor(255,0,0);
     ofFill();
     ofRect(0,0, 300,300);
     
-    
     canvas.render(); // accumulate everything onto the fbo.
-    
     // here is where we can do the transformations before projection
     canvas.draw();
-    
     // draw the gui
     guiManager.draw();
-    
     ofSetColor(255);
+}
 
+
+void ofxLivedrawEngine::windowResized(int w, int h) {
+    canvas.resize(w,h);
 }

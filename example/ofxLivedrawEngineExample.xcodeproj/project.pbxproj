@@ -23,9 +23,6 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		FD267402156067DE006323C7 /* ofxVideoBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD2673FB156067DE006323C7 /* ofxVideoBuffer.cpp */; };
-		FD267403156067DE006323C7 /* ofxVideoBufferLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD2673FD156067DE006323C7 /* ofxVideoBufferLoader.cpp */; };
-		FD267404156067DE006323C7 /* ofxVideoBufferPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD2673FF156067DE006323C7 /* ofxVideoBufferPlayer.cpp */; };
 		FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740D15607A6E006323C7 /* EffectsChain.cpp */; };
 		FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740F15607A6E006323C7 /* EffectsManager.cpp */; };
 		FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741415607A6E006323C7 /* CanvasGroup.cpp */; };
@@ -36,6 +33,8 @@
 		FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26742015607A6E006323C7 /* CanvasRenderer.cpp */; };
 		FD26743C15609400006323C7 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26743A15609400006323C7 /* BufferManager.cpp */; };
 		FD26743F15609670006323C7 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26743E15609670006323C7 /* FrameBuffer.cpp */; };
+		FD26744515609EBD006323C7 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26744115609EBD006323C7 /* Sampler.cpp */; };
+		FD26744615609EBD006323C7 /* SamplerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26744315609EBD006323C7 /* SamplerManager.cpp */; };
 		FD3F84C5156064BC0022CE42 /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F846C156064BC0022CE42 /* AssetManager.cpp */; };
 		FD3F84C6156064BC0022CE42 /* AssetMetaData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F846E156064BC0022CE42 /* AssetMetaData.cpp */; };
 		FD3F84C7156064BC0022CE42 /* BaseMediaAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F8471156064BC0022CE42 /* BaseMediaAsset.cpp */; };
@@ -60,6 +59,9 @@
 		FD3F853B156066F40022CE42 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F8528156066F40022CE42 /* tinyxmlparser.cpp */; };
 		FD3F853C156066F40022CE42 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F852A156066F40022CE42 /* ofxXmlSettings.cpp */; };
 		FD480F21155F029500660A6F /* ofxIpVideoGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD480F18155F029500660A6F /* ofxIpVideoGrabber.cpp */; };
+		FDA3F8811562D41200FF0E4F /* ofxVideoBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDA3F87A1562D41200FF0E4F /* ofxVideoBuffer.cpp */; };
+		FDA3F8821562D41200FF0E4F /* ofxVideoBufferLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDA3F87C1562D41200FF0E4F /* ofxVideoBufferLoader.cpp */; };
+		FDA3F8831562D41200FF0E4F /* ofxVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDA3F87F1562D41200FF0E4F /* ofxVideoPlayer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,13 +114,6 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		FD2673FB156067DE006323C7 /* ofxVideoBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoBuffer.cpp; sourceTree = "<group>"; };
-		FD2673FC156067DE006323C7 /* ofxVideoBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBuffer.h; sourceTree = "<group>"; };
-		FD2673FD156067DE006323C7 /* ofxVideoBufferLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoBufferLoader.cpp; sourceTree = "<group>"; };
-		FD2673FE156067DE006323C7 /* ofxVideoBufferLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBufferLoader.h; sourceTree = "<group>"; };
-		FD2673FF156067DE006323C7 /* ofxVideoBufferPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoBufferPlayer.cpp; sourceTree = "<group>"; };
-		FD267400156067DE006323C7 /* ofxVideoBufferPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBufferPlayer.h; sourceTree = "<group>"; };
-		FD267401156067DE006323C7 /* ofxVideoBufferTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBufferTypes.h; sourceTree = "<group>"; };
 		FD26740C15607A6E006323C7 /* AbstractShaderEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractShaderEffect.h; sourceTree = "<group>"; };
 		FD26740D15607A6E006323C7 /* EffectsChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsChain.cpp; sourceTree = "<group>"; };
 		FD26740E15607A6E006323C7 /* EffectsChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsChain.h; sourceTree = "<group>"; };
@@ -140,8 +135,12 @@
 		FD26742115607A6E006323C7 /* CanvasRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasRenderer.h; sourceTree = "<group>"; };
 		FD26743A15609400006323C7 /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
 		FD26743B15609400006323C7 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
-		FD26743D15609639006323C7 /* FrameBuffer.h */ = {isa = PBXFileReference; path = FrameBuffer.h; sourceTree = "<group>"; };
+		FD26743D15609639006323C7 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		FD26743E15609670006323C7 /* FrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameBuffer.cpp; sourceTree = "<group>"; };
+		FD26744115609EBD006323C7 /* Sampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sampler.cpp; sourceTree = "<group>"; };
+		FD26744215609EBD006323C7 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
+		FD26744315609EBD006323C7 /* SamplerManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SamplerManager.cpp; sourceTree = "<group>"; };
+		FD26744415609EBD006323C7 /* SamplerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamplerManager.h; sourceTree = "<group>"; };
 		FD3F846C156064BC0022CE42 /* AssetManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AssetManager.cpp; sourceTree = "<group>"; };
 		FD3F846D156064BC0022CE42 /* AssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetManager.h; sourceTree = "<group>"; };
 		FD3F846E156064BC0022CE42 /* AssetMetaData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AssetMetaData.cpp; sourceTree = "<group>"; };
@@ -205,6 +204,13 @@
 		FD3F852B156066F40022CE42 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
 		FD480F18155F029500660A6F /* ofxIpVideoGrabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxIpVideoGrabber.cpp; sourceTree = "<group>"; };
 		FD480F19155F029500660A6F /* ofxIpVideoGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxIpVideoGrabber.h; sourceTree = "<group>"; };
+		FDA3F87A1562D41200FF0E4F /* ofxVideoBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoBuffer.cpp; sourceTree = "<group>"; };
+		FDA3F87B1562D41200FF0E4F /* ofxVideoBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBuffer.h; sourceTree = "<group>"; };
+		FDA3F87C1562D41200FF0E4F /* ofxVideoBufferLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoBufferLoader.cpp; sourceTree = "<group>"; };
+		FDA3F87D1562D41200FF0E4F /* ofxVideoBufferLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBufferLoader.h; sourceTree = "<group>"; };
+		FDA3F87E1562D41200FF0E4F /* ofxVideoBufferTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoBufferTypes.h; sourceTree = "<group>"; };
+		FDA3F87F1562D41200FF0E4F /* ofxVideoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoPlayer.cpp; sourceTree = "<group>"; };
+		FDA3F8801562D41200FF0E4F /* ofxVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoPlayer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -325,13 +331,13 @@
 		FD2673FA156067DE006323C7 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				FD2673FB156067DE006323C7 /* ofxVideoBuffer.cpp */,
-				FD2673FC156067DE006323C7 /* ofxVideoBuffer.h */,
-				FD2673FD156067DE006323C7 /* ofxVideoBufferLoader.cpp */,
-				FD2673FE156067DE006323C7 /* ofxVideoBufferLoader.h */,
-				FD2673FF156067DE006323C7 /* ofxVideoBufferPlayer.cpp */,
-				FD267400156067DE006323C7 /* ofxVideoBufferPlayer.h */,
-				FD267401156067DE006323C7 /* ofxVideoBufferTypes.h */,
+				FDA3F87A1562D41200FF0E4F /* ofxVideoBuffer.cpp */,
+				FDA3F87B1562D41200FF0E4F /* ofxVideoBuffer.h */,
+				FDA3F87C1562D41200FF0E4F /* ofxVideoBufferLoader.cpp */,
+				FDA3F87D1562D41200FF0E4F /* ofxVideoBufferLoader.h */,
+				FDA3F87E1562D41200FF0E4F /* ofxVideoBufferTypes.h */,
+				FDA3F87F1562D41200FF0E4F /* ofxVideoPlayer.cpp */,
+				FDA3F8801562D41200FF0E4F /* ofxVideoPlayer.h */,
 			);
 			name = src;
 			path = ../../ofxVideoBuffer/src;
@@ -406,6 +412,17 @@
 			path = buffers;
 			sourceTree = "<group>";
 		};
+		FD26744015609EB9006323C7 /* samplers */ = {
+			isa = PBXGroup;
+			children = (
+				FD26744315609EBD006323C7 /* SamplerManager.cpp */,
+				FD26744415609EBD006323C7 /* SamplerManager.h */,
+				FD26744115609EBD006323C7 /* Sampler.cpp */,
+				FD26744215609EBD006323C7 /* Sampler.h */,
+			);
+			path = samplers;
+			sourceTree = "<group>";
+		};
 		FD3F8468156064A20022CE42 /* ofxLivedrawEngine */ = {
 			isa = PBXGroup;
 			children = (
@@ -417,6 +434,7 @@
 		FD3F846A156064BC0022CE42 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FD26744015609EB9006323C7 /* samplers */,
 				FD267439156093FD006323C7 /* buffers */,
 				FD26740A15607A6D006323C7 /* canvas */,
 				FD3F846B156064BC0022CE42 /* assets */,
@@ -467,18 +485,10 @@
 		FD3F849C156064BC0022CE42 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
-				FD3F849D156064BC0022CE42 /* elements */,
 				FD3F84A0156064BC0022CE42 /* GuiManager.cpp */,
 				FD3F84A1156064BC0022CE42 /* GuiManager.h */,
 			);
 			path = GUI;
-			sourceTree = "<group>";
-		};
-		FD3F849D156064BC0022CE42 /* elements */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = elements;
 			sourceTree = "<group>";
 		};
 		FD3F84A2156064BC0022CE42 /* OSC */ = {
@@ -801,9 +811,6 @@
 				FD3F853A156066F40022CE42 /* tinyxmlerror.cpp in Sources */,
 				FD3F853B156066F40022CE42 /* tinyxmlparser.cpp in Sources */,
 				FD3F853C156066F40022CE42 /* ofxXmlSettings.cpp in Sources */,
-				FD267402156067DE006323C7 /* ofxVideoBuffer.cpp in Sources */,
-				FD267403156067DE006323C7 /* ofxVideoBufferLoader.cpp in Sources */,
-				FD267404156067DE006323C7 /* ofxVideoBufferPlayer.cpp in Sources */,
 				FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */,
 				FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */,
 				FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */,
@@ -814,6 +821,11 @@
 				FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */,
 				FD26743C15609400006323C7 /* BufferManager.cpp in Sources */,
 				FD26743F15609670006323C7 /* FrameBuffer.cpp in Sources */,
+				FD26744515609EBD006323C7 /* Sampler.cpp in Sources */,
+				FD26744615609EBD006323C7 /* SamplerManager.cpp in Sources */,
+				FDA3F8811562D41200FF0E4F /* ofxVideoBuffer.cpp in Sources */,
+				FDA3F8821562D41200FF0E4F /* ofxVideoBufferLoader.cpp in Sources */,
+				FDA3F8831562D41200FF0E4F /* ofxVideoPlayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,6 +16,7 @@
 #include "CanvasRenderer.h"
 #include "SessionManager.h"
 #include "EffectsManager.h"
+#include "BufferManager.h"
 
 #define OSC_PORT 5433
 
@@ -30,8 +31,11 @@ public:
     void update();
     void draw();
     
+    void windowResized(int w, int h);
+    
 protected:
     
+    BufferManager   bufferManager;
     OscManager      oscManager;
     AssetManager    assetManager;
     EffectsManager  effectsManager;

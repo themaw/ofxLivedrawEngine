@@ -6,9 +6,7 @@ void testApp::setup(){
 	ofSetFrameRate(60);
 	ofBackground(0);
 	ofSetLogLevel(OF_LOG_NOTICE);
-
     livedraw.setup();
-    
 }
 
 //--------------------------------------------------------------
@@ -49,7 +47,7 @@ void testApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
+    livedraw.windowResized(w,h);
 }
 
 //--------------------------------------------------------------

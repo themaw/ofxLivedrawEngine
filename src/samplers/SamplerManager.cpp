@@ -1,27 +1,35 @@
+//
+//  FrameBuffer.cpp
+//  ofxLivedrawEngineExample
+//
+//  Created by Christopher Baker on 5/13/12.
+//  Copyright (c) 2012 School of the Art Institute of Chicago. All rights reserved.
+//
 
-#include "BufferManager.h"
+#include "SamplerManager.h"
+
 
 //--------------------------------------------------------------
-BufferManager::BufferManager() : OscNodeListener("/buffers") {
+SamplerManager::SamplerManager() : OscNodeListener("/samplers") {
     addOscCommand("new");
 }
 
 //--------------------------------------------------------------
-BufferManager::~BufferManager() {
+SamplerManager::~SamplerManager() {
     
 }
 
 //--------------------------------------------------------------
-void BufferManager::update() {
+void SamplerManager::update() {
 }
 
 //--------------------------------------------------------------
-void BufferManager::processOscMessage(string pattern, ofxOscMessage& m) {
+void SamplerManager::processOscMessage(string pattern, ofxOscMessage& m) {
     
 }
 
 //--------------------------------------------------------------
-FrameBuffer* BufferManager::getNewVideoBuffer(int _bufferSize) {
+Sampler* SamplerManager::getNewSampler() {
     
 }
 
