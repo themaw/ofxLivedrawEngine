@@ -144,9 +144,9 @@ Layers are assigned sources from the source library.  These sources each have ID
 	/livedraw/canvas/layer/(LAYER_NAME)/input/linked	LAYER_NAME_FROM
 
 	/livedraw/canvas/layer/(LAYER_NAME)/input/file 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+	/livedraw/canvas/layer/(LAYER_NAME)/input/stream 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 	/livedraw/canvas/layer/(LAYER_NAME)/input/hardware 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 	/livedraw/canvas/layer/(LAYER_NAME)/input/syphon 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/canvas/layer/(LAYER_NAME)/input/net 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 
 ### Layer Source Player
 
@@ -422,7 +422,7 @@ Asset SOURCE_ID's will follow the convention of source-type_source-name; for exa
 	Animated Robot[22].mov    >>>	file_Animated-Robot-22-.mov
 	USB camera #2 			  >>>	hardware_2 (use OpenFrameworks/QuickTime indexing)
 	syphon source "tex69"	  >>>	syphon_tex69
-	IP camera named "ipcam3"  >>>	net_ipcam3 (use source name from streams.xml file)
+	IP camera named "ipcam3"  >>>	stream_ipcam3 (use source name from streams.xml file)
 
 Camera devices can be assigned an alias for easy retrieval. *90% Complete (11 Mar 11)*
 
