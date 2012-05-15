@@ -32,10 +32,10 @@ Performances are best thought of as a presets in motion.  During a recording ses
 >
 > 1. In addition to persistence items above, the persistence interface needs an "animatable" interface so each item can be animated. 
 
-	/livedraw/session/performance/new 	PERFORMANCE_NAME
-	/livedraw/session/performance/delete 	PERFORMANCE_NAME
-	/livedraw/session/performance/store 	PERFORMANCE_NAME
-	/livedraw/session/performance/load 	PERFORMANCE_NAME
+	/livedraw/session/performance/new    PERFORMANCE_NAME
+	/livedraw/session/performance/delete PERFORMANCE_NAME
+	/livedraw/session/performance/store  PERFORMANCE_NAME
+	/livedraw/session/performance/load   PERFORMANCE_NAME
 
 ### Performance Playback and Control
 
@@ -144,40 +144,38 @@ Layers are assigned sources from the source library.  These sources each have ID
 	/livedraw/canvas/layer/(LAYER_NAME)/input/linked	LAYER_NAME_FROM
 
 	/livedraw/canvas/layer/(LAYER_NAME)/input/file 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+	/livedraw/canvas/layer/(LAYER_NAME)/input/stream 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 	/livedraw/canvas/layer/(LAYER_NAME)/input/hardware 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 	/livedraw/canvas/layer/(LAYER_NAME)/input/syphon 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/canvas/layer/(LAYER_NAME)/input/net 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 
-### Layer Source Sampler
+### Layer Source Player
 
-The source sampler is a complex playback controller/looper/sampler that is created from a given source. *95% Complete*
+The source player is a complex playback controller/looper/sampler that is created for a given source. *95% Complete*
 
 > **TODO**
 >
 > 1. "loadram" load entire video (or selection) into a sharable sampler / buffer.
 > 1. "loadram" equivalent for streaming sources, such as live video into sharable sampler / buffer.
-> 1. Finish samplers code to implement all items below.
+> 1. Finish player code to implement all items below.
 
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/start
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/pause
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/stop
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/loopmode	{LIVE, LOOP, PING_PONG}
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/start
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/pause
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/sampler/stop
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/sampler/loopmode	{LIVE, LOOP, PALINDROME}
 
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/looppointmode	{PERCENT, FRAME_NUM}
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/looppoints	START_POINT END_POINT
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/looppointmode	{PERCENT, FRAME_NUM}
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/looppoints	START_POINT END_POINT
 
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/rate	PLAYBACK_RATE
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/easing	{LINEAR, CUSTOM [FRM_NUM_0 DUR_0 ... FRM_NUM_N DUR_N]}
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/rate	PLAYBACK_RATE
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/easing	{LINEAR, CUSTOM [FRM_NUM_0 DUR_0 ... FRM_NUM_N DUR_N]}
 
-	/livedraw/canvas/layer/(LAYER_NAME)/input/source/sampler/cache B_CACHE
+	/livedraw/canvas/layer/(LAYER_NAME)/source/player/cache B_CACHE
 
 ### Layer Mask / Second Source
 
 Layer masks are simply sources that are treated as masks / second sources.  While usually just a static image source, the mask sources can be as complex as a normal source. 90% Complete (7 Mar 11)
 
-	/livedraw/canvas/layer/(LAYER_NAME)/mask/source/ ... (see source reference above)
-	/livedraw/canvas/layer/(LAYER_NAME)/mask/sampler/ ... (see source reference above)
-
+	/livedraw/canvas/layer/(LAYER_NAME)/mask/player/ ... (see source reference above)
 
 ### Layer Transforms
 
@@ -262,11 +260,11 @@ Canvas groups allow layers to be gathered into logical groupings.  Each layer ca
 >
 > 1. Grouping has been removed, in favor of tagging and a full tree-structure for rendering canvas layers.  Canvas layers inherit transforms from parents.
 
-	/livedraw/canvas/group/new	GROUP_NAME
+	/livedraw/canvas/group/new   	GROUP_NAME
 	/livedraw/canvas/group/delete	GROUP_NAME
 
 ## Canvas Group-wise Commands
-						
+
 Canvas groups can be labeled to allow easier onscreen visibility. *10% Complete (7 Mar 11)*
 
 > **TODO**
@@ -424,7 +422,7 @@ Asset SOURCE_ID's will follow the convention of source-type_source-name; for exa
 	Animated Robot[22].mov    >>>	file_Animated-Robot-22-.mov
 	USB camera #2 			  >>>	hardware_2 (use OpenFrameworks/QuickTime indexing)
 	syphon source "tex69"	  >>>	syphon_tex69
-	IP camera named "ipcam3"  >>>	net_ipcam3 (use source name from streams.xml file)
+	IP camera named "ipcam3"  >>>	stream_ipcam3 (use source name from streams.xml file)
 
 Camera devices can be assigned an alias for easy retrieval. *90% Complete (11 Mar 11)*
 
