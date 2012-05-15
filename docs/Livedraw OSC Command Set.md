@@ -143,10 +143,10 @@ Layers are assigned sources from the source library.  These sources each have ID
 
 	/livedraw/canvas/layer/(LAYER_NAME)/input/linked	LAYER_NAME_FROM
 
-	/livedraw/canvas/layer/(LAYER_NAME)/input/video 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/canvas/layer/(LAYER_NAME)/input/image 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/canvas/layer/(LAYER_NAME)/input/grabber 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/canvas/layer/(LAYER_NAME)/input/stream 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+	/livedraw/canvas/layer/(LAYER_NAME)/input/file 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+	/livedraw/canvas/layer/(LAYER_NAME)/input/hardware 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+	/livedraw/canvas/layer/(LAYER_NAME)/input/syphon 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+	/livedraw/canvas/layer/(LAYER_NAME)/input/net 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
 
 ### Layer Source Sampler
 
@@ -411,13 +411,20 @@ To replay the animation:
 
 Normally source IDs are set automatically and conformed to OSC namespace friendly naming specs (i.e. no ' ', #, *, , / ?  [ ] { }).  When automatically generating these source IDs, all illegal characters are replaced with underscores '_'.  e.g.
 
-	A movie file called "Animated Robot[22].mov" would become "Animated_Robot_22_.mov".
+	A movie file called "Animated Robot[22].mov" would become "Animated-Robot-22-.mov".
 
 Alternatively, if the file has associated meta-data that includes a pre-defined SOURCE_ID, that source ID will be used.
 
 	/livedraw/sources/video/alias	ORIGINAL_VIDEO_FILENAME NEW_SOURCE_ID
 	/livedraw/sources/image/alias	ORIGINAL_IMAGE_FILENAME NEW_SOURCE_ID
 	/livedraw/sources/url/alias		ORIGINAL_URL NEW_SOURCE_ID
+
+Asset SOURCE_ID's will follow the convention of source-type_source-name; for example:
+
+	Animated Robot[22].mov    >>>	file_Animated-Robot-22-.mov
+	USB camera #2 			  >>>	hardware_2 (use OpenFrameworks/QuickTime indexing)
+	syphon source "tex69"	  >>>	syphon_tex69
+	IP camera named "ipcam3"  >>>	net_ipcam3 (use source name from streams.xml file)
 
 Camera devices can be assigned an alias for easy retrieval. *90% Complete (11 Mar 11)*
 
