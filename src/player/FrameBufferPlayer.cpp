@@ -41,7 +41,7 @@ void FrameBufferPlayer::processOscMessage(string address, ofxOscMessage& m) {
             bool useDisk = toBoolean(m,1);
 
             if(hasParentLayer()) {
-                AssetManager* am = parentLayer->getAssetManager();
+                //AssetManager* am = parentLayer->getAssetManager();
                     
                 
                 

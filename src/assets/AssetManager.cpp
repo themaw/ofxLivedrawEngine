@@ -41,6 +41,7 @@ MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetURI) 
     string assetId = generateAssetId(_assetType,_assetURI);
     MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
     assets.push_back(asset);
+    return asset;
 }
 
 //--------------------------------------------------------------
@@ -197,6 +198,7 @@ MediaAsset* AssetManager::getAsset(string id) {
 
 //--------------------------------------------------------------
 string AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI) {
+    return "AAAAAA";
     /*
 	if(assetID.empty()) {
 		assetID = assetURI.toString();

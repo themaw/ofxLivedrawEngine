@@ -115,8 +115,8 @@ public:
     
     void setLayerParent(CanvasLayer* layerParent);
     
-    AssetManager* getAssetManager();
-    bool hasAssetManager();
+//    AssetManager* getAssetManager();
+//    bool hasAssetManager();
     
     
 private:

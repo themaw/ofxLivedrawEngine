@@ -52,14 +52,14 @@ void CanvasLayer::init() {
 }
 
 //--------------------------------------------------------------
-AssetManager* CanvasLayer::getAssetManager() {
-    return layerManager->getAssetManager();
-}
-
-//--------------------------------------------------------------
-bool CanvasLayer::hasAssetManager() {
-    return layerManager->hasAssetManager();
-}
+//AssetManager* CanvasLayer::getAssetManager() {
+//    return layerManager->getAssetManager();
+//}
+//
+////--------------------------------------------------------------
+//bool CanvasLayer::hasAssetManager() {
+//    return layerManager->hasAssetManager();
+//}
 
 
 //--------------------------------------------------------------
