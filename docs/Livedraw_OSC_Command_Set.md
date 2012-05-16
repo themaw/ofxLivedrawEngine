@@ -158,24 +158,39 @@ The source player is a complex playback controller/looper/sampler that is create
 > 1. "loadram" equivalent for streaming sources, such as live video into sharable sampler / buffer.
 > 1. Finish player code to implement all items below.
 
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/start
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/pause
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/sampler/stop
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/sampler/loopmode	{LIVE, LOOP, PALINDROME}
+	/livedraw/canvas/layer/(LAYER_NAME)/source buffer ASSET_ID [FROM_DISK]
 
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/looppointmode	{PERCENT, FRAME_NUM}
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/looppoints	START_POINT END_POINT
+	/livedraw/canvas/layer/(LAYER_NAME)/source start
+	/livedraw/canvas/layer/(LAYER_NAME)/source pause
+	/livedraw/canvas/layer/(LAYER_NAME)/source stop
+	/livedraw/canvas/layer/(LAYER_NAME)/source loopmode	{LIVE, LOOP, PALINDROME}
 
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/rate	PLAYBACK_RATE
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/easing	{LINEAR, CUSTOM [FRM_NUM_0 DUR_0 ... FRM_NUM_N DUR_N]}
+	/livedraw/canvas/layer/(LAYER_NAME)/source frame	    FRAME
+	/livedraw/canvas/layer/(LAYER_NAME)/source framen	    FRAME_NORM
 
-	/livedraw/canvas/layer/(LAYER_NAME)/source/player/cache B_CACHE
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointsn	    START_POINT_NORM END_POINT_NORM
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointstartn	    START_POINT_NORM
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointendn	    START_POINT_NORM
+
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppoints	    START_POINT END_POINT
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointstart	    START_POINT
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointsend	    START_POINT
+
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointsn	    START_POINT_NORM END_POINT_NORM
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointstartn	    START_POINT_NORM
+	/livedraw/canvas/layer/(LAYER_NAME)/source looppointendn	    START_POINT_NORM
+
+
+
+
+
+	/livedraw/canvas/layer/(LAYER_NAME)/source speed	PLAYBACK_RATE
 
 ### Layer Mask / Second Source
 
 Layer masks are simply sources that are treated as masks / second sources.  While usually just a static image source, the mask sources can be as complex as a normal source. 90% Complete (7 Mar 11)
 
-	/livedraw/canvas/layer/(LAYER_NAME)/mask/player/ ... (see source reference above)
+	/livedraw/canvas/layer/(LAYER_NAME)/mask ... (see source reference above)
 
 ### Layer Transforms
 
@@ -307,10 +322,10 @@ Group-wise transformations are applied _in addition_ to the layer-wise transform
 
 This is an anchor point that is measured by the offset from the upper-left-hand corner of the group's bounding box.  Thus, unless specified otherwise, the anchor point must be adjusted if new layers are added to a group. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchor_point X_ANCHOR [Y_ANCHOR [Z_ANCHOR]]
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchor_point X X_ANCHOR
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchor_point Y Y_ANCHOR
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchor_point Z Z_ANCHOR
+	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint X_ANCHOR [Y_ANCHOR [Z_ANCHOR]]
+	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint X X_ANCHOR
+	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint Y Y_ANCHOR
+	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint Z Z_ANCHOR
 
 Thus, to reset an anchor point you would use:
 
@@ -404,36 +419,41 @@ To replay the animation:
 	/livedraw/canvas/layer/MY_LAYER/transform/position/animate play loop
 
 
-### Sources
-#### Aliasing 	and IDs *90% Complete (11 Mar 11)*
+### Assets
+#### Aliasing 	and IDs
 
-Normally source IDs are set automatically and conformed to OSC namespace friendly naming specs (i.e. no ' ', #, *, , / ?  [ ] { }).  When automatically generating these source IDs, all illegal characters are replaced with underscores '_'.  e.g.
+Normally asset IDs are set automatically and conformed to OSC namespace friendly naming specs (i.e. no ' ', #, *, , / ?  [ ] { }).  When automatically generating these source IDs, all illegal characters are replaced with underscores '_'.  e.g.
 
 	A movie file called "Animated Robot[22].mov" would become "Animated-Robot-22-.mov".
 
 Alternatively, if the file has associated meta-data that includes a pre-defined SOURCE_ID, that source ID will be used.
 
-	/livedraw/sources/video/alias	ORIGINAL_VIDEO_FILENAME NEW_SOURCE_ID
-	/livedraw/sources/image/alias	ORIGINAL_IMAGE_FILENAME NEW_SOURCE_ID
-	/livedraw/sources/url/alias		ORIGINAL_URL NEW_SOURCE_ID
-
-Asset SOURCE_ID's will follow the convention of source-type_source-name; for example:
+	/livedraw/assets/alias	ORIGINAL_ASSET_ID NEW_ASSET_ID
+	
+Asset Id's will follow the convention of source-type_source-name; for example:
 
 	Animated Robot[22].mov    >>>	file_Animated-Robot-22-.mov
-	USB camera #2 			  >>>	hardware_2 (use OpenFrameworks/QuickTime indexing)
+	USB camera #2 			  >>>	grabber_2 (use OpenFrameworks/QuickTime indexing)
 	syphon source "tex69"	  >>>	syphon_tex69
 	IP camera named "ipcam3"  >>>	stream_ipcam3 (use source name from streams.xml file)
+	Recording Buffers		  >>>	buffer_name_of_buffer
 
-Camera devices can be assigned an alias for easy retrieval. *90% Complete (11 Mar 11)*
 
-	/livedraw/sources/camera/(DEV_NUM)|(DEV_NAME)/alias	DEV_ALIAS
+### Buffers
+#### Recording
 
+	/livedraw/buffers/ASSET_ID/clear
+	/livedraw/buffers/ASSET_ID/size   	 NEW_MAX_SIZE
+	/livedraw/buffers/ASSET_ID/framerate FRAMERATE
+	/livedraw/buffers/ASSET_ID/type		BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
+	/livedraw/buffers/ASSET_ID/usetexture B_USE_TEXTURE
+	
+	
 #### Camera Settings *90% Complete (11 Mar 11)*
 
 Camera settings can be changed via OSC.
 
-	/livedraw/sources/camera/(DEV_ALIAS)|(DEV_NUM)|(DEV_NAME)/settings/(KEY)	VALUE_0 [VALUE_1 ... VALUE_N]
-	/livedraw/sources/camera/(DEV_ALIAS)|(DEV_NUM)|(DEV_NAME)/settings/iidc	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/grabber ASSET_ID (KEY) VALUE_0 [VALUE_1 ... VALUE_N]
 
 #### Camera Capture
 
