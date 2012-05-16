@@ -445,7 +445,6 @@ Asset Id's will follow the convention of source-type_source-name; for example:
 	/livedraw/buffers/ASSET_ID/clear
 	/livedraw/buffers/ASSET_ID/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
 	/livedraw/buffers/ASSET_ID/stop
-	/livedraw/buffers/ASSET_ID/
 	
 	/livedraw/buffers/ASSET_ID/clear
 	/livedraw/buffers/ASSET_ID/size   	 NEW_MAX_SIZE
