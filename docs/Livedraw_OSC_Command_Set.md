@@ -457,21 +457,21 @@ Asset Id's will follow the convention of source-type_source-name; for example:
 
 Camera settings can be changed via OSC.
 
-	/livedraw/assets/ASSET_ID/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
+	/livedraw/assets/(ASSET_ID)/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
 
 #### Camera Capture
 
 Camera capture is user controllable. *85% Complete (11 Mar 11)*
 
-	/livedraw/assets/ASSET_ID/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
-	/livedraw/assets/ASSET_ID/close
-	/livedraw/assets/ASSET_ID/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
+	/livedraw/assets/(ASSET_ID)/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
+	/livedraw/assets/(ASSET_ID)/close
+	/livedraw/assets/(ASSET_ID)/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
 
 #### Assigning Metadata
 
 All source material can be assigned meta data using the (KEY) VALUE_0 sets. *40% Complete (11 Mar 11)*
 
-	/livedraw/assets/ASSET_ID/meta/(KEY)	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/(ASSET_ID)/meta/(KEY)	VALUE_0 [VALUE_1 ... VALUE_N]
 
 For example, one might set the tags associated with a given clip using the following syntax:
 
