@@ -437,11 +437,16 @@ Asset Id's will follow the convention of source-type_source-name; for example:
 	syphon source "tex69"	  >>>	syphon_tex69
 	IP camera named "ipcam3"  >>>	stream_ipcam3 (use source name from streams.xml file)
 	Recording Buffers		  >>>	buffer_name_of_buffer
+	Buffer Player			  >>>	bufferplayer_name_of_buffer_player
 
 
 ### Buffers
 #### Recording
-
+	/livedraw/buffers/ASSET_ID/clear
+	/livedraw/buffers/ASSET_ID/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
+	/livedraw/buffers/ASSET_ID/stop
+	/livedraw/buffers/ASSET_ID/
+	
 	/livedraw/buffers/ASSET_ID/clear
 	/livedraw/buffers/ASSET_ID/size   	 NEW_MAX_SIZE
 	/livedraw/buffers/ASSET_ID/framerate FRAMERATE
