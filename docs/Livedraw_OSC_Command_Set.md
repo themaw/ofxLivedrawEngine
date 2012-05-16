@@ -442,41 +442,40 @@ Asset Id's will follow the convention of source-type_source-name; for example:
 
 ### Buffers
 #### Recording
-	/livedraw/buffers/ASSET_ID/clear
-	/livedraw/buffers/ASSET_ID/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
-	/livedraw/buffers/ASSET_ID/stop
+	/livedraw/buffers/(ASSET_ID)/clear
+	/livedraw/buffers/(ASSET_ID)/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
+	/livedraw/buffers/(ASSET_ID)/stop
 	
-	/livedraw/buffers/ASSET_ID/clear
-	/livedraw/buffers/ASSET_ID/size   	 NEW_MAX_SIZE
-	/livedraw/buffers/ASSET_ID/framerate FRAMERATE
-	/livedraw/buffers/ASSET_ID/type		BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
-	/livedraw/buffers/ASSET_ID/usetexture B_USE_TEXTURE
+	/livedraw/buffers/(ASSET_ID)/clear
+	/livedraw/buffers/(ASSET_ID)/size   	 NEW_MAX_SIZE
+	/livedraw/buffers/(ASSET_ID)/framerate FRAMERATE
+	/livedraw/buffers/(ASSET_ID)/type		BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
+	/livedraw/buffers/(ASSET_ID)/usetexture B_USE_TEXTURE
 	
 	
 #### Camera Settings *90% Complete (11 Mar 11)*
 
 Camera settings can be changed via OSC.
 
-	/livedraw/assets/grabber ASSET_ID (KEY) VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/ASSET_ID/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
 
 #### Camera Capture
 
 Camera capture is user controllable. *85% Complete (11 Mar 11)*
 
-	/livedraw/sources/camera/(DEV_ALIAS)|(DEV_NUM)|(DEV_NAME)/control/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
-	/livedraw/sources/camera/(DEV_ALIAS)|(DEV_NUM)|(DEV_NAME)/control/close
-	/livedraw/sources/camera/(DEV_ALIAS)|(DEV_NUM)|(DEV_NAME)/control/size	CAPTURE_WIDTH CAPTURE_HEIGHT
-	/livedraw/sources/camera/(DEV_ALIAS)|(DEV_NUM)|(DEV_NAME)/control/unique B_UNIQUE   
+	/livedraw/assets/ASSET_ID/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
+	/livedraw/assets/ASSET_ID/close
+	/livedraw/assets/ASSET_ID/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
 
 #### Assigning Metadata
 
 All source material can be assigned meta data using the (KEY) VALUE_0 sets. *40% Complete (11 Mar 11)*
 
-	/livedraw/sources/(SOURCE_ID)/meta/(KEY)	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/ASSET_ID/meta/(KEY)	VALUE_0 [VALUE_1 ... VALUE_N]
 
 For example, one might set the tags associated with a given clip using the following syntax:
 
-	/livedraw/sources/VID_00982/meta/tags	fast scary colorful people
+	/livedraw/assets/VID_00982/meta/tags	fast scary colorful people
 
 ### GUI Layout
 
