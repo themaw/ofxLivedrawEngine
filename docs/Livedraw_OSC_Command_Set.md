@@ -471,11 +471,14 @@ Camera capture is user controllable. *85% Complete (11 Mar 11)*
 
 All source material can be assigned meta data using the (KEY) VALUE_0 sets. *40% Complete (11 Mar 11)*
 
-	/livedraw/assets/(ASSET_ID)/meta/(KEY)	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/(ASSET_ID)/metadata/add keywords	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/(ASSET_ID)/metadata/remove keywords	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/assets/(ASSET_ID)/metadata/description "Description"
+	
 
 For example, one might set the tags associated with a given clip using the following syntax:
 
-	/livedraw/assets/VID_00982/meta/tags	fast scary colorful people
+	/livedraw/assets/VID_00982/metadata/tags	fast scary colorful people
 
 ### GUI Layout
 

@@ -10,41 +10,57 @@
 #include "CanvasLayer.h"
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos, CanvasLayer* _layerParent) : OscNodeListener("/"+name) {
+CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos, CanvasLayer* _layerParent) : ofxOscRouterNode("/"+name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = _layerParent;
     setPosition(pos);
+    init();
 }
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos) : OscNodeListener("/"+name) {
+CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos) : ofxOscRouterNode("/"+name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = NULL;
     setPosition(pos);
+    init();
 }
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : OscNodeListener("/"+name) {
+CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : ofxOscRouterNode("/"+name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = NULL;
+    init();
 }
 
 //--------------------------------------------------------------
 CanvasLayer::~CanvasLayer() {
-    if(source != NULL) delete source;
-    if(mask != NULL) delete mask;
     if(fbo != NULL) delete fbo;
-    
+    if(sourcePlayer != NULL) delete sourcePlayer;
+    if(maskPlayer != NULL)   delete maskPlayer;
     // TODO : what do do about kids? delete the kids or set them to root?
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::setAssetManager(AssetManager* _assetManager) {
-    assetManager = _assetManager;
+void CanvasLayer::init() {
+    sourcePlayer->setOscNodeName("/source");
+    maskPlayer->setOscNodeName("/mask");
+    addOscChild(sourcePlayer);
+    addOscChild(maskPlayer);
 }
+
+//--------------------------------------------------------------
+AssetManager* CanvasLayer::getAssetManager() {
+    return layerManager->getAssetManager();
+}
+
+//--------------------------------------------------------------
+bool CanvasLayer::hasAssetManager() {
+    return layerManager->hasAssetManager();
+}
+
 
 //--------------------------------------------------------------
 //void CanvasLayer::setEffectsManager(EffectsManager* _effectsManager) {
@@ -67,22 +83,19 @@ void CanvasLayer::setup() {
     
     addOscChild(&transform); // add the transform as an OSC child
 //    addOscChild(&effectsChain); // add the associated effects chain as a child
-
-    addOscCommand("/input");
-    addOscCommand("/mask");
         
-    addOscCommand("/order");
-    
-    addOscCommand("/lock");
-    addOscCommand("/solo");
-    addOscCommand("/label");
+    addOscMethod("/order");
+    addOscMethod("/lock");
+    addOscMethod("/solo");
+    addOscMethod("/label");
 
     fbo = new ofFbo();
-
     fbo->allocate(getTransform()->getWidth(), getTransform()->getHeight());
 
-    source = new ofVideoPlayer();
-    mask = new ofImage();
+    sourcePlayer = new FrameBufferPlayer();
+    sourcePlayer->setParentLayer(this);
+    maskPlayer = new FrameBufferPlayer();
+    maskPlayer->setParentLayer(this);    
 }
 
 //--------------------------------------------------------------
@@ -205,32 +218,7 @@ void CanvasLayer::setRectangle(ofRectangle rect) {
 //--------------------------------------------------------------
 void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
     
-    if(isMatch(address, "/input")) {
-        if(validateOscSignature("s",m)) {
-            VideoMediaAsset* src = NULL;
-            string assetId = m.getArgAsString(0);
-            src = assetManager->getVideoAsset(assetId);
-            
-            if(src != NULL) {
-                setSource(src);
-            } else {
-                ofLog(OF_LOG_ERROR, "CanvasLayer: [" + assetId + "] does not exist."); 
-            }
-        }
-        
-    } else if(isMatch(address, "/mask")) {
-        if(validateOscSignature("s",m)) {
-//            ImageMediaAsset* src = NULL;
-//            string assetId = m.getArgAsString(0);
-//            src = assetManager->getImageAsset(assetId);
-//            
-//            if(src != NULL) {
-//                setMask(src);
-//            } else {
-//                ofLog(OF_LOG_ERROR, "CanvasLayer: [" + assetId + "] does not exist."); 
-//            }
-        }
-    } else if(isMatch(address, "/order")) {
+    if(isMatch(address, "/order")) {
         
         cout << "IN HERE " << endl;
         
@@ -258,15 +246,11 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
         }
     } else if(isMatch(address, "/lock")) {
         if(validateOscSignature("[fi]", m)) {
-            int val = m.getArgAsInt32(0);
-            locked = (val == 1);
-            layerManager->setLayerLock(this, locked);
+            layerManager->setLayerLock(this, toBoolean(m,0));
         }
     } else if(isMatch(address, "/solo")) {
         if(validateOscSignature("[fi]", m)) {
-            int val = m.getArgAsInt32(0);
-            solo = (val == 1);
-            layerManager->setLayerSolo(this, solo);
+            layerManager->setLayerSolo(this, toBoolean(m,0));
         }
     } else if(isMatch(address, "/label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
@@ -282,7 +266,8 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::setSource(VideoMediaAsset* src) {
+void CanvasLayer::setSource(MediaAsset* src) {
+    /*
     if(source->isLoaded()) {
         delete source;
         source = new ofVideoPlayer();
@@ -290,11 +275,12 @@ void CanvasLayer::setSource(VideoMediaAsset* src) {
     
     source->loadMovie(src->getAssetURI().toString());
     source->play();
+     */
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::setMask(ImageMediaAsset* src) {
-    mask->loadImage(src->getAssetURI().toString());
+void CanvasLayer::setMask(MediaAsset* src) {
+    //mask->loadImage(src->getAssetURI().toString());
 }
 
 //--------------------------------------------------------------
@@ -309,9 +295,9 @@ void CanvasLayer::setName(string _name) {
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::update()
-{
-    source->update();
+void CanvasLayer::update() {
+    sourcePlayer->update();
+    maskPlayer->update();
 }
 
 //--------------------------------------------------------------

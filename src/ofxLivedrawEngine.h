@@ -9,10 +9,9 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscManager.h"
-#include "ControllerManager.h"
-#include "GuiManager.h"
+#include "ofxOscRouter.h"
 #include "AssetManager.h"
+#include "CanvasLayerManager.h"
 #include "CanvasRenderer.h"
 #include "SessionManager.h"
 #include "EffectsManager.h"
@@ -33,17 +32,28 @@ public:
     
     void windowResized(int w, int h);
     
+    BufferManager&      getBufferManager();
+    ofxOscRouter&      getOscManager();
+    AssetManager&       getAssetManager();
+    EffectsManager&     getEffectsManager();
+    
+    CanvasLayerManager& getCanvasLayerManger();
+    
+    CanvasRenderer&     getCanvasRenderer();
+    
+    SessionManager&     getSessionManager();
+    
 protected:
     
-    BufferManager   bufferManager;
-    OscManager      oscManager;
-    AssetManager    assetManager;
-    EffectsManager  effectsManager;
+    BufferManager       bufferManager;
+    ofxOscRouter      	oscRouter;
+    AssetManager    	assetManager;
+    EffectsManager      effectsManager;
     
-    CanvasRenderer  canvas;
+    CanvasRenderer      canvas;
+    CanvasLayerManager  canvasLayerManager;
     
-    SessionManager  sessionManager;
-    GuiManager      guiManager;
+    SessionManager      sessionManager;
 
 private:
 

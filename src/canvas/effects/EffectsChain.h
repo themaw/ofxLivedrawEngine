@@ -9,12 +9,12 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 #include "EffectsManager.h"
 #include "ShaderCurves.h"
 #include "ShaderAlphaMask.h"
 
-class EffectsChain : public OscNodeListener {
+class EffectsChain : public ofxOscRouterNode {
 public:
     
     EffectsChain();

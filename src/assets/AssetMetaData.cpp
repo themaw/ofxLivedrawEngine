@@ -10,12 +10,17 @@
 #include "AssetMetaData.h"
 
 //--------------------------------------------------------------
-AssetMetaData::AssetMetaData() {
+AssetMetaData::AssetMetaData() : ofxOscRouterNode("/meta") {
     description = "";
 }
 
 //--------------------------------------------------------------
 AssetMetaData::~AssetMetaData() {};
+
+//--------------------------------------------------------------
+void AssetMetaData::processOscMessage(string address, ofxOscMessage& m) {
+    ofLog(OF_LOG_ERROR, "AssetMetaData::processOscMessage - unimplemented.");
+}
 
 //--------------------------------------------------------------
 bool AssetMetaData::containsKeyword(string keyword) {

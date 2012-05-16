@@ -15,10 +15,10 @@
 
 #define LUT_LENGTH 3 // assume 8 bit pis / color / pixel
 
-class ShaderCurvesSettings : public OscNodeListener, public Enabler {
+class ShaderCurvesSettings : public ofxOscRouterNode, public Enabler {
     
 public:
-    ShaderCurvesSettings() : OscNodeListener("/curves"), Enabler(true) {
+    ShaderCurvesSettings() : ofxOscRouterNode("/curves"), Enabler(true) {
         // just init a normal map
         for(int i = 0; i < LUT_LENGTH; i++) {
             dataLUT[i][0] = ofMap(i, 0, LUT_LENGTH-1, 0, 1);   // R low
@@ -26,8 +26,8 @@ public:
             dataLUT[i][2] = ofMap(i, 0, LUT_LENGTH-1, 0, 1);   // B low
         }
         
-        addOscCommand("/lut");
-        addOscCommand("/enable");
+        addOscMethod("/lut");
+        addOscMethod("/enable");
     }
     
     ~ShaderCurvesSettings() {
@@ -46,8 +46,7 @@ public:
             }
         } else if(isMatch("/enable",pattern)) {
             if(validateOscSignature("[fi]", m)) {
-                bool _enable = (m.getArgAsInt32(0) == 1);
-                setEnabled(_enable);
+                setEnabled(toBoolean(m,0));
             }
         }
     }

@@ -10,7 +10,7 @@
 #include "SessionManager.h"
 
 //--------------------------------------------------------------
-SessionManager::SessionManager() : OscNodeListener("/sessions") {
+SessionManager::SessionManager() : ofxOscRouterNode("/sessions") {
     
 }
 

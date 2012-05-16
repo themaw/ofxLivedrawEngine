@@ -10,12 +10,12 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 
 #include "ShaderAlphaMask.h"
 #include "ShaderCurves.h"
 
-class EffectsManager : public OscNodeListener {
+class EffectsManager : public ofxOscRouterNode {
     
 public:
     EffectsManager();

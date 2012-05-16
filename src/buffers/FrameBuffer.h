@@ -10,37 +10,36 @@
 
 #include "ofMain.h"
 #include <set>
-#include "BaseMediaAsset.h"
+#include "MediaAsset.h"
 #include "ofxVideoBuffer.h"
 
-enum FrameBufferType {
-    FRAMEBUFFER_DISK,
-    FRAMEBUFFER_RAM
-};
+// Frame Buffer is a wrapper for ofxVideoBuffer.
+// When it has a backing asset, it cannot be modified
+// but simply acts as a place to store full video 
+// assets in memory (GPU/RAM).
 
-class FrameBuffer {
+class ofxVideoBuffer;
+class ofxVideoPlayer;
+
+class FrameBuffer : public ofxVideoBuffer {
 public:
-    FrameBuffer(FrameBuffer& mom);
     FrameBuffer(int _bufferSize = 1);
     virtual ~FrameBuffer();
     
-    string getId();
-    void   setId(string bufferId);
+    void setBackingAsset(MediaAsset* _asset);
     
-    void setSource(BaseMediaAsset* _source);
-    BaseMediaAsset* getSource();
-    bool hasSource();
+    string getId();
+    void   setId(string _bufferId);
+    
+    bool        hasBackingAsset();
+    MediaAsset* getBackingAsset();
+    
+    bool        attachedPlayer(ofxVideoPlayer* player);
+    bool        detatchPlayer(ofxVideoPlayer* player);
     
 protected:
     
-    
-    
-    BaseMediaAsset* source; // only one source at a time
-    
-    string bufferId;
-    
-    FrameBufferType bufferType;
-    
-private:
+    string      bufferId;
+    MediaAsset* backingAsset; // only one source at a time
 
 };

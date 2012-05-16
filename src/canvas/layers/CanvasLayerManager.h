@@ -9,14 +9,14 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 #include "CanvasLayer.h"
 #include "AssetManager.h"
 //#include "EffectsManager.h"
 
 class CanvasLayer;
 
-class CanvasLayerManager : public OscNodeListener {
+class CanvasLayerManager : public ofxOscRouterNode {
 public:
     
     CanvasLayerManager();
@@ -27,6 +27,9 @@ public:
     void draw();
     
     void setAssetManager(AssetManager* _assetManager);
+    AssetManager* getAssetManager();
+    bool hasAssetManager();
+
 //    void setEffectsManager(EffectsManager* _effectsManager);
     
     void processOscMessage(string pattern, ofxOscMessage& m);
@@ -53,6 +56,7 @@ public:
     
     void setLayerSolo(CanvasLayer* layer, bool solo);
     void setLayerLock(CanvasLayer* layer, bool lock);
+    
     
     
 private:

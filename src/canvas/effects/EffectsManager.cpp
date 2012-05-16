@@ -10,7 +10,7 @@
 #include "EffectsManager.h"
 
 //--------------------------------------------------------------
-EffectsManager::EffectsManager() : OscNodeListener("/effects") {
+EffectsManager::EffectsManager() : ofxOscRouterNode("/effects") {
     
 }
 

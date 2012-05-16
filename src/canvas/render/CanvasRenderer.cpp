@@ -10,7 +10,7 @@
 #include "CanvasRenderer.h"
 
 //--------------------------------------------------------------
-CanvasRenderer::CanvasRenderer() : OscNodeListener("/canvas") {
+CanvasRenderer::CanvasRenderer() : ofxOscRouterNode("/canvas") {
     x = 0;
     y = 0;
     width = 1024;
@@ -25,12 +25,12 @@ CanvasRenderer::~CanvasRenderer() {
 }
 
 void CanvasRenderer::init() {
-    addOscCommand("/position");
-    addOscCommand("/size");
-    addOscCommand("/background");
-    addOscCommand("/fullscreen");
-    addOscCommand("/fps");
-    addOscCommand("/msaa");
+    addOscMethod("/position");
+    addOscMethod("/size");
+    addOscMethod("/background");
+    addOscMethod("/fullscreen");
+    addOscMethod("/fps");
+    addOscMethod("/msaa");
     
     addOscChild(&layerManager); // layer manager
     
@@ -42,7 +42,6 @@ void CanvasRenderer::init() {
 
 //--------------------------------------------------------------
 void CanvasRenderer::setup() {
-    cout << "canvas renderer was setup."<<endl;
     /*
     ofFbo::Settings s;
 	s.width				= width;
@@ -143,11 +142,11 @@ void CanvasRenderer::processOscMessage(string address, ofxOscMessage& m) {
         }            
     } else if(isMatch(address,"/fullscreen")) {
         if(validateOscSignature("[if]",m)) {
-            ofSetFullscreen(m.getArgAsInt32(0) == 1);
+            ofSetFullscreen(toBoolean(m,0));
         }
     } else if(isMatch(address,"/msaa")) {
         if(validateOscSignature("[if]",m)) {
-            setMsaa(m.getArgAsInt32(0) == 1);
+            setMsaa(toBoolean(m,0));
         }
     } else if(isMatch(address,"/fps")) {
         if(validateOscSignature("[if]",m)) {

@@ -10,12 +10,12 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 
 #include "SessionPreset.h"
 #include "SessionPerformance.h"
 
-class SessionManager : public OscNodeListener {
+class SessionManager : public ofxOscRouterNode {
 	
 public:
 	

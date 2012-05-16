@@ -10,18 +10,20 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 #include "ofTexture.h"
 #include "CanvasLayerTransform.h"
 #include "CanvasLayerManager.h"
 #include "EnablerInterface.h"
 #include "AssetManager.h"
+#include "FrameBufferPlayer.h"
 //#include "EffectsManager.h"
 //#include "EffectsChain.h"
 
+class FrameBufferPlayer;
 class CanvasLayerManager;
 
-class CanvasLayer : public OscNodeListener, public Enabler {
+class CanvasLayer : public ofxOscRouterNode, public Enabler {
 	
 public:
 
@@ -43,7 +45,6 @@ public:
     
 	// void draw(); // they can't draw themselves.  the view has to draw them ...
 	
-    void setAssetManager(AssetManager* assetManager);
 //    void setEffectsManager(EffectsManager* effectsManager);
 
     
@@ -53,11 +54,12 @@ public:
 	//MediaSampler* getSource();
 	//MediaSampler* getMask();
 	
-    void setSource(VideoMediaAsset* src);
-    void setMask(ImageMediaAsset* src);
+    void setSource(MediaAsset* src);
+    void setMask(MediaAsset* src);
     
-    ofVideoPlayer* getSource() {return source;};
-    ofImage* getMask() {return mask;};
+    FrameBufferPlayer* getSourcePlayer() {return sourcePlayer;};
+    FrameBufferPlayer* getMaskPlayer()   {return maskPlayer;};
+
     
 	CanvasLayerTransform* getTransform() { return &transform; };
 	
@@ -82,10 +84,10 @@ public:
 
 	// settings	
 	bool isSolo() {return solo;};
-	bool setSolo(bool solo) {this->solo = solo;};
+	bool setSolo(bool _solo) {solo = _solo;};
 
 	bool isLocked() {return locked;};
-	bool setLocked(bool locked) {this->locked = locked;};
+	bool setLocked(bool _locked) {locked = _locked;};
 	
     void onEnabled();
     void onDisabled();
@@ -113,22 +115,22 @@ public:
     
     void setLayerParent(CanvasLayer* layerParent);
     
+    AssetManager* getAssetManager();
+    bool hasAssetManager();
+    
+    
 private:
 	
     ofFbo* fbo;
     
     string layerName;
     
-    AssetManager* assetManager;
 //    EffectsManager* effectsManager;
     
 //    EffectsChain effectsChain;
     
-	//MediaSampler* source;
-	//MediaSampler* maskSource;
-
-    ofImage* mask;
-    ofVideoPlayer* source;
+    FrameBufferPlayer* sourcePlayer;
+    FrameBufferPlayer* maskPlayer;
 
 	// Masker compositer;
 	// width / height are all taken from the source

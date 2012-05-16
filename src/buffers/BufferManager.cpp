@@ -2,8 +2,8 @@
 #include "BufferManager.h"
 
 //--------------------------------------------------------------
-BufferManager::BufferManager() : OscNodeListener("/buffers") {
-    addOscCommand("new");
+BufferManager::BufferManager() : ofxOscRouterNode("/buffers") {
+    addOscMethod("new");
 }
 
 //--------------------------------------------------------------

@@ -16,7 +16,7 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _scale, 
                      int _opacity) : 
 Enabler(true),  
-OscNodeListener("/transform") {
+ofxOscRouterNode("/transform") {
     
     position = ofxLimitedPoint(_position);
     anchorPoint = ofxLimitedPoint(_anchorPoint);
@@ -34,7 +34,7 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _rotation, 
                      ofPoint _scale) : 
 Enabler(true),  
-OscNodeListener("/transform") {
+ofxOscRouterNode("/transform") {
     
     position = ofxLimitedPoint(_position);
     anchorPoint = ofxLimitedPoint(_anchorPoint);
@@ -51,7 +51,7 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _anchorPoint, 
                      ofPoint _rotation) : 
 Enabler(true),  
-OscNodeListener("/transform") {
+ofxOscRouterNode("/transform") {
     
     position = ofxLimitedPoint(_position);
     anchorPoint = ofxLimitedPoint(_anchorPoint);
@@ -67,7 +67,7 @@ OscNodeListener("/transform") {
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint) : 
 Enabler(true),  
-OscNodeListener("/transform") {
+ofxOscRouterNode("/transform") {
     
     position = ofxLimitedPoint(_position);
     anchorPoint = ofxLimitedPoint(_anchorPoint);
@@ -81,7 +81,7 @@ OscNodeListener("/transform") {
 //--------------------------------------------------------------
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position) : 
 Enabler(true),  
-OscNodeListener("/transform") {
+ofxOscRouterNode("/transform") {
     
     position = ofxLimitedPoint(_position);
     scale = ofxLimitedPoint(ofPoint(1.0f, 1.0f, 1.0f));
@@ -92,7 +92,7 @@ OscNodeListener("/transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform() : Enabler(true), OscNodeListener("/transform") {
+CanvasLayerTransform::CanvasLayerTransform() : Enabler(true), ofxOscRouterNode("/transform") {
     
     scale = ofxLimitedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     opacity = 255;
@@ -105,12 +105,12 @@ CanvasLayerTransform::CanvasLayerTransform() : Enabler(true), OscNodeListener("/
 
 //--------------------------------------------------------------
 void CanvasLayerTransform::init() {
-    addOscCommand("/position");
-    addOscCommand("/anchorpoint");
-    addOscCommand("/rotate");
-    addOscCommand("/scale");
-    addOscCommand("/opacity");
-    addOscCommand("/size");
+    addOscMethod("/position");
+    addOscMethod("/anchorpoint");
+    addOscMethod("/rotate");
+    addOscMethod("/scale");
+    addOscMethod("/opacity");
+    addOscMethod("/size");
     
 }
 

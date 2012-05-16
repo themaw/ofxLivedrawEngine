@@ -13,11 +13,11 @@
 #include "ofEvents.h"
 #include "EnablerInterface.h"
 #include "ofxLimitedPoint.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 
 
 
-class CanvasLayerTransform : public OscNodeListener, public Enabler {
+class CanvasLayerTransform : public ofxOscRouterNode, public Enabler {
 	
 public:
 	

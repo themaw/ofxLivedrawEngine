@@ -11,7 +11,6 @@ ofxLivedrawEngine::~ofxLivedrawEngine() {
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::setup() {
-    guiManager.setup();
     sessionManager.setup();
     assetManager.setup();
 	effectsManager.setup();
@@ -20,17 +19,15 @@ void ofxLivedrawEngine::setup() {
     canvas.setAssetManager(&assetManager);
     //canvas.setEffectsManager(&effectsManager);
     
-	oscManager.setup(OSC_PORT);
-    oscManager.addOscChild(&canvas);
-    oscManager.addOscChild(&effectsManager); 
-    oscManager.addOscChild(&sessionManager); 
+    oscRouter.setup("/livedraw", OSC_PORT);
+    oscRouter.addOscChild(&canvas);
+    oscRouter.addOscChild(&effectsManager); 
+    oscRouter.addOscChild(&sessionManager); 
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::update() {
-    // OSC gets checked first
-    oscManager.update();  
-    
+
     // session manager
     sessionManager.update();
     
@@ -43,9 +40,6 @@ void ofxLivedrawEngine::update() {
     // canvas gets updated
     canvas.update();
     
-    // GUI gets checked last to reflect any changes in state
-    guiManager.update();
-
 }
 
 void ofxLivedrawEngine::draw() {
@@ -56,9 +50,6 @@ void ofxLivedrawEngine::draw() {
     canvas.render(); // accumulate everything onto the fbo.
     // here is where we can do the transformations before projection
     canvas.draw();
-    // draw the gui
-    guiManager.draw();
-    ofSetColor(255);
 }
 
 

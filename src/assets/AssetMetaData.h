@@ -10,13 +10,16 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxOscRouterNode.h"
 #include <set>
 
-class AssetMetaData {
+class AssetMetaData : public ofxOscRouterNode {
   
 public:
     AssetMetaData();
     virtual ~AssetMetaData();
+
+    void processOscMessage(string address, ofxOscMessage& m);
 
     bool containsKeyword(string _keyword);
     void addKeyword(string _keyword);

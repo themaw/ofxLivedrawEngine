@@ -10,13 +10,13 @@
 #pragma once
 
 #include "ofMain.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 #include "CanvasGroup.h"
 #include "CanvasLayer.h"
 #include "CanvasLayerManager.h"
 
 
-class CanvasGroupManager : public OscNodeListener {
+class CanvasGroupManager : public ofxOscRouterNode {
 public:
     
     CanvasGroupManager(CanvasLayerManager* layerManager);

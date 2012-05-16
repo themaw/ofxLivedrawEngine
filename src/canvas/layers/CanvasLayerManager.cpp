@@ -9,7 +9,7 @@
 #include "CanvasLayerManager.h"
 
 //--------------------------------------------------------------
-CanvasLayerManager::CanvasLayerManager() : OscNodeListener("/layer") {
+CanvasLayerManager::CanvasLayerManager() : ofxOscRouterNode("/layer") {
 }
 
 //--------------------------------------------------------------
@@ -21,8 +21,8 @@ CanvasLayerManager::~CanvasLayerManager() {
 
 //--------------------------------------------------------------
 void CanvasLayerManager::setup() {
-    addOscCommand("/new");
-    addOscCommand("/delete");
+    addOscMethod("/new");
+    addOscMethod("/delete");
 }
 
 //--------------------------------------------------------------
@@ -83,7 +83,7 @@ CanvasLayer* CanvasLayerManager::newLayer(string layerName, ofPoint point, Canva
     
     cl->setup();
     cl->setPosition(point);
-    cl->setAssetManager(assetManager);
+ //   cl->setAssetManager(assetManager);
 //    cl->setEffectsManager(effectsManager);
 
     CanvasLayerTransform* xform = cl->getTransform();
@@ -203,11 +203,12 @@ void CanvasLayerManager::draw() {
 
         
  //       ofFill();
-        layer->getSource()->draw(-a.x, -a.y);
-        if(layer->getMask()->bAllocated()) {
-            layer->getMask()->draw(-a.x, -a.y);
-        }
-//        ofRect(-a.x, -a.y,0,w,h);
+        
+        layer->getSourcePlayer()->draw(-a.x, -a.y);
+        layer->getMaskPlayer()->draw(-a.x, -a.y);
+
+        
+        //        ofRect(-a.x, -a.y,0,w,h);
 //        ofNoFill();
         //layer->getFbo()->end();
         

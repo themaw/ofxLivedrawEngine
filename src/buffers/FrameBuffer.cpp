@@ -8,20 +8,18 @@
 
 #include "FrameBuffer.h"
 
-
 //--------------------------------------------------------------
-FrameBuffer::FrameBuffer(FrameBuffer& mom) {
-    source = NULL;   
+FrameBuffer::FrameBuffer(int _bufferSize) : ofxVideoBuffer(_bufferSize){
+    bufferId     = "";
+    backingAsset = NULL;
 }
 
 //--------------------------------------------------------------
-FrameBuffer::FrameBuffer(int _bufferSize) {
-    source = NULL;
-}
+FrameBuffer::~FrameBuffer() {}
 
 //--------------------------------------------------------------
-FrameBuffer::~FrameBuffer() {
-    
+void FrameBuffer::setBackingAsset(MediaAsset* _asset) {
+    backingAsset = _asset;
 }
 
 //--------------------------------------------------------------
@@ -29,21 +27,17 @@ string FrameBuffer::getId() {
     return bufferId;
 }
 //--------------------------------------------------------------
-void   FrameBuffer::setId(string _bufferId) {
+void FrameBuffer::setId(string _bufferId) {
     bufferId = _bufferId;
 }
 
 //--------------------------------------------------------------
-void FrameBuffer::setSource(BaseMediaAsset* _source) {
-    source = _source;
+bool FrameBuffer::hasBackingAsset() {
+    return backingAsset != NULL;
 }
 
 //--------------------------------------------------------------
-BaseMediaAsset* FrameBuffer::getSource() {
-    return source;
+MediaAsset* FrameBuffer::getBackingAsset() {
+    return backingAsset;
 }
 
-//--------------------------------------------------------------
-bool FrameBuffer::hasSource() {
-    return source == NULL;
-}

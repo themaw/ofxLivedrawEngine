@@ -10,91 +10,90 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Poco/RegularExpression.h"
 #include "ofxXmlSettings.h"
-#include "ofImage.h"
 
-//#include "BaseMediaAsset.h"
-#include "ImageMediaAsset.h"
-#include "VideoMediaAsset.h"
-#include "GrabberMediaAsset.h"
-#include "StreamMediaAsset.h"
-#include "SyphonMediaAsset.h"
-#include "OscNodeListener.h"
+#include "MediaAsset.h"
+#include "FrameBuffer.h"
+#include "ofxOscRouterNode.h"
  
-class AssetManager : public OscNodeListener {
+class AssetManager : public ofxOscRouterNode {
 	
 public:
-	
 	AssetManager();
 	virtual ~AssetManager();
     void setup();
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
+    
+    MediaAsset* addAsset(MediaAssetType _assetType, string _assetURI);
+    bool removeAsset(MediaAsset* asset);
 
-    
-	// this is for sources (videos)
-	//void getSourceInstance(BaseMediaSource* source);
-	
-	// this is for shared sources (live video, streams, videos??) // if we loaded the video into memory
-	//void getSourceShared(BaseMediaSource* source);
-	
-	//bool addSource(BaseMediaSource* source);
-	//bool removeSource(BaseMediaSource* source);
-	
-    
-    //ofVideoGrabber* grabber
-    
-	
 	void loadAssets();
-//	
-//	void loadImages();
-	void loadVideos();
-//	void loadGrabbers();
-//	void loadStreams();
-	
-	
+    
+    void loadFilesAssets();
+    void loadGrabberAssets(); 
+    void loadStreamAssets();
+	void loadSyphonAssets();
+    
+	int getNumAssets();
+
+    int getNumFileAssets();
 	int getNumImageAssets();
 	int getNumVideoAssets();
 	int getNumGrabberAssets();
 	int getNumStreamAssets();
+    int getNumSyphonAssets();
 
 	//  TODO: for file watchers	
-	//	void onNewAsset(ImageMediaAsset* image);
-	//	void onNewAsset(VideoMediaAsset* video);
-	//	void onNewAsset(GrabberMediaAsset* grabber);
-	//	void onNewAsset(StreamMediaAsset* stream);
-    
-	// TODO: this is strange.  we should be able to open this without having it passed in
-	
-    //ofVideoGrabber* getGrabberSource(GrabberMediaAsset* grabberAsset);
-    
-    
-    //ImageMediaAsset* getImageAsset(string id);
-    VideoMediaAsset* getVideoAsset(string id);
-    //GrabberMediaAsset* getGrabberAsset(string id);
-    //StreamMediaAsset* getStreamAsset(string id);
+	//	void onNewAsset(MediaAsset* asset);
+
+    MediaAsset* getAsset(string id);
     
     bool hasId(string id);
+
+    FrameBuffer* getAssetBackedBuffer(MediaAsset* asset, bool wantDiskBackedAsset) {
+        
+        if(wantDiskBackedAsset) {
+            // first we check and see if there is a buffer backed asset to tap
+            
+            
+            
+        } else {
+            
+        }
+        
+        
+    }
+    
     
 private:
 	
-	//vector<ImageMediaAsset*> images;
-	vector<VideoMediaAsset*> videos ;
-	//vector<GrabberMediaAsset*> grabbers;
-	//vector<StreamMediaAsset*> streams;
+	vector<MediaAsset*> assets;
 
-	//vector<GrabberSource*> activeGrabberSources;
-	//vector<GrabberSource*> activeStreamingSource;
-	//vector<GrabberSource*> activeGrabberSource;
-	//vector<GrabberSource*> activeGrabberSource;
-	//vector<GrabberSource*> activeGrabberSource;
-    
-    ofDirectory a;
+    map<MediaAsset*,FrameBuffer*>  buffBackedAssets;
+    set<MediaAsset*,FrameBuffer*>  diskBackedAssets;
     
     
+    /*
+    mymap['a']=50;
+    mymap['b']=100;
+    mymap['c']=150;
+    mymap['d']=200;
     
+    it=mymap.find('b');
+    mymap.erase (it);
+    mymap.erase (mymap.find('d'));
     
-    
-    
+    // print content:
+    cout << "elements in mymap:" << endl;
+    cout << "a => " << mymap.find('a')->second << endl;
+    cout << "c => " << mymap.find('c')->second << endl;
+     */
 
+    
+    string generateAssetId(MediaAssetType _assetType, string _assetURI);
+
+    ofDirectory dir;
+    
 };

@@ -9,7 +9,7 @@
 #include "EffectsChain.h"
 
 //--------------------------------------------------------------
-EffectsChain::EffectsChain() : OscNodeListener("/effects") {
+EffectsChain::EffectsChain() : ofxOscRouterNode("/effects") {
     
 }
 

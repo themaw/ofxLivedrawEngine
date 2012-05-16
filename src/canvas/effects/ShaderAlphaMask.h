@@ -10,14 +10,14 @@
 
 #include "ofMain.h"
 #include "AbstractShaderEffect.h"
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 #include "EnablerInterface.h"
 
-class ShaderAlphaMaskSettings : public OscNodeListener, public Enabler {
+class ShaderAlphaMaskSettings : public ofxOscRouterNode, public Enabler {
     
 public:
     
-    ShaderAlphaMaskSettings() : OscNodeListener("/alphamask"), Enabler(true) {
+    ShaderAlphaMaskSettings() : ofxOscRouterNode("/alphamask"), Enabler(true) {
         alphaMode = 5;
         invertMask = 0; // 0 = dark-alpha, 1 = light-alpha
         invertSource = 0; // 1 = invert, 0 = thru
@@ -25,13 +25,13 @@ public:
         spread = 0.01; //0.2);  //rtb runs between 0-1
         gain = 1.0; // gain = 0 - 1000
         
-        addOscCommand("/alphamode");
-        addOscCommand("/invertmask");
-        addOscCommand("/invertsource");
-        addOscCommand("/threshold");
-        addOscCommand("/spread");
-        addOscCommand("/gain");
-        addOscCommand("/enable");
+        addOscMethod("/alphamode");
+        addOscMethod("/invertmask");
+        addOscMethod("/invertsource");
+        addOscMethod("/threshold");
+        addOscMethod("/spread");
+        addOscMethod("/gain");
+        addOscMethod("/enable");
         
     }
     
@@ -45,12 +45,12 @@ public:
                 setAlphaMode(m.getArgAsInt32(0));
             }
         } else if(isMatch("/invertmask",pattern)) {
-            if(validateOscSignature("[fi]", m)) {
-                setInvertMask(m.getArgAsInt32(0) == 1);
+            if(validateOscSignature("[sfi]", m)) {
+                setInvertMask(toBoolean(m,0));
             }
         } else if(isMatch("/invertsource",pattern)) {
-            if(validateOscSignature("[fi]", m)) {
-                setInvertSource(m.getArgAsInt32(0) == 1);
+            if(validateOscSignature("[sfi]", m)) {
+                setInvertSource(toBoolean(m,0));
             }
         } else if(isMatch("/threshold",pattern)) {
             if(validateOscSignature("[fi]", m)) {
@@ -66,9 +66,8 @@ public:
                 setGain(m.getArgAsFloat(0));
             }     
         } else if(isMatch("/enable",pattern)) {
-            if(validateOscSignature("[fi]", m)) {
-                bool _enable = (m.getArgAsInt32(0) == 1);
-                setEnabled(_enable);
+            if(validateOscSignature("[sfi]", m)) {
+                setEnabled(toBoolean(m,0));
             }
         }
     }

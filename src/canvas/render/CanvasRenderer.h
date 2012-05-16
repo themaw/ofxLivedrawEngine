@@ -11,14 +11,14 @@
 // communication between layers
 
 #pragma once
-#include "OscNodeListener.h"
+#include "ofxOscRouterNode.h"
 #include "CanvasLayer.h"
 #include "CanvasLayerTransform.h"
 #include "CanvasLayerManager.h"
 #include "AssetManager.h"
 //#include "EffectsManager.h"
 
-class CanvasRenderer : public OscNodeListener {
+class CanvasRenderer : public ofxOscRouterNode {
 	
 public:
 	

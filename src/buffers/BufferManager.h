@@ -10,10 +10,10 @@
 
 #include "ofMain.h"
 #include "AssetManager.h"
-#include "OscManager.h"
+#include "ofxOscRouterNode.h"
 #include "FrameBuffer.h"
 
-class BufferManager : public OscNodeListener {
+class BufferManager : public ofxOscRouterNode {
 public:
     
     BufferManager();
@@ -22,15 +22,16 @@ public:
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
 
+    FrameBuffer* getNewAssetBackedBuffer(MediaAsset* _asset);
     FrameBuffer* getNewVideoBuffer(int _bufferSize = 1);
-    
-    //int getTotalFramesBuffered();
-    //int getTotalBytesBuffered();
     
 protected:
     AssetManager*   assetManager;
 
 private:
+    
+    
+    
     vector<ofxVideoBuffer> buffers;
     
 };

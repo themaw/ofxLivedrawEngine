@@ -10,47 +10,15 @@
 #include "AssetManager.h"
 
 //--------------------------------------------------------------
-AssetManager::AssetManager() : OscNodeListener("/sources")
+AssetManager::AssetManager() : ofxOscRouterNode("/assets")
 {
-	//loadAssets();
-    addOscCommand("alias"); // allows id changes
+    addOscMethod("alias"); // allows id changes
 }
 
 //--------------------------------------------------------------
-AssetManager::~AssetManager()
-{
-	
-	ofLog(OF_LOG_NOTICE, "Destroying manager.");
-	
-	// is this the correct way to free all of the memory?
-//	while (!images.empty())
-//	{
-//		delete images.back();
-//		images.pop_back();
-//	}
-	
-	// is this the correct way to free all of the memory?
-	while (!videos.empty())
-	{
-		delete videos.back();
-		videos.pop_back();
-	}
-	
-	// is this the correct way to free all of the memory?
-//	while (!grabbers.empty())
-//	{
-//		delete grabbers.back();
-//		grabbers.pop_back();
-//	}
-	
-	// is this the correct way to free all of the memory?
-//	while (!streams.empty())
-//	{
-//		delete streams.back();
-//		streams.pop_back();
-//	}
-	
-	
+AssetManager::~AssetManager() {
+    ofLog(OF_LOG_NOTICE, "Destroying Asset Manager.");
+
 }
 
 //--------------------------------------------------------------
@@ -68,222 +36,177 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
     cout << "OSC MESSAGE FOR THE ASSET MANAGER " << endl;
 }
 
-
 //--------------------------------------------------------------
-//void AssetManager::loadImages()
-//{
-//	ofLog(OF_LOG_NOTICE, "Loading Images:");
-//	ofLog(OF_LOG_NOTICE, "---------------");
-//	
-//    int nImages = a.listDir("sources/images/");
-//	for (int i = 0; i < nImages; i++) {
-//		// create image sources
-//		string name = a.getName(i);
-//		string path = a.getPath(i);
-//
-//		ImageMediaAsset* asset = new ImageMediaAsset(path);
-//        asset->setAssetId(name); // short name from file [TODO: make sure that this name is not taken already!
-//		images.push_back(asset);
-//		
-//		ofLog(OF_LOG_NOTICE, "Loading IMAGE: id: " + asset->getAssetId() + " uri: " + asset->getAssetURI().toString() );
-//	}
-//	ofLog(OF_LOG_NOTICE, "---------------");
-//}
-
-
-//--------------------------------------------------------------
-void AssetManager::loadVideos()
-{
-    ofLog(OF_LOG_NOTICE, "Loading Videos:");
-	ofLog(OF_LOG_NOTICE, "---------------");
-
-	int nVideos = a.listDir("sources/videos/");
-	for (int i = 0; i < nVideos; i++) {
-		// create video sources
-		
-		string name = a.getName(i);
-		string path = a.getPath(i);
-		
-		VideoMediaAsset* asset = new VideoMediaAsset(path);
-        asset->setAssetId(name); // short name from file // short name from file [TODO: make sure that this name is not taken already!
-		videos.push_back(asset);
-		
-		ofLog(OF_LOG_NOTICE, "Loading VIDEO: id: " + asset->getAssetId() + " uri: " + asset->getAssetURI().toString() );
-
-	}
-	ofLog(OF_LOG_NOTICE, "---------------" + ofToString(getNumVideoAssets()));
-	
+MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetURI) {
+    string assetId = generateAssetId(_assetType,_assetURI);
+    MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
+    assets.push_back(asset);
 }
 
 //--------------------------------------------------------------
-//void AssetManager::loadGrabbers()
-//{
-//	ofxXmlSettings XML;
+void AssetManager::loadAssets() {
+	loadFilesAssets();
+    loadGrabberAssets();
+    loadStreamAssets();
+    loadSyphonAssets();
+}
 //
-//    // TODO: load from list devices, rather than like this.
-//    
-//	ofLog(OF_LOG_NOTICE, "Loading Grabbers:");
-//	ofLog(OF_LOG_NOTICE, "-----------------");
-//	
-//	if( XML.loadFile("sources/grabbers/grabbers.xml") ){
-//		
-//		XML.pushTag("grabbers");
-//		string tag = "grabber";
-//		
-//		int nGrabbers = XML.getNumTags(tag);
-//		
-//		for(int n = 0; n < nGrabbers; n++) {
-//			string name = XML.getAttribute(tag, "name", "unknown", n);
-//			int id = XML.getAttribute(tag, "id", -1, n);
-//			int width = XML.getAttribute(tag, "width", -1, n);
-//			int height = XML.getAttribute(tag, "height", -1, n);
-//			
-//			string logMessage = "GRABBER LOADED: " + name + 
-//			" id: " +  ofToString(id) + 
-//			" width: " + ofToString(width) + 
-//			" height: " + ofToString(height);
-//			
-//			GrabberMediaAsset* asset = new GrabberMediaAsset(name);
-//            asset->setAssetId(name); // short name from file // short name from file [TODO: make sure that this name is not taken already!
-//			grabbers.push_back(asset);
-//			
-//			ofLog(OF_LOG_NOTICE, logMessage+ " id: " + asset->getAssetId() + "uri: " + asset->getAssetURI().toString() );
-//		}
-//		
-//		XML.popTag();
-//		
-//	} else {
-//		ofLog(OF_LOG_ERROR, "Unable to load sources/grabbers/grabbers.xml.");
-//	}
-//	ofLog(OF_LOG_NOTICE, "---------------");
-//}
+//--------------------------------------------------------------
+void AssetManager::loadFilesAssets()
+{
+	int nFiles = dir.listDir("media/");
+    
+    // lower case
+    string validVideoTypes = "[\\.](wm|wmv|asf|mov|qt|mp4|mpeg|mpg|mpe|m1v|mp2|mpv2|mod|vob|m1v|avi)";
+    string validImageTypes = "[\\.](jpg|jpeg|png|tiff|tif|gif|exr|ico|bmp|pict|psd|raw)";
+    string validOtherTypes = "[\\.](xml|txt)";
+
+    RegularExpression vidTypes(validVideoTypes,RegularExpression::RE_CASELESS);
+    RegularExpression imgTypes(validImageTypes,RegularExpression::RE_CASELESS);
+    RegularExpression otherTypes(validOtherTypes,RegularExpression::RE_CASELESS);
+    
+    string s;
+    
+	for (int i = 0; i < nFiles; i++) {
+		// create video sources
+		
+		string name = dir.getName(i);
+		string path = dir.getPath(i);
+		
+        if(vidTypes.extract(name, 0, s) > 0) {
+            addAsset(MEDIA_ASSET_VIDEO,path);
+        } else if(imgTypes.extract(name, 0, s) > 0) {
+            addAsset(MEDIA_ASSET_IMAGE,path);
+        } else if(otherTypes.extract(name, 0, s)) {
+            //ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - other valid non-media " + path); 
+        } else {
+            ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Unknown file type :  " + path);
+        }
+        
+		
+
+	}
+    
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumImageAssets()) + " images.");
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumVideoAssets()) + " videos.");	
+}
 
 //--------------------------------------------------------------
-//void AssetManager::loadStreams()
-//{
-//	ofxXmlSettings XML;
-//
-//	ofLog(OF_LOG_NOTICE, "Loading Streams:");
-//	ofLog(OF_LOG_NOTICE, "---------------");
-//	
-//	if( XML.loadFile("sources/streams/streams.xml") ){
-//		
-//		XML.pushTag("streams");
-//		string tag = "stream";
-//		
-//		int nStreams = XML.getNumTags(tag);
-//		
-//		for(int n = 0; n < nStreams; n++) {
-//			string name = XML.getAttribute(tag, "name", "unknown", n);
-//			string address = XML.getAttribute(tag, "address", "NULL", n);
-//			string username = XML.getAttribute(tag, "username", "NULL", n); 
-//			string password = XML.getAttribute(tag, "password", "NULL", n); 
-//			
-//			string logMessage = "STREAM LOADED: " + name + 
+void AssetManager::loadSyphonAssets() {
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumSyphonAssets()) + " syphon sources.");	
+}
+
+//--------------------------------------------------------------
+void AssetManager::loadGrabberAssets() {
+    // TODO: no way to get a vector of names?
+    ofVideoGrabber grabber;
+    grabber.listDevices();
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumGrabberAssets()) + " grabbers.");
+}
+
+
+//--------------------------------------------------------------
+void AssetManager::loadStreamAssets(){
+	ofxXmlSettings XML;
+
+	if( XML.loadFile("media/streams.xml") ){
+		
+		XML.pushTag("streams");
+		string tag = "stream";
+		
+		int nStreams = XML.getNumTags(tag);
+		
+		for(int n = 0; n < nStreams; n++) {
+			string name = XML.getAttribute(tag, "name", "unknown", n);
+			string address = XML.getAttribute(tag, "address", "NULL", n);
+			string username = XML.getAttribute(tag, "username", "NULL", n); 
+			string password = XML.getAttribute(tag, "password", "NULL", n); 
+			string type     = XML.getAttribute(tag,"type","NULL",n);
+
+            // TODO DIFFERENTIATE BETWEEN RTSP, QT HTTP, IPCAM, ETC
+//            string logMessage = "STREAM LOADED: " + name + 
 //			" address: " +  address + 
 //			" username: " + username + 
 //			" password: " + password;
-//			
-//			// TODO NOT WORKING YET
-//			StreamMediaAsset* asset = new StreamMediaAsset(address);
-//            asset->setAssetId(name); // short name from file [TODO: make sure that this name is not taken already!
-//			streams.push_back(asset);
-//			
-//            
-//            ofLog(OF_LOG_NOTICE, logMessage+ " id: " + asset->getAssetId() + "uri: " + asset->getAssetURI().toString() );
-//			
-//
-//			
-//		}
-//		
-//		XML.popTag();
-//		
-//		
-//		
-//	} else {
-//		ofLog(OF_LOG_ERROR, "Unable to load sources/streams/streams.xml.");
-//	}
-//	ofLog(OF_LOG_NOTICE, "---------------");
-//}
+            addAsset(MEDIA_ASSET_STREAM,address);
+		}
+		
+		XML.popTag();
+		
+	} else {
+		ofLog(OF_LOG_ERROR, "Unable to load media/streams.xml.");
+	}
+
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumStreamAssets()) + " streams.");
+
+}
 
 
+
+
+
+int AssetManager::getNumAssets() {return assets.size();}
 
 //--------------------------------------------------------------
-void AssetManager::loadAssets()
-{
-//	loadImages();
-	loadVideos();
-//	loadGrabbers();
-//	loadStreams();
+int AssetManager::getNumImageAssets() {
+    int cnt = 0;
+    for(int i = 0; i < assets.size(); i++) if(assets[i]->isImageAsset()) cnt++;
+    return cnt;
 }
-//
-////--------------------------------------------------------------
-//int AssetManager::getNumImageAssets() {return images.size();}
-////--------------------------------------------------------------
-//int AssetManager::getNumGrabberAssets() {return grabbers.size();}
-////--------------------------------------------------------------
-int AssetManager::getNumVideoAssets() {return videos.size();}
-////--------------------------------------------------------------
-//int AssetManager::getNumStreamAssets() {return streams.size();}
-////--------------------------------------------------------------
-
+//--------------------------------------------------------------
+int AssetManager::getNumGrabberAssets() {
+    int cnt = 0;
+    for(int i = 0; i < assets.size(); i++) if(assets[i]->isGrabberAsset()) cnt++;
+    return cnt;
+}
+//--------------------------------------------------------------
+int AssetManager::getNumVideoAssets() {
+    int cnt = 0;
+    for(int i = 0; i < assets.size(); i++) if(assets[i]->isVideoAsset()) cnt++;
+    return cnt;   
+}
+//--------------------------------------------------------------
+int AssetManager::getNumStreamAssets() {
+    int cnt = 0;
+    for(int i = 0; i < assets.size(); i++) if(assets[i]->isStreamAsset()) cnt++;
+    return cnt;
+}
+//--------------------------------------------------------------
+int AssetManager::getNumSyphonAssets() {
+    int cnt = 0;
+    for(int i = 0; i < assets.size(); i++) if(assets[i]->isSyphonAsset()) cnt++;
+    return cnt;
+}
 
 //--------------------------------------------------------------
 bool AssetManager::hasId(string id) {
-//    for(int i  = 0; i < images.size(); i++) {
-//        if(id.compare(images[i]->getAssetId()) == 0) return true;
-//    }
-    
-    for(int i  = 0; i < videos.size(); i++) {
-        if(id.compare(videos[i]->getAssetId()) == 0) return true;
+    for(int i  = 0; i < assets.size(); i++) {
+        if(id.compare(assets[i]->getAssetId()) == 0) return true;
     }
-
-//    for(int i  = 0; i < grabbers.size(); i++) {
-//        if(id.compare(grabbers[i]->getAssetId()) == 0) return true;
-//    }
-//
-//    for(int i  = 0; i < streams.size(); i++) {
-//        if(id.compare(streams[i]->getAssetId()) == 0) return true;
-//    }
-
     return false;
-
 }
 
 
-////--------------------------------------------------------------
-//ImageMediaAsset* AssetManager::getImageAsset(string id) {
-//    for(int i  = 0; i < images.size(); i++) {
-//        if(id.compare(images[i]->getAssetId()) == 0) return images[i];
-//    }
-//    return NULL;
-//}
-
 //--------------------------------------------------------------
-VideoMediaAsset* AssetManager::getVideoAsset(string id) {
-    for(int i  = 0; i < videos.size(); i++) {
-        if(id.compare(videos[i]->getAssetId()) == 0) return videos[i];
+MediaAsset* AssetManager::getAsset(string id) {
+    for(int i  = 0; i < assets.size(); i++) {
+        if(id.compare(assets[i]->getAssetId()) == 0) return assets[i];
     }
     return NULL;
 }
 
-////--------------------------------------------------------------
-//GrabberMediaAsset* AssetManager::getGrabberAsset(string id) {
-//    for(int i  = 0; i < grabbers.size(); i++) {
-//        if(id.compare(grabbers[i]->getAssetId()) == 0) return grabbers[i];
-//    }
-//    return NULL;
-//}
-//
-////--------------------------------------------------------------
-//StreamMediaAsset* AssetManager::getStreamAsset(string id) {
-//    for(int i  = 0; i < streams.size(); i++) {
-//        if(id.compare(streams[i]->getAssetId()) == 0) return streams[i];
-//    }
-//    return NULL;
-//}
-
 //--------------------------------------------------------------
+string AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI) {
+    /*
+	if(assetID.empty()) {
+		assetID = assetURI.toString();
+		return true;
+	} else{
+		ofLog(OF_LOG_WARNING, "Asset ID already set to " + assetID);
+		return false;	
+	}*/
+}
+
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 //--------------------------------------------------------------
