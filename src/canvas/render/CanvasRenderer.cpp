@@ -32,7 +32,7 @@ void CanvasRenderer::init() {
     addOscMethod("/fps");
     addOscMethod("/msaa");
     
-    addOscChild(&layerManager); // layer manager
+    //addOscChild(&layerManager); // layer manager
     
     useMSAA = true;
         
@@ -54,13 +54,7 @@ void CanvasRenderer::setup() {
     
     fbo.allocate(width,height);
 
-    layerManager.setup();
-}
-
-//--------------------------------------------------------------
-void CanvasRenderer::setAssetManager(AssetManager* _assetManager) {
-    assetManager = _assetManager;
-    layerManager.setAssetManager(assetManager);
+    //layerManager.setup();
 }
 
 //--------------------------------------------------------------
@@ -71,7 +65,7 @@ void CanvasRenderer::setAssetManager(AssetManager* _assetManager) {
 
 //--------------------------------------------------------------
 void CanvasRenderer::update() {
-    layerManager.update();
+//    layerManager.update();
 }
 
 //--------------------------------------------------------------
@@ -87,7 +81,7 @@ void CanvasRenderer::render() {
 //    ofFill();
 //    ofRect(0,0,fbo.getWidth(),fbo.getHeight());
 
-    layerManager.draw();
+//    layerManager.draw();
     fbo.end(); // end the fbo
 }
 
@@ -142,11 +136,11 @@ void CanvasRenderer::processOscMessage(string address, ofxOscMessage& m) {
         }            
     } else if(isMatch(address,"/fullscreen")) {
         if(validateOscSignature("[if]",m)) {
-            ofSetFullscreen(toBoolean(m,0));
+            ofSetFullscreen(getArgAsBoolean(m,0));
         }
     } else if(isMatch(address,"/msaa")) {
         if(validateOscSignature("[if]",m)) {
-            setMsaa(toBoolean(m,0));
+            setMsaa(getArgAsBoolean(m,0));
         }
     } else if(isMatch(address,"/fps")) {
         if(validateOscSignature("[if]",m)) {

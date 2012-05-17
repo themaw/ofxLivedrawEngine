@@ -38,10 +38,19 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
 
 //--------------------------------------------------------------
 MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetURI) {
-    string assetId = generateAssetId(_assetType,_assetURI);
-    MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
-    assets.push_back(asset);
-    return asset;
+    string assetId = "";
+    if(generateAssetId(_assetType,_assetURI,assetId)) {
+        
+        if(hasId(assetId)) {
+            MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
+            assets[assetId] = asset;
+            return asset;
+        } else {
+            ofLog(OF_LOG_WARNING, "AssetManager::addAsset alreadh has asset called : " + assetId);
+            return NULL;
+        }
+    }
+    return NULL;
 }
 
 //--------------------------------------------------------------
@@ -151,54 +160,117 @@ int AssetManager::getNumAssets() {return assets.size();}
 //--------------------------------------------------------------
 int AssetManager::getNumImageAssets() {
     int cnt = 0;
-    for(int i = 0; i < assets.size(); i++) if(assets[i]->isImageAsset()) cnt++;
+    map<string,MediaAsset*>::iterator iter = assets.begin();
+    while(iter != assets.end()) {
+        if(iter->second->isImageAsset()) cnt++;
+        iter++;
+    }
     return cnt;
 }
 //--------------------------------------------------------------
 int AssetManager::getNumGrabberAssets() {
     int cnt = 0;
-    for(int i = 0; i < assets.size(); i++) if(assets[i]->isGrabberAsset()) cnt++;
+    map<string,MediaAsset*>::iterator iter = assets.begin();
+    while(iter != assets.end()) {
+        if(iter->second->isGrabberAsset()) cnt++;
+        iter++;
+    }
     return cnt;
 }
 //--------------------------------------------------------------
 int AssetManager::getNumVideoAssets() {
     int cnt = 0;
-    for(int i = 0; i < assets.size(); i++) if(assets[i]->isVideoAsset()) cnt++;
+    map<string,MediaAsset*>::iterator iter = assets.begin();
+    while(iter != assets.end()) {
+        if(iter->second->isVideoAsset()) cnt++;
+        iter++;
+    }
     return cnt;   
 }
 //--------------------------------------------------------------
 int AssetManager::getNumStreamAssets() {
     int cnt = 0;
-    for(int i = 0; i < assets.size(); i++) if(assets[i]->isStreamAsset()) cnt++;
+    map<string,MediaAsset*>::iterator iter = assets.begin();
+    while(iter != assets.end()) {
+        if(iter->second->isStreamAsset()) cnt++;
+        iter++;
+    }
     return cnt;
 }
 //--------------------------------------------------------------
 int AssetManager::getNumSyphonAssets() {
     int cnt = 0;
-    for(int i = 0; i < assets.size(); i++) if(assets[i]->isSyphonAsset()) cnt++;
+    map<string,MediaAsset*>::iterator iter = assets.begin();
+    while(iter != assets.end()) {
+        if(iter->second->isSyphonAsset()) cnt++;
+        iter++;
+    }
     return cnt;
 }
 
 //--------------------------------------------------------------
 bool AssetManager::hasId(string id) {
-    for(int i  = 0; i < assets.size(); i++) {
-        if(id.compare(assets[i]->getAssetId()) == 0) return true;
-    }
-    return false;
+    return assets.find(id) != assets.end();
 }
 
 
 //--------------------------------------------------------------
 MediaAsset* AssetManager::getAsset(string id) {
-    for(int i  = 0; i < assets.size(); i++) {
-        if(id.compare(assets[i]->getAssetId()) == 0) return assets[i];
+    map<string,MediaAsset*>::iterator iter = assets.find(id);
+    if(iter!=assets.end()) {
+        return iter->second;
+    } else {
+        return NULL;
     }
-    return NULL;
 }
 
 //--------------------------------------------------------------
-string AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI) {
-    return "AAAAAA";
+bool AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI, string& assetId) {
+    
+    string id;
+    string prefix = "";
+    string filename = "";
+    
+    
+    switch (_assetType) {
+        case MEDIA_ASSET_UNKNOWN:
+            return false;
+            break;
+        case MEDIA_ASSET_IMAGE:
+            prefix = "image_";
+            break;
+        case MEDIA_ASSET_GRABBER:
+            prefix = "grabber_";
+            break;
+        case MEDIA_ASSET_STREAM:
+            prefix = "stream_";
+            break;
+        case MEDIA_ASSET_BUFFER:
+            prefix = "buffer_";
+            break;
+        case MEDIA_ASSET_SYPHON:
+            prefix = "syphon_";
+            break;
+        default:
+            break;
+    }
+    
+    filename = _assetURI;
+    
+    id = prefix + filename;
+    
+    
+
+    /*
+    Animated Robot[22].mov    >>>   file_Animated-Robot-22-.mov
+    USB camera #2             >>>   grabber_2 (use OpenFrameworks/QuickTime indexing)
+    syphon source "tex69"     >>>   syphon_tex69
+    IP camera named "ipcam3"  >>>   stream_ipcam3 (use source name from streams.xml file)
+    Recording Buffers         >>>   buffer_name_of_buffer
+    Buffer Player             >>>   bufferplayer_name_of_buffer_player
+    */
+    
+    
     /*
 	if(assetID.empty()) {
 		assetID = assetURI.toString();

@@ -246,11 +246,11 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
         }
     } else if(isMatch(address, "/lock")) {
         if(validateOscSignature("[fi]", m)) {
-            layerManager->setLayerLock(this, toBoolean(m,0));
+            layerManager->setLayerLock(this, getArgAsBoolean(m,0));
         }
     } else if(isMatch(address, "/solo")) {
         if(validateOscSignature("[fi]", m)) {
-            layerManager->setLayerSolo(this, toBoolean(m,0));
+            layerManager->setLayerSolo(this, getArgAsBoolean(m,0));
         }
     } else if(isMatch(address, "/label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {

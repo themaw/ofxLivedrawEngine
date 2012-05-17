@@ -46,7 +46,7 @@ public:
             }
         } else if(isMatch("/enable",pattern)) {
             if(validateOscSignature("[fi]", m)) {
-                setEnabled(toBoolean(m,0));
+                setEnabled(getArgAsBoolean(m,0));
             }
         }
     }

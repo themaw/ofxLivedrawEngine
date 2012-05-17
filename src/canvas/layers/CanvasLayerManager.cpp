@@ -25,10 +25,6 @@ void CanvasLayerManager::setup() {
     addOscMethod("/delete");
 }
 
-//--------------------------------------------------------------
-void CanvasLayerManager::setAssetManager(AssetManager* _assetManager) {
-    assetManager = _assetManager;
-}
 
 //--------------------------------------------------------------
 //void CanvasLayerManager::setEffectsManager(EffectsManager* _effectsManager) {

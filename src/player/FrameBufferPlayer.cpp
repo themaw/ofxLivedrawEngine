@@ -38,7 +38,7 @@ void FrameBufferPlayer::processOscMessage(string address, ofxOscMessage& m) {
     if(isMatch(address,"/buffer")) {
         if(validateOscSignature("[s][sfi]?", m)) {
             string assetId = m.getArgAsString(0);
-            bool useDisk = toBoolean(m,1);
+            bool useDisk = getArgAsBoolean(m,1);
 
             if(hasParentLayer()) {
                 //AssetManager* am = parentLayer->getAssetManager();
@@ -56,7 +56,7 @@ void FrameBufferPlayer::processOscMessage(string address, ofxOscMessage& m) {
         stop();
     } else if(isMatch(address, "/pause")) {
         if(validateOscSignature("[sfi]", m)) {
-            setPaused(toBoolean(m,0));
+            setPaused(getArgAsBoolean(m,0));
         }
     } else if(isMatch(address, "/loopmode")) {
         if(validateOscSignature("s", m)) {

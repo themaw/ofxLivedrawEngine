@@ -46,11 +46,11 @@ public:
             }
         } else if(isMatch("/invertmask",pattern)) {
             if(validateOscSignature("[sfi]", m)) {
-                setInvertMask(toBoolean(m,0));
+                setInvertMask(getArgAsBoolean(m,0));
             }
         } else if(isMatch("/invertsource",pattern)) {
             if(validateOscSignature("[sfi]", m)) {
-                setInvertSource(toBoolean(m,0));
+                setInvertSource(getArgAsBoolean(m,0));
             }
         } else if(isMatch("/threshold",pattern)) {
             if(validateOscSignature("[fi]", m)) {
@@ -67,7 +67,7 @@ public:
             }     
         } else if(isMatch("/enable",pattern)) {
             if(validateOscSignature("[sfi]", m)) {
-                setEnabled(toBoolean(m,0));
+                setEnabled(getArgAsBoolean(m,0));
             }
         }
     }

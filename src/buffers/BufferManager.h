@@ -12,6 +12,9 @@
 #include "AssetManager.h"
 #include "ofxOscRouterNode.h"
 #include "FrameBuffer.h"
+#include "ofxLivedrawEngine.h"
+
+class ofxLivedrawEngine;
 
 class BufferManager : public ofxOscRouterNode {
 public:
@@ -24,10 +27,14 @@ public:
 
     FrameBuffer* getNewAssetBackedBuffer(MediaAsset* _asset);
     FrameBuffer* getNewVideoBuffer(int _bufferSize = 1);
+
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
     
 protected:
-    AssetManager*   assetManager;
 
+    ofxLivedrawEngine* engine;
+    
 private:
     
     

@@ -20,6 +20,7 @@
 //#include "EffectsManager.h"
 //#include "EffectsChain.h"
 
+class MediaAsset;
 class FrameBufferPlayer;
 class CanvasLayerManager;
 
@@ -42,18 +43,7 @@ public:
     
     void render();
     void draw();
-    
-	// void draw(); // they can't draw themselves.  the view has to draw them ...
-	
-//    void setEffectsManager(EffectsManager* effectsManager);
 
-    
-	//void setSource(MediaSampler* source);
-	//void setMask(MediaSampler* mask);
-
-	//MediaSampler* getSource();
-	//MediaSampler* getMask();
-	
     void setSource(MediaAsset* src);
     void setMask(MediaAsset* src);
     

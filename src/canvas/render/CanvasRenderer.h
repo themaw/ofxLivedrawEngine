@@ -17,6 +17,9 @@
 #include "CanvasLayerManager.h"
 #include "AssetManager.h"
 //#include "EffectsManager.h"
+#include "ofxLivedrawEngine.h"
+
+class ofxLivedrawEngine;
 
 class CanvasRenderer : public ofxOscRouterNode {
 	
@@ -32,9 +35,6 @@ public:
 	void update();
     void render();
 	void draw();
-	
-    void setAssetManager(AssetManager* assetManager);
-//	void setEffectsManager(EffectsManager* effectsManager);
 	
 	// /livedraw/canvas/fullscreen
 	void setFullscreen(bool _fullscreen);
@@ -64,12 +64,18 @@ public:
     }
     
     void resize(int w, int h);
+
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
     
+protected:
+    
+    ofxLivedrawEngine* engine;
+
 private:
 	
 	// canvas group is a kind of canvas layer
-	
-    CanvasLayerManager layerManager;
+	//CanvasLayerManager layerManager;
     
     ofFbo fbo;
     int x, y;
@@ -77,8 +83,6 @@ private:
     bool useMSAA;
     
     ofColor bgColor;
-    
-    AssetManager* assetManager;
-//	EffectsManager* effectsManager;
+    //EffectsManager* effectsManager;
 };
 

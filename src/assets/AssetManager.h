@@ -12,11 +12,14 @@
 #include "ofMain.h"
 #include "Poco/RegularExpression.h"
 #include "ofxXmlSettings.h"
+#include "ofxLivedrawEngine.h"
 
 #include "MediaAsset.h"
 #include "FrameBuffer.h"
 #include "ofxOscRouterNode.h"
  
+class ofxLivedrawEngine;
+
 class AssetManager : public ofxOscRouterNode {
 	
 public:
@@ -65,11 +68,19 @@ public:
         
         
     }
+
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
     
+protected:
+    
+    ofxLivedrawEngine* engine;
+
     
 private:
 	
-	vector<MediaAsset*> assets;
+    
+	map<string,MediaAsset*> assets;
 
     map<MediaAsset*,FrameBuffer*>  buffBackedAssets;
     set<MediaAsset*,FrameBuffer*>  diskBackedAssets;
@@ -92,7 +103,7 @@ private:
      */
 
     
-    string generateAssetId(MediaAssetType _assetType, string _assetURI);
+    bool generateAssetId(MediaAssetType _assetType, string _assetURI, string& assetId);
 
     ofDirectory dir;
     

@@ -15,6 +15,10 @@ ofxOscRouterNode("/" + _assetId ) {
     assetId = _assetId;
 	assetType = _assetType;
 	assetURI = Poco::URI(_assetURI); // create the uri from the loaded asset
+
+    addOscMethod("/open");
+    
+
 }
 
 //--------------------------------------------------------------

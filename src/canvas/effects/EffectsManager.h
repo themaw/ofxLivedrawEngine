@@ -15,6 +15,10 @@
 #include "ShaderAlphaMask.h"
 #include "ShaderCurves.h"
 
+#include "ofxLivedrawEngine.h"
+
+class ofxLivedrawEngine;
+
 class EffectsManager : public ofxOscRouterNode {
     
 public:
@@ -32,7 +36,13 @@ public:
     // get access to shaders
     ShaderAlphaMask* getShaderAlphaMask();
     ShaderAlphaMask* getShaderCurves();
+   
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
     
+protected:
+    
+    ofxLivedrawEngine* engine;
 private:
 
     // we keep a single collection of shaders here

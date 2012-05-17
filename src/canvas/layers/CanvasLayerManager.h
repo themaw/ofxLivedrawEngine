@@ -9,11 +9,14 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxLivedrawEngine.h"
 #include "ofxOscRouterNode.h"
 #include "CanvasLayer.h"
 #include "AssetManager.h"
+
 //#include "EffectsManager.h"
 
+class ofxLivedrawEngine;
 class CanvasLayer;
 
 class CanvasLayerManager : public ofxOscRouterNode {
@@ -26,10 +29,6 @@ public:
     void update();
     void draw();
     
-    void setAssetManager(AssetManager* _assetManager);
-    AssetManager* getAssetManager();
-    bool hasAssetManager();
-
 //    void setEffectsManager(EffectsManager* _effectsManager);
     
     void processOscMessage(string pattern, ofxOscMessage& m);
@@ -57,11 +56,14 @@ public:
     void setLayerSolo(CanvasLayer* layer, bool solo);
     void setLayerLock(CanvasLayer* layer, bool lock);
     
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
     
+protected:
+    
+    ofxLivedrawEngine* engine;
     
 private:
-    AssetManager* assetManager;
-   // EffectsManager* effectsManager;
     
     vector<CanvasLayer*>::iterator it;
 

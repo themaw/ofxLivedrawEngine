@@ -14,6 +14,9 @@
 
 #include "SessionPreset.h"
 #include "SessionPerformance.h"
+#include "ofxLivedrawEngine.h"
+
+class ofxLivedrawEngine;
 
 class SessionManager : public ofxOscRouterNode {
 	
@@ -27,6 +30,14 @@ public:
     
     void processOscMessage(string address, ofxOscMessage& m);
 	
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
+    
+protected:
+    
+    ofxLivedrawEngine* engine;
+
+    
 };
 
 

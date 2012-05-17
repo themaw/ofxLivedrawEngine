@@ -19,6 +19,12 @@
 
 #define OSC_PORT 5433
 
+class BufferManager;
+class AssetManager;
+class EffectsManager;
+class CanvasLayerManager;
+class CanvasRenderer;
+class SessionManager;
 
 class ofxLivedrawEngine {
 public:
@@ -32,28 +38,27 @@ public:
     
     void windowResized(int w, int h);
     
-    BufferManager&      getBufferManager();
-    ofxOscRouter&      getOscManager();
-    AssetManager&       getAssetManager();
-    EffectsManager&     getEffectsManager();
+    BufferManager*      getBufferManager();
+    ofxOscRouter*       getOscRouter();
+    AssetManager*       getAssetManager();
+    EffectsManager*     getEffectsManager();
     
-    CanvasLayerManager& getCanvasLayerManger();
+    CanvasLayerManager* getCanvasLayerManger();
+    CanvasRenderer*     getCanvasRenderer();
     
-    CanvasRenderer&     getCanvasRenderer();
-    
-    SessionManager&     getSessionManager();
+    SessionManager*     getSessionManager();
     
 protected:
     
-    BufferManager       bufferManager;
-    ofxOscRouter      	oscRouter;
-    AssetManager    	assetManager;
-    EffectsManager      effectsManager;
+    BufferManager*       bufferManager;
+    ofxOscRouter*        oscRouter;
+    AssetManager*    	 assetManager;
+    EffectsManager*      effectsManager;
     
-    CanvasRenderer      canvas;
-    CanvasLayerManager  canvasLayerManager;
+    CanvasLayerManager*  canvasLayerManager;
+    CanvasRenderer*      canvas;
     
-    SessionManager      sessionManager;
+    SessionManager*      sessionManager;
 
 private:
 
