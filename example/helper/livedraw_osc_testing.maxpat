@@ -63,6 +63,36 @@
 						"boxes" : [ 							{
 								"box" : 								{
 									"maxclass" : "message",
+									"text" : "/livedraw/canvas/layer/LAYER_0/source/buffer stream_ipcam2",
+									"numoutlets" : 1,
+									"presentation_rect" : [ 477.75, 348.0, 0.0, 0.0 ],
+									"outlettype" : [ "" ],
+									"patching_rect" : [ 477.75, 348.0, 331.0, 18.0 ],
+									"fontname" : "Arial",
+									"id" : "obj-19",
+									"numinlets" : 2,
+									"fontsize" : 11.595187
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"maxclass" : "message",
+									"text" : "/livedraw/assets/alias stream_ipcam2 buttes",
+									"numoutlets" : 1,
+									"presentation_rect" : [ 454.75, 377.0, 0.0, 0.0 ],
+									"outlettype" : [ "" ],
+									"patching_rect" : [ 447.75, 311.0, 331.0, 18.0 ],
+									"fontname" : "Arial",
+									"id" : "obj-11",
+									"numinlets" : 2,
+									"fontsize" : 11.595187
+								}
+
+							}
+, 							{
+								"box" : 								{
+									"maxclass" : "message",
 									"text" : "/livedraw/canvas/layer/LAYER_0/source/buffer ipcam2",
 									"numoutlets" : 1,
 									"presentation_rect" : [ 402.75, 168.0, 0.0, 0.0 ],
@@ -78,11 +108,11 @@
 , 							{
 								"box" : 								{
 									"maxclass" : "message",
-									"text" : "/livedraw/canvas/layer/LAYER_0/source/buffer stream_ipcam2",
+									"text" : "/livedraw/canvas/layer/LAYER_0/source/buffer buttes",
 									"numoutlets" : 1,
 									"presentation_rect" : [ 359.75, 145.0, 0.0, 0.0 ],
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 359.75, 145.0, 331.0, 18.0 ],
+									"patching_rect" : [ 359.75, 145.0, 283.0, 18.0 ],
 									"fontname" : "Arial",
 									"id" : "obj-9",
 									"numinlets" : 2,
@@ -167,7 +197,7 @@
 									"text" : "/livedraw/canvas/layer/LAYER_0/mask fingers.mov",
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 399.75, 195.0, 272.0, 18.0 ],
+									"patching_rect" : [ 418.75, 198.0, 272.0, 18.0 ],
 									"fontname" : "Arial",
 									"id" : "obj-14",
 									"numinlets" : 2,
@@ -329,6 +359,24 @@
 							}
  ],
 						"lines" : [ 							{
+								"patchline" : 								{
+									"source" : [ "obj-19", 0 ],
+									"destination" : [ "obj-12", 0 ],
+									"hidden" : 0,
+									"midpoints" : [  ]
+								}
+
+							}
+, 							{
+								"patchline" : 								{
+									"source" : [ "obj-11", 0 ],
+									"destination" : [ "obj-12", 0 ],
+									"hidden" : 0,
+									"midpoints" : [  ]
+								}
+
+							}
+, 							{
 								"patchline" : 								{
 									"source" : [ "obj-10", 0 ],
 									"destination" : [ "obj-12", 0 ],

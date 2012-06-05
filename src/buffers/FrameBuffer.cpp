@@ -15,6 +15,12 @@ FrameBuffer::FrameBuffer(int _bufferSize) : ofxVideoBuffer(_bufferSize){
 }
 
 //--------------------------------------------------------------
+FrameBuffer::FrameBuffer(string alias, int _bufferSize) : ofxVideoBuffer(_bufferSize){
+    bufferId     = alias;
+    backingAsset = NULL;
+}
+
+//--------------------------------------------------------------
 FrameBuffer::~FrameBuffer() {}
 
 //--------------------------------------------------------------

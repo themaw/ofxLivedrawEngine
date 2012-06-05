@@ -9,13 +9,20 @@
 
 #include "AssetManager.h"
 
+
+bool isImageAsset (MediaAsset* m) { return m->isImageAsset(); }
+bool isGrabberAsset (MediaAsset* m) { return m->isGrabberAsset(); }
+bool isVideoAsset (MediaAsset* m) { return m->isVideoAsset(); }
+bool isStreamAsset (MediaAsset* m) { return m->isStreamAsset(); }
+bool isSyphonAsset (MediaAsset* m) { return m->isSyphonAsset(); }
+
 //--------------------------------------------------------------
 AssetManager::AssetManager() : ofxOscRouterNode("/assets")
 {
     addOscNodeAlias("/a");
     addOscNodeAlias("/ass");
     
-    addOscMethod("alias"); // allows id aliasing
+    addOscMethod("/alias"); // allows id aliasing
     
     loadAssets();
 }
@@ -32,7 +39,20 @@ void AssetManager::update() {
 
 //--------------------------------------------------------------
 void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
-    cout << "OSC MESSAGE FOR THE ASSET MANAGER " << endl;
+    
+    if(isMatch(pattern,"/alias")) {
+        cout << "processing alias " << pattern <<  endl;
+        if(validateOscSignature("ss", m)) {
+            string existingAlias = m.getArgAsString(0);
+            string additionalAlias = m.getArgAsString(1);
+            MediaAsset * a = getAsset(existingAlias);
+            if(a != NULL) {
+                addAssetAlias(a,additionalAlias);
+            } else {
+                ofLog(OF_LOG_WARNING,"Attempted to set alias, but media asset did not exist.");
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -41,7 +61,7 @@ MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetName,
     if(generateAssetId(_assetType,_assetName,assetId)) {
         if(!hasId(assetId)) {
             MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
-            assets.insert(asset);
+            bool added = assets.add(asset);
             
             // TODO: do checkint here ...
             addAssetAlias(asset,assetId);    
@@ -197,60 +217,29 @@ int AssetManager::getNumAssets() {return assets.size();}
 
 //--------------------------------------------------------------
 int AssetManager::getNumImageAssets() {
-    int cnt = 0;
-    set<MediaAsset*>::iterator iter = assets.begin();
-    while(iter != assets.end()) {
-        if((*iter)->isImageAsset()) cnt++;
-        iter++;
-    }
-    return cnt;
+    return count_if(assets.begin(), assets.end(), isImageAsset);
 }
 //--------------------------------------------------------------
 int AssetManager::getNumGrabberAssets() {
-    int cnt = 0;
-    set<MediaAsset*>::iterator iter = assets.begin();
-    while(iter != assets.end()) {
-        if((*iter)->isGrabberAsset()) cnt++;
-        iter++;
-    }
-    return cnt;
+    return count_if(assets.begin(), assets.end(), isGrabberAsset);
 }
 //--------------------------------------------------------------
 int AssetManager::getNumVideoAssets() {
-    int cnt = 0;
-    set<MediaAsset*>::iterator iter = assets.begin();
-    while(iter != assets.end()) {
-        if((*iter)->isVideoAsset()) cnt++;
-        iter++;
-    }
-    return cnt;   
+    return count_if(assets.begin(), assets.end(), isVideoAsset);
 }
 //--------------------------------------------------------------
 int AssetManager::getNumStreamAssets() {
-    int cnt = 0;
-    set<MediaAsset*>::iterator iter = assets.begin();
-    while(iter != assets.end()) {
-        if((*iter)->isStreamAsset()) cnt++;
-        iter++;
-    }
-    return cnt;
+    return count_if(assets.begin(), assets.end(), isStreamAsset);
 }
 //--------------------------------------------------------------
 int AssetManager::getNumSyphonAssets() {
-    int cnt = 0;
-    set<MediaAsset*>::iterator iter = assets.begin();
-    while(iter != assets.end()) {
-        if((*iter)->isSyphonAsset()) cnt++;
-        iter++;
-    }
-    return cnt;
+    return count_if(assets.begin(), assets.end(), isSyphonAsset);
 }
 
 //--------------------------------------------------------------
 bool AssetManager::hasId(string id) {
     return assetAliases.find(id) != assetAliases.end();
 }
-
 
 //--------------------------------------------------------------
 MediaAsset* AssetManager::getAsset(string id) {

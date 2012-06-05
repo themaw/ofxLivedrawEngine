@@ -13,7 +13,7 @@
 #include "ofxOscRouterNode.h"
 #include "FrameBuffer.h"
 #include "ofxLivedrawEngine.h"
-
+#include "ofxSimpleSet.h"
 class ofxLivedrawEngine;
 
 class BufferManager : public ofxOscRouterNode {
@@ -24,10 +24,12 @@ public:
     
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
-
+    
     FrameBuffer* getNewAssetBackedBuffer(MediaAsset* _asset);
-    FrameBuffer* getNewVideoBuffer(int _bufferSize = 1);
+    FrameBuffer* getNewVideoBuffer(string alias, int _bufferSize = 1);
 
+    
+    
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    
     
@@ -37,8 +39,12 @@ protected:
     
 private:
     
+//    REFACTOR
+//    -- aliasable object
+//    -- aliassed object collection
     
+	ofxSimpleSet<MediaAsset*>     buffers;         // this is the actual collection of assets that have been allocated
+    map<string,MediaAsset*> bufferAliases;   // this is a mapping of names / aliases back to the asset itself
     
-    vector<ofxVideoBuffer> buffers;
     
 };

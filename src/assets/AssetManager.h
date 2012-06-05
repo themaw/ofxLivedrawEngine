@@ -62,12 +62,9 @@ public:
         if(wantDiskBackedAsset) {
             // first we check and see if there is a buffer backed asset to tap
             
-            
-            
         } else {
             
         }
-        
         
     }
 
@@ -76,9 +73,9 @@ public:
     
     void dump() {
 
-        set<MediaAsset*>::iterator itr;
-        for(itr = assets.begin();itr!=assets.end();itr++) {
-            cout << (*itr)->getAssetId() << endl;
+        vector<MediaAsset*> vec = assets.toArray();
+        for(int i = 0; i < vec.size(); i++) {
+            cout << vec[i] << endl;
         }
     }
     
@@ -89,12 +86,12 @@ protected:
     
 private:
 	
-	set<MediaAsset*>        assets;         // this is the actual collection of assets that have been allocated
+	ofxSimpleSet<MediaAsset*>     assets;         // this is the actual collection of assets that have been allocated
     map<string,MediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
     
 
-    map<MediaAsset*,FrameBuffer*>  buffBackedAssets;
-    set<MediaAsset*,FrameBuffer*>  diskBackedAssets;
+    //set<MediaAsset*,FrameBuffer*>  buffBackedAssets;
+    //set<MediaAsset*,FrameBuffer*>  diskBackedAssets;
     
     
     /*

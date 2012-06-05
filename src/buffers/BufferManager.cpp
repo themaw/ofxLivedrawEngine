@@ -23,8 +23,9 @@ void BufferManager::processOscMessage(string pattern, ofxOscMessage& m) {
 }
 
 //--------------------------------------------------------------
-FrameBuffer* BufferManager::getNewVideoBuffer(int _bufferSize) {
-    
+FrameBuffer* BufferManager::getNewVideoBuffer(string alias, int _bufferSize) {
+    FrameBuffer* buffer = new FrameBuffer(alias,_bufferSize);
+
 }
 
 //--------------------------------------------------------------

@@ -24,6 +24,7 @@ class ofxVideoPlayer;
 class FrameBuffer : public ofxVideoBuffer {
 public:
     FrameBuffer(int _bufferSize = 1);
+    FrameBuffer(string alias, int _bufferSize = 1);
     virtual ~FrameBuffer();
     
     void setBackingAsset(MediaAsset* _asset);

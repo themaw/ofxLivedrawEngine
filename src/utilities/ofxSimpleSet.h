@@ -20,7 +20,11 @@ public:
     bool    add(T item);
     bool    remove(T item);
     typename set<T>::iterator find(T item);
+    typename set<T>::iterator begin();
+    typename set<T>::iterator end();
+    size_t size();
     vector<T> toArray();
+    set<T>& getItems();
 private:
     set<T> items;
     typename set<T>::iterator it;
@@ -40,11 +44,17 @@ template <class T> bool ofxSimpleSet<T>::remove(T item) {
     }
 }
 template <class T> typename set<T>::iterator ofxSimpleSet<T>::find(T item){return items.find(item);}
+template <class T> typename set<T>::iterator ofxSimpleSet<T>::begin(){return items.begin();}
+template <class T> typename set<T>::iterator ofxSimpleSet<T>::end(){return items.end();}
+
+template <class T> size_t ofxSimpleSet<T>::size() { return items.size();}
 template <class T> vector<T> ofxSimpleSet<T>::toArray() {
     vector<T> vec;
     for(it=items.begin(); it != items.end(); it++) vec.push_back(*it);
     return vec;
 }
+template <class T> set<T>& ofxSimpleSet<T>::getItems() {return items;}
+
 
 
 
