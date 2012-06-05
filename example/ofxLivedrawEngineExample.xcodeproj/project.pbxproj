@@ -23,6 +23,8 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		FD07485E157EA182002C021A /* BaseVideoSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD074859157EA17E002C021A /* BaseVideoSink.cpp */; };
+		FD07485F157EA182002C021A /* BaseVideoSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD07485C157EA182002C021A /* BaseVideoSource.cpp */; };
 		FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740D15607A6E006323C7 /* EffectsChain.cpp */; };
 		FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740F15607A6E006323C7 /* EffectsManager.cpp */; };
 		FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741415607A6E006323C7 /* CanvasGroup.cpp */; };
@@ -109,6 +111,10 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		FD074859157EA17E002C021A /* BaseVideoSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseVideoSink.cpp; sourceTree = "<group>"; };
+		FD07485A157EA17E002C021A /* BaseVideoSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseVideoSink.h; sourceTree = "<group>"; };
+		FD07485C157EA182002C021A /* BaseVideoSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseVideoSource.cpp; sourceTree = "<group>"; };
+		FD07485D157EA182002C021A /* BaseVideoSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseVideoSource.h; sourceTree = "<group>"; };
 		FD26740C15607A6E006323C7 /* AbstractShaderEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractShaderEffect.h; sourceTree = "<group>"; };
 		FD26740D15607A6E006323C7 /* EffectsChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsChain.cpp; sourceTree = "<group>"; };
 		FD26740E15607A6E006323C7 /* EffectsChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsChain.h; sourceTree = "<group>"; };
@@ -316,6 +322,24 @@
 			name = openFrameworks;
 			sourceTree = "<group>";
 		};
+		FD074858157EA17C002C021A /* sinks */ = {
+			isa = PBXGroup;
+			children = (
+				FD074859157EA17E002C021A /* BaseVideoSink.cpp */,
+				FD07485A157EA17E002C021A /* BaseVideoSink.h */,
+			);
+			path = sinks;
+			sourceTree = "<group>";
+		};
+		FD07485B157EA17E002C021A /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				FD07485C157EA182002C021A /* BaseVideoSource.cpp */,
+				FD07485D157EA182002C021A /* BaseVideoSource.h */,
+			);
+			path = sources;
+			sourceTree = "<group>";
+		};
 		FD2673FA156067DE006323C7 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -409,6 +433,8 @@
 		FD3F846A156064BC0022CE42 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FD074858157EA17C002C021A /* sinks */,
+				FD07485B157EA17E002C021A /* sources */,
 				FDEDAFED15636C4100384AE8 /* player */,
 				FD267439156093FD006323C7 /* buffers */,
 				FD26740A15607A6D006323C7 /* canvas */,
@@ -804,6 +830,8 @@
 				FD8B972F156441710099B79F /* osc_match.c in Sources */,
 				FD8B9730156441710099B79F /* ofxOscRouter.cpp in Sources */,
 				FD8B9731156441710099B79F /* ofxOscRouterNode.cpp in Sources */,
+				FD07485E157EA182002C021A /* BaseVideoSink.cpp in Sources */,
+				FD07485F157EA182002C021A /* BaseVideoSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
