@@ -29,12 +29,13 @@ public:
     void processOscMessage(string pattern, ofxOscMessage& m);
     
     MediaAsset* addAsset(MediaAssetType _assetType, string _assetName, string _assetURI);
-    MediaAsset* removeAsset(string alias);
+    bool removeAsset(string alias);
 
     MediaAsset* addImage(string alias, string filename);
     MediaAsset* addVideo(string alias, string filename);
-    MediaAsset* addStream(string alias, string url, string username, string password);
-    
+    MediaAsset* addStream(string alias, string url, string username, string password, string type);
+    MediaAsset* addBuffer(string alias, FrameBuffer* buffer);
+    MediaAsset* addGrabber(string alias, string url);
     
     
     bool addAssetAlias(MediaAsset* asset, string alias);
@@ -83,7 +84,14 @@ public:
 
         vector<MediaAsset*> vec = assets.toArray();
         for(int i = 0; i < vec.size(); i++) {
-            cout << vec[i] << endl;
+            cout << vec[i]->toString() << endl;
+        }
+        
+        std::map<string,MediaAsset*>::iterator iter;
+        
+        for (iter = assetAliases.begin(); iter != assetAliases.end(); ++iter) {
+            cout << iter->first << "=>";
+            cout << iter->second->getAssetId() << endl;
         }
     }
     
@@ -94,10 +102,12 @@ protected:
     
 private:
 	
+    ofxSimpleSet<FrameBuffer*>    buffers;
+    
 	ofxSimpleSet<MediaAsset*>     assets;         // this is the actual collection of assets that have been allocated
     map<string,MediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
     
-
+    
     //set<MediaAsset*,FrameBuffer*>  buffBackedAssets;
     //set<MediaAsset*,FrameBuffer*>  diskBackedAssets;
     

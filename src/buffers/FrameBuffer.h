@@ -21,6 +21,7 @@
 
 class ofxVideoBuffer;
 class ofxVideoPlayer;
+class MediaAsset;
 
 class FrameBuffer : public ofxVideoBuffer, public ofxOscRouterNode {
 public:
@@ -37,15 +38,15 @@ public:
     string getId();
     void   setId(string _bufferId);
     
-    bool        hasBackingAsset();
-    MediaAsset* getBackingAsset();
+//    bool        hasBackingAsset();
+//    MediaAsset* getBackingAsset();
     
     bool        attachedPlayer(ofxVideoPlayer* player);
     bool        detatchPlayer(ofxVideoPlayer* player);
     
 protected:
-    
+    void init(string alias);
     string      bufferId;
-    MediaAsset* backingAsset; // only one source at a time
+//    MediaAsset* backingAsset; // only one source at a time
 
 };

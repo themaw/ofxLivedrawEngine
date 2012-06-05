@@ -25,6 +25,7 @@ public:
     size_t size();
     vector<T> toArray();
     set<T>& getItems();
+    void clear();
 private:
     set<T> items;
     typename set<T>::iterator it;
@@ -54,6 +55,7 @@ template <class T> vector<T> ofxSimpleSet<T>::toArray() {
     return vec;
 }
 template <class T> set<T>& ofxSimpleSet<T>::getItems() {return items;}
+template <class T> void ofxSimpleSet<T>::clear() {items.clear();}
 
 
 

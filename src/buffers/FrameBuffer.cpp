@@ -12,10 +12,7 @@
 FrameBuffer::FrameBuffer(string alias) : ofxVideoBuffer(), 
 ofxOscRouterNode("/"+alias) 
 {
-    bufferId     = alias;
-    backingAsset = NULL;
-    addOscMethod("/type");    
-    addOscMethod("/size");    
+    init(alias);
 }
 
 //--------------------------------------------------------------
@@ -23,10 +20,7 @@ FrameBuffer::FrameBuffer(string alias, int _bufferSize) :
 ofxVideoBuffer(_bufferSize), 
 ofxOscRouterNode("/"+alias) 
 {
-    bufferId     = alias;
-    backingAsset = NULL;
-    addOscMethod("/type");    
-    addOscMethod("/size");    
+    init(alias);
 }
 
 //--------------------------------------------------------------
@@ -34,10 +28,15 @@ FrameBuffer::FrameBuffer(string alias, int _bufferSize, ofVideoBufferType _type)
 ofxVideoBuffer(_bufferSize, _type), 
 ofxOscRouterNode("/"+alias)  
 {
-    bufferId     = alias;
-    backingAsset = NULL;
+    init(alias);
+}
+
+void FrameBuffer::init(string alias) {
+    bufferId = alias;
     addOscMethod("/type");    
-    addOscMethod("/size");    
+    addOscMethod("/size"); 
+    addOscMethod("/clear");
+    addOscMethod("/framerate");
 }
 
 //--------------------------------------------------------------
@@ -46,13 +45,18 @@ FrameBuffer::~FrameBuffer() {}
 //--------------------------------------------------------------
 void FrameBuffer::processOscMessage(string pattern, ofxOscMessage& m) {
     cout << "got a buffer message " << pattern << endl;
+    
+    // size!
+    // type!
+    // clear!
+    
 }
 
 
-//--------------------------------------------------------------
-void FrameBuffer::setBackingAsset(MediaAsset* _asset) {
-    backingAsset = _asset;
-}
+////--------------------------------------------------------------
+//void FrameBuffer::setBackingAsset(MediaAsset* _asset) {
+//    backingAsset = _asset;
+//}
 
 //--------------------------------------------------------------
 string FrameBuffer::getId() {
@@ -63,13 +67,13 @@ void FrameBuffer::setId(string _bufferId) {
     bufferId = _bufferId;
 }
 
-//--------------------------------------------------------------
-bool FrameBuffer::hasBackingAsset() {
-    return backingAsset != NULL;
-}
-
-//--------------------------------------------------------------
-MediaAsset* FrameBuffer::getBackingAsset() {
-    return backingAsset;
-}
-
+////--------------------------------------------------------------
+//bool FrameBuffer::hasBackingAsset() {
+//    return backingAsset != NULL;
+//}
+//
+////--------------------------------------------------------------
+//MediaAsset* FrameBuffer::getBackingAsset() {
+//    return backingAsset;
+//}
+//

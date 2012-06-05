@@ -15,7 +15,8 @@ ofxOscRouterNode("/" + _assetId ) {
     assetId = _assetId;
 	assetType = _assetType;
 	assetURI = Poco::URI(_assetURI); // create the uri from the loaded asset
-
+    buffer = NULL;
+    
     addOscMethod("/open");
     
 
@@ -135,6 +136,12 @@ bool MediaAsset::containsAlias(string alias) {
 }
 
 
+FrameBuffer* MediaAsset::getBuffer() {
+    return buffer;
+}
+void MediaAsset::setBuffer(FrameBuffer* _buffer) {
+    buffer = _buffer;
+}
 
 string MediaAsset::toString() {
     stringstream ss;
@@ -147,4 +154,9 @@ string MediaAsset::toString() {
     
     return ss.str();
 }
+
+vector<string> MediaAsset::getAliases() {
+    return aliases.toArray();
+}
+
 

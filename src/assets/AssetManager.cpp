@@ -44,6 +44,8 @@ void AssetManager::update() {
 //--------------------------------------------------------------
 void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
     
+    cout << "processing-- " << pattern << endl;
+    
     if(isMatch(pattern,"/alias")) {
         if(validateOscSignature("ss", m)) {
             string existingAlias = m.getArgAsString(0);
@@ -56,33 +58,48 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
             }
         }
     } else if(isMatch(pattern,"/buffer")) {
+        cout << "doing buffer" << endl;
+        
         if(validateOscSignature("s(is?)?", m)) {
             int numArgs = m.getNumArgs();
-            if(numArgs == 1) {                
-                cout << "1 args" << endl;
+            if(numArgs == 1) {      
+                string alias = m.getArgAsString(0);
+                addBuffer(alias,new FrameBuffer(alias));
             } else if(numArgs == 2) {
-                cout << "2 args" << endl;
+                string alias = m.getArgAsString(0);
+                int    size  = m.getArgAsInt32(1);
+                addBuffer(alias,new FrameBuffer(alias,size));
             } else if(numArgs == 3) {
-                cout << "3 args" << endl;
+                string alias = m.getArgAsString(0);
+                int    size  = m.getArgAsInt32(1);
+                string type = m.getArgAsString(2);
+
+                ofVideoBufferType t = OFX_VIDEO_BUFFER_FIXED;
+                
+                if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
+                    t = OFX_VIDEO_BUFFER_FIXED;
+                } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "cirular")) {
+                    t = OFX_VIDEO_BUFFER_CIRCULAR;
+                } else if(isMatch(type, "pass") || isMatch(type, "passthrough")) {
+                    t = OFX_VIDEO_BUFFER_PASSTHROUGH;
+                } else {
+                    ofLog(OF_LOG_WARNING,"Unknown buffer type, using default.");
+                }
+                
+                addBuffer(alias,new FrameBuffer(alias,size,t));
             } else {
                 cout << "unknown num args." << endl;
             }
-            
-//            string name = m.getArgAsString(0);
-//            string name = m.getArgAsString(1);
-//            string name = m.getArgAsString(2);
-//            string name = m.getArgAsString(3);
-//            
-//            FrameBuffer* buff;
-//
-//            OFX_VIDEO_BUFFER_FIXED,
-//            OFX_VIDEO_BUFFER_CIRCULAR,
-//            OFX_VIDEO_BUFFER_PASSTHROUGH,
-
-            
-            
-        } else if(isMatch(pattern,"/delete")) {
-            cout << "going to delete somthing" << endl;
+        }
+                        
+    } else if(isMatch(pattern,"/delete")) {
+        cout << "in here" << endl;
+        if(validateOscSignature("s", m)) {
+            string alias = m.getArgAsString(0);
+            bool ret = removeAsset(alias);
+            if(!ret) {
+                cout << "error deleting " << alias << endl; 
+            }
         }
     }
 }
@@ -109,29 +126,64 @@ MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetName,
 }
 
 //--------------------------------------------------------------
-MediaAsset* AssetManager::removeAsset(string alias) {
-    cout << "removing asset => alias " << alias << endl;
+bool AssetManager::removeAsset(string alias) {
+    MediaAsset* toDelete = getAsset(alias);
     
-    // for normal assets, remove all links and buffers, etc.
-    // for buffers, remove osc child stauts, free content, etc.
+    if(toDelete == NULL) {
+        ofLog(OF_LOG_WARNING, "AssetManager::removeAsset - unable to remove " + alias);
+        return false;
+    }
+
+    if(toDelete->getAssetType() == MEDIA_ASSET_BUFFER) {
+        FrameBuffer* buffer = toDelete->getBuffer();
+        if(buffer == NULL) {
+            cout << "ERROR, the attached buffer was null ..." << endl;
+        } else {
+            bool success = buffers.remove(buffer); // remove the buffer
+            if(!success) {
+                cout << "ERROR deleting the buffer" << endl;
+            } else {
+                toDelete->setBuffer(NULL); // clear buffer
+                removeOscChild(buffer); // break osc link
+                delete buffer;
+            }
+        }
+    }
+    vector<string> aliases = toDelete->getAliases();
+    for(int i = 0; i < aliases.size(); i++) {
+        assetAliases.erase(assetAliases.find(aliases[i]));
+    }
+    assets.remove(toDelete);
+    return true;
+    
 }
 
 //--------------------------------------------------------------
 MediaAsset* AssetManager::addImage(string alias, string filename) {
-    cout << "Adding image" << endl;
-    //TODO
+    MediaAsset* asset = addAsset(MEDIA_ASSET_IMAGE, alias, filename);
 }
 //--------------------------------------------------------------
 MediaAsset* AssetManager::addVideo(string alias, string filename) {
-    cout << "Adding video" << endl;
-    //TODO
+    MediaAsset* asset = addAsset(MEDIA_ASSET_VIDEO, alias, filename);
 }
 //--------------------------------------------------------------
-MediaAsset* AssetManager::addStream(string alias, string url, string username, string password) {
-    cout << "Adding stream" << endl;
-    //TODO
+MediaAsset* AssetManager::addStream(string alias, string url, string username, string password, string type) {
+    // TODO: take care of username, password and type
+    MediaAsset* asset = addAsset(MEDIA_ASSET_STREAM, alias, url);
 }
 
+//--------------------------------------------------------------
+MediaAsset* AssetManager::addBuffer(string alias, FrameBuffer* buffer) {
+    MediaAsset* asset = addAsset(MEDIA_ASSET_BUFFER, alias, "NULL");
+    asset->setBuffer(buffer);
+    buffers.add(buffer);
+    addOscChild(buffer); // be sure to break this if deleted
+}
+
+//--------------------------------------------------------------
+MediaAsset* AssetManager::addGrabber(string alias, string url) {
+    MediaAsset* asset = addAsset(MEDIA_ASSET_GRABBER, alias, url);
+}
 
 //--------------------------------------------------------------
 bool AssetManager::addAssetAlias(MediaAsset* asset, string alias) {
@@ -170,17 +222,16 @@ void AssetManager::loadFilesAssets()
 		string path = dir.getPath(i);
 		
         if(vidTypes.extract(name, 0, s) > 0) {
-            addAsset(MEDIA_ASSET_VIDEO,name,path);
+            addVideo(name,path);
         } else if(imgTypes.extract(name, 0, s) > 0) {
-            addAsset(MEDIA_ASSET_IMAGE,name,path);
+            addImage(name,path);
         } else if(otherTypes.extract(name, 0, s)) {
             //ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - other valid non-media " + path); 
         } else {
             ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Unknown file type :  " + path);
         }
         
-		
-
+    
 	}
     
     ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumImageAssets()) + " images.");
@@ -212,7 +263,7 @@ void AssetManager::loadGrabberAssets() {
 		for(int n = 0; n < nStreams; n++) {
 			string name = XML.getAttribute(tag, "name", "unknown", n);
 			int id = XML.getAttribute(tag, "id", 0, n);
-            addAsset(MEDIA_ASSET_GRABBER, name, ofToString(id));
+            addGrabber(name,ofToString(id));
 		}
 		
 		XML.popTag();
@@ -250,7 +301,7 @@ void AssetManager::loadStreamAssets(){
 //			" password: " + password;
             // TODO: URL support for username / password, type
             
-            addAsset(MEDIA_ASSET_STREAM,name,address);
+            addStream(name,address,username,password,type);
 		}
 		
 		XML.popTag();
