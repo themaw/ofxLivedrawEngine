@@ -13,17 +13,19 @@
 #include "MediaAsset.h"
 #include "ofxVideoBuffer.h"
 #include "ofxOscRouterNode.h"
+#include "BaseVideoSink.h"
 
 // Frame Buffer is a wrapper for ofxVideoBuffer.
 // When it has a backing asset, it cannot be modified
 // but simply acts as a place to store full video 
 // assets in memory (GPU/RAM).
 
+//class BaseVideoSink;
 class ofxVideoBuffer;
-class ofxVideoPlayer;
-class MediaAsset;
+//class ofxVideoPlayer;
+//class MediaAsset;
 
-class FrameBuffer : public ofxVideoBuffer, public ofxOscRouterNode {
+class FrameBuffer : public ofxVideoBuffer, public ofxOscRouterNode /* , public BaseVideoSink*/{
 public:
     FrameBuffer(string alias);
     FrameBuffer(string alias, int _bufferSize);
@@ -33,20 +35,21 @@ public:
     void processOscMessage(string pattern, ofxOscMessage& m);
 
     
-    void setBackingAsset(MediaAsset* _asset);
+    string getAlias();
+    void   setAlias(string _alias);
     
-    string getId();
-    void   setId(string _bufferId);
-    
+    //  void setBackingAsset(MediaAsset* _asset);
 //    bool        hasBackingAsset();
 //    MediaAsset* getBackingAsset();
     
-    bool        attachedPlayer(ofxVideoPlayer* player);
-    bool        detatchPlayer(ofxVideoPlayer* player);
+//    bool        attachedPlayer(ofxVideoPlayer* player);
+//    bool        detatchPlayer(ofxVideoPlayer* player);
     
 protected:
     void init(string alias);
-    string      bufferId;
+    
+  //  MediaAsset*
+    string      alias;
 //    MediaAsset* backingAsset; // only one source at a time
 
 };

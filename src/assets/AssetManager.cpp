@@ -20,11 +20,14 @@ bool isSyphonAsset (MediaAsset* m) { return m->isSyphonAsset(); }
 //--------------------------------------------------------------
 AssetManager::AssetManager() : ofxOscRouterNode("/assets")
 {
+    
+    bufferManager = new BufferManager(this);
+    addOscChild(bufferManager);
+    
     addOscNodeAlias("/a");
     addOscNodeAlias("/ass");
     
     addOscMethod("/alias"); // allows id aliasing
-    addOscMethod("/buffer"); // allows id aliasing
     
     addOscMethod("/delete");
     
@@ -34,6 +37,7 @@ AssetManager::AssetManager() : ofxOscRouterNode("/assets")
 //--------------------------------------------------------------
 AssetManager::~AssetManager() {
     ofLog(OF_LOG_NOTICE, "Destroying Asset Manager.");
+    delete bufferManager;
 }
 
 //--------------------------------------------------------------
@@ -57,41 +61,6 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
                 ofLog(OF_LOG_WARNING,"Attempted to set alias, but media asset did not exist.");
             }
         }
-    } else if(isMatch(pattern,"/buffer")) {
-        cout << "doing buffer" << endl;
-        
-        if(validateOscSignature("s(is?)?", m)) {
-            int numArgs = m.getNumArgs();
-            if(numArgs == 1) {      
-                string alias = m.getArgAsString(0);
-                addBuffer(alias,new FrameBuffer(alias));
-            } else if(numArgs == 2) {
-                string alias = m.getArgAsString(0);
-                int    size  = m.getArgAsInt32(1);
-                addBuffer(alias,new FrameBuffer(alias,size));
-            } else if(numArgs == 3) {
-                string alias = m.getArgAsString(0);
-                int    size  = m.getArgAsInt32(1);
-                string type = m.getArgAsString(2);
-
-                ofVideoBufferType t = OFX_VIDEO_BUFFER_FIXED;
-                
-                if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
-                    t = OFX_VIDEO_BUFFER_FIXED;
-                } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "cirular")) {
-                    t = OFX_VIDEO_BUFFER_CIRCULAR;
-                } else if(isMatch(type, "pass") || isMatch(type, "passthrough")) {
-                    t = OFX_VIDEO_BUFFER_PASSTHROUGH;
-                } else {
-                    ofLog(OF_LOG_WARNING,"Unknown buffer type, using default.");
-                }
-                
-                addBuffer(alias,new FrameBuffer(alias,size,t));
-            } else {
-                cout << "unknown num args." << endl;
-            }
-        }
-                        
     } else if(isMatch(pattern,"/delete")) {
         cout << "in here" << endl;
         if(validateOscSignature("s", m)) {
@@ -106,23 +75,13 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
 
 //--------------------------------------------------------------
 MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetName, string _assetURI) {
-    string assetId = "";
-    if(generateAssetId(_assetType,_assetName,assetId)) {
-        if(!hasId(assetId)) {
-            MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
-            bool added = assets.add(asset);
-            
-            // TODO: do checkint here ...
-            addAssetAlias(asset,assetId);    
-            addAssetAlias(asset,_assetName); // two default asset names
-
-            return asset;
-        } else {
-            ofLog(OF_LOG_WARNING, "AssetManager::addAsset alreadh has asset called : " + assetId);
-            return NULL;
-        }
-    }
-    return NULL;
+    
+    string assetId = generateAssetId(_assetType,_assetName);
+    MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
+    bool added = assets.add(asset);
+    // TODO: do checkint here ...
+    addAssetAlias(asset,assetId);    
+    return asset;
 }
 
 //--------------------------------------------------------------
@@ -139,16 +98,10 @@ bool AssetManager::removeAsset(string alias) {
         if(buffer == NULL) {
             cout << "ERROR, the attached buffer was null ..." << endl;
         } else {
-            bool success = buffers.remove(buffer); // remove the buffer
-            if(!success) {
-                cout << "ERROR deleting the buffer" << endl;
-            } else {
-                toDelete->setBuffer(NULL); // clear buffer
-                removeOscChild(buffer); // break osc link
-                delete buffer;
-            }
+            bufferManager->remove(toDelete);
         }
     }
+    
     vector<string> aliases = toDelete->getAliases();
     for(int i = 0; i < aliases.size(); i++) {
         assetAliases.erase(assetAliases.find(aliases[i]));
@@ -173,11 +126,10 @@ MediaAsset* AssetManager::addStream(string alias, string url, string username, s
 }
 
 //--------------------------------------------------------------
-MediaAsset* AssetManager::addBuffer(string alias, FrameBuffer* buffer) {
+MediaAsset* AssetManager::addBuffer(string alias, int size, ofVideoBufferType t) {
+    FrameBuffer* buffer = bufferManager->createNewBuffer(alias,size,t);
     MediaAsset* asset = addAsset(MEDIA_ASSET_BUFFER, alias, "NULL");
     asset->setBuffer(buffer);
-    buffers.add(buffer);
-    addOscChild(buffer); // be sure to break this if deleted
 }
 
 //--------------------------------------------------------------
@@ -361,44 +313,48 @@ MediaAsset* AssetManager::getAsset(string id) {
 }
 
 //--------------------------------------------------------------
-bool AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI, string& assetId) {
+string AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI) {
     
     string id;
     string prefix = "";
     string filename = "";
     
-    
-    switch (_assetType) {
-        case MEDIA_ASSET_EMPTY:
-            return false;
-            break;
-        case MEDIA_ASSET_IMAGE:
-            prefix = "image_";
-            break;
-        case MEDIA_ASSET_GRABBER:
-            prefix = "grabber_";
-            break;
-        case MEDIA_ASSET_STREAM:
-            prefix = "stream_";
-            break;
-        case MEDIA_ASSET_BUFFER:
-            prefix = "buffer_";
-            break;
-        case MEDIA_ASSET_SYPHON:
-            prefix = "syphon_";
-            break;
-        case MEDIA_ASSET_VIDEO:
-            prefix = "video_";
-            break;
-        default:
-            break;
-    }
+//    
+//    switch (_assetType) {
+//        case MEDIA_ASSET_EMPTY:
+//            return false;
+//            break;
+//        case MEDIA_ASSET_IMAGE:
+//            prefix = "image_";
+//            break;
+//        case MEDIA_ASSET_GRABBER:
+//            prefix = "grabber_";
+//            break;
+//        case MEDIA_ASSET_STREAM:
+//            prefix = "stream_";
+//            break;
+//        case MEDIA_ASSET_BUFFER:
+//            prefix = "buffer_";
+//            break;
+//        case MEDIA_ASSET_SYPHON:
+//            prefix = "syphon_";
+//            break;
+//        case MEDIA_ASSET_VIDEO:
+//            prefix = "video_";
+//            break;
+//        default:
+//            break;
+//    }
     
     filename = _assetURI;
     
     assetId = prefix + filename;
     
-    return  true;
+    if(hasId(assetId)) { // assume once will be enough
+        assetId = assetId + ofToString((int)ofRandom(100000));
+    }
+    
+    return assetId;
     
 
     /*

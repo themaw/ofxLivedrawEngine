@@ -138,12 +138,12 @@
 , 							{
 								"box" : 								{
 									"maxclass" : "message",
-									"text" : "/livedraw/assets/buffer my_buffer_1 33 type",
+									"text" : "/livedraw/assets/buffers/new my_buffer_1 33 type",
 									"fontsize" : 11.595187,
 									"presentation_rect" : [ 455.75, 395.0, 0.0, 0.0 ],
 									"numinlets" : 2,
 									"numoutlets" : 1,
-									"patching_rect" : [ 431.75, 281.0, 243.0, 18.0 ],
+									"patching_rect" : [ 463.75, 282.0, 266.0, 18.0 ],
 									"id" : "obj-20",
 									"fontname" : "Arial",
 									"outlettype" : [ "" ]

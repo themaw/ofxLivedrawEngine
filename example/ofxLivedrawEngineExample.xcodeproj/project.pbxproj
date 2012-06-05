@@ -25,6 +25,8 @@
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		FD07485E157EA182002C021A /* BaseVideoSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD074859157EA17E002C021A /* BaseVideoSink.cpp */; };
 		FD07485F157EA182002C021A /* BaseVideoSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD07485C157EA182002C021A /* BaseVideoSource.cpp */; };
+		FD074862157EAB4A002C021A /* GrabberSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD074860157EAB4A002C021A /* GrabberSource.cpp */; };
+		FD074865157EB1F2002C021A /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD074863157EB1F2002C021A /* BufferManager.cpp */; };
 		FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740D15607A6E006323C7 /* EffectsChain.cpp */; };
 		FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740F15607A6E006323C7 /* EffectsManager.cpp */; };
 		FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741415607A6E006323C7 /* CanvasGroup.cpp */; };
@@ -115,6 +117,10 @@
 		FD07485A157EA17E002C021A /* BaseVideoSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseVideoSink.h; sourceTree = "<group>"; };
 		FD07485C157EA182002C021A /* BaseVideoSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseVideoSource.cpp; sourceTree = "<group>"; };
 		FD07485D157EA182002C021A /* BaseVideoSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseVideoSource.h; sourceTree = "<group>"; };
+		FD074860157EAB4A002C021A /* GrabberSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrabberSource.cpp; sourceTree = "<group>"; };
+		FD074861157EAB4A002C021A /* GrabberSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabberSource.h; sourceTree = "<group>"; };
+		FD074863157EB1F2002C021A /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferManager.cpp; sourceTree = "<group>"; };
+		FD074864157EB1F2002C021A /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
 		FD26740C15607A6E006323C7 /* AbstractShaderEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractShaderEffect.h; sourceTree = "<group>"; };
 		FD26740D15607A6E006323C7 /* EffectsChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsChain.cpp; sourceTree = "<group>"; };
 		FD26740E15607A6E006323C7 /* EffectsChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsChain.h; sourceTree = "<group>"; };
@@ -336,6 +342,8 @@
 			children = (
 				FD07485C157EA182002C021A /* BaseVideoSource.cpp */,
 				FD07485D157EA182002C021A /* BaseVideoSource.h */,
+				FD074860157EAB4A002C021A /* GrabberSource.cpp */,
+				FD074861157EAB4A002C021A /* GrabberSource.h */,
 			);
 			path = sources;
 			sourceTree = "<group>";
@@ -416,6 +424,8 @@
 		FD267439156093FD006323C7 /* buffers */ = {
 			isa = PBXGroup;
 			children = (
+				FD074863157EB1F2002C021A /* BufferManager.cpp */,
+				FD074864157EB1F2002C021A /* BufferManager.h */,
 				FD26743D15609639006323C7 /* FrameBuffer.h */,
 				FD26743E15609670006323C7 /* FrameBuffer.cpp */,
 			);
@@ -832,6 +842,8 @@
 				FD8B9731156441710099B79F /* ofxOscRouterNode.cpp in Sources */,
 				FD07485E157EA182002C021A /* BaseVideoSink.cpp in Sources */,
 				FD07485F157EA182002C021A /* BaseVideoSource.cpp in Sources */,
+				FD074862157EAB4A002C021A /* GrabberSource.cpp in Sources */,
+				FD074865157EB1F2002C021A /* BufferManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

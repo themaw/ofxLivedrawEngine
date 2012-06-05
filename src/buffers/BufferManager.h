@@ -14,32 +14,28 @@
 #include "FrameBuffer.h"
 #include "ofxLivedrawEngine.h"
 #include "ofxSimpleSet.h"
+
 class ofxLivedrawEngine;
+class AssetManager;
 
 class BufferManager : public ofxOscRouterNode {
 public:
     
-    BufferManager();
+    BufferManager(AssetManager* manager);
     virtual ~BufferManager();
     
-    void update();
+    void update();  // takes care of sinking, etc
+    
     void processOscMessage(string pattern, ofxOscMessage& m);
-    
-    FrameBuffer* getNewAssetBackedBuffer(MediaAsset* _asset);
-    FrameBuffer* getNewVideoBuffer(string alias, int _bufferSize = 1);
 
+    FrameBuffer* createNewBuffer(string alias);
+    FrameBuffer* createNewBuffer(string alias, int _bufferSize);
+    FrameBuffer* createNewBuffer(string alias, int _bufferSize, ofVideoBufferType _type);
     
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
-    
-protected:
-
-    ofxLivedrawEngine* engine;
-    
+    bool remove(MediaAsset* asset);
+        
 private:
     
-	ofxSimpleSet<MediaAsset*>     buffers;   // this is the actual collection of assets that have been allocated
-    map<string,MediaAsset*> bufferAliases;   // this is a mapping of names / aliases back to the asset itself
-    
-    
+    AssetManager* assetManager;
+    ofxSimpleSet<FrameBuffer*> buffers;   
 };

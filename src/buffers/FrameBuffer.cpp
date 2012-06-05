@@ -31,8 +31,8 @@ ofxOscRouterNode("/"+alias)
     init(alias);
 }
 
-void FrameBuffer::init(string alias) {
-    bufferId = alias;
+void FrameBuffer::init(string _alias) {
+    alias = _alias;
     addOscMethod("/type");    
     addOscMethod("/size"); 
     addOscMethod("/clear");
@@ -59,12 +59,12 @@ void FrameBuffer::processOscMessage(string pattern, ofxOscMessage& m) {
 //}
 
 //--------------------------------------------------------------
-string FrameBuffer::getId() {
-    return bufferId;
+string FrameBuffer::getAlias() {
+    return alias;
 }
 //--------------------------------------------------------------
-void FrameBuffer::setId(string _bufferId) {
-    bufferId = _bufferId;
+void FrameBuffer::setAlias(string _alias) {
+    alias = _alias;
 }
 
 ////--------------------------------------------------------------

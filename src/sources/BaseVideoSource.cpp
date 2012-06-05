@@ -38,6 +38,10 @@ bool BaseVideoSource::sinkWasDetached(BaseVideoSink* sink) {
     if(!sinks.remove(sink)) {
         cout << "Error detaching sink." << endl;
     }
+    
+    if(!isConnected()) {
+        close(); // close if we are all disconnected
+    }
 }
 
 //--------------------------------------------------------------

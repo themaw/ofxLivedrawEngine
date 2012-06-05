@@ -13,11 +13,13 @@
 #include "Poco/RegularExpression.h"
 #include "ofxXmlSettings.h"
 #include "ofxLivedrawEngine.h"
+#include "BufferManager.h"
 
 #include "MediaAsset.h"
 #include "FrameBuffer.h"
 #include "ofxOscRouterNode.h"
- 
+
+class BufferManager;
 class ofxLivedrawEngine;
 
 class AssetManager : public ofxOscRouterNode {
@@ -34,7 +36,7 @@ public:
     MediaAsset* addImage(string alias, string filename);
     MediaAsset* addVideo(string alias, string filename);
     MediaAsset* addStream(string alias, string url, string username, string password, string type);
-    MediaAsset* addBuffer(string alias, FrameBuffer* buffer);
+    MediaAsset* addBuffer(string alias, int size, ofVideoBufferType t);
     MediaAsset* addGrabber(string alias, string url);
     
     
@@ -102,34 +104,13 @@ protected:
     
 private:
 	
-    ofxSimpleSet<FrameBuffer*>    buffers;
+    BufferManager* bufferManager;
     
 	ofxSimpleSet<MediaAsset*>     assets;         // this is the actual collection of assets that have been allocated
     map<string,MediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
     
     
-    //set<MediaAsset*,FrameBuffer*>  buffBackedAssets;
-    //set<MediaAsset*,FrameBuffer*>  diskBackedAssets;
-    
-    
-    /*
-    mymap['a']=50;
-    mymap['b']=100;
-    mymap['c']=150;
-    mymap['d']=200;
-    
-    it=mymap.find('b');
-    mymap.erase (it);
-    mymap.erase (mymap.find('d'));
-    
-    // print content:
-    cout << "elements in mymap:" << endl;
-    cout << "a => " << mymap.find('a')->second << endl;
-    cout << "c => " << mymap.find('c')->second << endl;
-     */
-
-    
-    bool generateAssetId(MediaAssetType _assetType, string _assetURI, string& assetId);
+    string generateAssetId(MediaAssetType _assetType, string _assetURI);
 
     ofDirectory dir;
     

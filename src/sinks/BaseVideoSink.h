@@ -26,7 +26,7 @@ public:
     vector<BaseVideoSource*> getSources();
 
 private:
-    
+
     ofxSimpleSet<BaseVideoSource*> sources;
         
 };
