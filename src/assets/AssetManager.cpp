@@ -10,10 +10,11 @@
 #include "AssetManager.h"
 
 
-bool isImageAsset (MediaAsset* m) { return m->isImageAsset(); }
+bool isImageAsset  (MediaAsset* m) { return m->isImageAsset(); }
 bool isGrabberAsset (MediaAsset* m) { return m->isGrabberAsset(); }
-bool isVideoAsset (MediaAsset* m) { return m->isVideoAsset(); }
+bool isVideoAsset  (MediaAsset* m) { return m->isVideoAsset(); }
 bool isStreamAsset (MediaAsset* m) { return m->isStreamAsset(); }
+bool isBufferAsset (MediaAsset* m) { return m->isBufferAsset(); }
 bool isSyphonAsset (MediaAsset* m) { return m->isSyphonAsset(); }
 
 //--------------------------------------------------------------
@@ -23,6 +24,9 @@ AssetManager::AssetManager() : ofxOscRouterNode("/assets")
     addOscNodeAlias("/ass");
     
     addOscMethod("/alias"); // allows id aliasing
+    addOscMethod("/buffer"); // allows id aliasing
+    
+    addOscMethod("/delete");
     
     loadAssets();
 }
@@ -41,7 +45,6 @@ void AssetManager::update() {
 void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
     
     if(isMatch(pattern,"/alias")) {
-        cout << "processing alias " << pattern <<  endl;
         if(validateOscSignature("ss", m)) {
             string existingAlias = m.getArgAsString(0);
             string additionalAlias = m.getArgAsString(1);
@@ -51,6 +54,35 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
             } else {
                 ofLog(OF_LOG_WARNING,"Attempted to set alias, but media asset did not exist.");
             }
+        }
+    } else if(isMatch(pattern,"/buffer")) {
+        if(validateOscSignature("s(is?)?", m)) {
+            int numArgs = m.getNumArgs();
+            if(numArgs == 1) {                
+                cout << "1 args" << endl;
+            } else if(numArgs == 2) {
+                cout << "2 args" << endl;
+            } else if(numArgs == 3) {
+                cout << "3 args" << endl;
+            } else {
+                cout << "unknown num args." << endl;
+            }
+            
+//            string name = m.getArgAsString(0);
+//            string name = m.getArgAsString(1);
+//            string name = m.getArgAsString(2);
+//            string name = m.getArgAsString(3);
+//            
+//            FrameBuffer* buff;
+//
+//            OFX_VIDEO_BUFFER_FIXED,
+//            OFX_VIDEO_BUFFER_CIRCULAR,
+//            OFX_VIDEO_BUFFER_PASSTHROUGH,
+
+            
+            
+        } else if(isMatch(pattern,"/delete")) {
+            cout << "going to delete somthing" << endl;
         }
     }
 }
@@ -75,6 +107,31 @@ MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetName,
     }
     return NULL;
 }
+
+//--------------------------------------------------------------
+MediaAsset* AssetManager::removeAsset(string alias) {
+    cout << "removing asset => alias " << alias << endl;
+    
+    // for normal assets, remove all links and buffers, etc.
+    // for buffers, remove osc child stauts, free content, etc.
+}
+
+//--------------------------------------------------------------
+MediaAsset* AssetManager::addImage(string alias, string filename) {
+    cout << "Adding image" << endl;
+    //TODO
+}
+//--------------------------------------------------------------
+MediaAsset* AssetManager::addVideo(string alias, string filename) {
+    cout << "Adding video" << endl;
+    //TODO
+}
+//--------------------------------------------------------------
+MediaAsset* AssetManager::addStream(string alias, string url, string username, string password) {
+    cout << "Adding stream" << endl;
+    //TODO
+}
+
 
 //--------------------------------------------------------------
 bool AssetManager::addAssetAlias(MediaAsset* asset, string alias) {
@@ -112,9 +169,6 @@ void AssetManager::loadFilesAssets()
 		string name = dir.getName(i);
 		string path = dir.getPath(i);
 		
-        cout << "name=" << name << endl;
-        cout << "path=" << path << endl;
-        
         if(vidTypes.extract(name, 0, s) > 0) {
             addAsset(MEDIA_ASSET_VIDEO,name,path);
         } else if(imgTypes.extract(name, 0, s) > 0) {
@@ -230,6 +284,10 @@ int AssetManager::getNumVideoAssets() {
 //--------------------------------------------------------------
 int AssetManager::getNumStreamAssets() {
     return count_if(assets.begin(), assets.end(), isStreamAsset);
+}
+//--------------------------------------------------------------
+int AssetManager::getNumBufferAssets() {
+    return count_if(assets.begin(), assets.end(), isBufferAsset);
 }
 //--------------------------------------------------------------
 int AssetManager::getNumSyphonAssets() {

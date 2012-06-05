@@ -10,15 +10,17 @@
 
 #include "ofxLivedrawEngine.h"
 
+class ofxLivedrawEngine;
+
 class ofxLivedrawEngineChild {
 public:
-    ofxLivedrawEngineChild();
-    virtual ~ofxLivedrawEngineChild();
+    ofxLivedrawEngineChild() {}
+    virtual ~ofxLivedrawEngineChild() {}
 
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    
     
+protected:
     ofxLivedrawEngine* engine;
 
-private:
 };

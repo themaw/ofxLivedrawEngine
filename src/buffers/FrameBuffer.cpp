@@ -9,19 +9,45 @@
 #include "FrameBuffer.h"
 
 //--------------------------------------------------------------
-FrameBuffer::FrameBuffer(int _bufferSize) : ofxVideoBuffer(_bufferSize){
-    bufferId     = "";
+FrameBuffer::FrameBuffer(string alias) : ofxVideoBuffer(), 
+ofxOscRouterNode("/"+alias) 
+{
+    bufferId     = alias;
     backingAsset = NULL;
+    addOscMethod("/type");    
+    addOscMethod("/size");    
 }
 
 //--------------------------------------------------------------
-FrameBuffer::FrameBuffer(string alias, int _bufferSize) : ofxVideoBuffer(_bufferSize){
+FrameBuffer::FrameBuffer(string alias, int _bufferSize) : 
+ofxVideoBuffer(_bufferSize), 
+ofxOscRouterNode("/"+alias) 
+{
     bufferId     = alias;
     backingAsset = NULL;
+    addOscMethod("/type");    
+    addOscMethod("/size");    
+}
+
+//--------------------------------------------------------------
+FrameBuffer::FrameBuffer(string alias, int _bufferSize, ofVideoBufferType _type) : 
+ofxVideoBuffer(_bufferSize, _type), 
+ofxOscRouterNode("/"+alias)  
+{
+    bufferId     = alias;
+    backingAsset = NULL;
+    addOscMethod("/type");    
+    addOscMethod("/size");    
 }
 
 //--------------------------------------------------------------
 FrameBuffer::~FrameBuffer() {}
+
+//--------------------------------------------------------------
+void FrameBuffer::processOscMessage(string pattern, ofxOscMessage& m) {
+    cout << "got a buffer message " << pattern << endl;
+}
+
 
 //--------------------------------------------------------------
 void FrameBuffer::setBackingAsset(MediaAsset* _asset) {

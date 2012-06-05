@@ -31,7 +31,6 @@
 		FD26742715607A6E006323C7 /* CanvasLayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741B15607A6E006323C7 /* CanvasLayerManager.cpp */; };
 		FD26742815607A6E006323C7 /* CanvasLayerTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741D15607A6E006323C7 /* CanvasLayerTransform.cpp */; };
 		FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26742015607A6E006323C7 /* CanvasRenderer.cpp */; };
-		FD26743C15609400006323C7 /* BufferManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26743A15609400006323C7 /* BufferManager.cpp */; };
 		FD26743F15609670006323C7 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26743E15609670006323C7 /* FrameBuffer.cpp */; };
 		FD3F84C5156064BC0022CE42 /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F846C156064BC0022CE42 /* AssetManager.cpp */; };
 		FD3F84C6156064BC0022CE42 /* AssetMetaData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F846E156064BC0022CE42 /* AssetMetaData.cpp */; };
@@ -129,8 +128,6 @@
 		FD26741E15607A6E006323C7 /* CanvasLayerTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasLayerTransform.h; sourceTree = "<group>"; };
 		FD26742015607A6E006323C7 /* CanvasRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasRenderer.cpp; sourceTree = "<group>"; };
 		FD26742115607A6E006323C7 /* CanvasRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasRenderer.h; sourceTree = "<group>"; };
-		FD26743A15609400006323C7 /* BufferManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = BufferManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		FD26743B15609400006323C7 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BufferManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD26743D15609639006323C7 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		FD26743E15609670006323C7 /* FrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameBuffer.cpp; sourceTree = "<group>"; };
 		FD3F846C156064BC0022CE42 /* AssetManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = AssetManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -395,8 +392,6 @@
 		FD267439156093FD006323C7 /* buffers */ = {
 			isa = PBXGroup;
 			children = (
-				FD26743A15609400006323C7 /* BufferManager.cpp */,
-				FD26743B15609400006323C7 /* BufferManager.h */,
 				FD26743D15609639006323C7 /* FrameBuffer.h */,
 				FD26743E15609670006323C7 /* FrameBuffer.cpp */,
 			);
@@ -796,7 +791,6 @@
 				FD26742715607A6E006323C7 /* CanvasLayerManager.cpp in Sources */,
 				FD26742815607A6E006323C7 /* CanvasLayerTransform.cpp in Sources */,
 				FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */,
-				FD26743C15609400006323C7 /* BufferManager.cpp in Sources */,
 				FD26743F15609670006323C7 /* FrameBuffer.cpp in Sources */,
 				FDA3F8811562D41200FF0E4F /* ofxVideoBuffer.cpp in Sources */,
 				FDA3F8821562D41200FF0E4F /* ofxVideoBufferLoader.cpp in Sources */,

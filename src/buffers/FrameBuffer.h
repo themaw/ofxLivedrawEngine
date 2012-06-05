@@ -12,6 +12,7 @@
 #include <set>
 #include "MediaAsset.h"
 #include "ofxVideoBuffer.h"
+#include "ofxOscRouterNode.h"
 
 // Frame Buffer is a wrapper for ofxVideoBuffer.
 // When it has a backing asset, it cannot be modified
@@ -21,11 +22,15 @@
 class ofxVideoBuffer;
 class ofxVideoPlayer;
 
-class FrameBuffer : public ofxVideoBuffer {
+class FrameBuffer : public ofxVideoBuffer, public ofxOscRouterNode {
 public:
-    FrameBuffer(int _bufferSize = 1);
-    FrameBuffer(string alias, int _bufferSize = 1);
+    FrameBuffer(string alias);
+    FrameBuffer(string alias, int _bufferSize);
+    FrameBuffer(string alias, int _bufferSize, ofVideoBufferType _type);
     virtual ~FrameBuffer();
+    
+    void processOscMessage(string pattern, ofxOscMessage& m);
+
     
     void setBackingAsset(MediaAsset* _asset);
     

@@ -29,6 +29,13 @@ public:
     void processOscMessage(string pattern, ofxOscMessage& m);
     
     MediaAsset* addAsset(MediaAssetType _assetType, string _assetName, string _assetURI);
+    MediaAsset* removeAsset(string alias);
+
+    MediaAsset* addImage(string alias, string filename);
+    MediaAsset* addVideo(string alias, string filename);
+    MediaAsset* addStream(string alias, string url, string username, string password);
+    
+    
     
     bool addAssetAlias(MediaAsset* asset, string alias);
     
@@ -48,6 +55,7 @@ public:
 	int getNumVideoAssets();
 	int getNumGrabberAssets();
 	int getNumStreamAssets();
+	int getNumBufferAssets();
     int getNumSyphonAssets();
 
 	//  TODO: for file watchers	

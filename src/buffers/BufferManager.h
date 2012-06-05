@@ -29,7 +29,6 @@ public:
     FrameBuffer* getNewVideoBuffer(string alias, int _bufferSize = 1);
 
     
-    
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    
     
@@ -39,11 +38,7 @@ protected:
     
 private:
     
-//    REFACTOR
-//    -- aliasable object
-//    -- aliassed object collection
-    
-	ofxSimpleSet<MediaAsset*>     buffers;         // this is the actual collection of assets that have been allocated
+	ofxSimpleSet<MediaAsset*>     buffers;   // this is the actual collection of assets that have been allocated
     map<string,MediaAsset*> bufferAliases;   // this is a mapping of names / aliases back to the asset itself
     
     

@@ -15,11 +15,9 @@
 #include "CanvasRenderer.h"
 #include "SessionManager.h"
 #include "EffectsManager.h"
-#include "BufferManager.h"
 
 #define OSC_PORT 5433
 
-class BufferManager;
 class AssetManager;
 class EffectsManager;
 class CanvasLayerManager;
@@ -39,7 +37,6 @@ public:
     void windowResized(int w, int h);
     
     ofxOscRouter*       getOscRouter();
-    BufferManager*      getBufferManager();
     AssetManager*       getAssetManager();
     EffectsManager*     getEffectsManager();
     CanvasRenderer*     getCanvasRenderer();
@@ -49,7 +46,6 @@ public:
 protected:
     ofxOscRouter*        oscRouter;
     
-    BufferManager*       bufferManager;
     AssetManager*    	 assetManager;
     EffectsManager*      effectsManager;
     

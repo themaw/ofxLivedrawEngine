@@ -7,7 +7,6 @@ ofxLivedrawEngine::ofxLivedrawEngine() {
 
 //--------------------------------------------------------------
 ofxLivedrawEngine::~ofxLivedrawEngine() {
-    delete bufferManager;
     delete oscRouter;
     delete assetManager;
     delete effectsManager;
@@ -26,10 +25,6 @@ void ofxLivedrawEngine::setup() {
     oscRouter->addOscNodeAlias("/l");
     oscRouter->addOscNodeAlias("/ld");
 
-    bufferManager = new BufferManager();
-    bufferManager->setEngine(this);
-    oscRouter->addOscChild(bufferManager);
-    
     assetManager  = new AssetManager();
     assetManager->setEngine(this);
     oscRouter->addOscChild(assetManager);
@@ -51,9 +46,6 @@ void ofxLivedrawEngine::setup() {
 //--------------------------------------------------------------
 void ofxLivedrawEngine::update() {
 
-    // osc is on its own update listener
-    bufferManager->update();
-    
     // run asset manager updates (look for new files, etc)
     assetManager->update();
 
@@ -87,10 +79,6 @@ void ofxLivedrawEngine::windowResized(int w, int h) {
 //--------------------------------------------------------------
 ofxOscRouter* ofxLivedrawEngine::getOscRouter() {
     return oscRouter;
-}
-//--------------------------------------------------------------
-BufferManager* ofxLivedrawEngine::getBufferManager() {
-    return bufferManager;
 }
 //--------------------------------------------------------------
 AssetManager* ofxLivedrawEngine::getAssetManager() {
