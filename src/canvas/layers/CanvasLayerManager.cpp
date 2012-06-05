@@ -10,6 +10,11 @@
 
 //--------------------------------------------------------------
 CanvasLayerManager::CanvasLayerManager() : ofxOscRouterNode("/layer") {
+    addOscNodeAlias("/lay");
+    addOscNodeAlias("/l");
+ 
+    addOscMethod("/new");
+    addOscMethod("/delete");
 }
 
 //--------------------------------------------------------------
@@ -17,12 +22,6 @@ CanvasLayerManager::~CanvasLayerManager() {
     for (int i = 0; i < layers.size(); i++)
         delete layers[ i ];
     layers.clear();
-}
-
-//--------------------------------------------------------------
-void CanvasLayerManager::setup() {
-    addOscMethod("/new");
-    addOscMethod("/delete");
 }
 
 
@@ -33,6 +32,9 @@ void CanvasLayerManager::setup() {
 
 //--------------------------------------------------------------
 void CanvasLayerManager::processOscMessage(string pattern, ofxOscMessage& m) {
+    
+    cout << "CanvasLayerManager::processOscMessage" << endl;
+    
     
     if(isMatch(pattern,"/new")) {
         // /livedraw/canvas/layer/new      LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
@@ -70,6 +72,8 @@ void CanvasLayerManager::processOscMessage(string pattern, ofxOscMessage& m) {
 //--------------------------------------------------------------
 CanvasLayer* CanvasLayerManager::newLayer(string layerName, ofPoint point, CanvasLayer* parentLayer) {
 
+    cout << "making new layer |"<< layerName << "| " << point << " parent=" << (parentLayer == NULL ? "X" : parentLayer->getName()) << endl;
+    
     // rename if needed
     if(hasLayer(layerName)) {
         layerName = layerName + "_" + ofToString(ofGetElapsedTimeMillis());
@@ -77,7 +81,7 @@ CanvasLayer* CanvasLayerManager::newLayer(string layerName, ofPoint point, Canva
 
     CanvasLayer* cl = new CanvasLayer(this,layerName,point,parentLayer); // MAKE SURE THESE ARE DELETED
     
-    cl->setup();
+//
     cl->setPosition(point);
  //   cl->setAssetManager(assetManager);
 //    cl->setEffectsManager(effectsManager);
@@ -200,8 +204,30 @@ void CanvasLayerManager::draw() {
         
  //       ofFill();
         
-        layer->getSourcePlayer()->draw(-a.x, -a.y);
-        layer->getMaskPlayer()->draw(-a.x, -a.y);
+        if(layer->getSourcePlayer()->isLoaded()) {
+            layer->getSourcePlayer()->draw(-a.x, -a.y);
+        } else {
+            ofPushStyle();
+            ofSetColor(127);
+            ofNoFill();
+            ofRect(-a.x, -a.y,w,h);
+            ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
+            ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
+            ofPopStyle();
+        }
+            
+        if(layer->getMaskPlayer()->isLoaded()) {
+            layer->getMaskPlayer()->draw(-a.x, -a.y);
+        } else {
+            ofPushStyle();
+            ofSetColor(127);
+            ofNoFill();
+            ofRect(-a.x, -a.y,w,h);
+            ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
+            ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
+            ofPopStyle();
+        }
+
 
         
         //        ofRect(-a.x, -a.y,0,w,h);
@@ -260,5 +286,20 @@ void CanvasLayerManager::setLayerSolo(CanvasLayer* layer, bool solo) {
 //--------------------------------------------------------------
 void CanvasLayerManager::setLayerLock(CanvasLayer* layer, bool lock) {
     cout << "lock layer " << layer->getName() << " lock =" << lock <<  endl;
+}
+
+
+void CanvasLayerManager::dump() {
+
+    cout << "layers:" << endl;
+    for(it = layers.begin(); it != layers.end(); it++) {
+        cout << (*it)->getName() << endl;
+    }
+    
+    cout << "renderTree:" << endl;
+    for(it = renderTree.begin(); it != renderTree.end(); it++) {
+        cout << (*it)->getName() << endl;
+    }
+
 }
 

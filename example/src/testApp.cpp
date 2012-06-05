@@ -23,7 +23,14 @@ void testApp::draw(){
 void testApp::keyPressed (int key){
 	if(key == ' ') {
 		ofToggleFullscreen();   
+    } else if(key == 'a') {
+        AssetManager* man = livedraw.getAssetManager();
+        man->dump();
+    } else if(key == 'b') {
+        CanvasLayerManager* man = livedraw.getCanvasLayerManager();
+        man->dump();
     }
+
 }
 
 //--------------------------------------------------------------

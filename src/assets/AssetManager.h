@@ -25,7 +25,6 @@ class AssetManager : public ofxOscRouterNode {
 public:
 	AssetManager();
 	virtual ~AssetManager();
-    void setup();
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
     
@@ -72,10 +71,18 @@ public:
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    
     
+    void dump() {
+
+        map<string,MediaAsset*>::iterator itr;
+        for(itr = assets.begin();itr!=assets.end();itr++) {
+            cout << (*itr).second->getAssetId() << endl;
+        }
+    }
+    
+    
 protected:
     
     ofxLivedrawEngine* engine;
-
     
 private:
 	

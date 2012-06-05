@@ -25,7 +25,6 @@ public:
     CanvasLayerManager();
     virtual ~CanvasLayerManager();
     
-    void setup();
     void update();
     void draw();
     
@@ -58,6 +57,10 @@ public:
     
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    
+
+    void dump();
+
+    
     
 protected:
     

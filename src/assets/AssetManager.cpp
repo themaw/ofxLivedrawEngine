@@ -12,18 +12,16 @@
 //--------------------------------------------------------------
 AssetManager::AssetManager() : ofxOscRouterNode("/assets")
 {
+    addOscNodeAlias("/a");
+    addOscNodeAlias("/ass");
     addOscMethod("alias"); // allows id changes
+    
+    loadAssets();
 }
 
 //--------------------------------------------------------------
 AssetManager::~AssetManager() {
     ofLog(OF_LOG_NOTICE, "Destroying Asset Manager.");
-
-}
-
-//--------------------------------------------------------------
-void AssetManager::setup() {
-    loadAssets();
 }
 
 //--------------------------------------------------------------
@@ -41,7 +39,7 @@ MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetURI) 
     string assetId = "";
     if(generateAssetId(_assetType,_assetURI,assetId)) {
         
-        if(hasId(assetId)) {
+        if(!hasId(assetId)) {
             MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
             assets[assetId] = asset;
             return asset;
@@ -257,8 +255,9 @@ bool AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI, 
     
     filename = _assetURI;
     
-    id = prefix + filename;
+    assetId = prefix + filename;
     
+    return  true;
     
 
     /*

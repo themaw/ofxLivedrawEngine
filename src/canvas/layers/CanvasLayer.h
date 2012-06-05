@@ -38,14 +38,16 @@ public:
 
     void init();
     
-	void setup();
+//	void setup();
 	void update();
     
     void render();
     void draw();
 
-    void setSource(MediaAsset* src);
-    void setMask(MediaAsset* src);
+    //void setSource(MediaAsset* src);
+    //void setMask(MediaAsset* src);
+    
+    void swapSourceMaskPlayers();
     
     FrameBufferPlayer* getSourcePlayer() {return sourcePlayer;};
     FrameBufferPlayer* getMaskPlayer()   {return maskPlayer;};

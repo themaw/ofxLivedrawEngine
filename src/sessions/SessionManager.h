@@ -25,7 +25,6 @@ public:
 	SessionManager();
 	virtual ~SessionManager();
     
-    void setup();
     void update();
     
     void processOscMessage(string address, ofxOscMessage& m);

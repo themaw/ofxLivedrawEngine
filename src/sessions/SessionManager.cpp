@@ -11,16 +11,12 @@
 
 //--------------------------------------------------------------
 SessionManager::SessionManager() : ofxOscRouterNode("/sessions") {
-    
+    addOscNodeAlias("/ses");
+    addOscNodeAlias("/s");
 }
 
 //--------------------------------------------------------------
 SessionManager::~SessionManager() {
-    
-}
-
-//--------------------------------------------------------------
-void SessionManager::setup() {
     
 }
 

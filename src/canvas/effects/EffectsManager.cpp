@@ -11,7 +11,8 @@
 
 //--------------------------------------------------------------
 EffectsManager::EffectsManager() : ofxOscRouterNode("/effects") {
-    
+    addOscNodeAlias("/eff");
+    addOscNodeAlias("/e");
 }
 
 //--------------------------------------------------------------
@@ -20,10 +21,6 @@ EffectsManager::~EffectsManager() {
 }
 
 // basic functions
-//--------------------------------------------------------------
-void EffectsManager::setup() {
-    
-}
 
 //--------------------------------------------------------------
 void EffectsManager::update() {
@@ -35,7 +32,7 @@ void EffectsManager::update() {
 //--------------------------------------------------------------
 void EffectsManager::processOscMessage(string pattern, ofxOscMessage& m) {
  
-    
+    cout << "effects manager"  << endl;
     
     
 }

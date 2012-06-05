@@ -11,6 +11,9 @@
 
 //--------------------------------------------------------------
 CanvasRenderer::CanvasRenderer() : ofxOscRouterNode("/canvas") {
+    addOscNodeAlias("/c");
+    addOscNodeAlias("/can");
+    
     x = 0;
     y = 0;
     width = 1024;
@@ -25,6 +28,11 @@ CanvasRenderer::~CanvasRenderer() {
 }
 
 void CanvasRenderer::init() {
+    
+    layerManager = new CanvasLayerManager();
+    addOscChild(layerManager);
+    
+    
     addOscMethod("/position");
     addOscMethod("/size");
     addOscMethod("/background");
@@ -32,30 +40,26 @@ void CanvasRenderer::init() {
     addOscMethod("/fps");
     addOscMethod("/msaa");
     
-    //addOscChild(&layerManager); // layer manager
     
     useMSAA = true;
         
     bgColor = ofColor(0,0,0,255);
-}
 
-
-//--------------------------------------------------------------
-void CanvasRenderer::setup() {
     /*
-    ofFbo::Settings s;
-	s.width				= width;
-	s.height			= height;
-	s.numColorbuffers	= 1; // not sure how many I need.
-	s.numSamples		= useMSAA ? ofFbo::maxSamples() : 0;
-    
-    fbo.setup(s);
+     ofFbo::Settings s;
+     s.width				= width;
+     s.height			= height;
+     s.numColorbuffers	= 1; // not sure how many I need.
+     s.numSamples		= useMSAA ? ofFbo::maxSamples() : 0;
+     
+     fbo.setup(s);
      */
     
     fbo.allocate(width,height);
-
+    
     //layerManager.setup();
 }
+
 
 //--------------------------------------------------------------
 //void CanvasRenderer::setEffectsManager(EffectsManager* _effectsManager) {
@@ -193,6 +197,12 @@ void CanvasRenderer::setMsaa(bool _useMSAA) {
 //--------------------------------------------------------------
 void CanvasRenderer::resize(int w, int h) {
     fbo.allocate(w,h);
+}
+
+
+//--------------------------------------------------------------
+CanvasLayerManager* CanvasRenderer::getCanvasLayerManager() {
+    return layerManager;
 }
 
 

@@ -12,7 +12,7 @@ ofxLivedrawEngine::~ofxLivedrawEngine() {
     delete assetManager;
     delete effectsManager;
     
-    delete canvasLayerManager;
+//    delete canvasLayerManager;
     delete canvas;
     
     delete sessionManager;
@@ -21,47 +21,49 @@ ofxLivedrawEngine::~ofxLivedrawEngine() {
 //--------------------------------------------------------------
 void ofxLivedrawEngine::setup() {
     
-    bufferManager = new BufferManager();
     oscRouter     = new ofxOscRouter();
     oscRouter->setup("/livedraw", OSC_PORT);
+    oscRouter->addOscNodeAlias("/l");
+    oscRouter->addOscNodeAlias("/ld");
 
+    bufferManager = new BufferManager();
+    oscRouter->addOscChild(bufferManager);
+    
     assetManager  = new AssetManager();
-    assetManager->setup();
-
+    oscRouter->addOscChild(assetManager);
+    
     effectsManager= new EffectsManager();
-    effectsManager->setup();
+    oscRouter->addOscChild(effectsManager);
     
     canvas        = new CanvasRenderer();
-    canvas->setup();
-
-    canvasLayerManager = new CanvasLayerManager();
+    oscRouter->addOscChild(canvas);
     
     sessionManager = new SessionManager();
-    sessionManager->setup();
-    
-    //
-    oscRouter->addOscChild(canvas);
-    oscRouter->addOscChild(effectsManager); 
     oscRouter->addOscChild(sessionManager); 
+    
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::update() {
 
-    // session manager
-    sessionManager->update();
+    // osc is on its own update listener
+    bufferManager->update();
     
     // run asset manager updates (look for new files, etc)
     assetManager->update();
-    
+
     // updated effects
     effectsManager->update();
-	
+
     // canvas gets updated
     canvas->update();
+
+    // session manager
+    sessionManager->update();
     
 }
 
+//--------------------------------------------------------------
 void ofxLivedrawEngine::draw() {
     ofSetColor(255,0,0);
     ofFill();
@@ -72,7 +74,37 @@ void ofxLivedrawEngine::draw() {
     canvas->draw();
 }
 
-
+//--------------------------------------------------------------
 void ofxLivedrawEngine::windowResized(int w, int h) {
     canvas->resize(w,h);
 }
+
+//--------------------------------------------------------------
+ofxOscRouter* ofxLivedrawEngine::getOscRouter() {
+    return oscRouter;
+}
+//--------------------------------------------------------------
+BufferManager* ofxLivedrawEngine::getBufferManager() {
+    return bufferManager;
+}
+//--------------------------------------------------------------
+AssetManager* ofxLivedrawEngine::getAssetManager() {
+    return assetManager;
+}
+//--------------------------------------------------------------
+EffectsManager* ofxLivedrawEngine::getEffectsManager() {
+    return effectsManager;
+}
+//--------------------------------------------------------------
+CanvasLayerManager* ofxLivedrawEngine::getCanvasLayerManager() {
+    return canvas->getCanvasLayerManager();
+}
+//--------------------------------------------------------------
+CanvasRenderer* ofxLivedrawEngine::getCanvasRenderer() {
+    return canvas;
+}
+//--------------------------------------------------------------
+SessionManager* ofxLivedrawEngine::getSessionManager() {
+    return sessionManager;
+}
+

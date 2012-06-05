@@ -26,7 +26,6 @@ public:
     virtual ~EffectsManager();
     
     // basic functions
-    void setup();
     void update();
     
     // deal with OSC

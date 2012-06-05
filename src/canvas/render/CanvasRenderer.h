@@ -20,6 +20,7 @@
 #include "ofxLivedrawEngine.h"
 
 class ofxLivedrawEngine;
+class CanvasLayerManager;
 
 class CanvasRenderer : public ofxOscRouterNode {
 	
@@ -31,7 +32,6 @@ public:
 
     void init();
     
-    void setup();
 	void update();
     void render();
 	void draw();
@@ -65,17 +65,19 @@ public:
     
     void resize(int w, int h);
 
+    CanvasLayerManager* getCanvasLayerManager();
+    
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    
     
 protected:
     
     ofxLivedrawEngine* engine;
-
+    
+    
 private:
 	
-	// canvas group is a kind of canvas layer
-	//CanvasLayerManager layerManager;
+	CanvasLayerManager* layerManager;
     
     ofFbo fbo;
     int x, y;

@@ -3,6 +3,8 @@
 
 //--------------------------------------------------------------
 BufferManager::BufferManager() : ofxOscRouterNode("/buffers") {
+    addOscNodeAlias("/b");
+    addOscNodeAlias("/buff");
     addOscMethod("new");
 }
 
@@ -17,7 +19,7 @@ void BufferManager::update() {
 
 //--------------------------------------------------------------
 void BufferManager::processOscMessage(string pattern, ofxOscMessage& m) {
-    
+    cout << "in buffer manager" << endl;
 }
 
 //--------------------------------------------------------------

@@ -11,6 +11,9 @@
 
 //--------------------------------------------------------------
 CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos, CanvasLayer* _layerParent) : ofxOscRouterNode("/"+name) {
+    cout << "_layerManager=" << _layerManager << " " << name << " " << pos << " cl=" << endl;
+    
+    
     layerManager = _layerManager;
     layerName = name;
     layerParent = _layerParent;
@@ -45,10 +48,43 @@ CanvasLayer::~CanvasLayer() {
 
 //--------------------------------------------------------------
 void CanvasLayer::init() {
+    sourcePlayer = new FrameBufferPlayer();
+    sourcePlayer->setParentLayer(this);
+    maskPlayer = new FrameBufferPlayer();
+    maskPlayer->setParentLayer(this);    
+
     sourcePlayer->setOscNodeName("/source");
     maskPlayer->setOscNodeName("/mask");
     addOscChild(sourcePlayer);
     addOscChild(maskPlayer);
+    
+    //    effectsChain.setup();
+    solo = false;
+    locked = false;
+    
+    // fbo
+    useMSAA = true;
+    
+    getTransform()->setWidth(640);
+    getTransform()->setHeight(480); // standard canvas layer size
+    
+    addOscChild(&transform); // add the transform as an OSC child
+    //    addOscChild(&effectsChain); // add the associated effects chain as a child
+    
+    addOscMethod("/order");
+    addOscMethod("/lock");
+    addOscMethod("/solo");
+    addOscMethod("/label");
+    
+    
+    addOscMethod("/swap");
+    
+    
+    
+    fbo = new ofFbo();
+    fbo->allocate(getTransform()->getWidth(), getTransform()->getHeight());
+    
+
 }
 
 //--------------------------------------------------------------
@@ -68,35 +104,7 @@ void CanvasLayer::init() {
 //    effectsChain.setEffectsManager(effectsManager);
 //}
 
-//--------------------------------------------------------------
 
-void CanvasLayer::setup() {
-//    effectsChain.setup();
-    solo = false;
-    locked = false;
-    
-    // fbo
-    useMSAA = true;
-    
-    getTransform()->setWidth(640);
-    getTransform()->setHeight(480); // standard canvas layer size
-    
-    addOscChild(&transform); // add the transform as an OSC child
-//    addOscChild(&effectsChain); // add the associated effects chain as a child
-        
-    addOscMethod("/order");
-    addOscMethod("/lock");
-    addOscMethod("/solo");
-    addOscMethod("/label");
-
-    fbo = new ofFbo();
-    fbo->allocate(getTransform()->getWidth(), getTransform()->getHeight());
-
-    sourcePlayer = new FrameBufferPlayer();
-    sourcePlayer->setParentLayer(this);
-    maskPlayer = new FrameBufferPlayer();
-    maskPlayer->setParentLayer(this);    
-}
 
 //--------------------------------------------------------------
 bool CanvasLayer::bringFoward() {
@@ -218,6 +226,8 @@ void CanvasLayer::setRectangle(ofRectangle rect) {
 //--------------------------------------------------------------
 void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
     
+    cout << "CanvasLayer::processOscMessage" << address << "/" << endl;
+    
     if(isMatch(address, "/order")) {
         
         cout << "IN HERE " << endl;
@@ -254,34 +264,42 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
         }
     } else if(isMatch(address, "/label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
-            label.r = m.getArgAsFloat(0);
-            label.g = m.getArgAsFloat(1);
-            label.b = m.getArgAsFloat(2);
-            if(m.getNumArgs() < 4) {
-                label.a = m.getArgAsFloat(3);
-            }
+            label = getArgsAsColor(m, 0);
         }
+    } else if(isMatch(address, "/swap")) {
+        swapSourceMaskPlayers();
     }
     
 }
 
-//--------------------------------------------------------------
-void CanvasLayer::setSource(MediaAsset* src) {
-    /*
-    if(source->isLoaded()) {
-        delete source;
-        source = new ofVideoPlayer();
-    }
-    
-    source->loadMovie(src->getAssetURI().toString());
-    source->play();
-     */
-}
+////--------------------------------------------------------------
+//void CanvasLayer::setSource(MediaAsset* src) {
+//    /*
+//    if(source->isLoaded()) {
+//        delete source;
+//        source = new ofVideoPlayer();
+//    }
+//    
+//    source->loadMovie(src->getAssetURI().toString());
+//    source->play();
+//     */
+//}
+//
+////--------------------------------------------------------------
+//void CanvasLayer::setMask(MediaAsset* src) {
+//    //mask->loadImage(src->getAssetURI().toString());
+//}
+
 
 //--------------------------------------------------------------
-void CanvasLayer::setMask(MediaAsset* src) {
-    //mask->loadImage(src->getAssetURI().toString());
+void CanvasLayer::swapSourceMaskPlayers() {
+    FrameBufferPlayer* tmp;
+    tmp = getSourcePlayer();
+    sourcePlayer = getMaskPlayer();
+    maskPlayer = tmp;
 }
+
+
 
 //--------------------------------------------------------------
 string CanvasLayer::getName() {
