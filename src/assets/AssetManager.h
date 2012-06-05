@@ -28,7 +28,10 @@ public:
     void update();
     void processOscMessage(string pattern, ofxOscMessage& m);
     
-    MediaAsset* addAsset(MediaAssetType _assetType, string _assetURI);
+    MediaAsset* addAsset(MediaAssetType _assetType, string _assetName, string _assetURI);
+    
+    bool addAssetAlias(MediaAsset* asset, string alias);
+    
     bool removeAsset(MediaAsset* asset);
 
 	void loadAssets();
@@ -73,9 +76,9 @@ public:
     
     void dump() {
 
-        map<string,MediaAsset*>::iterator itr;
+        set<MediaAsset*>::iterator itr;
         for(itr = assets.begin();itr!=assets.end();itr++) {
-            cout << (*itr).second->getAssetId() << endl;
+            cout << (*itr)->getAssetId() << endl;
         }
     }
     
@@ -86,8 +89,9 @@ protected:
     
 private:
 	
+	set<MediaAsset*>        assets;         // this is the actual collection of assets that have been allocated
+    map<string,MediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
     
-	map<string,MediaAsset*> assets;
 
     map<MediaAsset*,FrameBuffer*>  buffBackedAssets;
     set<MediaAsset*,FrameBuffer*>  diskBackedAssets;

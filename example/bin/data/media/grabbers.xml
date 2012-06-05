@@ -1,0 +1,5 @@
+<grabbers>
+    <!-- listing grabbers until core has better support -->
+    <grabber name="cam"  id="4"/>
+
+</grabbers>

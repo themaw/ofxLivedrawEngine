@@ -27,18 +27,23 @@ void ofxLivedrawEngine::setup() {
     oscRouter->addOscNodeAlias("/ld");
 
     bufferManager = new BufferManager();
+    bufferManager->setEngine(this);
     oscRouter->addOscChild(bufferManager);
     
     assetManager  = new AssetManager();
+    assetManager->setEngine(this);
     oscRouter->addOscChild(assetManager);
     
     effectsManager= new EffectsManager();
+    effectsManager->setEngine(this);
     oscRouter->addOscChild(effectsManager);
     
     canvas        = new CanvasRenderer();
+    canvas->setEngine(this);
     oscRouter->addOscChild(canvas);
     
     sessionManager = new SessionManager();
+    sessionManager->setEngine(this);
     oscRouter->addOscChild(sessionManager); 
     
 }

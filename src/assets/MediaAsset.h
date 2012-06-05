@@ -6,11 +6,13 @@
 #include "ofxOscRouterNode.h"
 #include "ofxVideoBuffer.h"
 
+#include "ofxSimpleSet.h"
+
 #include "Poco/URI.h"
 
 enum MediaAssetType
 {
-    MEDIA_ASSET_UNKNOWN,
+    MEDIA_ASSET_EMPTY,
 	MEDIA_ASSET_IMAGE,
 	MEDIA_ASSET_VIDEO,
 	MEDIA_ASSET_GRABBER,
@@ -32,8 +34,9 @@ public:
 	string          getAssetId();
 	Poco::URI       getAssetURI();
 	MediaAssetType  getAssetType();	// this returns an enum type
+	string          getAssetTypeString();	// this returns an enum type
 	
-    bool isUnknownAsset();
+    bool isEmptyAsset();
     bool isImageAsset();
     bool isVideoAsset();
     bool isGrabberAsset();
@@ -58,10 +61,18 @@ public:
 	ofImage* getCacheImage();					// get the default preview image
      */
 	
-
+    
+    
+    string toString();
+    
+    bool addAlias(string alias);
+    bool removeAlias(string alias);
+    bool containsAlias(string alias);
     
 protected:
-
+    
+    ofxSimpleStringSet aliases;
+    
     //set<ofxVideoBuffer*> buffers;
     
     MediaAssetType assetType;

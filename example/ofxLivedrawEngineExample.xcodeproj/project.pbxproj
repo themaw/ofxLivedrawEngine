@@ -158,6 +158,7 @@
 		FD3F852B156066F40022CE42 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
 		FD480F18155F029500660A6F /* ofxIpVideoGrabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxIpVideoGrabber.cpp; sourceTree = "<group>"; };
 		FD480F19155F029500660A6F /* ofxIpVideoGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxIpVideoGrabber.h; sourceTree = "<group>"; };
+		FD731E4E157DB40300D7256C /* ofxSimpleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSimpleSet.h; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
 		FD8B9728156441710099B79F /* osc_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osc_match.h; sourceTree = "<group>"; };
 		FD8B972B156441710099B79F /* ofxOscRouter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouter.cpp; sourceTree = "<group>"; };
@@ -456,6 +457,7 @@
 			children = (
 				FD3F84C1156064BC0022CE42 /* EnablerInterface.h */,
 				FD3F84C3156064BC0022CE42 /* ofxLimitedPoint.h */,
+				FD731E4E157DB40300D7256C /* ofxSimpleSet.h */,
 			);
 			path = utilities;
 			sourceTree = "<group>";

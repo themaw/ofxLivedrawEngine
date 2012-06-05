@@ -23,6 +23,7 @@
 class MediaAsset;
 class FrameBufferPlayer;
 class CanvasLayerManager;
+class ofxLivedrawEngine;
 
 class CanvasLayer : public ofxOscRouterNode, public Enabler {
 	
@@ -47,7 +48,7 @@ public:
     //void setSource(MediaAsset* src);
     //void setMask(MediaAsset* src);
     
-    void swapSourceMaskPlayers();
+    //void swapSourceMaskPlayers();
     
     FrameBufferPlayer* getSourcePlayer() {return sourcePlayer;};
     FrameBufferPlayer* getMaskPlayer()   {return maskPlayer;};
@@ -110,6 +111,8 @@ public:
 //    AssetManager* getAssetManager();
 //    bool hasAssetManager();
     
+    CanvasLayerManager* getCanvasLayerManager();
+    ofxLivedrawEngine* getEngine();
     
 private:
 	

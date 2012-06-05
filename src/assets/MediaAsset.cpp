@@ -50,8 +50,42 @@ MediaAssetType MediaAsset::getAssetType() {
 }
 
 //--------------------------------------------------------------
-bool MediaAsset::isUnknownAsset() {
-    return assetType == MEDIA_ASSET_UNKNOWN;
+string MediaAsset::getAssetTypeString() {
+    
+    switch (assetType) {
+        case MEDIA_ASSET_EMPTY:
+            return "EMPTY";
+            break;
+        case MEDIA_ASSET_IMAGE:
+            return "IMAGE";
+            break;
+        case MEDIA_ASSET_VIDEO:
+            return "VIDEO";
+            break;
+        case MEDIA_ASSET_GRABBER:
+            return "GRABBER";
+            break;
+        case MEDIA_ASSET_STREAM:
+            return "STREAM";
+            break;
+        case MEDIA_ASSET_BUFFER:
+            return "BUFFER";
+            break;
+        case MEDIA_ASSET_SYPHON:
+            return "SYPHON";
+            break;
+        default:
+            return "UNKNOWN";
+            break;
+    }
+    
+    
+}
+
+
+//--------------------------------------------------------------
+bool MediaAsset::isEmptyAsset() {
+    return assetType == MEDIA_ASSET_EMPTY;
 }
 //--------------------------------------------------------------
 bool MediaAsset::isImageAsset() {
@@ -85,5 +119,32 @@ bool MediaAsset::isSyphonAsset() {
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 
+//--------------------------------------------------------------
+bool MediaAsset::addAlias(string alias) {
+    return aliases.add(alias);
+}
 
+//--------------------------------------------------------------
+bool MediaAsset::removeAlias(string alias) {
+    return aliases.remove(alias);
+}
+
+//--------------------------------------------------------------
+bool MediaAsset::containsAlias(string alias) {
+    return aliases.contains(alias);
+}
+
+
+
+string MediaAsset::toString() {
+    stringstream ss;
+    ss << "----------------" << endl;
+    ss << "MEDIA ASSET:" << endl;
+    ss << "\tTYPE="     << getAssetTypeString() << endl;
+    ss << "\tID="       << getAssetId() << endl;
+    ss << "\tURL="      << getAssetURI().toString() << endl;
+    ss << "\tAliases="  << ofToString(aliases.toArray()) << endl;
+    
+    return ss.str();
+}
 

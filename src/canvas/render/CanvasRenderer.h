@@ -67,8 +67,8 @@ public:
 
     CanvasLayerManager* getCanvasLayerManager();
     
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
+    void setEngine(ofxLivedrawEngine* _engine);
+    ofxLivedrawEngine* getEngine();    
     
 protected:
     

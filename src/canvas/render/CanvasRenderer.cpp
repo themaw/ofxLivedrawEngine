@@ -206,4 +206,13 @@ CanvasLayerManager* CanvasRenderer::getCanvasLayerManager() {
 }
 
 
+//--------------------------------------------------------------
+void CanvasRenderer::setEngine(ofxLivedrawEngine* _engine) {
+    engine = _engine;
+    layerManager->setEngine(_engine);
+};
+
+//--------------------------------------------------------------
+ofxLivedrawEngine* CanvasRenderer::getEngine() {return engine;}    
+
 

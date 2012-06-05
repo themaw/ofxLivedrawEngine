@@ -14,7 +14,8 @@ AssetManager::AssetManager() : ofxOscRouterNode("/assets")
 {
     addOscNodeAlias("/a");
     addOscNodeAlias("/ass");
-    addOscMethod("alias"); // allows id changes
+    
+    addOscMethod("alias"); // allows id aliasing
     
     loadAssets();
 }
@@ -35,13 +36,17 @@ void AssetManager::processOscMessage(string pattern, ofxOscMessage& m) {
 }
 
 //--------------------------------------------------------------
-MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetURI) {
+MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetName, string _assetURI) {
     string assetId = "";
-    if(generateAssetId(_assetType,_assetURI,assetId)) {
-        
+    if(generateAssetId(_assetType,_assetName,assetId)) {
         if(!hasId(assetId)) {
             MediaAsset* asset = new MediaAsset(_assetType,assetId,_assetURI);
-            assets[assetId] = asset;
+            assets.insert(asset);
+            
+            // TODO: do checkint here ...
+            addAssetAlias(asset,assetId);    
+            addAssetAlias(asset,_assetName); // two default asset names
+
             return asset;
         } else {
             ofLog(OF_LOG_WARNING, "AssetManager::addAsset alreadh has asset called : " + assetId);
@@ -49,6 +54,12 @@ MediaAsset* AssetManager::addAsset(MediaAssetType _assetType, string _assetURI) 
         }
     }
     return NULL;
+}
+
+//--------------------------------------------------------------
+bool AssetManager::addAssetAlias(MediaAsset* asset, string alias) {
+    asset->addAlias(alias);
+    assetAliases[alias] = asset;
 }
 
 //--------------------------------------------------------------
@@ -81,10 +92,13 @@ void AssetManager::loadFilesAssets()
 		string name = dir.getName(i);
 		string path = dir.getPath(i);
 		
+        cout << "name=" << name << endl;
+        cout << "path=" << path << endl;
+        
         if(vidTypes.extract(name, 0, s) > 0) {
-            addAsset(MEDIA_ASSET_VIDEO,path);
+            addAsset(MEDIA_ASSET_VIDEO,name,path);
         } else if(imgTypes.extract(name, 0, s) > 0) {
-            addAsset(MEDIA_ASSET_IMAGE,path);
+            addAsset(MEDIA_ASSET_IMAGE,name,path);
         } else if(otherTypes.extract(name, 0, s)) {
             //ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - other valid non-media " + path); 
         } else {
@@ -107,8 +121,32 @@ void AssetManager::loadSyphonAssets() {
 //--------------------------------------------------------------
 void AssetManager::loadGrabberAssets() {
     // TODO: no way to get a vector of names?
-    ofVideoGrabber grabber;
-    grabber.listDevices();
+    // this is a total hack.  Should be:
+    // vector<int> devIds = ofVideoGrabber:getDeviceList();
+    // https://github.com/openframeworks/openFrameworks/issues/91
+    // 
+    
+    ofxXmlSettings XML;
+    
+    if( XML.loadFile("media/grabbers.xml") ){
+		
+		XML.pushTag("grabbers");
+		string tag = "grabber";
+		
+		int nStreams = XML.getNumTags(tag);
+		
+		for(int n = 0; n < nStreams; n++) {
+			string name = XML.getAttribute(tag, "name", "unknown", n);
+			int id = XML.getAttribute(tag, "id", 0, n);
+            addAsset(MEDIA_ASSET_GRABBER, name, ofToString(id));
+		}
+		
+		XML.popTag();
+		
+	} else {
+		ofLog(OF_LOG_ERROR, "Unable to load media/streams.xml.");
+	}
+    
     ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumGrabberAssets()) + " grabbers.");
 }
 
@@ -136,7 +174,9 @@ void AssetManager::loadStreamAssets(){
 //			" address: " +  address + 
 //			" username: " + username + 
 //			" password: " + password;
-            addAsset(MEDIA_ASSET_STREAM,address);
+            // TODO: URL support for username / password, type
+            
+            addAsset(MEDIA_ASSET_STREAM,name,address);
 		}
 		
 		XML.popTag();
@@ -158,9 +198,9 @@ int AssetManager::getNumAssets() {return assets.size();}
 //--------------------------------------------------------------
 int AssetManager::getNumImageAssets() {
     int cnt = 0;
-    map<string,MediaAsset*>::iterator iter = assets.begin();
+    set<MediaAsset*>::iterator iter = assets.begin();
     while(iter != assets.end()) {
-        if(iter->second->isImageAsset()) cnt++;
+        if((*iter)->isImageAsset()) cnt++;
         iter++;
     }
     return cnt;
@@ -168,9 +208,9 @@ int AssetManager::getNumImageAssets() {
 //--------------------------------------------------------------
 int AssetManager::getNumGrabberAssets() {
     int cnt = 0;
-    map<string,MediaAsset*>::iterator iter = assets.begin();
+    set<MediaAsset*>::iterator iter = assets.begin();
     while(iter != assets.end()) {
-        if(iter->second->isGrabberAsset()) cnt++;
+        if((*iter)->isGrabberAsset()) cnt++;
         iter++;
     }
     return cnt;
@@ -178,9 +218,9 @@ int AssetManager::getNumGrabberAssets() {
 //--------------------------------------------------------------
 int AssetManager::getNumVideoAssets() {
     int cnt = 0;
-    map<string,MediaAsset*>::iterator iter = assets.begin();
+    set<MediaAsset*>::iterator iter = assets.begin();
     while(iter != assets.end()) {
-        if(iter->second->isVideoAsset()) cnt++;
+        if((*iter)->isVideoAsset()) cnt++;
         iter++;
     }
     return cnt;   
@@ -188,9 +228,9 @@ int AssetManager::getNumVideoAssets() {
 //--------------------------------------------------------------
 int AssetManager::getNumStreamAssets() {
     int cnt = 0;
-    map<string,MediaAsset*>::iterator iter = assets.begin();
+    set<MediaAsset*>::iterator iter = assets.begin();
     while(iter != assets.end()) {
-        if(iter->second->isStreamAsset()) cnt++;
+        if((*iter)->isStreamAsset()) cnt++;
         iter++;
     }
     return cnt;
@@ -198,9 +238,9 @@ int AssetManager::getNumStreamAssets() {
 //--------------------------------------------------------------
 int AssetManager::getNumSyphonAssets() {
     int cnt = 0;
-    map<string,MediaAsset*>::iterator iter = assets.begin();
+    set<MediaAsset*>::iterator iter = assets.begin();
     while(iter != assets.end()) {
-        if(iter->second->isSyphonAsset()) cnt++;
+        if((*iter)->isSyphonAsset()) cnt++;
         iter++;
     }
     return cnt;
@@ -208,14 +248,14 @@ int AssetManager::getNumSyphonAssets() {
 
 //--------------------------------------------------------------
 bool AssetManager::hasId(string id) {
-    return assets.find(id) != assets.end();
+    return assetAliases.find(id) != assetAliases.end();
 }
 
 
 //--------------------------------------------------------------
 MediaAsset* AssetManager::getAsset(string id) {
-    map<string,MediaAsset*>::iterator iter = assets.find(id);
-    if(iter!=assets.end()) {
+    map<string,MediaAsset*>::iterator iter = assetAliases.find(id);
+    if(iter!=assetAliases.end()) {
         return iter->second;
     } else {
         return NULL;
@@ -231,7 +271,7 @@ bool AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI, 
     
     
     switch (_assetType) {
-        case MEDIA_ASSET_UNKNOWN:
+        case MEDIA_ASSET_EMPTY:
             return false;
             break;
         case MEDIA_ASSET_IMAGE:
@@ -248,6 +288,9 @@ bool AssetManager::generateAssetId(MediaAssetType _assetType, string _assetURI, 
             break;
         case MEDIA_ASSET_SYPHON:
             prefix = "syphon_";
+            break;
+        case MEDIA_ASSET_VIDEO:
+            prefix = "video_";
             break;
         default:
             break;

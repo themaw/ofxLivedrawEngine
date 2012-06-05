@@ -3,8 +3,24 @@
 
 
 //--------------------------------------------------------------
-FrameBufferPlayer::FrameBufferPlayer() : ofxVideoBufferPlayer(), ofxOscRouterNode("/player") {
-    
+FrameBufferPlayer::FrameBufferPlayer() : ofxVideoBufferPlayer(), 
+                                         ofxOscRouterNode("/player") {
+    init();
+}
+
+//--------------------------------------------------------------
+FrameBufferPlayer::FrameBufferPlayer(CanvasLayer* layer) : ofxVideoBufferPlayer(), 
+                                                           ofxOscRouterNode("/player") {
+    setParentLayer(layer);
+    init();
+}
+
+
+//--------------------------------------------------------------
+FrameBufferPlayer::~FrameBufferPlayer() {}
+
+//--------------------------------------------------------------
+void FrameBufferPlayer::init() {
     addOscMethod("/buffer");
     
     addOscMethod("/start");
@@ -12,7 +28,7 @@ FrameBufferPlayer::FrameBufferPlayer() : ofxVideoBufferPlayer(), ofxOscRouterNod
     addOscMethod("/pause");
     
     addOscMethod("/loopmode");
-
+    
     addOscMethod("/looppoints");
     addOscMethod("/looppointstart");
     addOscMethod("/looppointend");
@@ -29,20 +45,36 @@ FrameBufferPlayer::FrameBufferPlayer() : ofxVideoBufferPlayer(), ofxOscRouterNod
 
 
 //--------------------------------------------------------------
-FrameBufferPlayer::~FrameBufferPlayer() {}
-
-//--------------------------------------------------------------
 void FrameBufferPlayer::processOscMessage(string address, ofxOscMessage& m) {
-    cout << "player got a meessssaaaage!!!!" << endl;
+    
+    cout << getOscNodeName() << " got a meessssaaaage!!!!" << endl;
     
     if(isMatch(address,"/buffer")) {
+        
+        cout << "buffer ";
+        
         if(validateOscSignature("[s][sfi]?", m)) {
+            
             string assetId = m.getArgAsString(0);
             bool useDisk = getArgAsBoolean(m,1);
 
+            cout << "asset=" << assetId << " useDisk= " << useDisk << endl; 
+
             if(hasParentLayer()) {
-                //AssetManager* am = parentLayer->getAssetManager();
-                    
+                
+                cout << parentLayer->getEngine() << endl;;
+                
+                AssetManager* assets = parentLayer->getEngine()->getAssetManager();
+                
+                MediaAsset* asset = assets->getAsset(assetId);
+                //assets->getAssetBackedBuffer(<#MediaAsset *asset#>, <#bool wantDiskBackedAsset#>)
+                
+                if(asset != NULL) {
+                    cout << asset->toString() << endl;
+                } else {
+                    cout << "INVALID ASSET.  Does not exist." << endl;
+                }
+                
                 
                 
                 

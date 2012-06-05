@@ -48,13 +48,11 @@ CanvasLayer::~CanvasLayer() {
 
 //--------------------------------------------------------------
 void CanvasLayer::init() {
-    sourcePlayer = new FrameBufferPlayer();
-    sourcePlayer->setParentLayer(this);
-    maskPlayer = new FrameBufferPlayer();
-    maskPlayer->setParentLayer(this);    
-
+    sourcePlayer = new FrameBufferPlayer(this);
     sourcePlayer->setOscNodeName("/source");
+    maskPlayer = new FrameBufferPlayer(this);
     maskPlayer->setOscNodeName("/mask");
+
     addOscChild(sourcePlayer);
     addOscChild(maskPlayer);
     
@@ -154,6 +152,13 @@ vector<CanvasLayer*>::iterator CanvasLayer::findChild(CanvasLayer* _layerChild) 
                  _layerChild);
 }
 
+//--------------------------------------------------------------
+ofxLivedrawEngine* CanvasLayer::getEngine() {
+    cout << "CLM=" << layerManager << endl;
+    cout << "CLM=" << layerManager->getEngine() << endl;
+    
+    return layerManager->getEngine();
+}
 
 //--------------------------------------------------------------
 void CanvasLayer::setLayerParent(CanvasLayer* _layerParent) {
@@ -266,9 +271,9 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
             label = getArgsAsColor(m, 0);
         }
-    } else if(isMatch(address, "/swap")) {
+    }/* else if(isMatch(address, "/swap")) {
         swapSourceMaskPlayers();
-    }
+    }*/
     
 }
 
@@ -292,12 +297,14 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
 
 
 //--------------------------------------------------------------
-void CanvasLayer::swapSourceMaskPlayers() {
-    FrameBufferPlayer* tmp;
-    tmp = getSourcePlayer();
-    sourcePlayer = getMaskPlayer();
-    maskPlayer = tmp;
-}
+// This must also swap node names, etc.  Better to swap the playe rdata, 
+// rather than the whole frame buffer pointer.
+//void CanvasLayer::swapSourceMaskPlayers() {
+//    FrameBufferPlayer* tmp;
+//    tmp = getSourcePlayer();
+//    sourcePlayer = getMaskPlayer();
+//    maskPlayer = tmp;
+//}
 
 
 

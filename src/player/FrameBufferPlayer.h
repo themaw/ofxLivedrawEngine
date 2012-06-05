@@ -18,7 +18,10 @@ class CanvasLayer; // forward!
 class FrameBufferPlayer : public ofxVideoBufferPlayer, public ofxOscRouterNode {
 public:
     FrameBufferPlayer();
+    FrameBufferPlayer(CanvasLayer* layer);
     virtual ~FrameBufferPlayer();
+    
+    void init();
     
     void processOscMessage(string address, ofxOscMessage& m);
 
