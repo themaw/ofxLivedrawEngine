@@ -27,7 +27,7 @@ public:
     
     void update();
     
-    void processOscMessage(string address, ofxOscMessage& m);
+    void processOscMessage(const string& address, const ofxOscMessage& m);
 	
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    

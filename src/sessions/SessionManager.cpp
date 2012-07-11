@@ -26,6 +26,6 @@ void SessionManager::update() {
 }
 
 //--------------------------------------------------------------
-void SessionManager::processOscMessage(string address, ofxOscMessage& m) {
+void SessionManager::processOscMessage(const string& address, const ofxOscMessage& m) {
     cout << "got a message in the session manager " << address << endl;
 }

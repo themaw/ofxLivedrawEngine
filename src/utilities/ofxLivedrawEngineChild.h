@@ -22,5 +22,4 @@ public:
     
 protected:
     ofxLivedrawEngine* engine;
-
 };
