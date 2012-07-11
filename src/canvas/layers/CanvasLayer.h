@@ -14,18 +14,18 @@
 #include "ofTexture.h"
 #include "CanvasLayerTransform.h"
 #include "CanvasLayerManager.h"
-#include "EnablerInterface.h"
+#include "ofxEnablerInterface.h"
 #include "AssetManager.h"
-#include "FrameBufferPlayer.h"
+#include "BufferPlayerAsset.h"
 //#include "EffectsManager.h"
 //#include "EffectsChain.h"
 
-class MediaAsset;
-class FrameBufferPlayer;
+//class MediaAsset;
+class BufferPlayerAsset;
 class CanvasLayerManager;
 class ofxLivedrawEngine;
 
-class CanvasLayer : public ofxOscRouterNode, public Enabler {
+class CanvasLayer : public ofxOscRouterNode, public ofxEnablerInterface {
 	
 public:
 
@@ -35,7 +35,7 @@ public:
     
 	virtual ~CanvasLayer();
 	
-    void processOscMessage(string address, ofxOscMessage& m);
+    void processOscMessage(const string& address, const ofxOscMessage& m);
 
     void init();
     
@@ -50,8 +50,8 @@ public:
     
     //void swapSourceMaskPlayers();
     
-    FrameBufferPlayer* getSourcePlayer() {return sourcePlayer;};
-    FrameBufferPlayer* getMaskPlayer()   {return maskPlayer;};
+    BufferPlayerAsset* getSourcePlayer() {return sourcePlayer;};
+    BufferPlayerAsset* getMaskPlayer()   {return maskPlayer;};
 
     
 	CanvasLayerTransform* getTransform() { return &transform; };
@@ -116,6 +116,7 @@ public:
     
 private:
 	
+    
     ofFbo* fbo;
     
     string layerName;
@@ -124,8 +125,8 @@ private:
     
 //    EffectsChain effectsChain;
     
-    FrameBufferPlayer* sourcePlayer;
-    FrameBufferPlayer* maskPlayer;
+    BufferPlayerAsset* sourcePlayer;
+    BufferPlayerAsset* maskPlayer;
 
 	// Masker compositer;
 	// width / height are all taken from the source

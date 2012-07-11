@@ -30,7 +30,7 @@ void EffectsManager::update() {
 // deal with OSC
 
 //--------------------------------------------------------------
-void EffectsManager::processOscMessage(string pattern, ofxOscMessage& m) {
+void EffectsManager::processOscMessage(const string& pattern, const ofxOscMessage& m) {
  
     cout << "effects manager"  << endl;
     

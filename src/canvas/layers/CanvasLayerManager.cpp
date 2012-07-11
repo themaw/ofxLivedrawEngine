@@ -31,9 +31,9 @@ CanvasLayerManager::~CanvasLayerManager() {
 //}
 
 //--------------------------------------------------------------
-void CanvasLayerManager::processOscMessage(string pattern, ofxOscMessage& m) {
+void CanvasLayerManager::processOscMessage(const string& pattern, const ofxOscMessage& m) {
     
-    cout << "CanvasLayerManager::processOscMessage" << endl;
+    cout << "CanvasLayerManager::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << endl;
     
     
     if(isMatch(pattern,"/new")) {
@@ -86,7 +86,7 @@ CanvasLayer* CanvasLayerManager::newLayer(string layerName, ofPoint point, Canva
  //   cl->setAssetManager(assetManager);
 //    cl->setEffectsManager(effectsManager);
 
-    CanvasLayerTransform* xform = cl->getTransform();
+    //CanvasLayerTransform* xform = cl->getTransform();
     //ofPoint p = xform->getPosition();
 
     layers.push_back(cl);

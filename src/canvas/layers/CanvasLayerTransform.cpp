@@ -15,13 +15,13 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _rotation, 
                      ofPoint _scale, 
                      int _opacity) : 
-Enabler(true),  
+ofxEnablerInterface(true),  
 ofxOscRouterNode("/transform") {
     
-    position = ofxLimitedPoint(_position);
-    anchorPoint = ofxLimitedPoint(_anchorPoint);
-    rotation = ofxLimitedPoint(_rotation);
-    scale = ofxLimitedPoint(_scale);
+    position = ofxClampedPoint(_position);
+    anchorPoint = ofxClampedPoint(_anchorPoint);
+    rotation = ofxClampedPoint(_rotation);
+    scale = ofxClampedPoint(_scale);
     opacity = _opacity;
     size = ofPoint(640,480);
     
@@ -33,13 +33,13 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _anchorPoint, 
                      ofPoint _rotation, 
                      ofPoint _scale) : 
-Enabler(true),  
+ofxEnablerInterface(true),  
 ofxOscRouterNode("/transform") {
     
-    position = ofxLimitedPoint(_position);
-    anchorPoint = ofxLimitedPoint(_anchorPoint);
-    rotation = ofxLimitedPoint(_rotation);
-    scale = ofxLimitedPoint(_scale);
+    position = ofxClampedPoint(_position);
+    anchorPoint = ofxClampedPoint(_anchorPoint);
+    rotation = ofxClampedPoint(_rotation);
+    scale = ofxClampedPoint(_scale);
     opacity = 255;
     size = ofPoint(640,480);
     
@@ -50,13 +50,13 @@ ofxOscRouterNode("/transform") {
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint, 
                      ofPoint _rotation) : 
-Enabler(true),  
+ofxEnablerInterface(true),  
 ofxOscRouterNode("/transform") {
     
-    position = ofxLimitedPoint(_position);
-    anchorPoint = ofxLimitedPoint(_anchorPoint);
-    rotation = ofxLimitedPoint(_rotation);
-    scale = ofxLimitedPoint(ofPoint(1.0f, 1.0f, 1.0f));
+    position = ofxClampedPoint(_position);
+    anchorPoint = ofxClampedPoint(_anchorPoint);
+    rotation = ofxClampedPoint(_rotation);
+    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     opacity = 255;
     size = ofPoint(640,480);
     
@@ -66,12 +66,12 @@ ofxOscRouterNode("/transform") {
 //--------------------------------------------------------------
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint) : 
-Enabler(true),  
+ofxEnablerInterface(true),  
 ofxOscRouterNode("/transform") {
     
-    position = ofxLimitedPoint(_position);
-    anchorPoint = ofxLimitedPoint(_anchorPoint);
-    scale = ofxLimitedPoint(ofPoint(1.0f, 1.0f, 1.0f));
+    position = ofxClampedPoint(_position);
+    anchorPoint = ofxClampedPoint(_anchorPoint);
+    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     opacity = 255;
     size = ofPoint(640,480);
     
@@ -80,11 +80,11 @@ ofxOscRouterNode("/transform") {
 
 //--------------------------------------------------------------
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position) : 
-Enabler(true),  
+ofxEnablerInterface(true),  
 ofxOscRouterNode("/transform") {
     
-    position = ofxLimitedPoint(_position);
-    scale = ofxLimitedPoint(ofPoint(1.0f, 1.0f, 1.0f));
+    position = ofxClampedPoint(_position);
+    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     opacity = 255;
     size = ofPoint(640,480);
     
@@ -92,9 +92,11 @@ ofxOscRouterNode("/transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform() : Enabler(true), ofxOscRouterNode("/transform") {
+CanvasLayerTransform::CanvasLayerTransform() : 
+ofxEnablerInterface(true), 
+ofxOscRouterNode("/transform") {
     
-    scale = ofxLimitedPoint(ofPoint(1.0f, 1.0f, 1.0f));
+    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     opacity = 255;
     size = ofPoint(640,480);
     
@@ -118,7 +120,7 @@ void CanvasLayerTransform::init() {
 CanvasLayerTransform::~CanvasLayerTransform() {};
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::processOscMessage(string address, ofxOscMessage& m) {
+void CanvasLayerTransform::processOscMessage(const string& address, const ofxOscMessage& m) {
     
     if(isMatch(address,"/position")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
@@ -257,9 +259,9 @@ void CanvasLayerTransform::processOscMessage(string address, ofxOscMessage& m) {
 
 
 //--------------------------------------------------------------
-int CanvasLayerTransform::getWidth() {return size.getLimitedPoint().x; };
+int CanvasLayerTransform::getWidth() {return size.getClampedX(); };
 //--------------------------------------------------------------
-int CanvasLayerTransform::getHeight() {return size.getLimitedPoint().y; };
+int CanvasLayerTransform::getHeight() {return size.getClampedY(); };
 //--------------------------------------------------------------
 void CanvasLayerTransform::setSize(float w, float h) {this->size.set(w, h, 0); onSetSize();}
 //--------------------------------------------------------------
@@ -269,13 +271,13 @@ void CanvasLayerTransform::setHeight(float h) {this->size.y = h; onSetSize();}
 
 
 //--------------------------------------------------------------
-int CanvasLayerTransform::getX() { return position.getLimitedPoint().x; };
+int CanvasLayerTransform::getX() { return position.getClampedX(); };
 //--------------------------------------------------------------
-int CanvasLayerTransform::getY() { return position.getLimitedPoint().y; };
+int CanvasLayerTransform::getY() { return position.getClampedY(); };
 //--------------------------------------------------------------
-int CanvasLayerTransform::getZ() { return position.getLimitedPoint().z; };
+int CanvasLayerTransform::getZ() { return position.getClampedZ(); };
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getPosition() { return position.getLimitedPoint(); };
+ofPoint CanvasLayerTransform::getPosition() { return position.getClamped(); };
 //--------------------------------------------------------------
 void CanvasLayerTransform::setPosition(ofPoint const p) { position.set(p.x, p.y, p.z); onSetPosition();}
 //--------------------------------------------------------------
@@ -286,7 +288,7 @@ void CanvasLayerTransform::setPositionY(float y) {position.y = y; onSetPosition(
 void CanvasLayerTransform::setPositionZ(float z) {position.z = z; onSetPosition();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getAnchorPoint() { return anchorPoint.getLimitedPoint(); };
+ofPoint CanvasLayerTransform::getAnchorPoint() { return anchorPoint.getClamped(); };
 //--------------------------------------------------------------
 void CanvasLayerTransform::setAnchorPoint(ofPoint const p) {anchorPoint.set(p.x, p.y, p.z); onSetAnchorPoint();}
 //--------------------------------------------------------------
@@ -297,7 +299,7 @@ void CanvasLayerTransform::setAnchorPointY(float y) {anchorPoint.y = y; onSetAnc
 void CanvasLayerTransform::setAnchorPointZ(float z) {anchorPoint.z = z; onSetAnchorPoint();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getRotation()	 { return rotation.getLimitedPoint(); };
+ofPoint CanvasLayerTransform::getRotation()	 { return rotation.getClamped(); };
 //--------------------------------------------------------------
 void CanvasLayerTransform::setRotation(ofPoint const p) {rotation.set(p.x, p.y, p.z);onSetRotation();}
 //--------------------------------------------------------------
@@ -308,7 +310,7 @@ void CanvasLayerTransform::setRotationY(float y) {rotation.y = y; onSetRotation(
 void CanvasLayerTransform::setRotationZ(float z) {rotation.z = z; onSetRotation();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getOrientation()	 { return orientation.getLimitedPoint(); };
+ofPoint CanvasLayerTransform::getOrientation()	 { return orientation.getClamped(); };
 //--------------------------------------------------------------
 void CanvasLayerTransform::setOrientation(ofPoint const p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
 //--------------------------------------------------------------
@@ -319,7 +321,7 @@ void CanvasLayerTransform::setOrientationY(float y) {orientation.y = y; onSetOri
 void CanvasLayerTransform::setOrientationZ(float z) {orientation.z = z; onSetOrientation();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getScale()	 { return scale.getLimitedPoint(); };
+ofPoint CanvasLayerTransform::getScale()	 { return scale.getClamped(); };
 //--------------------------------------------------------------
 void CanvasLayerTransform::setScale(ofPoint const p) {scale.set(p.x, p.y, p.z);onSetScale();}
 //--------------------------------------------------------------

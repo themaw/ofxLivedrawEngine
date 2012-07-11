@@ -48,13 +48,16 @@ CanvasLayer::~CanvasLayer() {
 
 //--------------------------------------------------------------
 void CanvasLayer::init() {
-    sourcePlayer = new FrameBufferPlayer(this);
-    sourcePlayer->setOscNodeName("/source");
-    maskPlayer = new FrameBufferPlayer(this);
-    maskPlayer->setOscNodeName("/mask");
-
-    addOscChild(sourcePlayer);
-    addOscChild(maskPlayer);
+    sourcePlayer = NULL;
+    maskPlayer = NULL;
+    
+//    sourcePlayer = new FrameBufferPlayer(this);
+//    sourcePlayer->addOscNodeAlias("/source");
+//    maskPlayer = new FrameBufferPlayer(this);
+//    maskPlayer->addOscNodeAlias("/mask");
+//
+//    addOscChild(sourcePlayer);
+//    addOscChild(maskPlayer);
     
     //    effectsChain.setup();
     solo = false;
@@ -229,11 +232,11 @@ void CanvasLayer::setRectangle(ofRectangle rect) {
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
+void CanvasLayer::processOscMessage(const string& pattern, const ofxOscMessage& m) {
     
-    cout << "CanvasLayer::processOscMessage" << address << "/" << endl;
+    cout << "CanvasLayer::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << pattern << "/" << endl;
     
-    if(isMatch(address, "/order")) {
+    if(isMatch(pattern, "/order")) {
         
         cout << "IN HERE " << endl;
         
@@ -259,15 +262,15 @@ void CanvasLayer::processOscMessage(string address, ofxOscMessage& m) {
 
             
         }
-    } else if(isMatch(address, "/lock")) {
+    } else if(isMatch(pattern, "/lock")) {
         if(validateOscSignature("[fi]", m)) {
             layerManager->setLayerLock(this, getArgAsBoolean(m,0));
         }
-    } else if(isMatch(address, "/solo")) {
+    } else if(isMatch(pattern, "/solo")) {
         if(validateOscSignature("[fi]", m)) {
             layerManager->setLayerSolo(this, getArgAsBoolean(m,0));
         }
-    } else if(isMatch(address, "/label")) {
+    } else if(isMatch(pattern, "/label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
             label = getArgsAsColor(m, 0);
         }
@@ -316,13 +319,13 @@ string CanvasLayer::getName() {
 //--------------------------------------------------------------
 void CanvasLayer::setName(string _name) {
     layerName = _name;
-    setOscNodeName("/"+layerName);
+    addOscNodeAlias("/"+layerName);
 }
 
 //--------------------------------------------------------------
 void CanvasLayer::update() {
-    sourcePlayer->update();
-    maskPlayer->update();
+//    sourcePlayer->update();
+//    maskPlayer->update();
 }
 
 //--------------------------------------------------------------

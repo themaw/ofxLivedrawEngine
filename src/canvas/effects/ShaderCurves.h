@@ -11,14 +11,14 @@
 
 #include "ofMain.h"
 #include "AbstractShaderEffect.h"
-#include "EnablerInterface.h"
+#include "ofxEnablerInterface.h"
 
 #define LUT_LENGTH 3 // assume 8 bit pis / color / pixel
 
-class ShaderCurvesSettings : public ofxOscRouterNode, public Enabler {
+class ShaderCurvesSettings : public ofxOscRouterNode, public ofxEnablerInterface {
     
 public:
-    ShaderCurvesSettings() : ofxOscRouterNode("/curves"), Enabler(true) {
+    ShaderCurvesSettings() : ofxOscRouterNode("/curves"), ofxEnablerInterface(true) {
         // just init a normal map
         for(int i = 0; i < LUT_LENGTH; i++) {
             dataLUT[i][0] = ofMap(i, 0, LUT_LENGTH-1, 0, 1);   // R low
@@ -34,7 +34,7 @@ public:
         
     }
     
-    void processOscMessage(string pattern, ofxOscMessage& m) {
+    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
         if(isMatch("/lut",pattern)) {
             if(validateOscSignature("([if][if][if])([if][if][if])([if][if][if])", m)) {
                 int j = 0;

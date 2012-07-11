@@ -11,13 +11,13 @@
 
 #include "ofMain.h"
 #include "ofEvents.h"
-#include "EnablerInterface.h"
+#include "ofxEnablerInterface.h"
 #include "ofxLimitedPoint.h"
 #include "ofxOscRouterNode.h"
 
 
 
-class CanvasLayerTransform : public ofxOscRouterNode, public Enabler {
+class CanvasLayerTransform : public ofxOscRouterNode, public ofxEnablerInterface {
 	
 public:
 	
@@ -47,7 +47,7 @@ public:
     
     void init();
     
-    void processOscMessage(string address, ofxOscMessage& m);
+    void processOscMessage(const string& address, const ofxOscMessage& m);
     
     int getWidth();
     int getHeight();
@@ -106,19 +106,19 @@ public:
 	
 //protected:
 	
-	ofxLimitedPoint position;
-	ofxLimitedPoint anchorPoint;
-	ofxLimitedPoint rotation;
+	ofxClampedPoint position;
+	ofxClampedPoint anchorPoint;
+	ofxClampedPoint rotation;
 	
 	// A NOTE ON ORIENTATION 
 	// http://help.adobe.com/en_US/aftereffects/cs/using/WS3878526689cb91655866c1103906c6dea-7e33a.html
 	
-	ofxLimitedPoint orientation;
-	ofxLimitedPoint scale;
+	ofxClampedPoint orientation;
+	ofxClampedPoint scale;
 
 	// materials options ... ?
 	
-    ofxLimitedPoint size;
+    ofxClampedPoint size;
     
 	float opacity; // 0-255
 	

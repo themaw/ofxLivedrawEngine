@@ -11,13 +11,13 @@
 #include "ofMain.h"
 #include "AbstractShaderEffect.h"
 #include "ofxOscRouterNode.h"
-#include "EnablerInterface.h"
+#include "ofxEnablerInterface.h"
 
-class ShaderAlphaMaskSettings : public ofxOscRouterNode, public Enabler {
+class ShaderAlphaMaskSettings : public ofxOscRouterNode, public ofxEnablerInterface {
     
 public:
     
-    ShaderAlphaMaskSettings() : ofxOscRouterNode("/alphamask"), Enabler(true) {
+    ShaderAlphaMaskSettings() : ofxOscRouterNode("/alphamask"), ofxEnablerInterface(true) {
         alphaMode = 5;
         invertMask = 0; // 0 = dark-alpha, 1 = light-alpha
         invertSource = 0; // 1 = invert, 0 = thru
@@ -39,7 +39,7 @@ public:
         
     }
     
-    void processOscMessage(string pattern, ofxOscMessage& m) {
+    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
         if(isMatch("/alphamode",pattern)) {
             if(validateOscSignature("[if]", m)) {
                 setAlphaMode(m.getArgAsInt32(0));

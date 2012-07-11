@@ -22,7 +22,7 @@ public:
     CanvasGroupManager(CanvasLayerManager* layerManager);
     virtual ~CanvasGroupManager();
     
-    void processOscMessage(string pattern, ofxOscMessage& m);
+    void processOscMessage(const string& pattern, const ofxOscMessage& m);
     
 	CanvasGroup* newGroup(string groupName, vector<CanvasLayer*> layers);
 	bool deleteGroup(string groupName);

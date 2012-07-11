@@ -95,12 +95,12 @@ void CanvasRenderer::draw() {
 }
 
 //--------------------------------------------------------------
-void CanvasRenderer::processOscMessage(string address, ofxOscMessage& m) {
+void CanvasRenderer::processOscMessage(const string& pattern, const ofxOscMessage& m) {
     // got one for the canvas!
 
-    ofLog(OF_LOG_NOTICE, "CanvasRenderer:processOscMessage : " + m.getAddress());
+    ofLog(OF_LOG_NOTICE, "CanvasRenderer:const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m) : " + m.getAddress());
     
-    if(isMatch(address, "/position")) {
+    if(isMatch(pattern, "/position")) {
         if(validateOscSignature("[if][if]",m)) {
             cout << m.getAddress() << endl;
             int _x = m.getArgAsInt32(0);
@@ -111,7 +111,7 @@ void CanvasRenderer::processOscMessage(string address, ofxOscMessage& m) {
             setPosition(x,y);
         }
         
-    } else if(isMatch(address,"/size")) {
+    } else if(isMatch(pattern,"/size")) {
         if(validateOscSignature("[if][if]",m)) {
             int w = MAX(0,m.getArgAsInt32(0));
             int h = MAX(0,m.getArgAsInt32(1));
@@ -121,7 +121,7 @@ void CanvasRenderer::processOscMessage(string address, ofxOscMessage& m) {
             setSize(w,h);
         }
         
-    } else if(isMatch(address,"/background")) {
+    } else if(isMatch(pattern,"/background")) {
         if(validateOscSignature("[if][if][if][if]?",m)) {
             ofColor _bgColor;
             if(m.getNumArgs() >= 3) {
@@ -138,20 +138,20 @@ void CanvasRenderer::processOscMessage(string address, ofxOscMessage& m) {
             
             setBackground(_bgColor); // redundant ...
         }            
-    } else if(isMatch(address,"/fullscreen")) {
+    } else if(isMatch(pattern,"/fullscreen")) {
         if(validateOscSignature("[if]",m)) {
             ofSetFullscreen(getArgAsBoolean(m,0));
         }
-    } else if(isMatch(address,"/msaa")) {
+    } else if(isMatch(pattern,"/msaa")) {
         if(validateOscSignature("[if]",m)) {
             setMsaa(getArgAsBoolean(m,0));
         }
-    } else if(isMatch(address,"/fps")) {
+    } else if(isMatch(pattern,"/fps")) {
         if(validateOscSignature("[if]",m)) {
             setFPS(MAX(0,m.getArgAsInt32(0)));
         }
     } else {
-        ofLog(OF_LOG_WARNING, "CanvasRenderer: Unknown command: " + address);
+        ofLog(OF_LOG_WARNING, "CanvasRenderer: Unknown command: " + pattern);
     }
 }
 

@@ -54,7 +54,7 @@ public:
     void setMsaa(bool _msaa);
     
 	
-    void processOscMessage(string address, ofxOscMessage& m);
+    void processOscMessage(const string& address, const ofxOscMessage& m);
 
 
 	// /livedraw/canvas/layer/delete   LAYER_NAME

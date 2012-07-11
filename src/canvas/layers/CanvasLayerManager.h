@@ -30,7 +30,7 @@ public:
     
 //    void setEffectsManager(EffectsManager* _effectsManager);
     
-    void processOscMessage(string pattern, ofxOscMessage& m);
+    void processOscMessage(const string& pattern, const ofxOscMessage& m);
 
 	CanvasLayer* newLayer(string layerName, ofPoint point = ofPoint(0.0,0.0,0.0), CanvasLayer* parentLayer = NULL);
 	bool deleteLayer(string layerName);

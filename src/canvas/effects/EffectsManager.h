@@ -29,7 +29,7 @@ public:
     void update();
     
     // deal with OSC
-    void processOscMessage(string pattern, ofxOscMessage& m);
+    void processOscMessage(const string& pattern, const ofxOscMessage& m);
 
     
     // get access to shaders

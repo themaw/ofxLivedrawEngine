@@ -31,7 +31,7 @@ void EffectsChain::update() {}
 void EffectsChain::draw() {}
 
 //--------------------------------------------------------------
-void EffectsChain::processOscMessage(string pattern, ofxOscMessage& m) {
+void EffectsChain::processOscMessage(const string& pattern, const ofxOscMessage& m) {
     cout << "EFFECTS CHAIN GOT AN OSC MESSAGE";
 }
 
