@@ -7,156 +7,138 @@
  *
  */
 
-#include "MediaAsset.h"
+#include "BaseMediaAsset.h"
 
 //--------------------------------------------------------------
-MediaAsset::MediaAsset(MediaAssetType _assetType, string _assetId, string _assetURI) : 
-ofxOscRouterNode("/" + _assetId ) {
-    assetId = _assetId;
-	assetType = _assetType;
-	assetURI = Poco::URI(_assetURI); // create the uri from the loaded asset
-    buffer = NULL;
+BaseMediaAsset::BaseMediaAsset() {
+    name      = "UNDEFINED";
+	assetType = MEDIA_ASSET_UNDEFINED;
     
-    addOscMethod("/open");
+    canSource = false;
+    canSink   = false;
+    canCache  = false;
+    diskAsset = false;
     
-
+    addOscChild(&meta);
 }
 
 //--------------------------------------------------------------
-MediaAsset::~MediaAsset() {}
+BaseMediaAsset::~BaseMediaAsset() {}
 
-//--------------------------------------------------------------
-void MediaAsset::processOscMessage(string pattern, ofxOscMessage& m) {
-    cout << "MEDIA ASSET OSC NOT IMPLEMENTED" << endl;
+string BaseMediaAsset::getName() const {
+    return name;
 }
 
 //--------------------------------------------------------------
-void MediaAsset::setAssetId(string id) { 
-    assetId = id; 
-}
-
-//--------------------------------------------------------------
-string MediaAsset::getAssetId() { 
-    return assetId; 
-} 
-
-//--------------------------------------------------------------
-Poco::URI MediaAsset::getAssetURI(){ 
-    return assetURI; 
-}
-
-//--------------------------------------------------------------
-MediaAssetType MediaAsset::getAssetType() {
+MediaAssetType BaseMediaAsset::getAssetType() const {
 	return assetType;
 }
 
 //--------------------------------------------------------------
-string MediaAsset::getAssetTypeString() {
-    
+string BaseMediaAsset::getAssetTypeString() const {
     switch (assetType) {
-        case MEDIA_ASSET_EMPTY:
-            return "EMPTY";
-            break;
+        case MEDIA_ASSET_UNDEFINED:
+            return "UNDEFINED";
         case MEDIA_ASSET_IMAGE:
             return "IMAGE";
-            break;
-        case MEDIA_ASSET_VIDEO:
-            return "VIDEO";
-            break;
+        case MEDIA_ASSET_MOVIE:
+            return "MOVIE";
         case MEDIA_ASSET_GRABBER:
             return "GRABBER";
-            break;
         case MEDIA_ASSET_STREAM:
             return "STREAM";
-            break;
         case MEDIA_ASSET_BUFFER:
             return "BUFFER";
-            break;
+        case MEDIA_ASSET_BUFFERPLAYER:
+            return "BUFFERPLAYER";
         case MEDIA_ASSET_SYPHON:
             return "SYPHON";
-            break;
         default:
+            ofLog(OF_LOG_ERROR, "BaseMediaAsset::getAssetTypeString() - unknwon asset type " + ofToString(assetType));
             return "UNKNOWN";
-            break;
     }
-    
-    
 }
 
 
 //--------------------------------------------------------------
-bool MediaAsset::isEmptyAsset() {
-    return assetType == MEDIA_ASSET_EMPTY;
-}
-//--------------------------------------------------------------
-bool MediaAsset::isImageAsset() {
-    return assetType == MEDIA_ASSET_IMAGE;
-}
-//--------------------------------------------------------------
-bool MediaAsset::isVideoAsset() {
-    return assetType == MEDIA_ASSET_VIDEO;
-}
-//--------------------------------------------------------------
-bool MediaAsset::isGrabberAsset() {
-    return assetType == MEDIA_ASSET_GRABBER;
-}
-//--------------------------------------------------------------
-bool MediaAsset::isStreamAsset() {
-    return assetType == MEDIA_ASSET_STREAM;
-}
-//--------------------------------------------------------------
-bool MediaAsset::isBufferAsset() {
-    return assetType == MEDIA_ASSET_BUFFER;
-}
-//--------------------------------------------------------------
-bool MediaAsset::isSyphonAsset() {
-    return assetType == MEDIA_ASSET_SYPHON;
-}
-
-
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-
-//--------------------------------------------------------------
-bool MediaAsset::addAlias(string alias) {
-    return aliases.add(alias);
+bool BaseMediaAsset::isSource() const {
+    return canSource;
 }
 
 //--------------------------------------------------------------
-bool MediaAsset::removeAlias(string alias) {
-    return aliases.remove(alias);
+bool BaseMediaAsset::isSink() const {
+    return canSink;
 }
 
 //--------------------------------------------------------------
-bool MediaAsset::containsAlias(string alias) {
-    return aliases.contains(alias);
+bool BaseMediaAsset::isCacheable() const {
+    return canCache;
+}
+
+//--------------------------------------------------------------
+bool BaseMediaAsset::isDiskAsset() const {
+    return diskAsset;
 }
 
 
-FrameBuffer* MediaAsset::getBuffer() {
-    return buffer;
-}
-void MediaAsset::setBuffer(FrameBuffer* _buffer) {
-    buffer = _buffer;
-}
+////--------------------------------------------------------------
+//bool MediaAsset::isCached() {
+//    return cacheBuffer != NULL;
+//}
+//
+//void MediaAsset::setBuffer(FrameBuffer* _buffer) {
+//    bufferAsset = _buffer;
+//}
+//
+//FrameBuffer* MediaAsset::getBuffer() {
+//    return bufferAsset;
+//}
+//
+//FrameBuffer* MediaAsset::getCache() {
+//    if(!isLiveAsset()) {
+//        return cacheBuffer;
+//    } else {
+//        cout << "you can't cache a live data type." << endl;   
+//        return NULL;
+//    }
+//}
 
-string MediaAsset::toString() {
+////--------------------------------------------------------------
+//bool MediaAsset::setCache(FrameBuffer* buffer) {
+//    if(!isLiveAsset()) {
+//        cacheBuffer = buffer;
+//        return true;
+//    } else {
+//        cout << "you can't cache a live data type." << endl;   
+//        return false;
+//    }
+//}
+//
+////--------------------------------------------------------------
+//bool MediaAsset::removeCache() {
+//    if(!isLiveAsset()) {
+//        if(isCached()) {
+//            cacheBuffer = NULL;
+//            return true;
+//        } else {
+//            cout << "not cached" << endl;
+//            return false;
+//        }
+//    } else {
+//        cout << "you can't cache a live data type." << endl;   
+//        return false;
+//    }
+//}
+
+//--------------------------------------------------------------
+string BaseMediaAsset::toString() const {
     stringstream ss;
-    ss << "----------------" << endl;
     ss << "MEDIA ASSET:" << endl;
-    ss << "\tTYPE="     << getAssetTypeString() << endl;
-    ss << "\tID="       << getAssetId() << endl;
-    ss << "\tURL="      << getAssetURI().toString() << endl;
-    ss << "\tAliases="  << ofToString(aliases.toArray()) << endl;
-    
+    ss << "\tgetType()     = " << getAssetTypeString() << endl;
+    ss << "\tgetName()     = " << getName() << endl;
+    ss << "\tisCacheable() = " << (isCacheable() ? "TRUE" : "FALSE") << endl;
+    ss << "\tisSource()    = " << (isSource()    ? "TRUE" : "FALSE") << endl;
+    ss << "\tisSink()      = " << (isSink()      ? "TRUE" : "FALSE") << endl;
     return ss.str();
 }
-
-vector<string> MediaAsset::getAliases() {
-    return aliases.toArray();
-}
-
 
