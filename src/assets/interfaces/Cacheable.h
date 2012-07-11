@@ -10,13 +10,18 @@
 
 #include "BaseMediaAsset.h"
 
-class Cacheable : 
-    public virtual BaseMediaAsset {
+class BufferAsset;
+
+class Cacheable : public virtual BaseMediaAsset 
+{
 public:
     Cacheable() {
         canCache = true;
         cached = false;
         //buffer.setReadOnly(true);
+     
+//        addOscMethod("cache");
+//        addOscMethod("uncache");
     }
 
     virtual ~Cacheable() {}
@@ -51,5 +56,5 @@ public:
     
 protected:
     bool cached;
-    //ofxVideoBuffer buffer;    
+        
 };

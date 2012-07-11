@@ -7,8 +7,10 @@
 
 #pragma once
 
-#include "BaseMediaAsset.h"
 #include "ofxSimpleSet.h"
+#include "BaseMediaAsset.h"
+#include "ofxVideoFrame.h"
+#include "FrameSink.h"
 
 class FrameSink;
 
@@ -16,17 +18,27 @@ class FrameSource : public virtual BaseMediaAsset {
 public:
     FrameSource();
     virtual ~FrameSource();
+
+    void update(ofEventArgs& eventsArgs);
+
+    void sourceFrame(); // push frames to all receivers
+
+    ///////////
+    virtual void frameSourced(ofxVideoFrame frame) {};
+
+    virtual bool isFrameNew() = 0;
+    virtual ofPixelsRef getPixelsRef() = 0;
     
-    virtual ofxVideoFrame getFrame() = 0;
+    virtual void open()   = 0;
+    virtual void close()  = 0;
+
+    virtual bool isLoaded() = 0;
+    ///////////
     
-    void source(); // push frames
-    virtual void frameSent(ofxVideoFrame frame) {};
+
     
-    virtual bool close() = 0;
-    virtual bool open() = 0;
-    virtual bool isOpen() = 0;
-    
-    bool isConnected();
+    // sinks
+    bool hasSinks() const;  // is connected to any receivers
     
     bool attachToSink(FrameSink* sink); // sinks call this to be fed by this source
     bool detachFromSink(FrameSink* sink); // sinks call this to be cut off from this source
@@ -41,10 +53,12 @@ public:
     bool getCloseOnLastDisconnect();
     
     vector<FrameSink*> getSinks() const;
+
+protected:
+    ofxVideoFrame frame;
     
 private:
     
-    ofxVideoFrame frame;
     
     bool openOnFirstConnection;
     bool closeOnLastDisconnect;
