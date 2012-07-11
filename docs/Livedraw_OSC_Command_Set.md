@@ -419,7 +419,7 @@ To replay the animation:
 	/livedraw/canvas/layer/MY_LAYER/transform/position/animate play loop
 
 
-### Assets
+### media
 #### Aliasing 	and IDs
 
 Normally asset IDs are set automatically and conformed to OSC namespace friendly naming specs (i.e. no ' ', #, *, , / ?  [ ] { }).  When automatically generating these source IDs, all illegal characters are replaced with underscores '_'.  e.g.
@@ -428,57 +428,58 @@ Normally asset IDs are set automatically and conformed to OSC namespace friendly
 
 Alternatively, if the file has associated meta-data that includes a pre-defined SOURCE_ID, that source ID will be used.
 
-	/livedraw/assets/alias	ORIGINAL_ASSET_ID NEW_ASSET_ID
+	/livedraw/media/alias	ORIGINAL_ASSET_ID NEW_ASSET_ID
 	
-Asset Id's will follow the convention of source-type_source-name; for example:
+Generated Asset Id's will follow the convention of source-type_source-name; for example:
 
-	Animated Robot[22].mov    >>>	file_Animated-Robot-22-.mov
-	USB camera #2 			  >>>	grabber_2 (use OpenFrameworks/QuickTime indexing)
-	syphon source "tex69"	  >>>	syphon_tex69
-	IP camera named "ipcam3"  >>>	stream_ipcam3 (use source name from streams.xml file)
-	Recording Buffers		  >>>	buffer_name_of_buffer
-	Buffer Player			  >>>	bufferplayer_name_of_buffer_player
+    Animated Robot[22].mov    >>>   movie_NAME
+    Mask.png                  >>>   image_NAME
+    USB camera #2             >>>   grabber_NAME (use OpenFrameworks/QuickTime indexing)
+    syphon source "tex69"     >>>   syphon_NAME
+    IP camera named "ipcam3"  >>>   stream_NAME (use source name from streams.xml file)
+    Recording Buffers         >>>   buffer_NAME
+    Buffer Player             >>>   bufferplayer_NAME
 
 
 ### Buffers
 #### Recording
-	/livedraw/buffers/(ASSET_ID)/clear
-	/livedraw/buffers/(ASSET_ID)/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
-	/livedraw/buffers/(ASSET_ID)/stop
+	/livedraw/media/(ASSET_ID)/clear
+	/livedraw/media/(ASSET_ID)/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
+	/livedraw/media/(ASSET_ID)/stop
 	
-	/livedraw/buffers/(ASSET_ID)/clear
-	/livedraw/buffers/(ASSET_ID)/size   	 NEW_MAX_SIZE
-	/livedraw/buffers/(ASSET_ID)/framerate FRAMERATE
-	/livedraw/buffers/(ASSET_ID)/type		BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
-	/livedraw/buffers/(ASSET_ID)/usetexture B_USE_TEXTURE
+	/livedraw/media/(ASSET_ID)/clear
+	/livedraw/media/(ASSET_ID)/size   	  NEW_MAX_SIZE
+	/livedraw/media/(ASSET_ID)/framerate  FRAMERATE
+	/livedraw/media/(ASSET_ID)/type		  BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
+	/livedraw/media/(ASSET_ID)/usetexture B_USE_TEXTURE
 	
 	
 #### Camera Settings *90% Complete (11 Mar 11)*
 
 Camera settings can be changed via OSC.
 
-	/livedraw/assets/(ASSET_ID)/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
+	/livedraw/media/(ASSET_ID)/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
 
 #### Camera Capture
 
 Camera capture is user controllable. *85% Complete (11 Mar 11)*
 
-	/livedraw/assets/(ASSET_ID)/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
-	/livedraw/assets/(ASSET_ID)/close
-	/livedraw/assets/(ASSET_ID)/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
+	/livedraw/media/(ASSET_ID)/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
+	/livedraw/media/(ASSET_ID)/close
+	/livedraw/media/(ASSET_ID)/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
 
 #### Assigning Metadata
 
 All source material can be assigned meta data using the (KEY) VALUE_0 sets. *40% Complete (11 Mar 11)*
 
-	/livedraw/assets/(ASSET_ID)/metadata/add keywords	VALUE_0 [VALUE_1 ... VALUE_N]
-	/livedraw/assets/(ASSET_ID)/metadata/remove keywords	VALUE_0 [VALUE_1 ... VALUE_N]
-	/livedraw/assets/(ASSET_ID)/metadata/description "Description"
+	/livedraw/media/(ASSET_ID)/metadata/add keywords	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/media/(ASSET_ID)/metadata/remove keywords	VALUE_0 [VALUE_1 ... VALUE_N]
+	/livedraw/media/(ASSET_ID)/metadata/description "Description"
 	
 
 For example, one might set the tags associated with a given clip using the following syntax:
 
-	/livedraw/assets/VID_00982/metadata/tags	fast scary colorful people
+	/livedraw/media/VID_00982/metadata/tags	fast scary colorful people
 
 ### GUI Layout
 

@@ -1,5 +1,5 @@
 <streams>
     <!-- streaming ipcams -->
-    <stream address="http://82.79.176.85:8081/axis-cgi/mjpg/video.cgi?resolution=320x240" name="ipcam0"  type="ipcam" username="" password=""/>
+    <stream address="http://82.79.176.85:8081/axis-cgi/mjpg/video.cgi?resolution=320x240" name="ipcam0" type="ipcam" username="" password=""/>
 
 </streams>
