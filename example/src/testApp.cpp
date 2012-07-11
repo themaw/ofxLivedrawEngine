@@ -29,8 +29,11 @@ void testApp::keyPressed (int key){
     } else if(key == 'b') {
         CanvasLayerManager* man = livedraw.getCanvasLayerManager();
         man->dump();
+    } else if(key == 's') {
+        int i = 0;
+        string s = livedraw.getOscRouter()->schemaToString(i);
+        cout << s << endl;
     }
-
 }
 
 //--------------------------------------------------------------
