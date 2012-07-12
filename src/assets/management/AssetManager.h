@@ -2,7 +2,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Poco/RegularExpression.h"
 #include "ofxXmlSettings.h"
 #include "ofxLivedrawEngine.h"
 
