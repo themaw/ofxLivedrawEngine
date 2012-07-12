@@ -12,7 +12,7 @@
 #include "ofMain.h"
 #include "ofEvents.h"
 #include "ofxEnablerInterface.h"
-#include "ofxLimitedPoint.h"
+#include "ofxClampedPoint.h"
 #include "ofxOscRouterNode.h"
 
 
