@@ -8,21 +8,24 @@
 
 #pragma once
 
-#include "ofMain.h"
-#include "ofxOscRouter.h"
-#include "AssetManager.h"
-#include "CanvasLayerManager.h"
-#include "CanvasRenderer.h"
-#include "SessionManager.h"
-#include "EffectsManager.h"
-
 #define OSC_PORT 5433
 
-class AssetManager;
-class EffectsManager;
-class CanvasLayerManager;
-class CanvasRenderer;
-class SessionManager;
+#include "ofMain.h"
+#include "ofxOscRouter.h"
+
+#include "AssetManager.h"
+
+//#include "CanvasRenderer.h"
+//#include "SessionManager.h"
+//#include "EffectsManager.h"
+
+
+//class ofxOscRouter;
+//class AssetManager;
+//class EffectsManager;
+////class CanvasLayerManager;
+//class CanvasRenderer;
+//class SessionManager;
 
 class ofxLivedrawEngine {
 public:
@@ -37,22 +40,18 @@ public:
     void windowResized(int w, int h);
     
     ofxOscRouter*       getOscRouter();
-    AssetManager*       getAssetManager();
-    EffectsManager*     getEffectsManager();
-    CanvasRenderer*     getCanvasRenderer();
-    CanvasLayerManager* getCanvasLayerManager();
-    SessionManager*     getSessionManager();
+//    AssetManager*       getAssetManager();
+//    EffectsManager*     getEffectsManager();
+//    CanvasRenderer*     getCanvasRenderer();
+//    CanvasLayerManager* getCanvasLayerManager();
+//    SessionManager*     getSessionManager();
     
-protected:
-    ofxOscRouter*        oscRouter;
-    
-    AssetManager*    	 assetManager;
-    EffectsManager*      effectsManager;
-    
-    CanvasRenderer*      canvas; // owns the layer manager
-    
-    SessionManager*      sessionManager;
 
-private:
+protected:
+    ofxOscRouter    oscRouter;
+    AssetManager    assetManager;
+    //    EffectsManager  effectsManager;
+    //    CanvasRenderer  canvas; // owns the layer manager
+    //    SessionManager  sessionManager;
     
 };
