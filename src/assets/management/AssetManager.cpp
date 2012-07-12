@@ -26,12 +26,12 @@ bool isBufferAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_
 bool isBufferPlayerAsset(BaseMediaAsset* m) { return m->getAssetType() == MEDIA_ASSET_BUFFERPLAYER; }
 bool isSyphonAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_SYPHON;    }
 
-
 //--------------------------------------------------------------
 AssetManager::AssetManager() : ofxOscRouterNode("/media") {
     
     // TODO: move some of these to their respective asset implementations
     
+    addOscNodeAlias("/med");
     addOscNodeAlias("/m");
     
     // give an asset a new alias
@@ -85,9 +85,7 @@ bool AssetManager::attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsse
 
 //--------------------------------------------------------------
 void AssetManager::processOscMessage(const string& pattern, const ofxOscMessage& m) {
-    
-    cout << "processing-- " << pattern << endl;
-    
+
     if(isMatch(pattern,"/alias")) {
         if(validateOscSignature("ss", m)) {
             string existingAlias = m.getArgAsString(0);
@@ -118,14 +116,7 @@ void AssetManager::processOscMessage(const string& pattern, const ofxOscMessage&
             stopAsset(alias);
         }
     } else if(isMatch(pattern,"/dump")) {
-        vector<BaseMediaAsset*> a = assets.toArray();
-
-        cout << "------ dumping assets ---" << endl;
-        for(int i = 0; i < a.size(); i++) {
-            //cout << a[i]->toString() << endl;
-            cout << "no to string." << endl;
-        }
-        
+        dump();
     } else if(isMatch(pattern, "/buffer")) {
         cout << "in buffer manager" << endl;
         
