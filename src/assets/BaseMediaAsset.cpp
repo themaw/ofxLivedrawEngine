@@ -11,6 +11,8 @@
 
 //--------------------------------------------------------------
 BaseMediaAsset::BaseMediaAsset() {
+//    manager = NULL;
+    
     name      = "UNDEFINED";
 	assetType = MEDIA_ASSET_UNDEFINED;
     
@@ -141,4 +143,20 @@ string BaseMediaAsset::toString() const {
     ss << "\tisSink()      = " << (isSink()      ? "TRUE" : "FALSE") << endl;
     return ss.str();
 }
+
+////--------------------------------------------------------------
+//bool BaseMediaAsset::hasAssetManager() {
+//    return manager != NULL;
+//}
+//
+////--------------------------------------------------------------
+//AssetManager* BaseMediaAsset::getAssetManager() {
+//    return manager;
+//}
+//
+////--------------------------------------------------------------
+//void BaseMediaAsset::setAssetManager(AssetManager* _manager) {
+//    manager = _manager;
+//}
+
 

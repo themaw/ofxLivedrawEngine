@@ -12,15 +12,14 @@
 
 #pragma once
 #include "ofxOscRouterNode.h"
-#include "CanvasLayer.h"
-#include "CanvasLayerTransform.h"
-#include "CanvasLayerManager.h"
-#include "AssetManager.h"
-//#include "EffectsManager.h"
-#include "ofxLivedrawEngine.h"
 
-class ofxLivedrawEngine;
-class CanvasLayerManager;
+#include "CanvasLayerManager.h"
+//#include "AssetManager.h"
+//#include "EffectsManager.h"
+//#include "ofxLivedrawEngine.h"
+
+//class ofxLivedrawEngine;
+//class CanvasLayerManager;
 
 class CanvasRenderer : public ofxOscRouterNode {
 	
@@ -65,19 +64,19 @@ public:
     
     void resize(int w, int h);
 
-    CanvasLayerManager* getCanvasLayerManager();
-    
-    void setEngine(ofxLivedrawEngine* _engine);
-    ofxLivedrawEngine* getEngine();    
+//    CanvasLayerManager* getCanvasLayerManager();
+//    
+//    void setEngine(ofxLivedrawEngine* _engine);
+//    ofxLivedrawEngine* getEngine();    
     
 protected:
     
-    ofxLivedrawEngine* engine;
+//    ofxLivedrawEngine* engine;
     
     
 private:
 	
-	CanvasLayerManager* layerManager;
+	CanvasLayerManager layerManager;
     
     ofFbo fbo;
     int x, y;

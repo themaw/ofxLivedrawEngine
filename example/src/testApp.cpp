@@ -24,15 +24,15 @@ void testApp::keyPressed (int key){
 	if(key == ' ') {
 		ofToggleFullscreen();   
     } else if(key == 'a') {
-        AssetManager* man = livedraw.getAssetManager();
-        man->dump();
+//        AssetManager* man = livedraw.getAssetManager();
+//        man->dump();
     } else if(key == 'b') {
-        CanvasLayerManager* man = livedraw.getCanvasLayerManager();
-        man->dump();
+//        CanvasLayerManager* man = livedraw.getCanvasLayerManager();
+//        man->dump();
     } else if(key == 's') {
         int i = 0;
-        string s = livedraw.getOscRouter()->schemaToString(i);
-        cout << s << endl;
+//        string s = livedraw.getOscRouter()->schemaToString(i);
+//        cout << s << endl;
     }
 }
 

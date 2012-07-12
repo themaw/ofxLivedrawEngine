@@ -17,7 +17,7 @@
 
 #include "ofxLivedrawEngine.h"
 
-class ofxLivedrawEngine;
+//class ofxLivedrawEngine;
 
 class EffectsManager : public ofxOscRouterNode {
     

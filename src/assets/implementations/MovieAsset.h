@@ -8,31 +8,57 @@
 
 #pragma once
 
-#include "Cacheable.h"
+#include "BaseMediaAsset.h"
+#include "DiskBasedAsset.h"
+#include "CacheableAsset.h"
+//#include "BufferAsset.h"
 
 class MovieAsset : public virtual BaseMediaAsset,
-                   public virtual Cacheable {
+                   public virtual DiskBasedAsset,
+                   public virtual CacheableAsset
+{
 public:
-    MovieAsset(const string& _name, string _filename) {
+    MovieAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
        assetType = MEDIA_ASSET_MOVIE;
        name      = _name;
-       filename  = _filename;
     }
     
     virtual ~MovieAsset() {}
 
     virtual bool dispose() {
-        return unCache();
+        uncache();
+        return true;
     }
 
-   void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-       
-   }
+// TODO: we don't even need this if we don't have any other messages.
+//   void processOscMessage(const string& pattern, const ofxOscMessage& m) {
+//       
+//       if(isMatch(pattern, "/cache") || isMatch(pattern, "/uncache")) {
+//           Cacheable::processOscMessage(pattern, m);
+//       } else {
+//           cout << "processing message inside of movie asset." << endl;
+//       }
+//
+//       
+//       
+//   }
                        
                        
-    bool doCache()   {return true;}
-    bool doUnCache() {return true;}
+    bool doCache()   {
+        
+//        if(hasAssetManager()) {
+//            cacheBuffer = manager->addBuffer("cache_" + name, 1, OFX_VIDEO_BUFFER_FIXED);
+//        }
+        
+        
+        
+        return true;
+    }
+    
+    bool doUncache() {
+        cout << "uncaching" << endl;
+        return true;
+    }
 
 protected:
-    string filename;
 };

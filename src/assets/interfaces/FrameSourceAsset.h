@@ -10,14 +10,14 @@
 #include "ofxSimpleSet.h"
 #include "BaseMediaAsset.h"
 #include "ofxVideoFrame.h"
-#include "FrameSink.h"
+#include "FrameSinkAsset.h"
 
-class FrameSink;
+class FrameSinkAsset;
 
-class FrameSource : public virtual BaseMediaAsset {
+class FrameSourceAsset : public virtual BaseMediaAsset {
 public:
-    FrameSource();
-    virtual ~FrameSource();
+    FrameSourceAsset();
+    virtual ~FrameSourceAsset();
 
     void update(ofEventArgs& eventsArgs);
 
@@ -35,16 +35,15 @@ public:
     virtual bool isLoaded() = 0;
     ///////////
     
-
-    
     // sinks
     bool hasSinks() const;  // is connected to any receivers
     
-    bool attachToSink(FrameSink* sink); // sinks call this to be fed by this source
-    bool detachFromSink(FrameSink* sink); // sinks call this to be cut off from this source
+    bool attachToSink(FrameSinkAsset* sink); // sinks call this to be fed by this source
+    bool detachFromAllSinks();
+    bool detachFromSink(FrameSinkAsset* sink); // sinks call this to be cut off from this source
     
-    void sinkWasAttached(FrameSink* sink)  {}; // these callbacks are available
-    void sinkWasDetatched(FrameSink* sink) {}; // these callbacks are available
+    void sinkWasAttached(FrameSinkAsset* sink)  {}; // these callbacks are available
+    void sinkWasDetatched(FrameSinkAsset* sink) {}; // these callbacks are available
     
     void setOpenOnFirstConnect(bool v);
     void setCloseOnLastDisconnect(bool v);
@@ -52,7 +51,7 @@ public:
     bool getOpenOnFirstConnect();
     bool getCloseOnLastDisconnect();
     
-    vector<FrameSink*> getSinks() const;
+    vector<FrameSinkAsset*> getSinks() const;
 
 protected:
     ofxVideoFrame frame;
@@ -65,6 +64,6 @@ private:
     
     // no subclass access.  all access done via getters 
     // and setters so events will be called
-    ofxSimpleSet<FrameSink*> sinks;
+    ofxSimpleSet<FrameSinkAsset*> sinks;
 };
 

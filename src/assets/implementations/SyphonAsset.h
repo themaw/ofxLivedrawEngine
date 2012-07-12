@@ -9,12 +9,12 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-#include "FrameSource.h"
+#include "FrameSourceAsset.h"
 
 #include "ofxSyphonVideoClient.h"
 
 class SyphonAsset : public virtual BaseMediaAsset,
-                    public virtual FrameSource 
+                    public virtual FrameSourceAsset 
 {
 public:
     SyphonAsset(const string& _name) {
@@ -34,6 +34,8 @@ public:
     }
     
     virtual bool dispose() {
+        detachFromAllSinks();
+        
         cout << "disposing of syphon " << getName() << endl;
     }
     

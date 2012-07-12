@@ -9,16 +9,17 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-#include "FrameSource.h"
+#include "DiskBasedAsset.h"
+#include "FrameSourceAsset.h"
 
 class ImageAsset : public virtual BaseMediaAsset,
-                   public virtual FrameSource 
+                   public virtual DiskBasedAsset,
+                   public virtual FrameSourceAsset 
 {
 public:
-    ImageAsset(const string& _name, string _filename) {
+    ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
         assetType = MEDIA_ASSET_IMAGE;
         name      = _name;
-        filename  = _filename;
             
         // go directly to the frame source file
         frame = ofPtr<ofImage>(new ofImage());
@@ -28,9 +29,11 @@ public:
     virtual ~ImageAsset() {}
 
     void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-
+        cout << "processing image asset " << getName() << endl;
     }
+    
     bool dispose() {
+        detachFromAllSinks();
         cout << "disposing of image " << getName() << endl;
     }
 
@@ -55,6 +58,6 @@ public:
     }
     
 protected:
-    string filename;
+//    string filename;
     
 };

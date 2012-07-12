@@ -10,17 +10,20 @@
 
 #include "BaseMediaAsset.h"
 
-class DiskBased : public virtual BaseMediaAsset {
+class DiskBasedAsset : public virtual BaseMediaAsset 
+{
 public:
-    DiskBased(string _filename) {
+    DiskBasedAsset(string _filename) {
         filename  = _filename;
         diskAsset = true;
     }
-    virtual ~DiskBased() {}
+    virtual ~DiskBasedAsset() {}
 
     string getFilename() const {
         return filename;
     }
+    
+//    void fileMoved(const string& newLocation) {};
     
 protected:
     string filename;

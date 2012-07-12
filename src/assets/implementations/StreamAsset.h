@@ -9,7 +9,7 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-#include "FrameSource.h"
+#include "FrameSourceAsset.h"
 
 #include "ofxIpVideoGrabber.h"
 
@@ -22,7 +22,7 @@ enum StreamType
 
 
 class StreamAsset : public virtual BaseMediaAsset,
-                    public virtual FrameSource 
+                    public virtual FrameSourceAsset 
 {
 public:
     StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password) {
@@ -59,6 +59,7 @@ public:
         
     }
     virtual bool dispose() {
+        detachFromAllSinks();
         cout << "disposing of stream " << getName() << endl;
     }
     

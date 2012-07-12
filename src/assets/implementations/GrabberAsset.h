@@ -9,10 +9,10 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-#include "FrameSource.h"
+#include "FrameSourceAsset.h"
 
 class GrabberAsset : public virtual BaseMediaAsset, 
-                     public virtual FrameSource 
+                     public virtual FrameSourceAsset 
 {
 public:
     GrabberAsset(const string& _name, int _devId, int _width, int _height) {
@@ -28,11 +28,12 @@ public:
     virtual ~GrabberAsset() {}
 
     bool dispose() {
+        detachFromAllSinks();
         close();
     }
     
     void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-        
+        cout << "cout process osc message" << endl;
     }
     
     bool isFrameNew() {

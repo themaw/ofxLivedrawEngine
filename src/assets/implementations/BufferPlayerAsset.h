@@ -8,13 +8,14 @@
 
 #pragma once
 
-#include "BaseMediaAsset.h"
 #include "ofxVideoBufferPlayer.h"
-#include "FrameSource.h"
+
+#include "BaseMediaAsset.h"
+#include "FrameSourceAsset.h"
 
 
 class BufferPlayerAsset : public virtual BaseMediaAsset, 
-                          public virtual FrameSource 
+                          public virtual FrameSourceAsset 
 {
 public:
     BufferPlayerAsset(const string& _name) 
@@ -49,7 +50,11 @@ public:
     virtual ~BufferPlayerAsset() {}
 
     // Base media asset
-    bool dispose() {}
+    bool dispose() {
+        detachFromAllSinks();
+
+    }
+    
     void processOscMessage(const string& pattern, const ofxOscMessage& m) {
         
         cout << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;

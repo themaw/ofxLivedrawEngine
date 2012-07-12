@@ -9,15 +9,13 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-#include "FrameSink.h"
+#include "FrameSinkAsset.h"
 
 #include "ofxVideoBuffer.h"
 
-//class FrameBuffer;
-
 
 class BufferAsset : public virtual BaseMediaAsset, 
-                    public virtual FrameSink
+                    public virtual FrameSinkAsset
 {
 public:
     BufferAsset(const string& _name, int size, ofxVideoBufferType t)
@@ -33,6 +31,7 @@ public:
         addOscMethod("/clear");
         addOscMethod("/framerate");
         
+        cacheSource = NULL;
         
     }
     
@@ -40,7 +39,7 @@ public:
 
     // From BaseMediaAsset
     bool dispose() {
-
+        detachFromAllSources();
     }
     
     void processOscMessage(const string& address, const ofxOscMessage& m) {}
@@ -49,7 +48,20 @@ public:
     bool frameReceived(ofxVideoFrame frame) {};
 
 
+    bool isCacheBuffer() {
+        return cacheSource != NULL;
+    }
 
+    CacheableAsset* getCacheSource() {
+        return cacheSource;
+    }
+
+    ofPtr<ofxVideoBuffer> getBuffer() {
+        return buffer;
+    }
+    
 protected:
+    CacheableAsset* cacheSource;
+    
     ofPtr<ofxVideoBuffer> buffer;
 };

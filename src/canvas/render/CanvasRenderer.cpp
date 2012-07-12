@@ -29,8 +29,8 @@ CanvasRenderer::~CanvasRenderer() {
 
 void CanvasRenderer::init() {
     
-    layerManager = new CanvasLayerManager();
-    addOscChild(layerManager);
+//    layerManager = new CanvasLayerManager();
+//    addOscChild(layerManager);
     
     
     addOscMethod("/position");
@@ -200,19 +200,19 @@ void CanvasRenderer::resize(int w, int h) {
 }
 
 
-//--------------------------------------------------------------
-CanvasLayerManager* CanvasRenderer::getCanvasLayerManager() {
-    return layerManager;
-}
-
-
-//--------------------------------------------------------------
-void CanvasRenderer::setEngine(ofxLivedrawEngine* _engine) {
-    engine = _engine;
-    layerManager->setEngine(_engine);
-};
-
-//--------------------------------------------------------------
-ofxLivedrawEngine* CanvasRenderer::getEngine() {return engine;}    
+////--------------------------------------------------------------
+//CanvasLayerManager* CanvasRenderer::getCanvasLayerManager() {
+//    return layerManager;
+//}
+//
+//
+////--------------------------------------------------------------
+//void CanvasRenderer::setEngine(ofxLivedrawEngine* _engine) {
+//    engine = _engine;
+//    layerManager->setEngine(_engine);
+//};
+//
+////--------------------------------------------------------------
+//ofxLivedrawEngine* CanvasRenderer::getEngine() {return engine;}    
 
 

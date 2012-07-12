@@ -6,37 +6,37 @@
 //  Copyright (c) 2012 School of the Art Institute of Chicago. All rights reserved.
 //
 
-#include "FrameSource.h"
+#include "FrameSourceAsset.h"
 
 
 //--------------------------------------------------------------
-FrameSource::FrameSource() {
+FrameSourceAsset::FrameSourceAsset() {
     canSource = true;
 
     openOnFirstConnection = true;
     closeOnLastDisconnect = true;
     
 
-    ofAddListener(ofEvents().update,this,&FrameSource::update);
+    ofAddListener(ofEvents().update,this,&FrameSourceAsset::update);
     
 }
 
 //--------------------------------------------------------------
-FrameSource::~FrameSource() {
-    std::set<FrameSink*>::iterator iter = sinks.begin();
+FrameSourceAsset::~FrameSourceAsset() {
+    std::set<FrameSinkAsset*>::iterator iter = sinks.begin();
     while(iter != sinks.end()) detachFromSink(*iter++);
     sinks.clear();
     
-    ofRemoveListener(ofEvents().update,this,&FrameSource::update);
+    ofRemoveListener(ofEvents().update,this,&FrameSourceAsset::update);
 }
 
-void FrameSource::update(ofEventArgs& eventsArgs) {
+void FrameSourceAsset::update(ofEventArgs& eventsArgs) {
     sourceFrame();
 }
 
 
 //--------------------------------------------------------------
-void FrameSource::sourceFrame() {
+void FrameSourceAsset::sourceFrame() {
     if(sinks.isEmpty()) return; 
     
     if(isFrameNew()) {
@@ -45,7 +45,7 @@ void FrameSource::sourceFrame() {
         frame = ofPtr<ofImage>(new ofImage()); 
         frame->setFromPixels(getPixelsRef());
 
-        std::set<FrameSink*>::iterator iter = sinks.begin();
+        std::set<FrameSinkAsset*>::iterator iter = sinks.begin();
         while(iter != sinks.end()) (*iter++)->sink(frame);
         
         frameSourced(frame);
@@ -53,12 +53,12 @@ void FrameSource::sourceFrame() {
 }
 
 //--------------------------------------------------------------
-bool FrameSource::hasSinks() const { 
+bool FrameSourceAsset::hasSinks() const { 
     return sinks.size() > 0; 
 }
 
 //--------------------------------------------------------------
-bool FrameSource::attachToSink(FrameSink* sink) {
+bool FrameSourceAsset::attachToSink(FrameSinkAsset* sink) {
     if(openOnFirstConnection && !hasSinks() && !isLoaded()) {
         open();
         
@@ -81,7 +81,7 @@ bool FrameSource::attachToSink(FrameSink* sink) {
 }
 
 //--------------------------------------------------------------
-bool FrameSource::detachFromSink(FrameSink* sink) {
+bool FrameSourceAsset::detachFromSink(FrameSinkAsset* sink) {
     if(sinks.remove(sink)) {
         sinkWasDetatched(sink);
         if(closeOnLastDisconnect && !hasSinks() && isLoaded()) {
@@ -96,26 +96,35 @@ bool FrameSource::detachFromSink(FrameSink* sink) {
 }
 
 //--------------------------------------------------------------
-vector<FrameSink*> FrameSource::getSinks() const {
+bool FrameSourceAsset::detachFromAllSinks() {
+    vector<FrameSinkAsset*> connected = sinks.toArray();
+    for(int i = 0; i < connected.size(); i++) {
+        detachFromSink(connected[i]);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------
+vector<FrameSinkAsset*> FrameSourceAsset::getSinks() const {
     return sinks.toArray();
 }
 
 //--------------------------------------------------------------
-void FrameSource::setOpenOnFirstConnect(bool v) {
+void FrameSourceAsset::setOpenOnFirstConnect(bool v) {
     openOnFirstConnection = v;
 }
 
 //--------------------------------------------------------------
-void FrameSource::setCloseOnLastDisconnect(bool v) {
+void FrameSourceAsset::setCloseOnLastDisconnect(bool v) {
     closeOnLastDisconnect = v;
 }
 
 //--------------------------------------------------------------
-bool FrameSource::getOpenOnFirstConnect() {
+bool FrameSourceAsset::getOpenOnFirstConnect() {
     return openOnFirstConnection;
 }
 
 //--------------------------------------------------------------
-bool FrameSource::getCloseOnLastDisconnect() {
+bool FrameSourceAsset::getCloseOnLastDisconnect() {
     return closeOnLastDisconnect;
 }

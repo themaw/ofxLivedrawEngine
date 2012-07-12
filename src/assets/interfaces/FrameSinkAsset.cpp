@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 School of the Art Institute of Chicago. All rights reserved.
 //
 
-#include "FrameSink.h"
+#include "FrameSinkAsset.h"
 
 
 //bool attachToSource(ofxVideoSourceInterface* source);    
@@ -21,22 +21,22 @@
 
 
 //--------------------------------------------------------------
-FrameSink::FrameSink() {
+FrameSinkAsset::FrameSinkAsset() {
     canSink = true;
     sinking = true;
 }
 
 //--------------------------------------------------------------
-FrameSink::~FrameSink() {
-    vector<FrameSource*> _sources = getSources();
+FrameSinkAsset::~FrameSinkAsset() {
+    vector<FrameSourceAsset*> _sources = getSources();
     for(int i = 0; i < _sources.size(); i++) {
-        detatchFromSource(_sources[i]);
+        detachFromSource(_sources[i]);
     }
     sources.clear();
 }
 
 //--------------------------------------------------------------
-bool FrameSink::sink(ofxVideoFrame frame) {
+bool FrameSinkAsset::sink(ofxVideoFrame frame) {
     if(isSinking()) {
         return frameReceived(frame);
     } else {
@@ -45,12 +45,12 @@ bool FrameSink::sink(ofxVideoFrame frame) {
 }
 
 //--------------------------------------------------------------
-bool FrameSink::isConnected() { 
+bool FrameSinkAsset::isConnected() { 
     return sources.size() > 0; 
 }
 
 //--------------------------------------------------------------
-bool FrameSink::attachToSource(FrameSource* source) {
+bool FrameSinkAsset::attachToSource(FrameSourceAsset* source) {
     if(source->attachToSink(this)) {
         sources.add(source);
         return true;
@@ -61,7 +61,17 @@ bool FrameSink::attachToSource(FrameSource* source) {
 }
 
 //--------------------------------------------------------------
-bool FrameSink::detatchFromSource(FrameSource* source) {
+bool FrameSinkAsset::detachFromAllSources() {
+    vector<FrameSourceAsset*> connected = sources.toArray();
+    for(int i = 0; i < connected.size(); i++) {
+        detachFromSource(connected[i]);
+    }
+    return true;
+}
+
+
+//--------------------------------------------------------------
+bool FrameSinkAsset::detachFromSource(FrameSourceAsset* source) {
     if(source->detachFromSink(this)) {
         sources.remove(source);
         return true;
@@ -72,12 +82,12 @@ bool FrameSink::detatchFromSource(FrameSource* source) {
 }
 
 //--------------------------------------------------------------
-bool FrameSink::isSinking() {
+bool FrameSinkAsset::isSinking() {
     return sinking;
 }
 
 //--------------------------------------------------------------
-void FrameSink::setSinking(bool _sinking) {
+void FrameSinkAsset::setSinking(bool _sinking) {
     if(_sinking != sinking) {
         sinking = _sinking;
         if(sinking) {

@@ -3,12 +3,10 @@
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
-#include "ofxLivedrawEngine.h"
 
+#include "ofxOscRouterNode.h"
 
 #include "BaseMediaAsset.h"
-#include "AssetMetaData.h"
-
 #include "ImageAsset.h"
 #include "MovieAsset.h"
 #include "BufferAsset.h"
@@ -17,12 +15,16 @@
 #include "StreamAsset.h"
 #include "SyphonAsset.h"
 
+//class BaseMediaAsset;
+//class ImageAsset;
+//class MovieAsset;
+//class BufferAsset;
+//class BufferPlayerAsset;
+//class GrabberAsset;
+//class StreamAsset;
+//class SyphonAsset;
 
-#include "ofxOscRouterNode.h"
-
-class BaseMediaAsset;
-class BufferManager;
-class ofxLivedrawEngine;
+class ofxLivedrawEngine;  // we only use the pointer below, so no need to include
 
 class AssetManager : public ofxOscRouterNode {
 	
@@ -41,7 +43,7 @@ public:
     bool hasAlias(string alias);
     bool addAlias(BaseMediaAsset* asset, string alias);
     bool removeAlias(string alias);
-    bool changeAlias(string fromAlias, string toAlias);
+//    bool changeAlias(string fromAlias, string toAlias);
     vector<string> getAliases(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
@@ -67,8 +69,9 @@ public:
     bool attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAlias);
 
     //--------------------------------------------------------------
-    bool cacheAsset(string alias);
-    bool uncacheAsset(string alias);
+    bool cacheAsset(CacheableAsset* asset);
+    bool uncacheAsset(CacheableAsset* asset);
+
     bool startAsset(string alias);
     bool stopAsset(string alias);
     
@@ -96,7 +99,6 @@ protected:
     ofxLivedrawEngine* engine;
     
 private:
-    //BufferManager* bufferManager;
 
     string generateAssetId(BaseMediaAsset* asset);
 

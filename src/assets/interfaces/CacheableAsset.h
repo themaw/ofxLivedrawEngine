@@ -12,49 +12,68 @@
 
 class BufferAsset;
 
-class Cacheable : public virtual BaseMediaAsset 
+class CacheableAsset : public virtual BaseMediaAsset 
 {
 public:
-    Cacheable() {
+    CacheableAsset() {
+        cacheBuffer = NULL;
+
         canCache = true;
         cached = false;
         //buffer.setReadOnly(true);
-     
-//        addOscMethod("cache");
-//        addOscMethod("uncache");
+  
+        addOscMethod("/cache");
+        addOscMethod("/uncache");
+        
+//        addOscPlugMethod("/cache", bind(&Cacheable::cache, ref(*this)));
+//        addOscPlugMethod("/uncache", bind(&Cacheable::uncache, ref(*this)));
     }
 
-    virtual ~Cacheable() {}
+    virtual ~CacheableAsset() {}
 
-    virtual bool doCache()   = 0;
-    virtual bool doUnCache() = 0;
-
-    bool cache() {
-        if(!isCached()) {
-            cached = doCache();
-            return cached;
+    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
+        if(isMatch(pattern, "/cache")) {
+            cache();
+        } else if(isMatch(pattern, "/uncache")) {
+            uncache();
         } else {
-            return true;
+            cout << "unknown pattern in cache." << endl;
         }
-    };
-    bool unCache() {
-        if(isCached()) {
-            if(doUnCache()) {
-                cached = false;
-                return true;
-            } else {
-                cached = true;
-                return false;
-            }
-        } else {
-            return true;
-        }
-    };
+    }
 
     
+    
+    virtual bool doCache()   = 0;
+    virtual bool doUncache() = 0;
+
+    void cache() {
+        if(!isCached()) {
+            cached = doCache();
+        }
+    }
+    
+    void uncache() {
+        if(isCached()) {
+            if(doUncache()) {
+                cached = false;
+            } else {
+                cached = true;
+            }
+        }
+    };
+
     bool isCached() {return cached;}
+
+    BufferAsset* getCacheBuffer() {
+        return cacheBuffer;
+    }
+    
+    void setCacheBuffer(BufferAsset* _cacheBuffer) {
+        cacheBuffer = _cacheBuffer;
+    }
     
 protected:
     bool cached;
+    BufferAsset* cacheBuffer;
         
 };

@@ -12,6 +12,11 @@
 //--------------------------------------------------------------
 AssetMetaData::AssetMetaData() : ofxOscRouterNode("/meta") {
     description = "";
+
+    addOscMethod("/add");
+    addOscMethod("/remove");
+    addOscMethod("/change");
+    addOscMethod("/description");
 }
 
 //--------------------------------------------------------------
@@ -19,7 +24,10 @@ AssetMetaData::~AssetMetaData() {};
 
 //--------------------------------------------------------------
 void AssetMetaData::processOscMessage(const string& pattern, const ofxOscMessage& m) {
-    ofLog(OF_LOG_ERROR, "AssetMetaData::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m) - unimplemented.");
+    
+    cout << "processing meta data." << endl;
+    
+    //    ofLog(OF_LOG_ERROR, "AssetMetaData::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m) - unimplemented.");
 }
 
 ////--------------------------------------------------------------
