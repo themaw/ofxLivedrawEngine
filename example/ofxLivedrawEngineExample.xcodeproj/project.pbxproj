@@ -136,6 +136,7 @@
 		FD084F3215AFB009001CC08F /* SyphonAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyphonAsset.cpp; sourceTree = "<group>"; };
 		FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CacheableAsset.cpp; sourceTree = "<group>"; };
 		FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskBasedAsset.cpp; sourceTree = "<group>"; };
+		FD084F3C15AFC0C3001CC08F /* CacheProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheProvider.h; sourceTree = "<group>"; };
 		FD118AA615AE25A900532B54 /* ofxSyphon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphon.h; sourceTree = "<group>"; };
 		FD118AA715AE25A900532B54 /* ofxSyphonClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonClient.h; sourceTree = "<group>"; };
 		FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonClient.mm; sourceTree = "<group>"; };
@@ -882,6 +883,7 @@
 			children = (
 				FDF978DE15A80FD2000ADECA /* AssetManager.cpp */,
 				FDF978DF15A80FD2000ADECA /* AssetManager.h */,
+				FD084F3C15AFC0C3001CC08F /* CacheProvider.h */,
 			);
 			path = management;
 			sourceTree = "<group>";

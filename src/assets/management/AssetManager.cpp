@@ -261,6 +261,7 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
     return true;
 }
 
+//--------------------------------------------------------------
 bool AssetManager::cacheAsset(CacheableAsset* asset) {
     if(asset == NULL) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset is NULL");
@@ -269,9 +270,6 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
     
     BufferAsset* cacheAsset = addBuffer("BUFFER_" + asset->getName(), 1, OFX_VIDEO_BUFFER_FIXED);
     
-    
-    
-    
     if(cacheAsset != NULL) {
         asset->setCacheBuffer(cacheAsset);
         return true;
@@ -279,8 +277,9 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Only non-live assets can be cached");
         return false;
     }
-    
 }
+
+//--------------------------------------------------------------
 bool AssetManager::uncacheAsset(CacheableAsset* asset) {
 
     if(asset == NULL) {
@@ -295,6 +294,7 @@ bool AssetManager::uncacheAsset(CacheableAsset* asset) {
 
 }
 
+//--------------------------------------------------------------
 bool AssetManager::startAsset(string alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
@@ -314,6 +314,8 @@ bool AssetManager::startAsset(string alias) {
 //    }
 
 }
+
+//--------------------------------------------------------------
 bool AssetManager::stopAsset(string alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
@@ -330,9 +332,6 @@ bool AssetManager::stopAsset(string alias) {
 //    }
 
 }
-
-
-
 
 //--------------------------------------------------------------
 ImageAsset* AssetManager::addImage(string name, string filename) {
@@ -361,6 +360,7 @@ MovieAsset* AssetManager::addMovie(string name, string filename) {
     
     return asset;
 }
+
 //--------------------------------------------------------------
 StreamAsset* AssetManager::addStream(string name, StreamType type, string url, string username, string password) {
     

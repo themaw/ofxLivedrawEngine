@@ -23,10 +23,10 @@
  ==============================================================================*/
 
 #include "BaseMediaAsset.h"
+#include "AssetManager.h"
 
 //--------------------------------------------------------------
 BaseMediaAsset::BaseMediaAsset() {
-//    manager = NULL;
     
     name      = "UNDEFINED";
 	assetType = MEDIA_ASSET_UNDEFINED;

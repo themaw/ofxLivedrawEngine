@@ -28,6 +28,7 @@
 #include "ofxXmlSettings.h"
 
 #include "ofxOscRouterNode.h"
+#include "CacheProvider.h"
 
 #include "BaseMediaAsset.h"
 #include "ImageAsset.h"
@@ -49,8 +50,10 @@
 
 class ofxLivedrawEngine;  // we only use the pointer below, so no need to include
 
-class AssetManager : public ofxOscRouterNode {
-	
+class AssetManager : public ofxOscRouterNode, 
+                     public CacheProvider
+
+{
 public:
     //--------------------------------------------------------------
 	AssetManager();
@@ -70,6 +73,7 @@ public:
     vector<string> getAliases(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
+    
     ImageAsset*         addImage(string name, string filename);
     MovieAsset*         addMovie(string name, string filename);
     StreamAsset*        addStream(string name, StreamType type, string url, string username, string password);

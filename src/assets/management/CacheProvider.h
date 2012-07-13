@@ -22,44 +22,14 @@
  
  ==============================================================================*/
 
+#pragma once
 
-#include "MovieAsset.h"
+class CacheableAsset;
 
-//--------------------------------------------------------------
-MovieAsset::MovieAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
-    assetType = MEDIA_ASSET_MOVIE;
-    name      = _name;
-}
-
-//--------------------------------------------------------------
-MovieAsset::~MovieAsset() {}
-
-//--------------------------------------------------------------
-bool MovieAsset::dispose() {
-    uncache();
-    return true;
-}
-
-// TODO: we don't even need this if we don't have any other messages.
-//   void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-//       
-//       if(isMatch(pattern, "/cache") || isMatch(pattern, "/uncache")) {
-//           Cacheable::processOscMessage(pattern, m);
-//       } else {
-//           cout << "processing message inside of movie asset." << endl;
-//       }
-//
-//       
-//       
-//   }
-
-
-//--------------------------------------------------------------
-bool MovieAsset::doCache() {
-    return hasCacheProvider() && cacheProvider->cacheAsset(this);
-}
-
-//--------------------------------------------------------------
-bool MovieAsset::doUncache() {
-    return hasCacheProvider() && cacheProvider->uncacheAsset(this);
-}
+class CacheProvider {
+public:
+    CacheProvider() {}
+    virtual ~CacheProvider() {}
+    virtual bool cacheAsset(CacheableAsset* asset) = 0;
+    virtual bool uncacheAsset(CacheableAsset* asset) = 0;
+};

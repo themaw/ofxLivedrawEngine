@@ -26,6 +26,7 @@
 
 //--------------------------------------------------------------
 CacheableAsset::CacheableAsset() {
+    cacheProvider = NULL;
     cacheBuffer = NULL;
     
     canCache = true;
@@ -40,7 +41,9 @@ CacheableAsset::CacheableAsset() {
 }
 
 //--------------------------------------------------------------
-CacheableAsset::~CacheableAsset() {}
+CacheableAsset::~CacheableAsset() {
+    uncache(); // TODO : here or in dispose?
+}
 
 //--------------------------------------------------------------
 void CacheableAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
@@ -72,7 +75,9 @@ void CacheableAsset::uncache() {
 }
 
 //--------------------------------------------------------------
-bool CacheableAsset::isCached() {return cached;}
+bool CacheableAsset::isCached() {
+    return cached;
+}
 
 //--------------------------------------------------------------
 BufferAsset* CacheableAsset::getCacheBuffer() {
@@ -83,3 +88,14 @@ BufferAsset* CacheableAsset::getCacheBuffer() {
 void CacheableAsset::setCacheBuffer(BufferAsset* _cacheBuffer) {
     cacheBuffer = _cacheBuffer;
 }
+
+//--------------------------------------------------------------
+bool CacheableAsset::hasCacheProvider() {
+    return cacheProvider != NULL;
+}
+
+//--------------------------------------------------------------
+void CacheableAsset::setCacheProvider(CacheProvider* _cacheProvider) {
+    cacheProvider = _cacheProvider;
+}
+

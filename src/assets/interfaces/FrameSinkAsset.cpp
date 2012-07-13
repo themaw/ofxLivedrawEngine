@@ -33,7 +33,6 @@
 //bool sourceWasDetatched(ofxVideoSourceInterface* source) {}; // these callbacks are available
 //
 //// get source list
-//vector<ofxVideoSourceInterface*> getSources();
 
 
 //--------------------------------------------------------------
@@ -98,6 +97,11 @@ bool FrameSinkAsset::detachFromSource(FrameSourceAsset* source) {
 }
 
 //--------------------------------------------------------------
+vector<FrameSourceAsset*> FrameSinkAsset::getSources() {
+    return sources.toArray();
+}
+
+//--------------------------------------------------------------
 bool FrameSinkAsset::isSinking() {
     return sinking;
 }
@@ -113,4 +117,6 @@ void FrameSinkAsset::setSinking(bool _sinking) {
         }
     }
 }
+
+
 

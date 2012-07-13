@@ -28,7 +28,6 @@
 #include "BaseMediaAsset.h"
 #include "DiskBasedAsset.h"
 #include "CacheableAsset.h"
-//#include "BufferAsset.h"
 
 class MovieAsset : public virtual BaseMediaAsset,
                    public virtual DiskBasedAsset,

@@ -28,7 +28,7 @@
 #include "FrameSinkAsset.h"
 #include "ofxVideoBuffer.h"
 
-#include "CacheableAsset.h"
+class CacheableAsset;
 
 class BufferAsset : public virtual BaseMediaAsset, 
                     public virtual FrameSinkAsset

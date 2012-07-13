@@ -25,8 +25,8 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-
-class BufferAsset;
+#include "BufferAsset.h"
+#include "CacheProvider.h"
 
 class CacheableAsset : public virtual BaseMediaAsset 
 {
@@ -45,8 +45,11 @@ public:
     BufferAsset* getCacheBuffer();
     void setCacheBuffer(BufferAsset* _cacheBuffer);
     
+    bool hasCacheProvider();
+    void setCacheProvider(CacheProvider* cacheProvider);
+    
 protected:
     bool cached;
     BufferAsset* cacheBuffer;
-        
+    CacheProvider* cacheProvider;
 };

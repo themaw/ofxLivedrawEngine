@@ -6,10 +6,6 @@
 #include "ofxOscRouterNode.h"
 #include "AssetMetaData.h"
 
-//#include "AssetManager.h"
-
-//class AssetManager;
-
 enum MediaAssetType
 {
     MEDIA_ASSET_UNDEFINED,
@@ -21,8 +17,6 @@ enum MediaAssetType
     MEDIA_ASSET_BUFFERPLAYER,
     MEDIA_ASSET_SYPHON
 };
-
-
 
 class BaseMediaAsset : virtual public ofxOscRouterNode {
 public:
@@ -46,10 +40,6 @@ public:
     // utilities
     string toString() const;
 
-//    bool hasAssetManager();
-//    AssetManager* getAssetManager();
-//    void setAssetManager(AssetManager* manager);
-    
 protected:
     string name;
     MediaAssetType assetType;
@@ -61,8 +51,6 @@ protected:
     
     AssetMetaData meta;
     
-//    AssetManager* manager;
-
 };
 
 
