@@ -15,62 +15,19 @@ class BufferAsset;
 class CacheableAsset : public virtual BaseMediaAsset 
 {
 public:
-    CacheableAsset() {
-        cacheBuffer = NULL;
+    CacheableAsset();
+    virtual ~CacheableAsset();
 
-        canCache = true;
-        cached = false;
-        //buffer.setReadOnly(true);
-  
-        addOscMethod("/cache");
-        addOscMethod("/uncache");
-        
-//        addOscPlugMethod("/cache", bind(&Cacheable::cache, ref(*this)));
-//        addOscPlugMethod("/uncache", bind(&Cacheable::uncache, ref(*this)));
-    }
+    void processOscMessage(const string& pattern, const ofxOscMessage& m);    
 
-    virtual ~CacheableAsset() {}
+    virtual bool doCache()   = 0; // must implement in subclasses
+    virtual bool doUncache() = 0; // must implement in subclasses
 
-    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-        if(isMatch(pattern, "/cache")) {
-            cache();
-        } else if(isMatch(pattern, "/uncache")) {
-            uncache();
-        } else {
-            cout << "unknown pattern in cache." << endl;
-        }
-    }
-
-    
-    
-    virtual bool doCache()   = 0;
-    virtual bool doUncache() = 0;
-
-    void cache() {
-        if(!isCached()) {
-            cached = doCache();
-        }
-    }
-    
-    void uncache() {
-        if(isCached()) {
-            if(doUncache()) {
-                cached = false;
-            } else {
-                cached = true;
-            }
-        }
-    };
-
-    bool isCached() {return cached;}
-
-    BufferAsset* getCacheBuffer() {
-        return cacheBuffer;
-    }
-    
-    void setCacheBuffer(BufferAsset* _cacheBuffer) {
-        cacheBuffer = _cacheBuffer;
-    }
+    void cache();
+    void uncache();
+    bool isCached();
+    BufferAsset* getCacheBuffer();
+    void setCacheBuffer(BufferAsset* _cacheBuffer);
     
 protected:
     bool cached;

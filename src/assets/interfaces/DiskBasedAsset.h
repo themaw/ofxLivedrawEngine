@@ -13,16 +13,9 @@
 class DiskBasedAsset : public virtual BaseMediaAsset 
 {
 public:
-    DiskBasedAsset(string _filename) {
-        filename  = _filename;
-        diskAsset = true;
-    }
-    virtual ~DiskBasedAsset() {}
-
-    string getFilename() const {
-        return filename;
-    }
-    
+    DiskBasedAsset(string _filename);
+    virtual ~DiskBasedAsset();
+    string getFilename() const;
 //    void fileMoved(const string& newLocation) {};
     
 protected:

@@ -30,6 +30,8 @@
 		FD084F2F15AFAF0F001CC08F /* MovieAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */; };
 		FD084F3115AFAF89001CC08F /* StreamAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F3015AFAF88001CC08F /* StreamAsset.cpp */; };
 		FD084F3315AFB00A001CC08F /* SyphonAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F3215AFB009001CC08F /* SyphonAsset.cpp */; };
+		FD084F3515AFB0E4001CC08F /* CacheableAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */; };
+		FD084F3715AFB157001CC08F /* DiskBasedAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */; };
 		FD118AB715AE25A900532B54 /* ofxSyphonClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */; };
 		FD118AB815AE25A900532B54 /* ofxSyphonServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD118AAA15AE25A900532B54 /* ofxSyphonServer.mm */; };
 		FD118B0D15AE31F900532B54 /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD118B0C15AE31F900532B54 /* Syphon.framework */; };
@@ -132,6 +134,8 @@
 		FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MovieAsset.cpp; sourceTree = "<group>"; };
 		FD084F3015AFAF88001CC08F /* StreamAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamAsset.cpp; sourceTree = "<group>"; };
 		FD084F3215AFB009001CC08F /* SyphonAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyphonAsset.cpp; sourceTree = "<group>"; };
+		FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CacheableAsset.cpp; sourceTree = "<group>"; };
+		FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskBasedAsset.cpp; sourceTree = "<group>"; };
 		FD118AA615AE25A900532B54 /* ofxSyphon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphon.h; sourceTree = "<group>"; };
 		FD118AA715AE25A900532B54 /* ofxSyphonClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonClient.h; sourceTree = "<group>"; };
 		FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonClient.mm; sourceTree = "<group>"; };
@@ -862,7 +866,9 @@
 			isa = PBXGroup;
 			children = (
 				FD6FD75D15AF62A300DABC38 /* CacheableAsset.h */,
+				FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */,
 				FDF978DA15A80FD2000ADECA /* DiskBasedAsset.h */,
+				FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */,
 				FDF978DB15A80FD2000ADECA /* FrameSinkAsset.h */,
 				FDF978EC15A8CA1E000ADECA /* FrameSinkAsset.cpp */,
 				FDF978DC15A80FD2000ADECA /* FrameSourceAsset.h */,
@@ -1023,6 +1029,8 @@
 				FD084F2F15AFAF0F001CC08F /* MovieAsset.cpp in Sources */,
 				FD084F3115AFAF89001CC08F /* StreamAsset.cpp in Sources */,
 				FD084F3315AFB00A001CC08F /* SyphonAsset.cpp in Sources */,
+				FD084F3515AFB0E4001CC08F /* CacheableAsset.cpp in Sources */,
+				FD084F3715AFB157001CC08F /* DiskBasedAsset.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

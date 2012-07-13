@@ -8,6 +8,7 @@
 
 #include "StreamAsset.h"
 
+//--------------------------------------------------------------
 StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password) {
     assetType  = MEDIA_ASSET_STREAM;
     streamType = _type;
@@ -35,19 +36,23 @@ StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, str
     addOscMethod("/size");
 }
 
+//--------------------------------------------------------------
 StreamAsset::~StreamAsset() {
     // ofPtr!
 }
 
+//--------------------------------------------------------------
 void StreamAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
     cout << "Stream asset processing osc." << endl;
 }
 
+//--------------------------------------------------------------
 bool StreamAsset::dispose() {
     detachFromAllSinks();
     cout << "disposing of stream " << getName() << endl;
 }
 
+//--------------------------------------------------------------
 bool StreamAsset::isFrameNew() {
     if(isIpVideo) {
         return ipcam->isFrameNew();
@@ -55,6 +60,8 @@ bool StreamAsset::isFrameNew() {
         return qtcam->isFrameNew();
     }
 }
+
+//--------------------------------------------------------------
 ofPixelsRef StreamAsset::getPixelsRef() {
     if(isIpVideo) {
         return ipcam->getPixelsRef();
@@ -63,6 +70,7 @@ ofPixelsRef StreamAsset::getPixelsRef() {
     }
 }
 
+//--------------------------------------------------------------
 void StreamAsset::open()   {
     if(isIpVideo) {
         ipcam->connect();
@@ -71,6 +79,7 @@ void StreamAsset::open()   {
     }
 }
 
+//--------------------------------------------------------------
 void StreamAsset::close()  {
     if(isIpVideo) {
         ipcam->close();
@@ -79,6 +88,7 @@ void StreamAsset::close()  {
     }
 }
 
+//--------------------------------------------------------------
 bool StreamAsset::isLoaded() {
     if(isIpVideo) {
         return ipcam->isConnected();
@@ -87,19 +97,22 @@ bool StreamAsset::isLoaded() {
     }
 }
 
-// getters and setters
+//--------------------------------------------------------------
 string StreamAsset::getUrl() {
     return url;
 }
 
+//--------------------------------------------------------------
 string StreamAsset::getUsername() {
     return username;
 }
 
+//--------------------------------------------------------------
 string StreamAsset::getPassword() {
     return password;
 }
 
+//--------------------------------------------------------------
 StreamType StreamAsset::getStreamType() {
     return streamType;
 }
