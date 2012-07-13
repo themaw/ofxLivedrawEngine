@@ -20,104 +20,31 @@ enum StreamType
     STREAM_TYPE_QT
 };
 
-
 class StreamAsset : public virtual BaseMediaAsset,
                     public virtual FrameSourceAsset 
 {
 public:
-    StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password) {
-        assetType  = MEDIA_ASSET_STREAM;
-        streamType = _type;
-        name       = _name;
-        url        = _url;
-        username   = _username;
-        password   = _password;
-        
-        isIpVideo = streamType == STREAM_TYPE_IPCAM;
-
-        if(isIpVideo) {
-            ipcam = ofPtr<ofxIpVideoGrabber>(new ofxIpVideoGrabber());
-            ipcam->setURI(url);
-            ipcam->setUsername(username);
-            ipcam->setPassword(password);
-        } else {
-            qtcam = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
-            qtcam->loadMovie(url); // TODO: construct correct user/pass string
-        }
-        
-        addOscMethod("/open");
-        addOscMethod("/close");
-        addOscMethod("/start");
-        addOscMethod("/stop");
-        addOscMethod("/size");
-    }
-    virtual ~StreamAsset() {
-        // ofPtr!
-    }
+    StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password);
+    virtual ~StreamAsset();
     
-    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-        
-    }
-    virtual bool dispose() {
-        detachFromAllSinks();
-        cout << "disposing of stream " << getName() << endl;
-    }
+    void processOscMessage(const string& pattern, const ofxOscMessage& m);
     
-    bool isFrameNew() {
-        if(isIpVideo) {
-            return ipcam->isFrameNew();
-        } else {
-            return qtcam->isFrameNew();
-        }
-    }
-    ofPixelsRef getPixelsRef() {
-        if(isIpVideo) {
-            return ipcam->getPixelsRef();
-        } else {
-            return qtcam->getPixelsRef();
-        }
-    }
+    bool dispose();
     
-    void open()   {
-        if(isIpVideo) {
-            ipcam->connect();
-        } else {
-            qtcam->loadMovie(url);
-        }
-    }
+    bool isFrameNew();
+    ofPixelsRef getPixelsRef();
     
-    void close()  {
-        if(isIpVideo) {
-            ipcam->close();
-        } else {
-            qtcam->close();;
-        }
-    }
+    void open();
+    void close();
     
-    bool isLoaded() {
-        if(isIpVideo) {
-            return ipcam->isConnected();
-        } else {
-            return qtcam->isLoaded();
-        }
-    }
+    bool isLoaded();
     
     // getters and setters
-    string getUrl() {
-        return url;
-    }
-    
-    string getUsername() {
-        return username;
-    }
-    
-    string getPassword() {
-        return password;
-    }
-    
-    StreamType getStreamType() {
-        return streamType;
-    }
+    string getUrl();
+    string getUsername();
+    string getPassword();
+
+    StreamType getStreamType();
     
 protected:
     string     url;

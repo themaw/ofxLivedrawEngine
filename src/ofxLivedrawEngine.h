@@ -39,8 +39,8 @@ public:
     
     void windowResized(int w, int h);
     
-    ofxOscRouter*       getOscRouter();
-//    AssetManager*       getAssetManager();
+    ofxOscRouter*   getOscRouter();
+    AssetManager*   getAssetManager();
 //    EffectsManager*     getEffectsManager();
 //    CanvasRenderer*     getCanvasRenderer();
 //    CanvasLayerManager* getCanvasLayerManager();
@@ -48,8 +48,8 @@ public:
     
 
 protected:
-    ofxOscRouter    oscRouter;
-    AssetManager    assetManager;
+    ofxOscRouter oscRouter;
+    AssetManager assetManager;
     //    EffectsManager  effectsManager;
     //    CanvasRenderer  canvas; // owns the layer manager
     //    SessionManager  sessionManager;

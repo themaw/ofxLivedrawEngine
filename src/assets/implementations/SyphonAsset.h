@@ -17,49 +17,16 @@ class SyphonAsset : public virtual BaseMediaAsset,
                     public virtual FrameSourceAsset 
 {
 public:
-    SyphonAsset(const string& _name) {
-        assetType = MEDIA_ASSET_SYPHON;
-        name = _name;
-        
-        syphonClient = ofPtr<ofxSyphonVideoClient>(new ofxSyphonVideoClient());
-        syphonClient->setup();
-        syphonClient->setApplicationName("ofxLivedrawEngine Asset");
-        syphonClient->setServerName("");
+    SyphonAsset(const string& _name);
+    virtual ~SyphonAsset();
 
-    }
-    virtual ~SyphonAsset() {}
-
-    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-        
-    }
-    
-    virtual bool dispose() {
-        detachFromAllSinks();
-        
-        cout << "disposing of syphon " << getName() << endl;
-    }
-    
-    bool isFrameNew() {
-        return syphonClient->isFrameNew();
-    }
-    
-    ofPixelsRef getPixelsRef() {
-        return syphonClient->getPixelsRef();
-    }
-    
-    void open() {
-        syphonClient->open();
-    }
-    
-    void close() {
-        syphonClient->close();
-    }
-    
-    bool isLoaded() {
-        return syphonClient->isConnected();
-    }
-
-    
+    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    bool dispose();
+    bool isFrameNew();    
+    ofPixelsRef getPixelsRef();
+    void open();
+    void close();
+    bool isLoaded();
     
 protected:
     

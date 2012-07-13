@@ -23,6 +23,13 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		FD084F2715AFAC0C001CC08F /* BufferAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2615AFAC0B001CC08F /* BufferAsset.cpp */; };
+		FD084F2915AFAC7E001CC08F /* BufferPlayerAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2815AFAC7D001CC08F /* BufferPlayerAsset.cpp */; };
+		FD084F2B15AFADEE001CC08F /* GrabberAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2A15AFADED001CC08F /* GrabberAsset.cpp */; };
+		FD084F2D15AFAE64001CC08F /* ImageAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2C15AFAE64001CC08F /* ImageAsset.cpp */; };
+		FD084F2F15AFAF0F001CC08F /* MovieAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */; };
+		FD084F3115AFAF89001CC08F /* StreamAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F3015AFAF88001CC08F /* StreamAsset.cpp */; };
+		FD084F3315AFB00A001CC08F /* SyphonAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F3215AFB009001CC08F /* SyphonAsset.cpp */; };
 		FD118AB715AE25A900532B54 /* ofxSyphonClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */; };
 		FD118AB815AE25A900532B54 /* ofxSyphonServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD118AAA15AE25A900532B54 /* ofxSyphonServer.mm */; };
 		FD118B0D15AE31F900532B54 /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD118B0C15AE31F900532B54 /* Syphon.framework */; };
@@ -118,6 +125,13 @@
 		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		FD084F2615AFAC0B001CC08F /* BufferAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferAsset.cpp; sourceTree = "<group>"; };
+		FD084F2815AFAC7D001CC08F /* BufferPlayerAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferPlayerAsset.cpp; sourceTree = "<group>"; };
+		FD084F2A15AFADED001CC08F /* GrabberAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrabberAsset.cpp; sourceTree = "<group>"; };
+		FD084F2C15AFAE64001CC08F /* ImageAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageAsset.cpp; sourceTree = "<group>"; };
+		FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MovieAsset.cpp; sourceTree = "<group>"; };
+		FD084F3015AFAF88001CC08F /* StreamAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamAsset.cpp; sourceTree = "<group>"; };
+		FD084F3215AFB009001CC08F /* SyphonAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyphonAsset.cpp; sourceTree = "<group>"; };
 		FD118AA615AE25A900532B54 /* ofxSyphon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphon.h; sourceTree = "<group>"; };
 		FD118AA715AE25A900532B54 /* ofxSyphonClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonClient.h; sourceTree = "<group>"; };
 		FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonClient.mm; sourceTree = "<group>"; };
@@ -827,12 +841,19 @@
 			isa = PBXGroup;
 			children = (
 				FDF978D115A80FD2000ADECA /* BufferAsset.h */,
+				FD084F2615AFAC0B001CC08F /* BufferAsset.cpp */,
 				FDF978D215A80FD2000ADECA /* BufferPlayerAsset.h */,
+				FD084F2815AFAC7D001CC08F /* BufferPlayerAsset.cpp */,
 				FDF978D315A80FD2000ADECA /* GrabberAsset.h */,
+				FD084F2A15AFADED001CC08F /* GrabberAsset.cpp */,
 				FDF978D415A80FD2000ADECA /* ImageAsset.h */,
+				FD084F2C15AFAE64001CC08F /* ImageAsset.cpp */,
 				FDF978D515A80FD2000ADECA /* MovieAsset.h */,
+				FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */,
 				FDF978D615A80FD2000ADECA /* StreamAsset.h */,
+				FD084F3015AFAF88001CC08F /* StreamAsset.cpp */,
 				FDF978D715A80FD2000ADECA /* SyphonAsset.h */,
+				FD084F3215AFB009001CC08F /* SyphonAsset.cpp */,
 			);
 			path = implementations;
 			sourceTree = "<group>";
@@ -995,6 +1016,13 @@
 				FD118AB815AE25A900532B54 /* ofxSyphonServer.mm in Sources */,
 				FD118B1615AE465500532B54 /* SyphonNameboundClient.m in Sources */,
 				FD6FD75615AF3ABD00DABC38 /* ofxOscRouterEvent.cpp in Sources */,
+				FD084F2715AFAC0C001CC08F /* BufferAsset.cpp in Sources */,
+				FD084F2915AFAC7E001CC08F /* BufferPlayerAsset.cpp in Sources */,
+				FD084F2B15AFADEE001CC08F /* GrabberAsset.cpp in Sources */,
+				FD084F2D15AFAE64001CC08F /* ImageAsset.cpp in Sources */,
+				FD084F2F15AFAF0F001CC08F /* MovieAsset.cpp in Sources */,
+				FD084F3115AFAF89001CC08F /* StreamAsset.cpp in Sources */,
+				FD084F3315AFB00A001CC08F /* SyphonAsset.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

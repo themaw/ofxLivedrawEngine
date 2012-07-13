@@ -158,5 +158,5 @@ string BaseMediaAsset::toString() const {
 //void BaseMediaAsset::setAssetManager(AssetManager* _manager) {
 //    manager = _manager;
 //}
-
+//
 

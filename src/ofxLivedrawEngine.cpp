@@ -7,25 +7,20 @@ ofxLivedrawEngine::ofxLivedrawEngine() {
 
 //--------------------------------------------------------------
 ofxLivedrawEngine::~ofxLivedrawEngine() {
-//    delete oscRouter;
-//    delete assetManager;
-//    delete effectsManager;
-    
-//    delete canvasLayerManager;
-//    delete canvas;
-//    
-//    delete sessionManager;
+    // ofPtr magic.
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::setup() {
     
+//    oscRouter = ofPtr<ofxOscRouter>(new ofxOscRouter());
     oscRouter.setup("/livedraw", OSC_PORT);
     oscRouter.addOscNodeAlias("/l");
     oscRouter.addOscNodeAlias("/ld");
 
-//    assetManager.setEngine(this);
-//    oscRouter.addOscChild(&assetManager);
+//    assetManager = ofPtr<AssetManager>(new AssetManager());
+    assetManager.setEngine(this);
+    oscRouter.addOscChild(&assetManager);
     
 //    effectsManager.setEngine(this);
 //    oscRouter.addOscChild(&effectsManager);

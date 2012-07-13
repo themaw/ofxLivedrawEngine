@@ -10,58 +10,30 @@
 
 #include "BaseMediaAsset.h"
 #include "FrameSinkAsset.h"
-
 #include "ofxVideoBuffer.h"
 
+#include "CacheableAsset.h"
 
 class BufferAsset : public virtual BaseMediaAsset, 
                     public virtual FrameSinkAsset
 {
 public:
-    BufferAsset(const string& _name, int size, ofxVideoBufferType t)
-    {
-        assetType = MEDIA_ASSET_BUFFER;
-        
-        name = _name;
-        
-        buffer = ofPtr<ofxVideoBuffer>(new ofxVideoBuffer(size,t));
-        
-        addOscMethod("/type");    
-        addOscMethod("/size"); 
-        addOscMethod("/clear");
-        addOscMethod("/framerate");
-        
-        cacheSource = NULL;
-        
-    }
-    
+    BufferAsset(const string& _name, int size, ofxVideoBufferType t);    
     virtual ~BufferAsset();
 
     // From BaseMediaAsset
-    bool dispose() {
-        detachFromAllSources();
-    }
+    bool dispose();
     
-    void processOscMessage(const string& address, const ofxOscMessage& m) {}
+    void processOscMessage(const string& address, const ofxOscMessage& m);
 
     // From FrameSink
-    bool frameReceived(ofxVideoFrame frame) {};
+    bool frameReceived(ofxVideoFrame frame);
 
-
-    bool isCacheBuffer() {
-        return cacheSource != NULL;
-    }
-
-    CacheableAsset* getCacheSource() {
-        return cacheSource;
-    }
-
-    ofPtr<ofxVideoBuffer> getBuffer() {
-        return buffer;
-    }
+    bool isCacheBuffer();
+    CacheableAsset* getCacheSource();
+    ofPtr<ofxVideoBuffer> getBuffer();
     
 protected:
     CacheableAsset* cacheSource;
-    
     ofPtr<ofxVideoBuffer> buffer;
 };

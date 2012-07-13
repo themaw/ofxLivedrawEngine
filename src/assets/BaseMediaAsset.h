@@ -8,7 +8,7 @@
 
 //#include "AssetManager.h"
 
-class AssetManager;
+//class AssetManager;
 
 enum MediaAssetType
 {
