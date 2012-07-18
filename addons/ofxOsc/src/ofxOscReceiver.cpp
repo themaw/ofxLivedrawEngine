@@ -211,6 +211,7 @@ bool ofxOscReceiver::getNextMessage( ofxOscMessage* message )
 
 	// now delete the src message
 	delete src_message;
+    src_message = NULL;
 	// and remove it from the queue
 	messages.pop_front();
 
