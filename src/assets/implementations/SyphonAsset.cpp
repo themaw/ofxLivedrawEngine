@@ -38,6 +38,13 @@ SyphonAsset::SyphonAsset(const string& _name) {
 //--------------------------------------------------------------
 SyphonAsset::~SyphonAsset() {}
 
+void SyphonAsset::update() {
+    syphonClient->update();
+    
+    // super classes
+    FrameSourceAsset::update();
+}
+
 //--------------------------------------------------------------
 void SyphonAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "processing message in syphon asset." << endl;

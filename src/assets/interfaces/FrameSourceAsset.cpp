@@ -33,9 +33,6 @@ FrameSourceAsset::FrameSourceAsset() {
     openOnFirstConnection = true;
     closeOnLastDisconnect = true;
     
-
-    ofAddListener(ofEvents().update,this,&FrameSourceAsset::update);
-    
 }
 
 //--------------------------------------------------------------
@@ -44,10 +41,10 @@ FrameSourceAsset::~FrameSourceAsset() {
     while(iter != sinks.end()) detachFromSink(*iter++);
     sinks.clear();
     
-    ofRemoveListener(ofEvents().update,this,&FrameSourceAsset::update);
 }
 
-void FrameSourceAsset::update(ofEventArgs& eventsArgs) {
+void FrameSourceAsset::update() {
+
     sourceFrame();
 }
 

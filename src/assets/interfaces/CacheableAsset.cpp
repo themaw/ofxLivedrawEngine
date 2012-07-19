@@ -46,6 +46,13 @@ CacheableAsset::~CacheableAsset() {
 }
 
 //--------------------------------------------------------------
+void CacheableAsset::update() {
+
+    // call subclass
+    DiskBasedAsset::update();
+}
+
+//--------------------------------------------------------------
 void CacheableAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "processing command in cachable." << endl;
     

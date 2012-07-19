@@ -35,6 +35,14 @@ MovieAsset::MovieAsset(const string& _name, const string& _filename) : Cacheable
 MovieAsset::~MovieAsset() {}
 
 //--------------------------------------------------------------
+void MovieAsset::update() {
+
+    
+    // everybody has some work to do
+    CacheableAsset::update();
+}
+
+//--------------------------------------------------------------
 bool MovieAsset::dispose() {
     uncache();
     return true;

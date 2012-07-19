@@ -31,6 +31,7 @@ class DiskBasedAsset : public virtual BaseMediaAsset
 public:
     DiskBasedAsset(const string& _filename);
     virtual ~DiskBasedAsset();
+    virtual void update();
     string getFilename() const;
 //    void fileMoved(const string& newLocation) {};
     

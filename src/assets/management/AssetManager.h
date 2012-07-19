@@ -67,6 +67,11 @@ public:
     //--------------------------------------------------------------
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+    ofxLivedrawEngine* getEngine() {return engine;}    
+
+protected:
+
     //--------------------------------------------------------------
     bool hasAlias(string alias);
     //bool addAlias(BaseMediaAsset* asset, string alias);
@@ -92,9 +97,6 @@ public:
     bool queueRegisterAsset(BaseMediaAsset* asset);
     bool queueUnregisterAsset(const string& alias);
     bool queueUnregisterAsset(BaseMediaAsset* asset);
-
-    bool registerAsset(BaseMediaAsset* asset);
-    bool unregisterAsset(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
     bool attachSourceToSink(string sourceAlias, string sinkAlias);
@@ -121,8 +123,6 @@ public:
 	//  TODO: for file watchers	
 	//	void onNewAsset(MediaAsset* asset);
 
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
     
     void dump();    
     
@@ -132,6 +132,13 @@ protected:
     
 private:
 
+    void processQueues();
+    void updateAssets();
+    
+    // these are private.
+    bool registerAsset(BaseMediaAsset* asset);
+    bool unregisterAsset(BaseMediaAsset* asset);
+
     string validateAssetId(const string& name);
 
     set<BaseMediaAsset*> registerQueue; // items are scheduled for registration here.
@@ -139,6 +146,7 @@ private:
     
 	set<BaseMediaAsset*> assets;   // this is the actual collection of assets that have been allocated
 	set<BaseMediaAsset*>::iterator assetsIter;   // this is the actual collection of assets that have been allocated
+    
     map<string,BaseMediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
     
     ofDirectory dir;

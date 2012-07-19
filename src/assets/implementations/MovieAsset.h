@@ -34,6 +34,9 @@ class MovieAsset : public virtual BaseMediaAsset,
 public:
     MovieAsset(const string& _name, const string& _filename);
     virtual ~MovieAsset();
+    
+    void update();
+    
     bool dispose();
 
     bool doCache();

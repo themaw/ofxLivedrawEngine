@@ -43,6 +43,8 @@ public:
     StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password);
     virtual ~StreamAsset();
     
+    void update();
+    
     void processOscCommand(const string& command, const ofxOscMessage& m);
     
     bool dispose();

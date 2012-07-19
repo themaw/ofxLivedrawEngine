@@ -35,7 +35,7 @@ public:
     FrameSourceAsset();
     virtual ~FrameSourceAsset();
 
-    void update(ofEventArgs& eventsArgs);
+    void update();
 
     void sourceFrame(); // push frames to all receivers
 

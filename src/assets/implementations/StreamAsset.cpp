@@ -59,6 +59,16 @@ StreamAsset::~StreamAsset() {
     // ofPtr!
 }
 
+void StreamAsset::update() {
+    if(isIpVideo) {
+        return ipcam->update();
+    } else {
+        return qtcam->update();
+    }
+
+    // everybody has some work
+    FrameSourceAsset::update();
+}
 //--------------------------------------------------------------
 void StreamAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "Stream asset processing osc." << endl;

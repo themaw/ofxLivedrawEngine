@@ -50,6 +50,11 @@ FrameSinkAsset::~FrameSinkAsset() {
 }
 
 //--------------------------------------------------------------
+void FrameSinkAsset::update() {
+    // nothing to do but wait.
+}
+
+//--------------------------------------------------------------
 bool FrameSinkAsset::sink(ofxVideoFrame frame) {
     if(isSinking()) {
         return frameReceived(frame);

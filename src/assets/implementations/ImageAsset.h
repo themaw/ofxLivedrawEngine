@@ -38,6 +38,8 @@ public:
     virtual ~ImageAsset();
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
+    void update();
+    
     bool dispose();
 
     bool isFrameNew();

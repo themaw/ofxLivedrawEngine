@@ -62,6 +62,15 @@ BufferPlayerAsset::BufferPlayerAsset(const string& _name)
 BufferPlayerAsset::~BufferPlayerAsset() {}
 
 //--------------------------------------------------------------
+void BufferPlayerAsset::update() {
+    player->update();
+    
+    
+    // everybody has some work to do
+    FrameSourceAsset::update();
+}
+
+//--------------------------------------------------------------
 bool BufferPlayerAsset::dispose() {
     detachFromAllSinks();
 }

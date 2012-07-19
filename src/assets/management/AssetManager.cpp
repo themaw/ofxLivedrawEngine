@@ -95,25 +95,17 @@ AssetManager::~AssetManager() {
 //--------------------------------------------------------------
 void AssetManager::update() {
     
-    std::set<BaseMediaAsset*>::iterator iter;
+    // process all de/registration queues
+    processQueues();
+
+    // update assets
+    updateAssets();
     
-    for(iter = registerQueue.begin(); 
-        iter != registerQueue.end(); 
-        iter++) {
-        registerAsset(*iter);
-    }
     
-    registerQueue.clear(); // done!
+
     
-    for(iter = unregisterQueue.begin(); 
-        iter != unregisterQueue.end(); 
-        iter++) {
-        unregisterAsset(*iter);
-    }
     
-    unregisterQueue.clear(); // done!
     
-    // TODO: add directory watchers?  or put those in another thread?
 }
 
 //--------------------------------------------------------------
@@ -282,11 +274,13 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
         return false;
     }
     
+    // get rid of the alias
     if(hasAlias(asset->getName())) { // double check
         assetAliases.erase(asset->getName());
     }
     
-    if(hasOscChild(asset) &&!removeOscChild(asset)) {
+    
+    if(hasOscChild(asset) && !removeOscChild(asset)) {
         ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - failed to remove as an osc child node");
         return false;
     }
@@ -820,6 +814,44 @@ string AssetManager::validateAssetId(const string& name) {
     // return the generated asset id
     return assetId;
 }
+
+//--------------------------------------------------------------
+void AssetManager::processQueues() {
+    
+    // clear register queues
+    if(!registerQueue.empty()) {
+        for(assetsIter = registerQueue.begin(); 
+            assetsIter != registerQueue.end(); 
+            assetsIter++) {
+            registerAsset(*assetsIter);
+        }
+        registerQueue.clear(); // done!
+    }
+    
+    // clear unregister queue
+    if(!unregisterQueue.empty()) {
+        for(assetsIter = unregisterQueue.begin(); 
+            assetsIter != unregisterQueue.end(); 
+            assetsIter++) {
+            unregisterAsset(*assetsIter);
+        }
+        unregisterQueue.clear(); // done!
+    }
+}
+
+//--------------------------------------------------------------
+void AssetManager::updateAssets() {
+    
+    // clear register queues
+    if(!assets.empty()) {
+        for(assetsIter = assets.begin(); 
+            assetsIter != assets.end(); 
+            assetsIter++) {
+            (*assetsIter)->update();
+        }
+    }
+}
+
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------

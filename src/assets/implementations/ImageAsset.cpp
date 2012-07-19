@@ -39,6 +39,17 @@ ImageAsset::ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_
 ImageAsset::~ImageAsset() {}
 
 //--------------------------------------------------------------
+void ImageAsset::update() {
+    // everybody has some work to do
+    
+    
+    
+    // everybod has some work to do
+    DiskBasedAsset::update();
+    FrameSourceAsset::update();
+}
+
+//--------------------------------------------------------------
 void ImageAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "processing image asset " << getName() << endl;
 }

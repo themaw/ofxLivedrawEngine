@@ -34,6 +34,11 @@ DiskBasedAsset::DiskBasedAsset(const string& _filename) {
 DiskBasedAsset::~DiskBasedAsset() {}
 
 //--------------------------------------------------------------
+void DiskBasedAsset::update() {
+// TODO: keep an eye on the files here?
+}
+
+//--------------------------------------------------------------
 string DiskBasedAsset::getFilename() const {
     return filename;
 }

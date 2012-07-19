@@ -34,6 +34,8 @@ public:
     GrabberAsset(const string& _name, int _devId, int _width, int _height);
     virtual ~GrabberAsset();
 
+    void update();
+    
     bool dispose();
     void processOscCommand(const string& command, const ofxOscMessage& m);
     bool isFrameNew();

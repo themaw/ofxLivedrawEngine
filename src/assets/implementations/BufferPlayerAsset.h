@@ -37,6 +37,8 @@ public:
     BufferPlayerAsset(const string& _name);
     virtual ~BufferPlayerAsset();
 
+    void update();
+    
     // Base media asset
     bool dispose();
     

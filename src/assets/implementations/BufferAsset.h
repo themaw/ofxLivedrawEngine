@@ -37,6 +37,8 @@ public:
     BufferAsset(const string& _name, int size, ofxVideoBufferType t);    
     virtual ~BufferAsset();
 
+    void update();
+    
     // From BaseMediaAsset
     bool dispose();
     

@@ -43,6 +43,14 @@ GrabberAsset::GrabberAsset(const string& _name, int _devId, int _width, int _hei
 GrabberAsset::~GrabberAsset() {}
 
 //--------------------------------------------------------------
+void GrabberAsset::update() {
+    grabber->update();
+    
+    // everybody has some work to do
+    FrameSourceAsset::update();
+}
+
+//--------------------------------------------------------------
 bool GrabberAsset::dispose() {
     detachFromAllSinks();
     close();

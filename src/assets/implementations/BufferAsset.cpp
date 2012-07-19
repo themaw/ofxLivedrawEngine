@@ -47,6 +47,15 @@ BufferAsset::BufferAsset(const string& _name, int size, ofxVideoBufferType t)
 BufferAsset::~BufferAsset() {}
 
 //--------------------------------------------------------------
+void BufferAsset::update() {
+    
+    buffer->update(); // update the buffer
+    
+    // everybod has some work to do
+    FrameSinkAsset::update();
+}
+
+//--------------------------------------------------------------
 bool BufferAsset::dispose() {
     detachFromAllSources();
 }

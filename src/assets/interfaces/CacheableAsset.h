@@ -36,6 +36,8 @@ public:
     CacheableAsset(const string& _filename);
     virtual ~CacheableAsset();
 
+    virtual void update();
+    
     void processOscCommand(const string& command, const ofxOscMessage& m);    
 
     virtual bool doCache()   = 0; // must implement in subclasses

@@ -38,6 +38,8 @@ public:
     
     virtual ~FrameSinkAsset();
     
+    void update();
+    
     bool sink(ofxVideoFrame frame);
     virtual bool frameReceived(ofxVideoFrame frame) = 0;
     

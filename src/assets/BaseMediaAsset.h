@@ -18,11 +18,13 @@ enum MediaAssetType
     MEDIA_ASSET_SYPHON
 };
 
-class BaseMediaAsset : virtual public ofxOscRouterBaseNode {
+class BaseMediaAsset : virtual public ofxOscRouterBaseNode, public ofBaseUpdates {
 public:
 	BaseMediaAsset();
 	virtual ~BaseMediaAsset();
 
+    virtual void update() = 0;
+    
     virtual bool dispose() = 0;
     virtual void processOscCommand(const string& command, const ofxOscMessage& m) = 0;
 
