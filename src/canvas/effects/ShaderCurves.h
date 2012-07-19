@@ -34,7 +34,7 @@
 class ShaderCurvesSettings : public ofxOscRouterNode, public ofxEnablerInterface {
     
 public:
-    ShaderCurvesSettings() : ofxOscRouterNode("/curves"), ofxEnablerInterface(true) {
+    ShaderCurvesSettings() : ofxOscRouterNode("curves"), ofxEnablerInterface(true) {
         // just init a normal map
         for(int i = 0; i < LUT_LENGTH; i++) {
             dataLUT[i][0] = ofMap(i, 0, LUT_LENGTH-1, 0, 1);   // R low
@@ -42,16 +42,16 @@ public:
             dataLUT[i][2] = ofMap(i, 0, LUT_LENGTH-1, 0, 1);   // B low
         }
         
-        addOscMethod("/lut");
-        addOscMethod("/enable");
+        addOscMethod("lut");
+        addOscMethod("enable");
     }
     
     ~ShaderCurvesSettings() {
         
     }
     
-    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-        if(isMatch("/lut",pattern)) {
+    void processOscCommand(const string& command, const ofxOscMessage& m) {
+        if(isMatch(command,"lut")) {
             if(validateOscSignature("([if][if][if])([if][if][if])([if][if][if])", m)) {
                 int j = 0;
                 for(int i = 0; i < 3; i++) {
@@ -60,7 +60,7 @@ public:
                     dataLUT[i][2] = m.getArgAsInt32(j++);
                 }
             }
-        } else if(isMatch("/enable",pattern)) {
+        } else if(isMatch(command,"enable")) {
             if(validateOscSignature("[fi]", m)) {
                 setEnabled(getArgAsBoolean(m,0));
             }

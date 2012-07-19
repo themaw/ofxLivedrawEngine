@@ -25,7 +25,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxSimpleSet.h"
 #include "ofxVideoFrame.h"
 #include "FrameSourceAsset.h"
 #include "BaseMediaAsset.h"
@@ -60,7 +59,7 @@ public:
     void sinkingDisabled() {};
     
     // get source list
-    vector<FrameSourceAsset*> getSources();
+//    vector<FrameSourceAsset*> getSources();
     
     bool isSinking();
     void setSinking(bool _sinking);
@@ -68,5 +67,6 @@ private:
     
     bool sinking;
     
-    ofxSimpleSet<FrameSourceAsset*> sources;
+    set<FrameSourceAsset*> sources;
+    set<FrameSourceAsset*>::iterator sourcesIter;
 };

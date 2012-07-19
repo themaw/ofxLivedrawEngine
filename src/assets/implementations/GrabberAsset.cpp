@@ -28,7 +28,9 @@
 //--------------------------------------------------------------
 GrabberAsset::GrabberAsset(const string& _name, int _devId, int _width, int _height) {
     assetType = MEDIA_ASSET_GRABBER;
-    name   = _name;
+
+    addAlias(_name);
+    
     width  = _width;
     height = _height;
     devId  = _devId;
@@ -47,7 +49,7 @@ bool GrabberAsset::dispose() {
 }
 
 //--------------------------------------------------------------
-void GrabberAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void GrabberAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "cout process osc message" << endl;
 }
 

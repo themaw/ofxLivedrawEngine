@@ -43,9 +43,8 @@ FrameSinkAsset::FrameSinkAsset() {
 
 //--------------------------------------------------------------
 FrameSinkAsset::~FrameSinkAsset() {
-    vector<FrameSourceAsset*> _sources = getSources();
-    for(int i = 0; i < _sources.size(); i++) {
-        detachFromSource(_sources[i]);
+    for(sourcesIter = sources.begin(); sourcesIter != sources.end(); sourcesIter++) {
+        detachFromSource(*sourcesIter);
     }
     sources.clear();
 }
@@ -67,7 +66,7 @@ bool FrameSinkAsset::isConnected() {
 //--------------------------------------------------------------
 bool FrameSinkAsset::attachToSource(FrameSourceAsset* source) {
     if(source->attachToSink(this)) {
-        sources.add(source);
+        sources.insert(source);
         return true;
     } else {
         ofLog(OF_LOG_ERROR, "ofxVideoSourceInterface::attachToSource() : error attaching to source.");
@@ -77,9 +76,9 @@ bool FrameSinkAsset::attachToSource(FrameSourceAsset* source) {
 
 //--------------------------------------------------------------
 bool FrameSinkAsset::detachFromAllSources() {
-    vector<FrameSourceAsset*> connected = sources.toArray();
-    for(int i = 0; i < connected.size(); i++) {
-        detachFromSource(connected[i]);
+
+    for(sourcesIter = sources.begin(); sourcesIter != sources.end(); sourcesIter++) {
+        detachFromSource(*sourcesIter);
     }
     return true;
 }
@@ -88,7 +87,7 @@ bool FrameSinkAsset::detachFromAllSources() {
 //--------------------------------------------------------------
 bool FrameSinkAsset::detachFromSource(FrameSourceAsset* source) {
     if(source->detachFromSink(this)) {
-        sources.remove(source);
+        sources.erase(source);
         return true;
     } else {
         ofLog(OF_LOG_ERROR, "ofxVideoSourceInterface::detatchFromSource() : error detatching from source.");
@@ -96,10 +95,10 @@ bool FrameSinkAsset::detachFromSource(FrameSourceAsset* source) {
     }
 }
 
-//--------------------------------------------------------------
-vector<FrameSourceAsset*> FrameSinkAsset::getSources() {
-    return sources.toArray();
-}
+////--------------------------------------------------------------
+//vector<FrameSourceAsset*> FrameSinkAsset::getSources() {
+//    return sources.toArray();
+//}
 
 //--------------------------------------------------------------
 bool FrameSinkAsset::isSinking() {

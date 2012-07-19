@@ -28,7 +28,9 @@
 StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password) {
     assetType  = MEDIA_ASSET_STREAM;
     streamType = _type;
-    name       = _name;
+
+    addAlias(_name);
+    
     url        = _url;
     username   = _username;
     password   = _password;
@@ -45,11 +47,11 @@ StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, str
         qtcam->loadMovie(url); // TODO: construct correct user/pass string
     }
     
-    addOscMethod("/open");
-    addOscMethod("/close");
-    addOscMethod("/start");
-    addOscMethod("/stop");
-    addOscMethod("/size");
+    addOscMethod("open");
+    addOscMethod("close");
+    addOscMethod("start");
+    addOscMethod("stop");
+    addOscMethod("size");
 }
 
 //--------------------------------------------------------------
@@ -58,7 +60,7 @@ StreamAsset::~StreamAsset() {
 }
 
 //--------------------------------------------------------------
-void StreamAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void StreamAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "Stream asset processing osc." << endl;
 }
 

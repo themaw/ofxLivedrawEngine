@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include <set>
+
 #include "ofMain.h"
 #include "CanvasLayer.h"
 
@@ -39,6 +41,6 @@ public:
     
 private:
     string name;
-    vector<CanvasLayer*> groupLayers;
+    set<CanvasLayer*> groupLayers;
     
 };

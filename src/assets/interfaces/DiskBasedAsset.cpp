@@ -25,7 +25,7 @@
 #include "DiskBasedAsset.h"
 
 //--------------------------------------------------------------
-DiskBasedAsset::DiskBasedAsset(string _filename) {
+DiskBasedAsset::DiskBasedAsset(const string& _filename) {
     filename  = _filename;
     diskAsset = true;
 }

@@ -27,26 +27,25 @@
 
 #include "ofMain.h"
 #include "ofxOscRouterNode.h"
-#include <set>
 
-class AssetMetaData : public ofxOscRouterNode,
-                      public ofxSimpleSet<string> {
+class AssetMetaData : public ofxOscRouterNode {
   
 public:
     AssetMetaData();
     virtual ~AssetMetaData();
 
-    void processOscMessage(const string& address, const ofxOscMessage& m);
-
-//    vector<string> getKeywords() const;
-//    bool hasKeyword(string _keyword) const;
-//    void addKeyword(string _keyword);
-//    void removeKeyword(string _keyword);
-//    int  getNumKeywords();
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     
-    void   setDescription(string _description);
-    string getDescription();
+    set<string>& getKeywordsRef();
+    bool containsKeyword(const string& _keyword) const;
+    bool addKeyword(const string& _keyword);
+    bool removeKeyword(const string& _keyword);
+    int  getNumKeywords() const;
+    
+    void   setDescription(const string& _description);
+    string getDescription() const;
 
 protected:
     string description;
+    set<string> keywords;
 };

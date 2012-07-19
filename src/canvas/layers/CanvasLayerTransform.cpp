@@ -31,7 +31,7 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _scale, 
                      int _opacity) : 
 ofxEnablerInterface(true),  
-ofxOscRouterNode("/transform") {
+ofxOscRouterNode("transform") {
     
     position = ofxClampedPoint(_position);
     anchorPoint = ofxClampedPoint(_anchorPoint);
@@ -49,7 +49,7 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _rotation, 
                      ofPoint _scale) : 
 ofxEnablerInterface(true),  
-ofxOscRouterNode("/transform") {
+ofxOscRouterNode("transform") {
     
     position = ofxClampedPoint(_position);
     anchorPoint = ofxClampedPoint(_anchorPoint);
@@ -66,7 +66,7 @@ CanvasLayerTransform::CanvasLayerTransform(ofPoint _position,
                      ofPoint _anchorPoint, 
                      ofPoint _rotation) : 
 ofxEnablerInterface(true),  
-ofxOscRouterNode("/transform") {
+ofxOscRouterNode("transform") {
     
     position = ofxClampedPoint(_position);
     anchorPoint = ofxClampedPoint(_anchorPoint);
@@ -82,7 +82,7 @@ ofxOscRouterNode("/transform") {
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint) : 
 ofxEnablerInterface(true),  
-ofxOscRouterNode("/transform") {
+ofxOscRouterNode("transform") {
     
     position = ofxClampedPoint(_position);
     anchorPoint = ofxClampedPoint(_anchorPoint);
@@ -96,7 +96,7 @@ ofxOscRouterNode("/transform") {
 //--------------------------------------------------------------
 CanvasLayerTransform::CanvasLayerTransform(ofPoint _position) : 
 ofxEnablerInterface(true),  
-ofxOscRouterNode("/transform") {
+ofxOscRouterNode("transform") {
     
     position = ofxClampedPoint(_position);
     scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
@@ -109,7 +109,7 @@ ofxOscRouterNode("/transform") {
 //--------------------------------------------------------------
 CanvasLayerTransform::CanvasLayerTransform() : 
 ofxEnablerInterface(true), 
-ofxOscRouterNode("/transform") {
+ofxOscRouterNode("transform") {
     
     scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     opacity = 255;
@@ -122,12 +122,12 @@ ofxOscRouterNode("/transform") {
 
 //--------------------------------------------------------------
 void CanvasLayerTransform::init() {
-    addOscMethod("/position");
-    addOscMethod("/anchorpoint");
-    addOscMethod("/rotate");
-    addOscMethod("/scale");
-    addOscMethod("/opacity");
-    addOscMethod("/size");
+    addOscMethod("position");
+    addOscMethod("anchorpoint");
+    addOscMethod("rotate");
+    addOscMethod("scale");
+    addOscMethod("opacity");
+    addOscMethod("size");
     
 }
 
@@ -135,9 +135,9 @@ void CanvasLayerTransform::init() {
 CanvasLayerTransform::~CanvasLayerTransform() {};
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::processOscMessage(const string& address, const ofxOscMessage& m) {
+void CanvasLayerTransform::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    if(isMatch(address,"/position")) {
+    if(isMatch(command,"position")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 char c = tolower(m.getArgAsString(0)[0]);
@@ -150,7 +150,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
                 } else if(c == 'z') {
                     setPositionZ(val);
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + address);
+                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
             } else {
@@ -164,7 +164,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
             }
         }
         
-    } else if(isMatch(address,"/anchorpoint")) {
+    } else if(isMatch(command,"anchorpoint")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
@@ -178,7 +178,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
                 } else if(c == 'z') {
                     setAnchorPointZ(val);
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + address);
+                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
                 
@@ -193,7 +193,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
             }
         }
         
-    } else if(isMatch(address,"/rotate")) {
+    } else if(isMatch(command,"rotate")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if][if]?[if]?)", m)) {
             
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
@@ -211,7 +211,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
                     setRotationY(m.getArgAsFloat(2));
                     setRotationZ(m.getArgAsFloat(3));
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + address);
+                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
                 
@@ -228,7 +228,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
             
             
         }
-    } else if(isMatch(address,"/scale")) {            
+    } else if(isMatch(command,"scale")) {            
         if(validateOscSignature("([f][f]?[f]?)|([s][f])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
@@ -242,7 +242,7 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
                 } else if(c == 'z') {
                     setScaleZ(val);
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + address);
+                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
             } else {
@@ -256,12 +256,12 @@ void CanvasLayerTransform::processOscMessage(const string& address, const ofxOsc
             }
         }
         
-    } else if(isMatch(address,"/opacity")) {
+    } else if(isMatch(command,"opacity")) {
         if(validateOscSignature("[if]", m)) {
             float  val = m.getArgAsFloat(0);
             setOpacity(val);
         }
-    } else if(isMatch(address,"/size")) {
+    } else if(isMatch(command,"size")) {
         if(validateOscSignature("[if][if]", m)) {
             int w = m.getArgAsFloat(0);
             int h = m.getArgAsFloat(1);

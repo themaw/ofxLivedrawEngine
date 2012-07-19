@@ -33,7 +33,7 @@ class ShaderAlphaMaskSettings : public ofxOscRouterNode, public ofxEnablerInterf
     
 public:
     
-    ShaderAlphaMaskSettings() : ofxOscRouterNode("/alphamask"), ofxEnablerInterface(true) {
+    ShaderAlphaMaskSettings() : ofxOscRouterNode("alphamask"), ofxEnablerInterface(true) {
         alphaMode = 5;
         invertMask = 0; // 0 = dark-alpha, 1 = light-alpha
         invertSource = 0; // 1 = invert, 0 = thru
@@ -41,13 +41,13 @@ public:
         spread = 0.01; //0.2);  //rtb runs between 0-1
         gain = 1.0; // gain = 0 - 1000
         
-        addOscMethod("/alphamode");
-        addOscMethod("/invertmask");
-        addOscMethod("/invertsource");
-        addOscMethod("/threshold");
-        addOscMethod("/spread");
-        addOscMethod("/gain");
-        addOscMethod("/enable");
+        addOscMethod("alphamode");
+        addOscMethod("invertmask");
+        addOscMethod("invertsource");
+        addOscMethod("threshold");
+        addOscMethod("spread");
+        addOscMethod("gain");
+        addOscMethod("enable");
         
     }
     
@@ -55,33 +55,33 @@ public:
         
     }
     
-    void processOscMessage(const string& pattern, const ofxOscMessage& m) {
-        if(isMatch("/alphamode",pattern)) {
+    void processOscCommand(const string& command, const ofxOscMessage& m) {
+        if(isMatch(command,"alphamode")) {
             if(validateOscSignature("[if]", m)) {
                 setAlphaMode(m.getArgAsInt32(0));
             }
-        } else if(isMatch("/invertmask",pattern)) {
+        } else if(isMatch(command,"invertmask")) {
             if(validateOscSignature("[sfi]", m)) {
                 setInvertMask(getArgAsBoolean(m,0));
             }
-        } else if(isMatch("/invertsource",pattern)) {
+        } else if(isMatch(command,"invertsource")) {
             if(validateOscSignature("[sfi]", m)) {
                 setInvertSource(getArgAsBoolean(m,0));
             }
-        } else if(isMatch("/threshold",pattern)) {
+        } else if(isMatch(command,"threshold")) {
             if(validateOscSignature("[fi]", m)) {
                 setThreshold(m.getArgAsFloat(0));
             }
-        } else if(isMatch("/spread",pattern)) {
+        } else if(isMatch(command,"spread")) {
             if(validateOscSignature("[fi]", m)) {
                 setSpread(m.getArgAsFloat(0));
             }
             
-        } else if(isMatch("/gain",pattern)) {
+        } else if(isMatch(command,"gain")) {
             if(validateOscSignature("[fi]", m)) {
                 setGain(m.getArgAsFloat(0));
             }     
-        } else if(isMatch("/enable",pattern)) {
+        } else if(isMatch(command,"enable")) {
             if(validateOscSignature("[sfi]", m)) {
                 setEnabled(getArgAsBoolean(m,0));
             }

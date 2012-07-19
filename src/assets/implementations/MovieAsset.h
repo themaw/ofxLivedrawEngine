@@ -26,15 +26,13 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
-#include "DiskBasedAsset.h"
 #include "CacheableAsset.h"
 
 class MovieAsset : public virtual BaseMediaAsset,
-                   public virtual DiskBasedAsset,
                    public virtual CacheableAsset
 {
 public:
-    MovieAsset(const string& _name, string _filename);
+    MovieAsset(const string& _name, const string& _filename);
     virtual ~MovieAsset();
     bool dispose();
 

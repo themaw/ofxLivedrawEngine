@@ -41,37 +41,47 @@ bool isBufferAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_
 bool isBufferPlayerAsset(BaseMediaAsset* m) { return m->getAssetType() == MEDIA_ASSET_BUFFERPLAYER; }
 bool isSyphonAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_SYPHON;    }
 
+
+ImageAsset*   toImageAsset(BaseMediaAsset* asset)   { return dynamic_cast<ImageAsset*>(asset); }
+MovieAsset*   toMovieAsset(BaseMediaAsset* asset)   { return dynamic_cast<MovieAsset*>(asset); }
+BufferAsset*  toBufferAsset(BaseMediaAsset* asset)  { return dynamic_cast<BufferAsset*>(asset); }
+BufferPlayerAsset* toBufferPlayerAsset(BaseMediaAsset* asset) { return dynamic_cast<BufferPlayerAsset*>(asset); }
+GrabberAsset* toGrabberAsset(BaseMediaAsset* asset) { return dynamic_cast<GrabberAsset*>(asset); }
+StreamAsset*  toStreamAsset(BaseMediaAsset* asset)  { return dynamic_cast<StreamAsset*>(asset); }
+SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<SyphonAsset*>(asset); }
+
+
 //--------------------------------------------------------------
-AssetManager::AssetManager() : ofxOscRouterNode("/media") {
+AssetManager::AssetManager() : ofxOscRouterNode("media") {
     
     // TODO: move some of these to their respective asset implementations
     
-    addOscNodeAlias("/med");
-    addOscNodeAlias("/m");
+//    addOscNodeAlias("med");
+//    addOscNodeAlias("m");
     
-    // give an asset a new alias
-    addOscMethod("/alias"); // allows id aliasing
-    
-    // delte an asset
-    addOscMethod("/delete");
-    
-    // for disk data
-    addOscMethod("/cache");
-    addOscMethod("/uncache");
-    
-    // for live data (move to streaming type)
-    addOscMethod("/start");
-    addOscMethod("/stop");
-
-    // utility
-    addOscMethod("/dump");
-    
-
-    
-    // buffer
-    addOscMethod("/buffer");
-    // buffer
-    addOscMethod("/player");
+//    // give an asset a new alias
+//    addOscMethod("alias"); // allows id aliasing
+//    
+//    // delte an asset
+//    addOscMethod("delete");
+//    
+//    // for disk data
+//    addOscMethod("cache");
+//    addOscMethod("uncache");
+//    
+//    // for live data (move to streaming type)
+//    addOscMethod("start");
+//    addOscMethod("stop");
+//
+//    // utility
+    addOscMethod("dump");
+//    
+//
+//    
+//    // buffer
+//    addOscMethod("buffer");
+//    // buffer
+//    addOscMethod("player");
     
     
     loadAssets();
@@ -80,11 +90,29 @@ AssetManager::AssetManager() : ofxOscRouterNode("/media") {
 //--------------------------------------------------------------
 AssetManager::~AssetManager() {
     ofLog(OF_LOG_NOTICE, "Destroying Asset Manager.");
-//    delete bufferManager;
 }
 
 //--------------------------------------------------------------
 void AssetManager::update() {
+    
+    std::set<BaseMediaAsset*>::iterator iter;
+    
+    for(iter = registerQueue.begin(); 
+        iter != registerQueue.end(); 
+        iter++) {
+        registerAsset(*iter);
+    }
+    
+    registerQueue.clear(); // done!
+    
+    for(iter = unregisterQueue.begin(); 
+        iter != unregisterQueue.end(); 
+        iter++) {
+        unregisterAsset(*iter);
+    }
+    
+    unregisterQueue.clear(); // done!
+    
     // TODO: add directory watchers?  or put those in another thread?
 }
 
@@ -99,43 +127,45 @@ bool AssetManager::attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsse
 }
 
 //--------------------------------------------------------------
-void AssetManager::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void AssetManager::processOscCommand(const string& command, const ofxOscMessage& m) {
 
-    if(isMatch(pattern,"/alias")) {
-        if(validateOscSignature("ss", m)) {
-            string existingAlias = m.getArgAsString(0);
-            string additionalAlias = m.getArgAsString(1);
-            BaseMediaAsset * a = getAsset(existingAlias);
-            if(a != NULL) {
-                addAlias(a,additionalAlias);
-            } else {
-                ofLog(OF_LOG_WARNING,"Attempted to set alias, but media asset did not exist.");
-            }
-        }
-    } else if(isMatch(pattern,"/delete")) {
+//    if(isMatch(command,"alias")) {
+//        if(validateOscSignature("ss", m)) {
+//            string existingAlias = m.getArgAsString(0);
+//            string additionalAlias = m.getArgAsString(1);
+//            BaseMediaAsset * a = getAsset(existingAlias);
+//            if(a != NULL) {
+//                addAlias(a,additionalAlias);
+//            } else {
+//                ofLog(OF_LOG_WARNING,"Attempted to set alias, but media asset did not exist.");
+//            }
+//        }
+//    } else 
+//    
+    if(isMatch(command,"delete")) {
         if(validateOscSignature("s", m)) {
             string alias = m.getArgAsString(0);
-            bool ret = unregisterAsset(alias);
+            bool ret = queueUnregisterAsset(alias);
             if(!ret) {
                 cout << "error deleting " << alias << endl; 
             }
         }
-    } else if(isMatch(pattern,"/start")) {
+    } else if(isMatch(command,"start")) {
         string alias = m.getArgAsString(0);
         if(validateOscSignature("s", m)) {
             startAsset(alias);
         }
-    } else if(isMatch(pattern,"/stop")) {
+    } else if(isMatch(command,"stop")) {
         string alias = m.getArgAsString(0);
         if(validateOscSignature("s", m)) {
             stopAsset(alias);
         }
-    } else if(isMatch(pattern,"/dump")) {
+    } else if(isMatch(command,"dump")) {
         dump();
-    } else if(isMatch(pattern, "/buffer")) {
+    } else if(isMatch(command, "buffer")) {
         cout << "in buffer manager" << endl;
         
-//        if(isMatch(pattern,"/new")) {
+//        if(isMatch(command,"new")) {
 //            cout << "making new buffer" << endl;
 //            
 //            if(validateOscSignature("s(is?)?", m)) {
@@ -166,7 +196,7 @@ void AssetManager::processOscMessage(const string& pattern, const ofxOscMessage&
 //                    cout << "unknown num args." << endl;
 //                }
 //            }
-//        } else if(isMatch(pattern,"/dump")) {
+//        } else if(isMatch(command,"dump")) {
 //            vector<FrameBuffer*> b = buffers.toArray();
 //            cout << "dumping buffer" << endl;
 //            for(int i = 0; i < b.size(); i++) {
@@ -175,23 +205,43 @@ void AssetManager::processOscMessage(const string& pattern, const ofxOscMessage&
 //            
 //        }
 
-    } else if(isMatch(pattern, "/player")) {
+    } else if(isMatch(command,"player")) {
         cout << "in player manager" << endl;
     }                      
                       
      
 }
 
+
+//--------------------------------------------------------------
+bool AssetManager::queueRegisterAsset(BaseMediaAsset* asset) {
+    asset->setNodeActive(false);
+    return registerQueue.insert(asset).second;
+}
+
+//--------------------------------------------------------------
+bool AssetManager::queueUnregisterAsset(const string& alias) {
+    BaseMediaAsset* toDelete = getAsset(alias);
+    if(toDelete != NULL) {
+        return queueUnregisterAsset(toDelete);
+    } else {
+        return false;   
+    }
+}
+
+//--------------------------------------------------------------
+bool AssetManager::queueUnregisterAsset(BaseMediaAsset* asset) {
+    asset->setNodeActive(false);
+    return unregisterQueue.insert(asset).second;
+}
+
 //--------------------------------------------------------------
 bool AssetManager::registerAsset(BaseMediaAsset* asset) {
-    // generate its uniqe id
-    string assetId = generateAssetId(asset);
-
-    // create a link to the asset manager
-    //asset->setAssetManager(this);
     
-    if(!addAlias(asset, assetId)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - failed to add asset alias");
+    if(!hasAlias(asset->getName())) { // double check
+        assetAliases[asset->getName()] = asset;
+    } else {
+        ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - alias already exists");
         return false;
     }
     
@@ -200,28 +250,26 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
         return false;
     }
 
-    if(!assets.add(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - failed to add asset");
-        return false;
+    // turn it on
+    asset->setNodeActive(true);
+
+
+    assets.insert(asset);
+    
+    // special procedures
+    if(isMovieAsset(asset)) {
+        toMovieAsset(asset)->setCacheProvider(this);
     }
+    
 
     return true;
-}
-
-
-//--------------------------------------------------------------
-bool AssetManager::unregisterAsset(string alias) {
-    BaseMediaAsset* toDelete = getAsset(alias);
-    if(toDelete != NULL) {
-        return unregisterAsset(toDelete);
-    } else {
-        return false;   
-    }
 }
 
 //--------------------------------------------------------------
 bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
+    cout << "unregistering asset --- " << asset->getName() << endl;
+    
     // is there a there there?
     if(asset == NULL) {
         ofLog(OF_LOG_WARNING, "AssetManager::unregisterAsset - asset is NULL ");
@@ -229,40 +277,34 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
     }
     
     // tell the object to dispose of itself (free connections, kill other things, etc)
-    if(asset->dispose()) {
+    if(!asset->dispose()) {
         ofLog(OF_LOG_WARNING, "AssetManager::unregisterAsset - unable to dispose " + asset->getName());
         return false;
     }
     
-    if(!removeOscChild(asset)) {
+    if(hasAlias(asset->getName())) { // double check
+        assetAliases.erase(asset->getName());
+    }
+    
+    if(hasOscChild(asset) &&!removeOscChild(asset)) {
         ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - failed to remove as an osc child node");
         return false;
     }
-
-    // get a list of the asset's aliases and remove them
-    vector<string> aliases = getAliases(asset);
-    for(int i = 0; i < aliases.size(); i++) {
-        if(!removeAlias(aliases[i])) {
-            ofLog(OF_LOG_WARNING, "AssetManager::unregisterAsset - unable to remove alias " + aliases[i] + " for " + asset->getName());
-            return false;
-        }
-    }
     
     // remove the asset pointer from the assets set
-    if(!assets.remove(asset)) {
-        ofLog(OF_LOG_WARNING, "AssetManager::unregisterAsset - unable to remove asset " + asset->getName());
-        return false;
-    }
+    assets.erase(asset);
     
     // free the memory
     delete asset; // free the memory
-    
+    asset = NULL;
     // success
     return true;
 }
 
 //--------------------------------------------------------------
 bool AssetManager::cacheAsset(CacheableAsset* asset) {
+    cout << "AssetManager::cacheAsset" << endl;
+    
     if(asset == NULL) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset is NULL");
         return false;
@@ -271,10 +313,11 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
     BufferAsset* cacheAsset = addBuffer("BUFFER_" + asset->getName(), 1, OFX_VIDEO_BUFFER_FIXED);
     
     if(cacheAsset != NULL) {
+        cacheAsset->getBuffer()->loadMovie(asset->getFilename());
         asset->setCacheBuffer(cacheAsset);
         return true;
     } else {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Only non-live assets can be cached");
+        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - could not create buffer.");
         return false;
     }
 }
@@ -283,15 +326,17 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
 bool AssetManager::uncacheAsset(CacheableAsset* asset) {
 
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset is NULL");
+        ofLog(OF_LOG_WARNING, "AssetManager::uncacheAsset - Asset is NULL");
         return false;
     }
 
-    unregisterAsset(asset);
-    asset->setCacheBuffer(NULL);
-
-    return true;
-
+    if(!queueUnregisterAsset(asset->getCacheBuffer())) {
+        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Unable to uncache buffer.");
+        return false;
+    } else {
+        asset->setCacheBuffer(NULL);
+        return true;
+    }
 }
 
 //--------------------------------------------------------------
@@ -335,85 +380,118 @@ bool AssetManager::stopAsset(string alias) {
 
 //--------------------------------------------------------------
 ImageAsset* AssetManager::addImage(string name, string filename) {
-   ImageAsset* asset = new ImageAsset(name, filename);
+    ImageAsset* asset = new ImageAsset(validateAssetId(name), filename);
+
+    queueRegisterAsset(asset);
     
-    if(!registerAsset(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed to add image");
-        unregisterAsset(asset);
-        assert(asset == NULL);
-        return asset;
-    }
+//    if(!registerAsset(asset)) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed to add image");
+//        if(!unregisterAsset(asset)) {
+//            ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed unregister problem image.");
+//            assert(asset == NULL);
+//            return asset;
+//        } else {
+//            return asset;
+//        }
+//    }
 
     return asset;
 }
 
 //--------------------------------------------------------------
 MovieAsset* AssetManager::addMovie(string name, string filename) {
-    MovieAsset* asset = new MovieAsset(name, filename);
+    MovieAsset* asset = new MovieAsset(validateAssetId(name), filename);
     
-    if(!registerAsset(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed to add image");
-        unregisterAsset(asset);
-        assert(asset == NULL);
-        return asset;
-    }
+    queueRegisterAsset(asset);
+
+//    if(!registerAsset(asset)) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::addMovie - failed to add image");
+//        if(!unregisterAsset(asset)) {
+//            ofLog(OF_LOG_ERROR, "AssetManager::addMovie - failed unregister problem image.");
+//            assert(asset == NULL);
+//            return asset;
+//        } else {
+//            return asset;
+//        }
+//    }
     
     return asset;
 }
 
 //--------------------------------------------------------------
 StreamAsset* AssetManager::addStream(string name, StreamType type, string url, string username, string password) {
+    StreamAsset* asset = new StreamAsset(validateAssetId(name), type, url, username, password);
     
-    StreamAsset* asset = new StreamAsset(name, type, url, username, password);
-    
-    if(!registerAsset(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed to add image");
-        unregisterAsset(asset);
-        assert(asset == NULL);
-        return asset;
-    }
+    queueRegisterAsset(asset);
+
+//    if(!registerAsset(asset)) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::addStream - failed to add image");
+//        if(!unregisterAsset(asset)) {
+//            ofLog(OF_LOG_ERROR, "AssetManager::addStream - failed unregister problem image.");
+//            assert(asset == NULL);
+//            return asset;
+//        } else {
+//            return asset;
+//        }
+//    }
     
     return asset;
 }
 
 //--------------------------------------------------------------
 BufferAsset* AssetManager::addBuffer(string name, int size, ofxVideoBufferType t) {
-    BufferAsset* asset = new BufferAsset(name, size, t);
+    BufferAsset* asset = new BufferAsset(validateAssetId(name), size, t);
     
-    if(!registerAsset(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::addBuffer - failed to add buffer");
-        unregisterAsset(asset);
-        assert(asset == NULL);
-        return asset;
-    }
+    queueRegisterAsset(asset);
+
+//    if(!registerAsset(asset)) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::addBuffer - failed to add image");
+//        if(!unregisterAsset(asset)) {
+//            ofLog(OF_LOG_ERROR, "AssetManager::addBuffer - failed unregister problem image.");
+//            assert(asset == NULL);
+//            return asset;
+//        } else {
+//            return asset;
+//        }
+//    }
     
     return asset;
 }
 
 //--------------------------------------------------------------
 BufferPlayerAsset* AssetManager::addBufferPlayer(string name) {
-    BufferPlayerAsset* asset = new BufferPlayerAsset(name);
-    
-    if(!registerAsset(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::addBufferPlayer - failed to add buffer");
-        unregisterAsset(asset);
-        assert(asset == NULL);
-        return asset;
-    }
+    BufferPlayerAsset* asset = new BufferPlayerAsset(validateAssetId(name));
+    queueRegisterAsset(asset);
+
+//    if(!registerAsset(asset)) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::addBufferPlayer - failed to add image");
+//        if(!unregisterAsset(asset)) {
+//            ofLog(OF_LOG_ERROR, "AssetManager::addBufferPlayer - failed unregister problem image.");
+//            assert(asset == NULL);
+//            return asset;
+//        } else {
+//            return asset;
+//        }
+//    }
     
     return asset;
 }
 
 //--------------------------------------------------------------
 GrabberAsset* AssetManager::addGrabber(string name, int devId, int width, int height) {
-    GrabberAsset* asset = new GrabberAsset(name, devId, width, height);
-    
-    if(!registerAsset(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::addGrabber - failed to add buffer");
-        unregisterAsset(asset);
-        assert(asset == NULL);
-        return asset;
-    }
+    GrabberAsset* asset = new GrabberAsset(validateAssetId(name), devId, width, height);
+    queueRegisterAsset(asset);
+
+//    if(!registerAsset(asset)) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::addGrabber - failed to add image");
+//        if(!unregisterAsset(asset)) {
+//            ofLog(OF_LOG_ERROR, "AssetManager::addGrabber - failed unregister problem image.");
+//            assert(asset == NULL);
+//            return asset;
+//        } else {
+//            return asset;
+//        }
+//    }    
     
     return asset;
 }
@@ -428,38 +506,59 @@ bool AssetManager::hasAlias(string alias) {
     return assetAliases.find(alias) != assetAliases.end();
 }
 
-//--------------------------------------------------------------
-bool AssetManager::addAlias(BaseMediaAsset* asset, string alias) {
-    if(!hasAlias(alias)) {
-        assetAliases[alias] = asset;
-        asset->addOscNodeAlias("/"+alias); // add the osc node alias
-        return true;
-    } else {
-        ofLog(OF_LOG_WARNING, "AssetManager::addAlias - failed to add alias because it already exists.");
-        return false;
-    }
-} 
+////--------------------------------------------------------------
+//bool AssetManager::addAlias(BaseMediaAsset* asset, string alias) {
+//    if(!hasAlias(alias)) {
+//        assetAliases[alias] = asset;
+//        asset->addOscNodeAlias(alias); // add the osc node alias
+//        return true;
+//    } else {
+//        ofLog(OF_LOG_WARNING, "AssetManager::addAlias - failed to add alias because it already exists.");
+//        return false;
+//    }
+//} 
 
-//--------------------------------------------------------------
-bool AssetManager::removeAlias(string alias) {
-    
-    BaseMediaAsset* asset = getAsset(alias);
-    if(asset == NULL) return false;
-    
-    vector<string> aliases = getAliases(asset);
-    
-    if(aliases.size() > 1) {
-        assetAliases.erase(alias); // remove the alias
-        asset->removeOscNodeAlias("/"+alias); // remove the node alias
-        return true;
-    } else if(aliases.size() == 0) {
-        ofLog(OF_LOG_ERROR, "AssetManager::removeAlias - found an asset with no aliases.  This is a problem.");
-        return false;
-    } else {
-        ofLog(OF_LOG_WARNING, "AssetManager::removeAlias - failed to remove alias because it was the last one for that asset.");
-        return false;
-    }
-}
+////--------------------------------------------------------------
+//bool AssetManager::removeAlias(string alias) {
+//    
+//    BaseMediaAsset* asset = getAsset(alias);
+//    if(asset == NULL) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::removeAlias - alias doesn't exist.");
+//        return false;
+//    }
+//    
+//    vector<string> aliases = getAliases(asset);
+//    
+//    if(aliases.size() > 1) {
+//        assetAliases.erase(alias); // remove the alias
+//        asset->removeOscNodeAlias(alias); // remove the node alias
+//        return true;
+//    } else if(aliases.size() == 0) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::removeAlias - found an asset with no aliases.  This is a problem.");
+//        return false;
+//    } else {
+//        ofLog(OF_LOG_WARNING, "AssetManager::removeAlias - failed to remove alias because it was the last one for that asset.");
+//        return false;
+//    }
+//}
+
+//bool AssetManager::removeAliasesForAsset(BaseMediaAsset* asset) {
+//    
+//    if(asset == NULL) {
+//        ofLog(OF_LOG_ERROR, "AssetManager::removeAliases - asset is null.");
+//        return false;
+//    }
+//
+//    vector<string> aliases = getAliases(asset);
+//    for(int i = 0; i < aliases.size(); i++) {
+//        assetAliases.erase(aliases[i]); // remove the alias
+//        asset->removeOscNodeAlias(aliases[i]); // remove the node alias
+//    }
+//    
+//    return true;
+//}
+
+
 
 ////--------------------------------------------------------------
 //bool AssetManager::changeAlias(string fromAlias, string toAlias) {
@@ -482,18 +581,18 @@ bool AssetManager::removeAlias(string alias) {
 //    
 //}
 
-//--------------------------------------------------------------
-vector<string> AssetManager::getAliases(BaseMediaAsset* asset) {
-    vector<string> aliases;
-    
-    map<string,BaseMediaAsset*>::iterator iter = assetAliases.begin();
-    
-    for(; iter != assetAliases.end(); iter++) {
-        if(iter->second == asset) aliases.push_back(iter->first);
-    }
-    
-    return aliases;
-}
+////--------------------------------------------------------------
+//vector<string> AssetManager::getAliases(BaseMediaAsset* asset) {
+//    vector<string> aliases;
+//    
+//    map<string,BaseMediaAsset*>::iterator iter = assetAliases.begin();
+//    
+//    for(; iter != assetAliases.end(); iter++) {
+//        if(iter->second == asset) aliases.push_back(iter->first);
+//    }
+//    
+//    return aliases;
+//}
 
 //--------------------------------------------------------------
 void AssetManager::loadAssets() {
@@ -689,12 +788,11 @@ BaseMediaAsset* AssetManager::getAsset(string alias) {
 }
 
 void AssetManager::dump() {
-    vector<BaseMediaAsset*> vec = assets.toArray();
-    for(int i = 0; i < vec.size(); i++) {
-        cout << vec[i]->toString() << endl;
+    for(assetsIter = assets.begin(); assetsIter != assets.end(); assetsIter++) {
+        cout << (*assetsIter)->toString() << endl;
     }
-        
-//        std::map<string,MediaAsset*>::iterator iter;
+
+    //        std::map<string,MediaAsset*>::iterator iter;
 //        
 //        for (iter = assetAliases.begin(); iter != assetAliases.end(); ++iter) {
 //            cout << iter->first << "=>";
@@ -704,20 +802,22 @@ void AssetManager::dump() {
 
 
 //--------------------------------------------------------------
-string AssetManager::generateAssetId(BaseMediaAsset* asset) {
-    string assetId = asset->getName();
+string AssetManager::validateAssetId(const string& name) {
+    // get the original asset name
+    string assetName = name;
 
-    string normalizedAssetId = normalizeMethodName(assetId);
+    // get the normalized name for OSC purposes
+    string assetId = normalizeOscNodeName(assetName);
     
-    if(icompare(assetId, normalizedAssetId) != 0) {
-        ofLog(OF_LOG_ERROR, "AssetManager::generateAssetId() - changed name from " + assetId + " to " + normalizedAssetId);
+    // if the alias exists, add a random suffix
+    if(hasAlias(assetId)) assetId +=  ("_" + ofToString((int)ofRandom(10000)));
+    
+    // toss a warning if the asset id differs from the asset's original name
+    if(!isMatch(assetName, assetId)) {
+        ofLog(OF_LOG_WARNING, "AssetManager::generateAssetId() - " + assetName + " produced variant : " + assetId + ".");
     }
     
-    // this is very unlikely to happen
-    while(hasAlias(assetId)) {
-        assetId = assetId + "_" + ofToString((int)ofGetElapsedTimeMillis());
-    }
-    
+    // return the generated asset id
     return assetId;
 }
 

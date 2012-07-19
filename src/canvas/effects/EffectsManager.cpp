@@ -25,9 +25,9 @@
 #include "EffectsManager.h"
 
 //--------------------------------------------------------------
-EffectsManager::EffectsManager() : ofxOscRouterNode("/effects") {
-    addOscNodeAlias("/eff");
-    addOscNodeAlias("/e");
+EffectsManager::EffectsManager() : ofxOscRouterNode("effects") {
+    addOscNodeAlias("eff");
+    addOscNodeAlias("e");
 }
 
 //--------------------------------------------------------------
@@ -45,7 +45,7 @@ void EffectsManager::update() {
 // deal with OSC
 
 //--------------------------------------------------------------
-void EffectsManager::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void EffectsManager::processOscCommand(const string& command, const ofxOscMessage& m) {
  
     cout << "effects manager"  << endl;
     

@@ -25,7 +25,7 @@
 #include "CanvasLayer.h"
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos, CanvasLayer* _layerParent) : ofxOscRouterNode("/"+name) {
+CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos, CanvasLayer* _layerParent) : ofxOscRouterNode(name) {
     cout << "_layerManager=" << _layerManager << " " << name << " " << pos << " cl=" << endl;
     
     
@@ -37,7 +37,7 @@ CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint
 }
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos) : ofxOscRouterNode("/"+name) {
+CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos) : ofxOscRouterNode(name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = NULL;
@@ -46,7 +46,7 @@ CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint
 }
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : ofxOscRouterNode("/"+name) {
+CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : ofxOscRouterNode(name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = NULL;
@@ -55,10 +55,19 @@ CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : ofxOs
 
 //--------------------------------------------------------------
 CanvasLayer::~CanvasLayer() {
-    if(fbo != NULL) delete fbo;
-    if(sourcePlayer != NULL) delete sourcePlayer;
-    if(maskPlayer != NULL)   delete maskPlayer;
-    // TODO : what do do about kids? delete the kids or set them to root?
+    if(fbo != NULL) {
+        delete fbo;
+        fbo = NULL;
+    }
+    if(sourcePlayer != NULL) {
+        delete sourcePlayer;
+        sourcePlayer = NULL;
+    }
+    
+    if(maskPlayer != NULL) {
+        delete maskPlayer;
+        maskPlayer = NULL;
+    } // TODO : what do do about kids? delete the kids or set them to root?
 }
 
 //--------------------------------------------------------------
@@ -67,9 +76,9 @@ void CanvasLayer::init() {
     maskPlayer = NULL;
     
 //    sourcePlayer = new FrameBufferPlayer(this);
-//    sourcePlayer->addOscNodeAlias("/source");
+//    sourcePlayer->addOscNodeAlias("source");
 //    maskPlayer = new FrameBufferPlayer(this);
-//    maskPlayer->addOscNodeAlias("/mask");
+//    maskPlayer->addOscNodeAlias("mask");
 //
 //    addOscChild(sourcePlayer);
 //    addOscChild(maskPlayer);
@@ -87,13 +96,13 @@ void CanvasLayer::init() {
     addOscChild(&transform); // add the transform as an OSC child
     //    addOscChild(&effectsChain); // add the associated effects chain as a child
     
-    addOscMethod("/order");
-    addOscMethod("/lock");
-    addOscMethod("/solo");
-    addOscMethod("/label");
+    addOscMethod("order");
+    addOscMethod("lock");
+    addOscMethod("solo");
+    addOscMethod("label");
     
     
-    addOscMethod("/swap");
+    addOscMethod("swap");
     
     
     
@@ -247,11 +256,11 @@ void CanvasLayer::setRectangle(ofRectangle rect) {
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void CanvasLayer::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    cout << "CanvasLayer::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << pattern << "/" << endl;
+    cout << "CanvasLayer::const string& command, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << command << "/" << endl;
     
-    if(isMatch(pattern, "/order")) {
+    if(isMatch(command,"order")) {
         
         cout << "IN HERE " << endl;
         
@@ -277,15 +286,15 @@ void CanvasLayer::processOscMessage(const string& pattern, const ofxOscMessage& 
 
             
         }
-    } else if(isMatch(pattern, "/lock")) {
+    } else if(isMatch(command,"lock")) {
         if(validateOscSignature("[fi]", m)) {
             layerManager->setLayerLock(this, getArgAsBoolean(m,0));
         }
-    } else if(isMatch(pattern, "/solo")) {
+    } else if(isMatch(command,"solo")) {
         if(validateOscSignature("[fi]", m)) {
             layerManager->setLayerSolo(this, getArgAsBoolean(m,0));
         }
-    } else if(isMatch(pattern, "/label")) {
+    } else if(isMatch(command,"label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
             label = getArgsAsColor(m, 0);
         }
@@ -300,6 +309,7 @@ void CanvasLayer::processOscMessage(const string& pattern, const ofxOscMessage& 
 //    /*
 //    if(source->isLoaded()) {
 //        delete source;
+//        source = NULL;
 //        source = new ofVideoPlayer();
 //    }
 //    
@@ -334,7 +344,7 @@ string CanvasLayer::getName() {
 //--------------------------------------------------------------
 void CanvasLayer::setName(string _name) {
     layerName = _name;
-    addOscNodeAlias("/"+layerName);
+    addOscNodeAlias(layerName);
 }
 
 //--------------------------------------------------------------

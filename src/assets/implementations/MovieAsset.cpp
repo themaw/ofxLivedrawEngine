@@ -26,9 +26,9 @@
 #include "MovieAsset.h"
 
 //--------------------------------------------------------------
-MovieAsset::MovieAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
+MovieAsset::MovieAsset(const string& _name, const string& _filename) : CacheableAsset(_filename), DiskBasedAsset(_filename){
     assetType = MEDIA_ASSET_MOVIE;
-    name      = _name;
+    addAlias(_name);
 }
 
 //--------------------------------------------------------------
@@ -41,10 +41,10 @@ bool MovieAsset::dispose() {
 }
 
 // TODO: we don't even need this if we don't have any other messages.
-//   void processOscMessage(const string& pattern, const ofxOscMessage& m) {
+//   void processOscCommand(const string& command, const ofxOscMessage& m) {
 //       
 //       if(isMatch(pattern, "/cache") || isMatch(pattern, "/uncache")) {
-//           Cacheable::processOscMessage(pattern, m);
+//           Cacheable::processOscCommand(pattern, m);
 //       } else {
 //           cout << "processing message inside of movie asset." << endl;
 //       }
@@ -56,10 +56,35 @@ bool MovieAsset::dispose() {
 
 //--------------------------------------------------------------
 bool MovieAsset::doCache() {
-    return hasCacheProvider() && cacheProvider->cacheAsset(this);
+    
+    cout << "MovieAsset::doCache  " << endl;
+
+    if(hasCacheProvider()) {
+        cout << "MovieAsset::caching asset  " << endl;
+
+        return cacheProvider->cacheAsset(this);
+    } else {
+        cout << "didn't have a cache provider  " << endl;
+        
+        return false;
+    }
+    
 }
 
 //--------------------------------------------------------------
 bool MovieAsset::doUncache() {
-    return hasCacheProvider() && cacheProvider->uncacheAsset(this);
+
+    cout << "MovieAsset::doUncache  " << endl;
+
+    
+    if(hasCacheProvider()) {
+        cout << "MovieAsset::uncaching asset  " << endl;
+        
+        return cacheProvider->uncacheAsset(this);
+    } else {
+        cout << "didn't have a cache provider  " << endl;
+        
+        return false;
+    }
+
 }

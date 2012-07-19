@@ -36,7 +36,7 @@ public:
     SyphonAsset(const string& _name);
     virtual ~SyphonAsset();
 
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     bool dispose();
     bool isFrameNew();    
     ofPixelsRef getPixelsRef();

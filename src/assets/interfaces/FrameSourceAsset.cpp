@@ -54,7 +54,7 @@ void FrameSourceAsset::update(ofEventArgs& eventsArgs) {
 
 //--------------------------------------------------------------
 void FrameSourceAsset::sourceFrame() {
-    if(sinks.isEmpty()) return; 
+    if(sinks.empty()) return; 
     
     if(isFrameNew()) {
         // anyone who referenced the old frame will keep it.
@@ -75,6 +75,12 @@ bool FrameSourceAsset::hasSinks() const {
 }
 
 //--------------------------------------------------------------
+bool FrameSourceAsset::hasSink(FrameSinkAsset* sink) const {
+    return sinks.find(sink) != sinks.end();
+}
+
+
+//--------------------------------------------------------------
 bool FrameSourceAsset::attachToSink(FrameSinkAsset* sink) {
     if(openOnFirstConnection && !hasSinks() && !isLoaded()) {
         open();
@@ -84,7 +90,8 @@ bool FrameSourceAsset::attachToSink(FrameSinkAsset* sink) {
         }
     }
     
-    if(sinks.add(sink)) {
+    if(!hasSink(sink)) {
+        sinks.insert(sink);
         sinkWasAttached(sink);
         return true;
     } else {
@@ -99,8 +106,10 @@ bool FrameSourceAsset::attachToSink(FrameSinkAsset* sink) {
 
 //--------------------------------------------------------------
 bool FrameSourceAsset::detachFromSink(FrameSinkAsset* sink) {
-    if(sinks.remove(sink)) {
+    if(hasSink(sink)) {
+        sinks.erase(sink);
         sinkWasDetatched(sink);
+
         if(closeOnLastDisconnect && !hasSinks() && isLoaded()) {
             close();
             //            if(!close())  ofLog(OF_LOG_ERROR, "ofxVideoSourceInterface::close() : error closing source.");
@@ -114,16 +123,11 @@ bool FrameSourceAsset::detachFromSink(FrameSinkAsset* sink) {
 
 //--------------------------------------------------------------
 bool FrameSourceAsset::detachFromAllSinks() {
-    vector<FrameSinkAsset*> connected = sinks.toArray();
-    for(int i = 0; i < connected.size(); i++) {
-        detachFromSink(connected[i]);
+
+    for(sinkIter = sinks.begin(); sinkIter != sinks.end(); sinkIter++) {
+        detachFromSink(*sinkIter);
     }
     return true;
-}
-
-//--------------------------------------------------------------
-vector<FrameSinkAsset*> FrameSourceAsset::getSinks() const {
-    return sinks.toArray();
 }
 
 //--------------------------------------------------------------

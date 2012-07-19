@@ -28,7 +28,6 @@
 //--------------------------------------------------------------
 BaseMediaAsset::BaseMediaAsset() {
     
-    name      = "UNDEFINED";
 	assetType = MEDIA_ASSET_UNDEFINED;
     
     canSource = false;
@@ -36,14 +35,22 @@ BaseMediaAsset::BaseMediaAsset() {
     canCache  = false;
     diskAsset = false;
     
+    bNodeActive = false;
+    
     addOscChild(&meta);
 }
 
 //--------------------------------------------------------------
 BaseMediaAsset::~BaseMediaAsset() {}
 
+//--------------------------------------------------------------
+set<string>& BaseMediaAsset::getOscNodeAliasesRef() {
+    return aliases;
+}
+
+//--------------------------------------------------------------
 string BaseMediaAsset::getName() const {
-    return name;
+    return getFirstAlias();
 }
 
 //--------------------------------------------------------------
@@ -97,55 +104,39 @@ bool BaseMediaAsset::isDiskAsset() const {
     return diskAsset;
 }
 
+//--------------------------------------------------------------
+set<string>& BaseMediaAsset::getAliasesRef() {
+    return aliases;
+}
 
-////--------------------------------------------------------------
-//bool MediaAsset::isCached() {
-//    return cacheBuffer != NULL;
-//}
-//
-//void MediaAsset::setBuffer(FrameBuffer* _buffer) {
-//    bufferAsset = _buffer;
-//}
-//
-//FrameBuffer* MediaAsset::getBuffer() {
-//    return bufferAsset;
-//}
-//
-//FrameBuffer* MediaAsset::getCache() {
-//    if(!isLiveAsset()) {
-//        return cacheBuffer;
-//    } else {
-//        cout << "you can't cache a live data type." << endl;   
-//        return NULL;
-//    }
-//}
+//--------------------------------------------------------------
+string BaseMediaAsset::getFirstAlias() const {
+    if(aliases.empty()) {
+        return "UNKNOWN";
+    } else {
+        return *aliases.begin();
+    }
+}
 
-////--------------------------------------------------------------
-//bool MediaAsset::setCache(FrameBuffer* buffer) {
-//    if(!isLiveAsset()) {
-//        cacheBuffer = buffer;
-//        return true;
-//    } else {
-//        cout << "you can't cache a live data type." << endl;   
-//        return false;
-//    }
-//}
-//
-////--------------------------------------------------------------
-//bool MediaAsset::removeCache() {
-//    if(!isLiveAsset()) {
-//        if(isCached()) {
-//            cacheBuffer = NULL;
-//            return true;
-//        } else {
-//            cout << "not cached" << endl;
-//            return false;
-//        }
-//    } else {
-//        cout << "you can't cache a live data type." << endl;   
-//        return false;
-//    }
-//}
+//--------------------------------------------------------------
+bool BaseMediaAsset::hasAlias(const string& alias) const {
+    return aliases.find(alias) != aliases.end();
+}
+
+//--------------------------------------------------------------
+bool BaseMediaAsset::addAlias(const string& alias) {
+    return aliases.insert(alias).second;
+}
+
+//--------------------------------------------------------------
+bool BaseMediaAsset::removeAlias(const string& alias) {
+    if(hasAlias(alias)) {
+        aliases.erase(alias);
+        return true;
+    } else {
+        return false;
+    }
+}
 
 //--------------------------------------------------------------
 string BaseMediaAsset::toString() const {
@@ -158,20 +149,4 @@ string BaseMediaAsset::toString() const {
     ss << "\tisSink()      = " << (isSink()      ? "TRUE" : "FALSE") << endl;
     return ss.str();
 }
-
-////--------------------------------------------------------------
-//bool BaseMediaAsset::hasAssetManager() {
-//    return manager != NULL;
-//}
-//
-////--------------------------------------------------------------
-//AssetManager* BaseMediaAsset::getAssetManager() {
-//    return manager;
-//}
-//
-////--------------------------------------------------------------
-//void BaseMediaAsset::setAssetManager(AssetManager* _manager) {
-//    manager = _manager;
-//}
-//
 

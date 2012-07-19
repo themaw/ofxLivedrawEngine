@@ -25,18 +25,20 @@
 #include "CanvasLayerManager.h"
 
 //--------------------------------------------------------------
-CanvasLayerManager::CanvasLayerManager() : ofxOscRouterNode("/layer") {
-    addOscNodeAlias("/lay");
-    addOscNodeAlias("/l");
+CanvasLayerManager::CanvasLayerManager() : ofxOscRouterNode("layer") {
+    addOscNodeAlias("lay");
+    addOscNodeAlias("l");
  
-    addOscMethod("/new");
-    addOscMethod("/delete");
+    addOscMethod("new");
+    addOscMethod("delete");
 }
 
 //--------------------------------------------------------------
 CanvasLayerManager::~CanvasLayerManager() {
-    for (int i = 0; i < layers.size(); i++)
+    for (int i = 0; i < layers.size(); i++) {
         delete layers[ i ];
+        layers[i] = NULL;
+    }
     layers.clear();
 }
 
@@ -47,12 +49,12 @@ CanvasLayerManager::~CanvasLayerManager() {
 //}
 
 //--------------------------------------------------------------
-void CanvasLayerManager::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void CanvasLayerManager::processOscCommand(const string& command, const ofxOscMessage& m) {
     
     cout << "CanvasLayerManager::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << endl;
     
     
-    if(isMatch(pattern,"/new")) {
+    if(isMatch(command,"new")) {
         // /livedraw/canvas/layer/new      LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
         if(validateOscSignature("s[fi][fi][fi]?", m)) {
 
@@ -72,7 +74,7 @@ void CanvasLayerManager::processOscMessage(const string& pattern, const ofxOscMe
             newLayer(layerName, p);
             
         }
-    } else if(isMatch(pattern, "/delete")) {
+    } else if(isMatch(command, "delete")) {
         // /livedraw/canvas/layer/new      LAYER_NAME
         if(validateOscSignature("s", m)) {
             string layerName = m.getArgAsString(0);
@@ -137,6 +139,7 @@ bool CanvasLayerManager::deleteLayer(string layerName) {
     if(it != layers.end()) {
         removeOscChild(*it); // remove it from the OSC tree!
         delete *it;       // free the memory
+        *it = NULL;
         layers.erase(it); // erase it from the vector
         success = true;
     } else {

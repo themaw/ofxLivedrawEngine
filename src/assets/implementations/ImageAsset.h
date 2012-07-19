@@ -36,7 +36,7 @@ class ImageAsset : public virtual BaseMediaAsset,
 public:
     ImageAsset(const string& _name, string _filename);
     virtual ~ImageAsset();
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 
     bool dispose();
 

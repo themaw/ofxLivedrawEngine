@@ -29,6 +29,8 @@
 
 #include "ofxOscRouterNode.h"
 #include "CacheProvider.h"
+#include "DiskBasedAsset.h"
+#include "CacheableAsset.h"
 
 #include "BaseMediaAsset.h"
 #include "ImageAsset.h"
@@ -63,14 +65,15 @@ public:
     void update();
 
     //--------------------------------------------------------------
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 
     //--------------------------------------------------------------
     bool hasAlias(string alias);
-    bool addAlias(BaseMediaAsset* asset, string alias);
-    bool removeAlias(string alias);
-//    bool changeAlias(string fromAlias, string toAlias);
-    vector<string> getAliases(BaseMediaAsset* asset);
+    //bool addAlias(BaseMediaAsset* asset, string alias);
+    //bool removeAlias(string alias);
+    //bool removeAliasesForAsset(BaseMediaAsset* asset);
+    //bool changeAlias(string fromAlias, string toAlias);
+    //vector<string> getAliases(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
     
@@ -86,9 +89,11 @@ public:
     BaseMediaAsset* getAsset(string string);
 
     //--------------------------------------------------------------
+    bool queueRegisterAsset(BaseMediaAsset* asset);
+    bool queueUnregisterAsset(const string& alias);
+    bool queueUnregisterAsset(BaseMediaAsset* asset);
+
     bool registerAsset(BaseMediaAsset* asset);
-    
-    bool unregisterAsset(string alias);
     bool unregisterAsset(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
@@ -127,9 +132,13 @@ protected:
     
 private:
 
-    string generateAssetId(BaseMediaAsset* asset);
+    string validateAssetId(const string& name);
 
-	ofxSimpleSet<BaseMediaAsset*>     assets;   // this is the actual collection of assets that have been allocated
+    set<BaseMediaAsset*> registerQueue; // items are scheduled for registration here.
+    set<BaseMediaAsset*> unregisterQueue; // items are scheduled for removal here.
+    
+	set<BaseMediaAsset*> assets;   // this is the actual collection of assets that have been allocated
+	set<BaseMediaAsset*>::iterator assetsIter;   // this is the actual collection of assets that have been allocated
     map<string,BaseMediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
     
     ofDirectory dir;

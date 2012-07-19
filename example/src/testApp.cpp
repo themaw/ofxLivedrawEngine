@@ -29,7 +29,7 @@ void testApp::setup(){
 	// main window setup
 	ofSetFrameRate(60);
 	ofBackground(0);
-	ofSetLogLevel(OF_LOG_NOTICE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
     livedraw.setup();
 }
 

@@ -24,7 +24,6 @@
 
 #pragma once
 
-#include "ofxSimpleSet.h"
 #include "BaseMediaAsset.h"
 #include "ofxVideoFrame.h"
 #include "FrameSinkAsset.h"
@@ -55,6 +54,7 @@ public:
     // sinks
     bool hasSinks() const;  // is connected to any receivers
     
+    bool hasSink(FrameSinkAsset* sink) const;
     bool attachToSink(FrameSinkAsset* sink); // sinks call this to be fed by this source
     bool detachFromAllSinks();
     bool detachFromSink(FrameSinkAsset* sink); // sinks call this to be cut off from this source
@@ -81,6 +81,7 @@ private:
     
     // no subclass access.  all access done via getters 
     // and setters so events will be called
-    ofxSimpleSet<FrameSinkAsset*> sinks;
+    set<FrameSinkAsset*> sinks;
+    set<FrameSinkAsset*>::iterator sinkIter;
 };
 

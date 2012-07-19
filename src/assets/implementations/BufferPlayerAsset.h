@@ -40,7 +40,7 @@ public:
     // Base media asset
     bool dispose();
     
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 
     void  draw(float x,float y);
 	void  draw(float x,float y,float w, float h);

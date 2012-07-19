@@ -50,7 +50,7 @@ public:
     
 	virtual ~CanvasLayer();
 	
-    void processOscMessage(const string& address, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 
     void init();
     

@@ -27,7 +27,7 @@
 //--------------------------------------------------------------
 SyphonAsset::SyphonAsset(const string& _name) {
     assetType = MEDIA_ASSET_SYPHON;
-    name = _name;
+    addAlias(_name);
     
     syphonClient = ofPtr<ofxSyphonVideoClient>(new ofxSyphonVideoClient());
     syphonClient->setup();
@@ -39,7 +39,7 @@ SyphonAsset::SyphonAsset(const string& _name) {
 SyphonAsset::~SyphonAsset() {}
 
 //--------------------------------------------------------------
-void SyphonAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void SyphonAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "processing message in syphon asset." << endl;
 }
 

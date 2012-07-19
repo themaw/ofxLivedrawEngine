@@ -41,7 +41,7 @@ public:
     void update();
     void draw();
     
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     void setEffectsManager(EffectsManager* manager);
     
 private:

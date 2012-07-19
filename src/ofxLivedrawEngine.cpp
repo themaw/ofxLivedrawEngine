@@ -37,10 +37,16 @@ ofxLivedrawEngine::~ofxLivedrawEngine() {
 void ofxLivedrawEngine::setup() {
     
 //    oscRouter = ofPtr<ofxOscRouter>(new ofxOscRouter());
-    oscRouter.setup("/livedraw", OSC_PORT);
-    oscRouter.addOscNodeAlias("/l");
-    oscRouter.addOscNodeAlias("/ld");
+    oscRouter.setup("livedraw", OSC_PORT);
+    oscRouter.addOscNodeAlias("l");
+    oscRouter.addOscNodeAlias("ld");
 
+    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
+    cout << oscRouter.isValidOscCommand("chr") << endl;
+    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
+    
+    
+    
 //    assetManager = ofPtr<AssetManager>(new AssetManager());
     assetManager.setEngine(this);
     oscRouter.addOscChild(&assetManager);
@@ -59,8 +65,10 @@ void ofxLivedrawEngine::setup() {
 //--------------------------------------------------------------
 void ofxLivedrawEngine::update() {
 
+    oscRouter.update();
+    
     // run asset manager updates (look for new files, etc)
-//    assetManager.update();
+    assetManager.update();
 
     // updated effects
 //    effectsManager.update();

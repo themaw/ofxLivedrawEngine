@@ -27,7 +27,8 @@
 //--------------------------------------------------------------
 ImageAsset::ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
     assetType = MEDIA_ASSET_IMAGE;
-    name      = _name;
+    addAlias(_name);
+//    name      = _name;
     
     // go directly to the frame source file
     frame = ofPtr<ofImage>(new ofImage());
@@ -38,7 +39,7 @@ ImageAsset::ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_
 ImageAsset::~ImageAsset() {}
 
 //--------------------------------------------------------------
-void ImageAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void ImageAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "processing image asset " << getName() << endl;
 }
 

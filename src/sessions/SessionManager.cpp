@@ -26,9 +26,9 @@
 #include "SessionManager.h"
 
 //--------------------------------------------------------------
-SessionManager::SessionManager() : ofxOscRouterNode("/sessions") {
-    addOscNodeAlias("/ses");
-    addOscNodeAlias("/s");
+SessionManager::SessionManager() : ofxOscRouterNode("sessions") {
+    addOscNodeAlias("ses");
+    addOscNodeAlias("s");
 }
 
 //--------------------------------------------------------------
@@ -42,6 +42,6 @@ void SessionManager::update() {
 }
 
 //--------------------------------------------------------------
-void SessionManager::processOscMessage(const string& address, const ofxOscMessage& m) {
-    cout << "got a message in the session manager " << address << endl;
+void SessionManager::processOscCommand(const string& command, const ofxOscMessage& m) {
+    cout << "got a message in the session manager " << command << endl;
 }

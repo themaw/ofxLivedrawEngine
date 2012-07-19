@@ -26,52 +26,62 @@
 #include "AssetMetaData.h"
 
 //--------------------------------------------------------------
-AssetMetaData::AssetMetaData() : ofxOscRouterNode("/meta") {
+AssetMetaData::AssetMetaData() : ofxOscRouterNode("meta") {
     description = "";
 
-    addOscMethod("/add");
-    addOscMethod("/remove");
-    addOscMethod("/change");
-    addOscMethod("/description");
+    addOscMethod("add");
+    addOscMethod("remove");
+    addOscMethod("change");
+    addOscMethod("description");
 }
 
 //--------------------------------------------------------------
 AssetMetaData::~AssetMetaData() {};
 
 //--------------------------------------------------------------
-void AssetMetaData::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void AssetMetaData::processOscCommand(const string& command, const ofxOscMessage& m) {
     
     cout << "processing meta data." << endl;
     
     //    ofLog(OF_LOG_ERROR, "AssetMetaData::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m) - unimplemented.");
 }
 
-////--------------------------------------------------------------
-//bool AssetMetaData::containsKeyword(string keyword) {
-//    return keywords.find(keyword) != keywords.end();
-//}
-//
-////--------------------------------------------------------------
-//void AssetMetaData::addKeyword(string keyword) {
-//    keywords.insert(keyword);
-//}
-//
-////--------------------------------------------------------------
-//void AssetMetaData::removeKeyword(string keyword) {
-//    keywords.erase (keywords.find(keyword));
-//}
-//
-////--------------------------------------------------------------
-//int AssetMetaData::getNumKeywords() {
-//    return (int) keywords.size();
-//}
+//--------------------------------------------------------------
+set<string>& AssetMetaData::getKeywordsRef() {
+    return keywords;
+}
 
 //--------------------------------------------------------------
-void AssetMetaData::setDescription(string _description) {
+bool AssetMetaData::containsKeyword(const string& keyword) const {
+    return keywords.find(keyword) != keywords.end();
+}
+
+//--------------------------------------------------------------
+bool AssetMetaData::addKeyword(const string& keyword) {
+    return keywords.insert(keyword).second;
+}
+
+//--------------------------------------------------------------
+bool AssetMetaData::removeKeyword(const string& keyword) {
+    if(containsKeyword(keyword)) {
+        keywords.erase(keyword);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//--------------------------------------------------------------
+int AssetMetaData::getNumKeywords() const {
+    return (int) keywords.size();
+}
+
+//--------------------------------------------------------------
+void AssetMetaData::setDescription(const string& _description) {
     description = _description;
 }
 
 //--------------------------------------------------------------
-string AssetMetaData::getDescription() {
+string AssetMetaData::getDescription() const {
     return description;
 }

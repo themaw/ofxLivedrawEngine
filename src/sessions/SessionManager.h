@@ -43,7 +43,7 @@ public:
     
     void update();
     
-    void processOscMessage(const string& address, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 	
     void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
     ofxLivedrawEngine* getEngine() {return engine;}    

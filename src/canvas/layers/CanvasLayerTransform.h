@@ -62,7 +62,7 @@ public:
     
     void init();
     
-    void processOscMessage(const string& address, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     
     int getWidth();
     int getHeight();

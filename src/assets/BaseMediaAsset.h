@@ -3,7 +3,7 @@
 
 #include "ofMain.h"
 
-#include "ofxOscRouterNode.h"
+#include "ofxOscRouterBaseNode.h"
 #include "AssetMetaData.h"
 
 enum MediaAssetType
@@ -18,14 +18,16 @@ enum MediaAssetType
     MEDIA_ASSET_SYPHON
 };
 
-class BaseMediaAsset : virtual public ofxOscRouterNode {
+class BaseMediaAsset : virtual public ofxOscRouterBaseNode {
 public:
 	BaseMediaAsset();
 	virtual ~BaseMediaAsset();
 
     virtual bool dispose() = 0;
-    virtual void processOscMessage(const string& address, const ofxOscMessage& m) = 0;
+    virtual void processOscCommand(const string& command, const ofxOscMessage& m) = 0;
 
+    set<string>& getOscNodeAliasesRef();
+    
 	MediaAssetType  getAssetType() const;   
 	string          getAssetTypeString() const;
 
@@ -40,8 +42,15 @@ public:
     // utilities
     string toString() const;
 
+    set<string>& getAliasesRef();
+    string getFirstAlias() const;
+    bool hasAlias(const string& alias) const;
+    bool addAlias(const string& alias);
+    bool removeAlias(const string& alias);
+    
 protected:
-    string name;
+    set<string> aliases; // normal ascending order, reverse iterate later
+    
     MediaAssetType assetType;
 
     bool canSource;
@@ -50,7 +59,7 @@ protected:
     bool diskAsset;
     
     AssetMetaData meta;
-    
+        
 };
 
 

@@ -26,7 +26,7 @@
 #include "EffectsChain.h"
 
 //--------------------------------------------------------------
-EffectsChain::EffectsChain() : ofxOscRouterNode("/effects") {
+EffectsChain::EffectsChain() : ofxOscRouterNode("effects") {
     
 }
 
@@ -48,7 +48,7 @@ void EffectsChain::update() {}
 void EffectsChain::draw() {}
 
 //--------------------------------------------------------------
-void EffectsChain::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void EffectsChain::processOscCommand(const string& command, const ofxOscMessage& m) {
     cout << "EFFECTS CHAIN GOT AN OSC MESSAGE";
 }
 

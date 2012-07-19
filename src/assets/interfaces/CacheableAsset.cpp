@@ -25,7 +25,7 @@
 #include "CacheableAsset.h"
 
 //--------------------------------------------------------------
-CacheableAsset::CacheableAsset() {
+CacheableAsset::CacheableAsset(const string& _filename) : DiskBasedAsset(_filename){
     cacheProvider = NULL;
     cacheBuffer = NULL;
     
@@ -33,8 +33,8 @@ CacheableAsset::CacheableAsset() {
     cached = false;
     //buffer.setReadOnly(true);
     
-    addOscMethod("/cache");
-    addOscMethod("/uncache");
+    addOscMethod("cache");
+    addOscMethod("uncache");
     
     //        addOscPlugMethod("/cache", bind(&Cacheable::cache, ref(*this)));
     //        addOscPlugMethod("/uncache", bind(&Cacheable::uncache, ref(*this)));
@@ -46,19 +46,25 @@ CacheableAsset::~CacheableAsset() {
 }
 
 //--------------------------------------------------------------
-void CacheableAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
-    if(isMatch(pattern, "/cache")) {
+void CacheableAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
+    cout << "processing command in cachable." << endl;
+    
+    if(isMatch(command,"cache")) {
         cache();
-    } else if(isMatch(pattern, "/uncache")) {
+    } else if(isMatch(command,"uncache")) {
         uncache();
     } else {
-        cout << "unknown pattern in cache." << endl;
+        cout << "unknown command in cache." << endl;
     }
 }
 
 //--------------------------------------------------------------
 void CacheableAsset::cache() {
+    cout << "CacheableAsset::processOscCommand " << endl;
+
+    
     if(!isCached()) {
+        cout << "here  " << endl;
         cached = doCache();
     }
 }

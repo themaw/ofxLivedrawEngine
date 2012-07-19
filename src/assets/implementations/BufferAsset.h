@@ -40,7 +40,7 @@ public:
     // From BaseMediaAsset
     bool dispose();
     
-    void processOscMessage(const string& address, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 
     // From FrameSink
     bool frameReceived(ofxVideoFrame frame);

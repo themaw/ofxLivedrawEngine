@@ -29,29 +29,32 @@
 BufferPlayerAsset::BufferPlayerAsset(const string& _name) 
 {
     assetType = MEDIA_ASSET_BUFFERPLAYER;
-    name = _name;
+    
+    addAlias(_name);
+    
+//    name = _name;
     player = ofPtr<ofxVideoBufferPlayer>(new ofxVideoBufferPlayer());
     
-    addOscMethod("/buffer");
+    addOscMethod("buffer");
     
-    addOscMethod("/start");
-    addOscMethod("/stop");
-    addOscMethod("/pause");
+    addOscMethod("start");
+    addOscMethod("stop");
+    addOscMethod("pause");
     
-    addOscMethod("/loopmode");
+    addOscMethod("loopmode");
     
-    addOscMethod("/looppoints");
-    addOscMethod("/looppointstart");
-    addOscMethod("/looppointend");
+    addOscMethod("looppoints");
+    addOscMethod("looppointstart");
+    addOscMethod("looppointend");
     
-    addOscMethod("/looppointsn");
-    addOscMethod("/looppointstartn");
-    addOscMethod("/looppointendn");
+    addOscMethod("looppointsn");
+    addOscMethod("looppointstartn");
+    addOscMethod("looppointendn");
     
-    addOscMethod("/frame");
-    addOscMethod("/framen");    
+    addOscMethod("frame");
+    addOscMethod("framen");    
     
-    addOscMethod("/speed");
+    addOscMethod("speed");
     
 }
 
@@ -64,12 +67,12 @@ bool BufferPlayerAsset::dispose() {
 }
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::processOscMessage(const string& pattern, const ofxOscMessage& m) {
+void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     
     cout << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;
     
     /*
-     if(isMatch(pattern,"/buffer")) {
+     if(isMatch(command,"buffer")) {
      
      cout << "buffer ";
      
@@ -106,15 +109,15 @@ void BufferPlayerAsset::processOscMessage(const string& pattern, const ofxOscMes
      } else 
      */
     
-    if(isMatch(pattern, "/start")) { 
+    if(isMatch(command,"start")) { 
         player->start();
-    } else if(isMatch(pattern, "/stop")) {
+    } else if(isMatch(command,"stop")) {
         player->stop();
-    } else if(isMatch(pattern, "/pause")) {
+    } else if(isMatch(command,"pause")) {
         if(validateOscSignature("[sfi]", m)) {
             player->setPaused(getArgAsBoolean(m,0));
         }
-    } else if(isMatch(pattern, "/loopmode")) {
+    } else if(isMatch(command,"loopmode")) {
         if(validateOscSignature("s", m)) {
             string loopMode = m.getArgAsString(0);
             if(isMatch(loopMode,"NONE")) {
@@ -127,39 +130,39 @@ void BufferPlayerAsset::processOscMessage(const string& pattern, const ofxOscMes
                 ofLog(OF_LOG_WARNING, "FrameBufferPlayer: Unknown loop mode: " + loopMode);
             }
         }
-    } else if(isMatch(pattern, "/looppoints")) {
+    } else if(isMatch(command,"looppoints")) {
         if(validateOscSignature("[fi][fi]", m)) {
             player->setLoopPoints(m.getArgAsFloat(0),m.getArgAsFloat(1));
         }
-    } else if(isMatch(pattern, "/looppointstart")) {
+    } else if(isMatch(command,"looppointstart")) {
         if(validateOscSignature("[fi]", m)) {
             player->setLoopPointStart(m.getArgAsFloat(0));
         }
-    } else if(isMatch(pattern, "/looppointend")) {
+    } else if(isMatch(command,"looppointend")) {
         if(validateOscSignature("[fi]", m)) {
             player->setLoopPointStart(m.getArgAsFloat(0));
         }
-    } else if(isMatch(pattern, "/looppointsn")) {
+    } else if(isMatch(command,"looppointsn")) {
         if(validateOscSignature("[fi][fi]", m)) {
             player->setLoopPointsNorm(m.getArgAsFloat(0),m.getArgAsFloat(1));
         }
-    } else if(isMatch(pattern, "/looppointstartn")) {
+    } else if(isMatch(command,"looppointstartn")) {
         if(validateOscSignature("[fi]", m)) {
             player->setLoopPointStartNorm(m.getArgAsFloat(0));
         }
-    } else if(isMatch(pattern, "/looppointendn")) {
+    } else if(isMatch(command,"looppointendn")) {
         if(validateOscSignature("[fi]", m)) {
             player->setLoopPointStartNorm(m.getArgAsFloat(0));
         }
-    } else if(isMatch(pattern, "/frame")) {
+    } else if(isMatch(command,"frame")) {
         if(validateOscSignature("[fi]", m)) {
             player->setFrame(m.getArgAsFloat(0));
         }
-    } else if(isMatch(pattern, "/framen")) {
+    } else if(isMatch(command,"/framen")) {
         if(validateOscSignature("[fi]", m)) {
             player->setFrameNorm(m.getArgAsFloat(0));
         }
-    } else if(isMatch(pattern, "/speed")) {
+    } else if(isMatch(command,"speed")) {
         if(validateOscSignature("[fi]", m)) {
             player->setSpeed(m.getArgAsFloat(0));
         }

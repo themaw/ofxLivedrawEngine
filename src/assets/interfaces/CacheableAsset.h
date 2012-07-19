@@ -25,16 +25,18 @@
 #pragma once
 
 #include "BaseMediaAsset.h"
+#include "DiskBasedAsset.h"
 #include "BufferAsset.h"
 #include "CacheProvider.h"
 
-class CacheableAsset : public virtual BaseMediaAsset 
+class CacheableAsset : public virtual BaseMediaAsset,
+                       public virtual DiskBasedAsset
 {
 public:
-    CacheableAsset();
+    CacheableAsset(const string& _filename);
     virtual ~CacheableAsset();
 
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);    
+    void processOscCommand(const string& command, const ofxOscMessage& m);    
 
     virtual bool doCache()   = 0; // must implement in subclasses
     virtual bool doUncache() = 0; // must implement in subclasses

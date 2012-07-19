@@ -35,7 +35,7 @@ public:
     virtual ~GrabberAsset();
 
     bool dispose();
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     bool isFrameNew();
     ofPixelsRef getPixelsRef();
     void open();

@@ -25,19 +25,19 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxOscRouterNode.h"
+#include "ofxOscRouterBaseNode.h"
 #include "CanvasGroup.h"
 #include "CanvasLayer.h"
 #include "CanvasLayerManager.h"
 
 
-class CanvasGroupManager : public ofxOscRouterNode {
+class CanvasGroupManager : public ofxOscRouterBaseNode {
 public:
     
     CanvasGroupManager(CanvasLayerManager* layerManager);
     virtual ~CanvasGroupManager();
     
-    void processOscMessage(const string& pattern, const ofxOscMessage& m);
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     
 	CanvasGroup* newGroup(string groupName, vector<CanvasLayer*> layers);
 	bool deleteGroup(string groupName);
