@@ -52,8 +52,8 @@ void SyphonAsset::processOscCommand(const string& command, const ofxOscMessage& 
 
 //--------------------------------------------------------------
 bool SyphonAsset::dispose() {
-    detachFromAllSinks();
     cout << "disposing of syphon " << getName() << endl;
+    return detachFromAllSinks();
 }
 
 //--------------------------------------------------------------

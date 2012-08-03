@@ -76,8 +76,8 @@ void StreamAsset::processOscCommand(const string& command, const ofxOscMessage& 
 
 //--------------------------------------------------------------
 bool StreamAsset::dispose() {
-    detachFromAllSinks();
     cout << "disposing of stream " << getName() << endl;
+    return detachFromAllSinks();
 }
 
 //--------------------------------------------------------------

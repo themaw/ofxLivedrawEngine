@@ -54,6 +54,7 @@ void GrabberAsset::update() {
 bool GrabberAsset::dispose() {
     detachFromAllSinks();
     close();
+    return true;
 }
 
 //--------------------------------------------------------------
