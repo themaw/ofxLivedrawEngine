@@ -304,6 +304,12 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
         return false;
     }
     
+    if(asset->isCached()) {
+        ofLogError("AssetManager::cacheAsset - Asset is already cached.");
+        return false;
+    }
+    
+    
     BufferAsset* cacheAsset = addBuffer("BUFFER_" + asset->getName(), 1, OFX_VIDEO_BUFFER_FIXED);
     
     if(cacheAsset != NULL) {
@@ -324,6 +330,11 @@ bool AssetManager::uncacheAsset(CacheableAsset* asset) {
         return false;
     }
 
+    if(!asset->isCached()) {
+        ofLogError("AssetManager::uncacheAsset - Asset has no cache.");
+        return false;
+    }
+    
     if(!queueUnregisterAsset(asset->getCacheBuffer())) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Unable to uncache buffer.");
         return false;
@@ -801,17 +812,9 @@ BaseMediaAsset* AssetManager::getAsset(string alias) {
 }
 
 void AssetManager::dump() {
-    
     for(assetsIter = assets.begin(); assetsIter != assets.end(); assetsIter++) {
         cout << (*assetsIter)->toString() << endl;
     }
-
-    //        std::map<string,MediaAsset*>::iterator iter;
-//        
-//        for (iter = assetAliases.begin(); iter != assetAliases.end(); ++iter) {
-//            cout << iter->first << "=>";
-//            cout << iter->second->getAssetId() << endl;
-//        }
 }
 
 
