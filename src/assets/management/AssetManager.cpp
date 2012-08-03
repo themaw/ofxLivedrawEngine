@@ -598,7 +598,7 @@ void AssetManager::loadAssets() {
 
 //--------------------------------------------------------------
 void AssetManager::loadFilesAssets() {
-
+    
 	int nFiles = dir.listDir("media/");
     
     string s;
@@ -624,13 +624,13 @@ void AssetManager::loadFilesAssets() {
         }
 	}
     
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumAssets(MEDIA_ASSET_IMAGE)) + " images.");
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumAssets(MEDIA_ASSET_MOVIE)) + " movies.");	
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_IMAGE)) + " images.");
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_MOVIE)) + " movies.");	
 }
 
 //--------------------------------------------------------------
 void AssetManager::loadSyphonAssets() {
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumAssets(MEDIA_ASSET_SYPHON)) + " syphon sources.");	
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_SYPHON)) + " syphon sources.");	
 }
 
 //--------------------------------------------------------------
@@ -667,7 +667,7 @@ void AssetManager::loadGrabberAssets() {
 		ofLog(OF_LOG_ERROR, "Unable to load media/streams.xml.");
 	}
     
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumAssets(MEDIA_ASSET_GRABBER)) + " grabbers.");
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_GRABBER)) + " grabbers.");
 }
 
 
@@ -736,36 +736,55 @@ void AssetManager::loadStreamAssets(){
 		ofLog(OF_LOG_ERROR, "Unable to load media/streams.xml.");
 	}
 
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getNumAssets(MEDIA_ASSET_STREAM)) + " streams.");
+    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_STREAM)) + " streams.");
 
 }
 
 //--------------------------------------------------------------
-int AssetManager::getNumAssets() {
-    return assets.size();
+int AssetManager::getTotalNumAssets() {
+    return assets.size() + registerQueue.size() - unregisterQueue.size();
 }
 
 //--------------------------------------------------------------
-int AssetManager::getNumAssets(MediaAssetType assetType) {
+int AssetManager::getTotalNumAssets(MediaAssetType assetType) {
+    return getNumAssetsInSet(assetType, assets) +
+           getNumAssetsInRegisterQueue(assetType) -
+           getNumAssetsInUnregisterQueue(assetType);
+}
+
+//--------------------------------------------------------------
+int AssetManager::getNumAssetsInRegisterQueue(MediaAssetType assetType) {
+    return getNumAssetsInSet(assetType, registerQueue);
+}
+
+//--------------------------------------------------------------
+int AssetManager::getNumAssetsInUnregisterQueue(MediaAssetType assetType) {
+    return getNumAssetsInSet(assetType, unregisterQueue);
+}
+
+
+//--------------------------------------------------------------
+int AssetManager::getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset*> _assets) {
+    
     switch (assetType) {
         case MEDIA_ASSET_UNDEFINED:
-            return count_if(assets.begin(), assets.end(), isUndefinedAsset);
+            return count_if(_assets.begin(), _assets.end(), isUndefinedAsset);
         case MEDIA_ASSET_IMAGE:
-            return count_if(assets.begin(), assets.end(), isImageAsset);
+            return count_if(_assets.begin(), _assets.end(), isImageAsset);
         case MEDIA_ASSET_MOVIE:
-            return count_if(assets.begin(), assets.end(), isMovieAsset);
+            return count_if(_assets.begin(), _assets.end(), isMovieAsset);
         case MEDIA_ASSET_GRABBER:
-            return count_if(assets.begin(), assets.end(), isGrabberAsset);
+            return count_if(_assets.begin(), _assets.end(), isGrabberAsset);
         case MEDIA_ASSET_STREAM:
-            return count_if(assets.begin(), assets.end(), isStreamAsset);
+            return count_if(_assets.begin(), _assets.end(), isStreamAsset);
         case MEDIA_ASSET_BUFFER:
-            return count_if(assets.begin(), assets.end(), isBufferAsset);
+            return count_if(_assets.begin(), _assets.end(), isBufferAsset);
         case MEDIA_ASSET_BUFFERPLAYER:
-            return count_if(assets.begin(), assets.end(), isBufferPlayerAsset);
+            return count_if(_assets.begin(), _assets.end(), isBufferPlayerAsset);
         case MEDIA_ASSET_SYPHON:
-            return count_if(assets.begin(), assets.end(), isSyphonAsset);
+            return count_if(_assets.begin(), _assets.end(), isSyphonAsset);
         default:
-            ofLog(OF_LOG_ERROR, "AssetManager::getNumAssets() - unknwon asset type " + ofToString(assetType));
+            ofLog(OF_LOG_ERROR, "AssetManager::getNumAssetsInSet() - unknwon asset type " + ofToString(assetType));
             return -1;
     }
 }
@@ -782,6 +801,7 @@ BaseMediaAsset* AssetManager::getAsset(string alias) {
 }
 
 void AssetManager::dump() {
+    
     for(assetsIter = assets.begin(); assetsIter != assets.end(); assetsIter++) {
         cout << (*assetsIter)->toString() << endl;
     }

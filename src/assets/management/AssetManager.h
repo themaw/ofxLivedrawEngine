@@ -117,8 +117,13 @@ protected:
     void loadStreamAssets();
 	void loadSyphonAssets();
     
-	int getNumAssets();
-	int getNumAssets(MediaAssetType assetType);
+    int getTotalNumAssets();
+    int getTotalNumAssets(MediaAssetType assetType);
+    int getNumAssetsInRegisterQueue(MediaAssetType assetType);
+    int getNumAssetsInUnregisterQueue(MediaAssetType assetType);
+    int getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset*> _assets);
+
+    
     
 	//  TODO: for file watchers	
 	//	void onNewAsset(MediaAsset* asset);
