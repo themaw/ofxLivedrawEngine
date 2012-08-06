@@ -29,9 +29,12 @@
 #include "ofMain.h"
 #include "ofxOscRouter.h"
 
-#include "AssetManager.h"
 
 //#include "CanvasRenderer.h"
+#include "LayerManager.h"
+
+//#include "AssetManager.h"
+
 //#include "SessionManager.h"
 //#include "EffectsManager.h"
 
@@ -39,7 +42,7 @@
 //class ofxOscRouter;
 //class AssetManager;
 //class EffectsManager;
-////class CanvasLayerManager;
+////class LayerManager;
 //class CanvasRenderer;
 //class SessionManager;
 
@@ -56,18 +59,19 @@ public:
     void windowResized(int w, int h);
     
     ofxOscRouter*   getOscRouter();
-    AssetManager*   getAssetManager();
+//    AssetManager*   getAssetManager();
 //    EffectsManager*     getEffectsManager();
 //    CanvasRenderer*     getCanvasRenderer();
-//    CanvasLayerManager* getCanvasLayerManager();
+  //  LayerManager*       getLayerManager();
 //    SessionManager*     getSessionManager();
     
 
 protected:
     ofxOscRouter oscRouter;
-    AssetManager assetManager;
+//    AssetManager assetManager;
     //    EffectsManager  effectsManager;
-    //    CanvasRenderer  canvas; // owns the layer manager
+   LayerManager    layerManager;
+  //  CanvasRenderer  canvasRenderer; // owns the layer manager
     //    SessionManager  sessionManager;
     
 };

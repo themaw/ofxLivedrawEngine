@@ -36,26 +36,23 @@ ofxLivedrawEngine::~ofxLivedrawEngine() {
 //--------------------------------------------------------------
 void ofxLivedrawEngine::setup() {
     
-//    oscRouter = ofPtr<ofxOscRouter>(new ofxOscRouter());
     oscRouter.setup("livedraw", OSC_PORT);
     oscRouter.addOscNodeAlias("l");
     oscRouter.addOscNodeAlias("ld");
 
-    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
-    cout << oscRouter.isValidOscCommand("chr") << endl;
-    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
+//    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
+//    cout << oscRouter.isValidOscCommand("chr") << endl;
+//    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
     
     
-    
-//    assetManager = ofPtr<AssetManager>(new AssetManager());
-    assetManager.setEngine(this);
-    oscRouter.addOscChild(&assetManager);
+//    assetManager.setEngine(this);
+//    oscRouter.addOscChild(&assetManager);
     
 //    effectsManager.setEngine(this);
 //    oscRouter.addOscChild(&effectsManager);
     
-//    canvas.setEngine(this);
-//    oscRouter.addOscChild(&canvas);
+   // canvasRenderer.setEngine(this);
+   // oscRouter.addOscChild(&canvasRenderer);
     
 //    sessionManager.setEngine(this);
 //    oscRouter.addOscChild(&sessionManager); 
@@ -68,13 +65,11 @@ void ofxLivedrawEngine::update() {
     oscRouter.update();
     
     // run asset manager updates (look for new files, etc)
-    assetManager.update();
+//    assetManager.update();
 
     // updated effects
 //    effectsManager.update();
 
-    // canvas gets updated
-//    canvas.update();
 
     // session manager
 //    sessionManager.update();
@@ -87,14 +82,21 @@ void ofxLivedrawEngine::draw() {
     ofFill();
     ofRect(0,0, 300,300);
     
-//    canvas.render(); // accumulate everything onto the fbo.
-    // here is where we can do the transformations before projection
-//    canvas.draw();
+   // canvasRenderer.begin();
+    //canvasLayerManager.draw();
+  //  canvasRenderer.end();
+
+    
+    // do work with canvas renderer fbo, or just draw it
+  //  canvasRenderer.draw(0,0);
+    
+    // draw gui here.
+    
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::windowResized(int w, int h) {
-//    canvas.resize(w,h);
+  //  canvasRenderer.resize(w,h);
 }
 
 ////--------------------------------------------------------------
@@ -110,8 +112,8 @@ void ofxLivedrawEngine::windowResized(int w, int h) {
 //    return &effectsManager;
 //}
 //--------------------------------------------------------------
-//CanvasLayerManager* ofxLivedrawEngine::getCanvasLayerManager() {
-//    return canvas->getCanvasLayerManager();
+//LayerManager* ofxLivedrawEngine::getLayerManager() {
+//    return canvas->getLayerManager();
 //}
 //--------------------------------------------------------------
 //CanvasRenderer* ofxLivedrawEngine::getCanvasRenderer() {
