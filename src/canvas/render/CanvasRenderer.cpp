@@ -38,15 +38,9 @@ CanvasRenderer::CanvasRenderer() : ofxOscRouterNode("canvas") {
 }
 
 //--------------------------------------------------------------
-CanvasRenderer::~CanvasRenderer() {
-    
-}
+CanvasRenderer::~CanvasRenderer() {}
 
 void CanvasRenderer::init() {
-    
-//    layerManager = new CanvasLayerManager();
-//    addOscChild(layerManager);
-    
     
     addOscMethod("position");
     addOscMethod("size");
@@ -72,23 +66,11 @@ void CanvasRenderer::init() {
     
     fbo.allocate(width,height);
     
-    //layerManager.setup();
 }
 
 
 //--------------------------------------------------------------
-//void CanvasRenderer::setEffectsManager(EffectsManager* _effectsManager) {
-//    effectsManager = _effectsManager;
-//    layerManager.setEffectsManager(effectsManager);
-//}
-
-//--------------------------------------------------------------
-void CanvasRenderer::update() {
-//    layerManager.update();
-}
-
-//--------------------------------------------------------------
-void CanvasRenderer::render() {
+void CanvasRenderer::begin() {
     fbo.begin(); // start the FBO
     // clear the background
     
@@ -105,7 +87,7 @@ void CanvasRenderer::render() {
 }
 
 //--------------------------------------------------------------
-void CanvasRenderer::draw() {
+void CanvasRenderer::end() {
     fbo.draw(0,0);
 }
 
@@ -113,7 +95,7 @@ void CanvasRenderer::draw() {
 void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessage& m) {
     // got one for the canvas!
 
-    ofLog(OF_LOG_NOTICE, "CanvasRenderer:const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m) : " + m.getAddress());
+//    ofLog(OF_LOG_NOTICE, "CanvasRenderer::processOscCommand : " + m.getAddress());
     
     if(isMatch(command,"position")) {
         if(validateOscSignature("[if][if]",m)) {
@@ -213,21 +195,3 @@ void CanvasRenderer::setMsaa(bool _useMSAA) {
 void CanvasRenderer::resize(int w, int h) {
     fbo.allocate(w,h);
 }
-
-
-////--------------------------------------------------------------
-//CanvasLayerManager* CanvasRenderer::getCanvasLayerManager() {
-//    return layerManager;
-//}
-//
-//
-////--------------------------------------------------------------
-//void CanvasRenderer::setEngine(ofxLivedrawEngine* _engine) {
-//    engine = _engine;
-//    layerManager->setEngine(_engine);
-//};
-//
-////--------------------------------------------------------------
-//ofxLivedrawEngine* CanvasRenderer::getEngine() {return engine;}    
-
-

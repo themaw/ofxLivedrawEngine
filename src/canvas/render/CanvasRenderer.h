@@ -28,15 +28,11 @@
 #pragma once
 #include "ofxOscRouterNode.h"
 
-#include "CanvasLayerManager.h"
-//#include "AssetManager.h"
-//#include "EffectsManager.h"
-//#include "ofxLivedrawEngine.h"
+class ofxLivedrawEngine; // we only use the pointer
 
-//class ofxLivedrawEngine;
-//class CanvasLayerManager;
-
-class CanvasRenderer : public ofxOscRouterNode {
+class CanvasRenderer :
+public ofBaseDraws,
+public ofxOscRouterNode {
 	
 public:
 	
@@ -45,11 +41,27 @@ public:
 	virtual ~CanvasRenderer();
 
     void init();
+
+    void begin();
+    void end();
     
-	void update();
-    void render();
-	void draw();
+	void draw(float x, float y) {
+        fbo.draw(x,y);
+    }
+    
+	void draw(float x, float y, float w, float h) {
+        fbo.draw(x,y,w,h);
+    }
+
+	float getHeight() {
+        return fbo.getHeight();
+    }
+    
+	float getWidth() {
+        return fbo.getWidth();
+    }
 	
+    
 	// /livedraw/canvas/fullscreen
 	void setFullscreen(bool _fullscreen);
 	
@@ -79,19 +91,16 @@ public:
     
     void resize(int w, int h);
 
-//    CanvasLayerManager* getCanvasLayerManager();
-//    
-//    void setEngine(ofxLivedrawEngine* _engine);
-//    ofxLivedrawEngine* getEngine();    
+    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;}
+    ofxLivedrawEngine* getEngine() {return engine;}
+
     
 protected:
     
-//    ofxLivedrawEngine* engine;
+    ofxLivedrawEngine* engine; // just the pointer
     
     
 private:
-	
-	CanvasLayerManager layerManager;
     
     ofFbo fbo;
     int x, y;
@@ -99,6 +108,5 @@ private:
     bool useMSAA;
     
     ofColor bgColor;
-    //EffectsManager* effectsManager;
 };
 
