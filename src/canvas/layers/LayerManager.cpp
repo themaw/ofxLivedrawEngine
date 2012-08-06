@@ -31,6 +31,7 @@ LayerManager::LayerManager() : ofxOscRouterNode("layers") {
  
     addOscMethod("new");
     addOscMethod("delete");
+    addOscMethod("dump");
 }
 
 //--------------------------------------------------------------
@@ -80,6 +81,8 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
             // delete a layer
             queueUnregisterLayer(layerName);
         }
+    } else if(isMatch(command, "dump")) {
+        dump();
     }
     
 }
@@ -418,7 +421,6 @@ void LayerManager::updateLayers() {
         (*it)->update();
     }
 }
-
 
 //--------------------------------------------------------------
 string LayerManager::validateAlias(const string& name) {
