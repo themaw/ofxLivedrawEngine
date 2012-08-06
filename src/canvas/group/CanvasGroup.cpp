@@ -33,7 +33,7 @@ CanvasGroup::CanvasGroup(string _name) {
 CanvasGroup::~CanvasGroup() {}
 
 //--------------------------------------------------------------
-bool addLayer(CanvasLayer* layer) {};
+bool addLayer(Layer* layer) {};
 
 //--------------------------------------------------------------
-bool removeLayer(CanvasLayer* layer) {};
+bool removeLayer(Layer* layer) {};

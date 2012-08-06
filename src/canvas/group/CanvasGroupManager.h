@@ -27,23 +27,23 @@
 #include "ofMain.h"
 #include "ofxOscRouterBaseNode.h"
 #include "CanvasGroup.h"
-#include "CanvasLayer.h"
-#include "CanvasLayerManager.h"
+#include "Layer.h"
+#include "LayerManager.h"
 
 
 class CanvasGroupManager : public ofxOscRouterBaseNode {
 public:
     
-    CanvasGroupManager(CanvasLayerManager* layerManager);
+    CanvasGroupManager(LayerManager* layerManager);
     virtual ~CanvasGroupManager();
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
     
-	CanvasGroup* newGroup(string groupName, vector<CanvasLayer*> layers);
+	CanvasGroup* newGroup(string groupName, vector<Layer*> layers);
 	bool deleteGroup(string groupName);
     
 private:
-    CanvasLayerManager* layerManager;
+    LayerManager* layerManager;
     vector<CanvasGroup*> groups;
     
 

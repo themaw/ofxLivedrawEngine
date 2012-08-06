@@ -27,7 +27,7 @@
 #include <set>
 
 #include "ofMain.h"
-#include "CanvasLayer.h"
+#include "Layer.h"
 
 class CanvasGroup {
 public:    
@@ -35,12 +35,12 @@ public:
     CanvasGroup(string name);
     virtual ~CanvasGroup();
     
-    bool addLayer(CanvasLayer* layer);
-    bool removeLayer(CanvasLayer* layer);
+    bool addLayer(Layer* layer);
+    bool removeLayer(Layer* layer);
     
     
 private:
     string name;
-    set<CanvasLayer*> groupLayers;
+    set<Layer*> groupLayers;
     
 };
