@@ -41,9 +41,9 @@
 		FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740F15607A6E006323C7 /* EffectsManager.cpp */; };
 		FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741415607A6E006323C7 /* CanvasGroup.cpp */; };
 		FD26742515607A6E006323C7 /* CanvasGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741615607A6E006323C7 /* CanvasGroupManager.cpp */; };
-		FD26742615607A6E006323C7 /* CanvasLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741915607A6E006323C7 /* CanvasLayer.cpp */; };
-		FD26742715607A6E006323C7 /* CanvasLayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741B15607A6E006323C7 /* CanvasLayerManager.cpp */; };
-		FD26742815607A6E006323C7 /* CanvasLayerTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741D15607A6E006323C7 /* CanvasLayerTransform.cpp */; };
+		FD26742615607A6E006323C7 /* Layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741915607A6E006323C7 /* Layer.cpp */; };
+		FD26742715607A6E006323C7 /* LayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741B15607A6E006323C7 /* LayerManager.cpp */; };
+		FD26742815607A6E006323C7 /* LayerTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741D15607A6E006323C7 /* LayerTransform.cpp */; };
 		FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26742015607A6E006323C7 /* CanvasRenderer.cpp */; };
 		FD3F84DC156064BC0022CE42 /* SessionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84AB156064BC0022CE42 /* SessionManager.cpp */; };
 		FD3F84DD156064BC0022CE42 /* SessionPerformance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84AD156064BC0022CE42 /* SessionPerformance.cpp */; };
@@ -163,12 +163,12 @@
 		FD26741515607A6E006323C7 /* CanvasGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasGroup.h; sourceTree = "<group>"; };
 		FD26741615607A6E006323C7 /* CanvasGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasGroupManager.cpp; sourceTree = "<group>"; };
 		FD26741715607A6E006323C7 /* CanvasGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasGroupManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FD26741915607A6E006323C7 /* CanvasLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = CanvasLayer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		FD26741A15607A6E006323C7 /* CanvasLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasLayer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FD26741B15607A6E006323C7 /* CanvasLayerManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = CanvasLayerManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		FD26741C15607A6E006323C7 /* CanvasLayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasLayerManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FD26741D15607A6E006323C7 /* CanvasLayerTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasLayerTransform.cpp; sourceTree = "<group>"; };
-		FD26741E15607A6E006323C7 /* CanvasLayerTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasLayerTransform.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		FD26741915607A6E006323C7 /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Layer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FD26741A15607A6E006323C7 /* Layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Layer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		FD26741B15607A6E006323C7 /* LayerManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = LayerManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FD26741C15607A6E006323C7 /* LayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LayerManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		FD26741D15607A6E006323C7 /* LayerTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerTransform.cpp; sourceTree = "<group>"; };
+		FD26741E15607A6E006323C7 /* LayerTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LayerTransform.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD26742015607A6E006323C7 /* CanvasRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasRenderer.cpp; sourceTree = "<group>"; };
 		FD26742115607A6E006323C7 /* CanvasRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasRenderer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD3F84AB156064BC0022CE42 /* SessionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SessionManager.cpp; sourceTree = "<group>"; };
@@ -258,6 +258,7 @@
 		FDF978E215A80FD2000ADECA /* AssetMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AssetMetaData.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FDF978EA15A8C912000ADECA /* FrameSourceAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSourceAsset.cpp; sourceTree = "<group>"; };
 		FDF978EC15A8CA1E000ADECA /* FrameSinkAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSinkAsset.cpp; sourceTree = "<group>"; };
+		FDFAA0B815CC9189007577B9 /* LayerManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerManagerInterface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -542,12 +543,13 @@
 		FD26741815607A6E006323C7 /* layers */ = {
 			isa = PBXGroup;
 			children = (
-				FD26741915607A6E006323C7 /* CanvasLayer.cpp */,
-				FD26741A15607A6E006323C7 /* CanvasLayer.h */,
-				FD26741B15607A6E006323C7 /* CanvasLayerManager.cpp */,
-				FD26741C15607A6E006323C7 /* CanvasLayerManager.h */,
-				FD26741D15607A6E006323C7 /* CanvasLayerTransform.cpp */,
-				FD26741E15607A6E006323C7 /* CanvasLayerTransform.h */,
+				FD26741915607A6E006323C7 /* Layer.cpp */,
+				FD26741A15607A6E006323C7 /* Layer.h */,
+				FD26741B15607A6E006323C7 /* LayerManager.cpp */,
+				FD26741C15607A6E006323C7 /* LayerManager.h */,
+				FD26741D15607A6E006323C7 /* LayerTransform.cpp */,
+				FD26741E15607A6E006323C7 /* LayerTransform.h */,
+				FDFAA0B815CC9189007577B9 /* LayerManagerInterface.h */,
 			);
 			path = layers;
 			sourceTree = "<group>";
@@ -1026,9 +1028,9 @@
 				FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */,
 				FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */,
 				FD26742515607A6E006323C7 /* CanvasGroupManager.cpp in Sources */,
-				FD26742615607A6E006323C7 /* CanvasLayer.cpp in Sources */,
-				FD26742715607A6E006323C7 /* CanvasLayerManager.cpp in Sources */,
-				FD26742815607A6E006323C7 /* CanvasLayerTransform.cpp in Sources */,
+				FD26742615607A6E006323C7 /* Layer.cpp in Sources */,
+				FD26742715607A6E006323C7 /* LayerManager.cpp in Sources */,
+				FD26742815607A6E006323C7 /* LayerTransform.cpp in Sources */,
 				FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */,
 				FDB9C44115641551005AA48E /* ofxOscBundle.cpp in Sources */,
 				FDB9C44215641551005AA48E /* ofxOscMessage.cpp in Sources */,
