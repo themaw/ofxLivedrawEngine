@@ -60,21 +60,10 @@ Layer::~Layer() {
         delete fbo;
         fbo = NULL;
     }
-    if(sourcePlayer != NULL) {
-        delete sourcePlayer;
-        sourcePlayer = NULL;
-    }
-    
-    if(maskPlayer != NULL) {
-        delete maskPlayer;
-        maskPlayer = NULL;
-    } // TODO : what do do about kids? delete the kids or set them to root?
 }
 
 //--------------------------------------------------------------
 void Layer::init() {
-    sourcePlayer = NULL;
-    maskPlayer = NULL;
     
 //    sourcePlayer = new FrameBufferPlayer(this);
 //    sourcePlayer->addOscNodeAlias("source");

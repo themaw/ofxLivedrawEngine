@@ -24,17 +24,20 @@
 
 #pragma once
 
+#include "ofxVideoBuffer.h"
+#include "ofxVideoSinkInterface.h"
+
 #include "BaseMediaAsset.h"
 #include "FrameSinkAsset.h"
-#include "ofxVideoBuffer.h"
 
 class CacheableAsset;
 
 class BufferAsset : public virtual BaseMediaAsset, 
-                    public virtual FrameSinkAsset
+                    public virtual ofxVideoSinkInterface
+
 {
 public:
-    BufferAsset(const string& _name, int size, ofxVideoBufferType t);    
+    BufferAsset(const string& _name, int size, ofxVideoBufferType t);
     virtual ~BufferAsset();
 
     void update();

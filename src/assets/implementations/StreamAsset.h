@@ -24,8 +24,8 @@
 
 #pragma once
 
+#include "ofxVideoSourceInterface.h"
 #include "BaseMediaAsset.h"
-#include "FrameSourceAsset.h"
 
 #include "ofxIpVideoGrabber.h"
 
@@ -37,7 +37,7 @@ enum StreamType
 };
 
 class StreamAsset : public virtual BaseMediaAsset,
-                    public virtual FrameSourceAsset 
+                    public virtual ofxVideoSourceInterface
 {
 public:
     StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password);

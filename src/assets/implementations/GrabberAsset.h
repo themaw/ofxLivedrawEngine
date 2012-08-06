@@ -24,11 +24,12 @@
 
 #pragma once
 
+#include "ofxVideoSourceInterface.h"
 #include "BaseMediaAsset.h"
 #include "FrameSourceAsset.h"
 
 class GrabberAsset : public virtual BaseMediaAsset, 
-                     public virtual FrameSourceAsset 
+                     public virtual ofxVideoSourceInterface
 {
 public:
     GrabberAsset(const string& _name, int _devId, int _width, int _height);
@@ -38,8 +39,10 @@ public:
     
     bool dispose();
     void processOscCommand(const string& command, const ofxOscMessage& m);
-    bool isFrameNew();
+    
     ofPixelsRef getPixelsRef();
+    bool isFrameNew();
+
     void open();
     void close();
     bool isLoaded();

@@ -24,13 +24,12 @@
 
 #pragma once
 
+#include "ofxVideoSourceInterface.h"
 #include "BaseMediaAsset.h"
-#include "FrameSourceAsset.h"
-
 #include "ofxSyphonVideoClient.h"
 
 class SyphonAsset : public virtual BaseMediaAsset,
-                    public virtual FrameSourceAsset 
+                    public virtual ofxVideoSourceInterface
 {
 public:
     SyphonAsset(const string& _name);

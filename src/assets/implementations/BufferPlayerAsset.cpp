@@ -28,6 +28,9 @@
 //--------------------------------------------------------------
 BufferPlayerAsset::BufferPlayerAsset(const string& _name) 
 {
+    
+    canSource = true;
+    
     assetType = MEDIA_ASSET_BUFFERPLAYER;
     
     addAlias(_name);
@@ -65,9 +68,8 @@ BufferPlayerAsset::~BufferPlayerAsset() {}
 void BufferPlayerAsset::update() {
     player->update();
     
-    
     // everybody has some work to do
-    FrameSourceAsset::update();
+    ofxVideoSourceInterface::update();
 }
 
 //--------------------------------------------------------------

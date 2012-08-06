@@ -25,13 +25,13 @@
 
 #pragma once
 
+#include "ofxVideoSourceInterface.h"
 #include "BaseMediaAsset.h"
 #include "DiskBasedAsset.h"
-#include "FrameSourceAsset.h"
 
 class ImageAsset : public virtual BaseMediaAsset,
                    public virtual DiskBasedAsset,
-                   public virtual FrameSourceAsset 
+                   public virtual ofxVideoSourceInterface
 {
 public:
     ImageAsset(const string& _name, string _filename);

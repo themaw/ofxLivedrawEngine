@@ -26,6 +26,9 @@
 
 //--------------------------------------------------------------
 ImageAsset::ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
+    
+    canSource = true;
+    
     assetType = MEDIA_ASSET_IMAGE;
     addAlias(_name);
 //    name      = _name;
@@ -44,9 +47,9 @@ void ImageAsset::update() {
     
     
     
-    // everybod has some work to do
+    // everybody has some work to do
     DiskBasedAsset::update();
-    FrameSourceAsset::update();
+    ofxVideoSourceInterface::update();
 }
 
 //--------------------------------------------------------------

@@ -25,13 +25,13 @@
 #pragma once
 
 #include "ofxVideoBufferPlayer.h"
+#include "ofxVideoSourceInterface.h"
 
 #include "BaseMediaAsset.h"
-#include "FrameSourceAsset.h"
 
 
 class BufferPlayerAsset : public virtual BaseMediaAsset, 
-                          public virtual FrameSourceAsset 
+                          public virtual ofxVideoSourceInterface 
 {
 public:
     BufferPlayerAsset(const string& _name);

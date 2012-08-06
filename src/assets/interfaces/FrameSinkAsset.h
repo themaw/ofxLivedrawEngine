@@ -26,49 +26,18 @@
 
 #include "ofMain.h"
 #include "ofxVideoFrame.h"
+#include "ofxVideoSinkInterface.h"
 #include "FrameSourceAsset.h"
 #include "BaseMediaAsset.h"
 
 
 class FrameSourceAsset;
 
-class FrameSinkAsset : public virtual BaseMediaAsset {
+class FrameSinkAsset : public virtual BaseMediaAsset,
+                       public virtual ofxVideoSinkInterface {
+
 public:
     FrameSinkAsset();
     
     virtual ~FrameSinkAsset();
-    
-    void update();
-    
-    bool sink(ofxVideoFrame frame);
-    virtual bool frameReceived(ofxVideoFrame frame) = 0;
-    
-    // connect / disconnect
-    bool isConnected();
-    bool attachToSource(FrameSourceAsset* source);    
-    bool detachFromAllSources();
-    bool detachFromSource(FrameSourceAsset* source);
-    
-    //    bool remoteAttachToSource(ofxVideoSourceInterface* source);
-    //    bool remoteDetachFromSource(ofxVideoSourceInterface* source);
- 
-
-    // callbacks
-    void sourceWasAttached(FrameSourceAsset* source)  {}; // these callbacks are available
-    void sourceWasDetatched(FrameSourceAsset* source) {}; // these callbacks are available
-    
-    void sinkingEnabled() {};
-    void sinkingDisabled() {};
-    
-    // get source list
-//    vector<FrameSourceAsset*> getSources();
-    
-    bool isSinking();
-    void setSinking(bool _sinking);
-private:
-    
-    bool sinking;
-    
-    set<FrameSourceAsset*> sources;
-    set<FrameSourceAsset*>::iterator sourcesIter;
 };

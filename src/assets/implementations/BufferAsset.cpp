@@ -28,6 +28,8 @@
 //--------------------------------------------------------------
 BufferAsset::BufferAsset(const string& _name, int size, ofxVideoBufferType t)
 {
+    canSink = true;
+    
     assetType = MEDIA_ASSET_BUFFER;
     
     addAlias(_name);
@@ -50,9 +52,7 @@ BufferAsset::~BufferAsset() {}
 void BufferAsset::update() {
     
     buffer->update(); // update the buffer
-    
-    // everybod has some work to do
-    FrameSinkAsset::update();
+
 }
 
 //--------------------------------------------------------------

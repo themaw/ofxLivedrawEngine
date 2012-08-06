@@ -27,6 +27,9 @@
 
 //--------------------------------------------------------------
 GrabberAsset::GrabberAsset(const string& _name, int _devId, int _width, int _height) {
+    
+    canSource = true;
+    
     assetType = MEDIA_ASSET_GRABBER;
 
     addAlias(_name);
@@ -47,7 +50,7 @@ void GrabberAsset::update() {
     grabber->update();
     
     // everybody has some work to do
-    FrameSourceAsset::update();
+    ofxVideoSourceInterface::update();
 }
 
 //--------------------------------------------------------------

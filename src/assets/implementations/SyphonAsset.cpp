@@ -26,6 +26,8 @@
 
 //--------------------------------------------------------------
 SyphonAsset::SyphonAsset(const string& _name) {
+    canSource = true;
+    
     assetType = MEDIA_ASSET_SYPHON;
     addAlias(_name);
     
@@ -42,7 +44,7 @@ void SyphonAsset::update() {
     syphonClient->update();
     
     // super classes
-    FrameSourceAsset::update();
+    ofxVideoSourceInterface::update();
 }
 
 //--------------------------------------------------------------

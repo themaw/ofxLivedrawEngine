@@ -120,24 +120,24 @@ bool AssetManager::attachSourceToSink(const string& sourceAlias, const string& s
 bool AssetManager::attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAsset) {
     
     if(!sourceAsset->isSource()) {
-        ofLogError("AssetManager::attachSourceToSink : " + sourceAsset->getName() + " is not a source.");
+        ofLogError() << "AssetManager::attachSourceToSink : " << sourceAsset->getName() << " is not a source.";
         return false;
     }
     
     if(!sinkAsset->isSink()) {
-        ofLogError("AssetManager::attachSourceToSink : " + sinkAsset->getName() + " is not a sink.");
+        ofLogError() << "AssetManager::attachSourceToSink : " << sinkAsset->getName() + " is not a sink.";
         return false;
     }
     
-    FrameSourceAsset* source = dynamic_cast<FrameSourceAsset*>(sourceAsset);
+    ofxVideoSourceInterface* source = dynamic_cast<ofxVideoSourceInterface*>(sourceAsset);
     if(source == NULL) {
-        ofLogError("AssetManager::attachSourceToSink : " + sourceAsset->getName() + " could not be cast to source.");
+        ofLogError() << "AssetManager::attachSourceToSink : " << sourceAsset->getName() + " could not be cast to source.";
         return false;
     }
     
-    FrameSinkAsset* sink = dynamic_cast<FrameSinkAsset*>(sinkAsset);
+    ofxVideoSinkInterface* sink = dynamic_cast<ofxVideoSinkInterface*>(sinkAsset);
     if(sink == NULL) {
-        ofLogError("AssetManager::attachSourceToSink : " + sinkAsset->getName() + " could not be cast to sink.");
+        ofLogError() << "AssetManager::attachSourceToSink : " << sinkAsset->getName() + " could not be cast to sink.";
         return false;
     }
     

@@ -27,6 +27,8 @@
 #include "ofMain.h"
 //#include "ofxLivedrawEngine.h"
 
+#include "ofxVideoSourceInterface.h"
+
 #include "ofxEnablerInterface.h"
 #include "ofxOscRouterNode.h"
 //#include "ofTexture.h"
@@ -34,9 +36,10 @@
 #include "LayerManagerInterface.h"
 #include "LayerTransform.h"
 //#include "AssetManager.h"
-#include "BufferPlayerAsset.h"
 //#include "EffectsManager.h"
 //#include "EffectsChain.h"
+
+#include "LayerRenderSink.h"
 
 //class MediaAsset;
 //class BufferPlayerAsset;
@@ -46,7 +49,10 @@
 //class LayerManager;
 //class BufferPlayerAsset;
 
-class Layer : public ofxOscRouterNode, public ofxEnablerInterface {
+class Layer : public ofxOscRouterNode,
+              public ofxVideoSourceInterface,
+              public ofxEnablerInterface
+{
 	
 public:
 
@@ -61,6 +67,19 @@ public:
 
     void init();
     
+    bool isFrameNew() { return true;} ;
+
+    // TODO: readback like this is not efficient, especially when it's all going right back
+    // onto the graphics card.  need a better way to pass textures as video frames w/o all the
+    // other info.
+    ofPixelsRef getPixelsRef() {
+        fbo->readToPixels(pix);
+        return pix;
+    };
+    
+    bool isLoaded() {return true;}
+
+    
     bool dispose();
     
 //	void setup();
@@ -69,16 +88,31 @@ public:
     void render();
     void draw();
 
-    //void setSource(MediaAsset* src);
-    //void setMask(MediaAsset* src);
+    // player assets
+    bool hasSource() {
+        return sourceSink.hasFrame();
+    }
     
-    //void swapSourceMaskPlayers();
+    bool hasMask() {
+        return maskSink.hasFrame();
+    }
     
-    BufferPlayerAsset* getSourcePlayer() {return sourcePlayer;};
-    BufferPlayerAsset* getMaskPlayer()   {return maskPlayer;};
+    //void setSourcePlayer(MediaAsset* src);
+    //void setMaskPlayer(MediaAsset* src);
 
+   
     
-	LayerTransform* getTransform() { return &transform; };
+    LayerRenderSink& getSourceSink() {
+        return sourceSink;
+    }
+    
+    LayerRenderSink& getMaskSink() {
+        return maskSink;
+    }
+
+
+	
+    LayerTransform* getTransform() { return &transform; };
 	
     string getName();
     void setName(string name);
@@ -139,7 +173,7 @@ public:
     
 private:
 	
-    
+    ofPixels pix;
     ofFbo* fbo;
     
     string layerName;
@@ -147,9 +181,15 @@ private:
 //    EffectsManager* effectsManager;
     
 //    EffectsChain effectsChain;
+
+    LayerRenderSink sourceSink;
+    LayerRenderSink maskSink;
+
     
-    BufferPlayerAsset* sourcePlayer;
-    BufferPlayerAsset* maskPlayer;
+//    LayerRenderSink sourceSinkA;
+//    LayerRenderSink sourceSinkB;
+//    LayerRenderSink maskSinkA;
+//    LayerRenderSink maskSinkB;
 
 	// Masker compositer;
 	// width / height are all taken from the source

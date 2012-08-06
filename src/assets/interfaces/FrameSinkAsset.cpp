@@ -24,103 +24,11 @@
 
 #include "FrameSinkAsset.h"
 
-
-//bool attachToSource(ofxVideoSourceInterface* source);    
-//bool detatchFromSource(ofxVideoSourceInterface* source);
-//
-//// callbacks
-//bool sourceWasAttached(ofxVideoSourceInterface* source)  {}; // these callbacks are available
-//bool sourceWasDetatched(ofxVideoSourceInterface* source) {}; // these callbacks are available
-//
-//// get source list
-
+//--------------------------------------------------------------
+FrameSinkAsset::FrameSinkAsset() {canSink = true;}
 
 //--------------------------------------------------------------
-FrameSinkAsset::FrameSinkAsset() {
-    canSink = true;
-    sinking = true;
-}
-
-//--------------------------------------------------------------
-FrameSinkAsset::~FrameSinkAsset() {
-    for(sourcesIter = sources.begin(); sourcesIter != sources.end(); sourcesIter++) {
-        detachFromSource(*sourcesIter);
-    }
-    sources.clear();
-}
-
-//--------------------------------------------------------------
-void FrameSinkAsset::update() {
-    // nothing to do but wait.
-}
-
-//--------------------------------------------------------------
-bool FrameSinkAsset::sink(ofxVideoFrame frame) {
-    if(isSinking()) {
-        return frameReceived(frame);
-    } else {
-        return false;
-    }
-}
-
-//--------------------------------------------------------------
-bool FrameSinkAsset::isConnected() { 
-    return sources.size() > 0; 
-}
-
-//--------------------------------------------------------------
-bool FrameSinkAsset::attachToSource(FrameSourceAsset* source) {
-    if(source->attachToSink(this)) {
-        sources.insert(source);
-        return true;
-    } else {
-        ofLog(OF_LOG_ERROR, "ofxVideoSourceInterface::attachToSource() : error attaching to source.");
-        return false;
-    }
-}
-
-//--------------------------------------------------------------
-bool FrameSinkAsset::detachFromAllSources() {
-
-    for(sourcesIter = sources.begin(); sourcesIter != sources.end(); sourcesIter++) {
-        detachFromSource(*sourcesIter);
-    }
-    return true;
-}
-
-
-//--------------------------------------------------------------
-bool FrameSinkAsset::detachFromSource(FrameSourceAsset* source) {
-    if(source->detachFromSink(this)) {
-        sources.erase(source);
-        return true;
-    } else {
-        ofLog(OF_LOG_ERROR, "ofxVideoSourceInterface::detatchFromSource() : error detatching from source.");
-        return false;
-    }
-}
-
-////--------------------------------------------------------------
-//vector<FrameSourceAsset*> FrameSinkAsset::getSources() {
-//    return sources.toArray();
-//}
-
-//--------------------------------------------------------------
-bool FrameSinkAsset::isSinking() {
-    return sinking;
-}
-
-//--------------------------------------------------------------
-void FrameSinkAsset::setSinking(bool _sinking) {
-    if(_sinking != sinking) {
-        sinking = _sinking;
-        if(sinking) {
-            sinkingEnabled();
-        } else {
-            sinkingDisabled();
-        }
-    }
-}
+FrameSinkAsset::~FrameSinkAsset() {}
 
 
 

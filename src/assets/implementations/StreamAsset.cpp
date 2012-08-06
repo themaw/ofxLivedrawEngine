@@ -26,6 +26,8 @@
 
 //--------------------------------------------------------------
 StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password) {
+    canSource = true;
+    
     assetType  = MEDIA_ASSET_STREAM;
     streamType = _type;
 
@@ -67,7 +69,7 @@ void StreamAsset::update() {
     }
 
     // everybody has some work
-    FrameSourceAsset::update();
+    ofxVideoSourceInterface::update();
 }
 //--------------------------------------------------------------
 void StreamAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
