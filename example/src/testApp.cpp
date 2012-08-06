@@ -29,7 +29,7 @@ void testApp::setup(){
 	// main window setup
 	ofSetFrameRate(60);
 	ofBackground(0);
-	ofSetLogLevel(OF_LOG_VERBOSE);
+	//ofSetLogLevel(OF_LOG_VERBOSE);
     livedraw.setup();
 }
 
@@ -51,7 +51,7 @@ void testApp::keyPressed (int key){
 //        AssetManager* man = livedraw.getAssetManager();
 //        man->dump();
     } else if(key == 'b') {
-//        CanvasLayerManager* man = livedraw.getCanvasLayerManager();
+//        LayerManager* man = livedraw.getLayerManager();
 //        man->dump();
     } else if(key == 's') {
         int i = 0;
