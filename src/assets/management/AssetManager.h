@@ -50,7 +50,7 @@
 //class StreamAsset;
 //class SyphonAsset;
 
-class ofxLivedrawEngine;  // we only use the pointer below, so no need to include
+//class ofxLivedrawEngine;  // we only use the pointer below, so no need to include
 
 class AssetManager : public ofxOscRouterNode, 
                      public CacheProvider
@@ -67,13 +67,13 @@ public:
     //--------------------------------------------------------------
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
+//    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
+//    ofxLivedrawEngine* getEngine() {return engine;}    
 
 protected:
 
     //--------------------------------------------------------------
-    bool hasAlias(string alias);
+    bool hasAlias(const string& alias);
     //bool addAlias(BaseMediaAsset* asset, string alias);
     //bool removeAlias(string alias);
     //bool removeAliasesForAsset(BaseMediaAsset* asset);
@@ -82,16 +82,20 @@ protected:
     
     //--------------------------------------------------------------
     
-    ImageAsset*         addImage(string name, string filename);
-    MovieAsset*         addMovie(string name, string filename);
-    StreamAsset*        addStream(string name, StreamType type, string url, string username, string password);
-    BufferAsset*        addBuffer(string name, int size, ofxVideoBufferType t);
-    BufferPlayerAsset*  addBufferPlayer(string name);
-    GrabberAsset*       addGrabber(string name, int devId, int width, int height);
-    SyphonAsset*        addSyphon(string name);
+    ImageAsset*         addImage(const string& name, const string& filename);
+    MovieAsset*         addMovie(const string& name, const string& filename);
+    StreamAsset*        addStream(const string& name,
+                                  StreamType type,
+                                  const string& url,
+                                  const string& username,
+                                  const string& password);
+    BufferAsset*        addBuffer(const string& name, int size, ofxVideoBufferType t);
+    BufferPlayerAsset*  addBufferPlayer(const string& name);
+    GrabberAsset*       addGrabber(const string& name, int devId, int width, int height);
+    SyphonAsset*        addSyphon(const string& name);
     
     //--------------------------------------------------------------
-    BaseMediaAsset* getAsset(string string);
+    BaseMediaAsset* getAsset(string alias);
 
     //--------------------------------------------------------------
     bool queueRegisterAsset(BaseMediaAsset* asset);
@@ -99,15 +103,15 @@ protected:
     bool queueUnregisterAsset(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
-    bool attachSourceToSink(string sourceAlias, string sinkAlias);
-    bool attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAlias);
+    bool attachSourceToSink(const string& sourceAlias, const string& sinkAlias);
+    bool attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAsset);
 
     //--------------------------------------------------------------
     bool cacheAsset(CacheableAsset* asset);
     bool uncacheAsset(CacheableAsset* asset);
 
-    bool startAsset(string alias);
-    bool stopAsset(string alias);
+    bool startAsset(const string& alias);
+    bool stopAsset(const string& alias);
     
     //--------------------------------------------------------------
 	void loadAssets();
@@ -133,7 +137,7 @@ protected:
     
 protected:
     
-    ofxLivedrawEngine* engine;
+//    ofxLivedrawEngine* engine;
     
 private:
 

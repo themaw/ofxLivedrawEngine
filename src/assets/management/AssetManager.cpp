@@ -109,12 +109,40 @@ void AssetManager::update() {
 }
 
 //--------------------------------------------------------------
-bool AssetManager::attachSourceToSink(string sourceAlias, string sinkAlias) {
-    return attachSourceToSink(getAsset(sourceAlias), getAsset(sinkAlias));
+bool AssetManager::attachSourceToSink(const string& sourceAlias, const string& sinkAlias) {
+    BaseMediaAsset* source = getAsset(sourceAlias);
+    BaseMediaAsset* sink = getAsset(sinkAlias);
+
+    return attachSourceToSink(source,sink);
 }
 
 //--------------------------------------------------------------
-bool AssetManager::attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAlias) {
+bool AssetManager::attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAsset) {
+    
+    if(!sourceAsset->isSource()) {
+        ofLogError("AssetManager::attachSourceToSink : " + sourceAsset->getName() + " is not a source.");
+        return false;
+    }
+    
+    if(!sinkAsset->isSink()) {
+        ofLogError("AssetManager::attachSourceToSink : " + sinkAsset->getName() + " is not a sink.");
+        return false;
+    }
+    
+    FrameSourceAsset* source = dynamic_cast<FrameSourceAsset*>(sourceAsset);
+    if(source == NULL) {
+        ofLogError("AssetManager::attachSourceToSink : " + sourceAsset->getName() + " could not be cast to source.");
+        return false;
+    }
+    
+    FrameSinkAsset* sink = dynamic_cast<FrameSinkAsset*>(sinkAsset);
+    if(sink == NULL) {
+        ofLogError("AssetManager::attachSourceToSink : " + sinkAsset->getName() + " could not be cast to sink.");
+        return false;
+    }
+    
+
+    return source->attachToSink(sink);
     
 }
 
@@ -245,7 +273,7 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
     // turn it on
     asset->setNodeActive(true);
 
-
+    // add it to our collection
     assets.insert(asset);
     
     // special procedures
@@ -264,13 +292,13 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
     
     // is there a there there?
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::unregisterAsset - asset is NULL ");
+        ofLogWarning() << "AssetManager::unregisterAsset - asset is NULL ";
         return false;
     }
     
     // tell the object to dispose of itself (free connections, kill other things, etc)
     if(!asset->dispose()) {
-        ofLog(OF_LOG_WARNING, "AssetManager::unregisterAsset - unable to dispose " + asset->getName());
+        ofLogWarning() << "AssetManager::unregisterAsset - unable to dispose " << asset->getName();
         return false;
     }
     
@@ -281,7 +309,7 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
     
     
     if(hasOscChild(asset) && !removeOscChild(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - failed to remove as an osc child node");
+        ofLogError() << "AssetManager::registerAsset - failed to remove as an osc child node";
         return false;
     }
     
@@ -345,7 +373,7 @@ bool AssetManager::uncacheAsset(CacheableAsset* asset) {
 }
 
 //--------------------------------------------------------------
-bool AssetManager::startAsset(string alias) {
+bool AssetManager::startAsset(const string& alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset not found " + alias);
@@ -366,10 +394,10 @@ bool AssetManager::startAsset(string alias) {
 }
 
 //--------------------------------------------------------------
-bool AssetManager::stopAsset(string alias) {
+bool AssetManager::stopAsset(const string& alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset not found " + alias);
+        ofLog(OF_LOG_WARNING, "AssetManager::stopAsset - Asset not found " + alias);
         return false;
     }
     
@@ -384,7 +412,7 @@ bool AssetManager::stopAsset(string alias) {
 }
 
 //--------------------------------------------------------------
-ImageAsset* AssetManager::addImage(string name, string filename) {
+ImageAsset* AssetManager::addImage(const string& name, const string& filename) {
     ImageAsset* asset = new ImageAsset(validateAssetId(name), filename);
 
     queueRegisterAsset(asset);
@@ -404,7 +432,7 @@ ImageAsset* AssetManager::addImage(string name, string filename) {
 }
 
 //--------------------------------------------------------------
-MovieAsset* AssetManager::addMovie(string name, string filename) {
+MovieAsset* AssetManager::addMovie(const string& name, const string& filename) {
     MovieAsset* asset = new MovieAsset(validateAssetId(name), filename);
     
     queueRegisterAsset(asset);
@@ -424,7 +452,7 @@ MovieAsset* AssetManager::addMovie(string name, string filename) {
 }
 
 //--------------------------------------------------------------
-StreamAsset* AssetManager::addStream(string name, StreamType type, string url, string username, string password) {
+StreamAsset* AssetManager::addStream(const string& name, StreamType type, const string& url, const string& username, const string& password) {
     StreamAsset* asset = new StreamAsset(validateAssetId(name), type, url, username, password);
     
     queueRegisterAsset(asset);
@@ -444,7 +472,7 @@ StreamAsset* AssetManager::addStream(string name, StreamType type, string url, s
 }
 
 //--------------------------------------------------------------
-BufferAsset* AssetManager::addBuffer(string name, int size, ofxVideoBufferType t) {
+BufferAsset* AssetManager::addBuffer(const string& name, int size, ofxVideoBufferType t) {
     BufferAsset* asset = new BufferAsset(validateAssetId(name), size, t);
     
     queueRegisterAsset(asset);
@@ -464,7 +492,7 @@ BufferAsset* AssetManager::addBuffer(string name, int size, ofxVideoBufferType t
 }
 
 //--------------------------------------------------------------
-BufferPlayerAsset* AssetManager::addBufferPlayer(string name) {
+BufferPlayerAsset* AssetManager::addBufferPlayer(const string& name) {
     BufferPlayerAsset* asset = new BufferPlayerAsset(validateAssetId(name));
     queueRegisterAsset(asset);
 
@@ -483,7 +511,7 @@ BufferPlayerAsset* AssetManager::addBufferPlayer(string name) {
 }
 
 //--------------------------------------------------------------
-GrabberAsset* AssetManager::addGrabber(string name, int devId, int width, int height) {
+GrabberAsset* AssetManager::addGrabber(const string& name, int devId, int width, int height) {
     GrabberAsset* asset = new GrabberAsset(validateAssetId(name), devId, width, height);
     queueRegisterAsset(asset);
 
@@ -502,12 +530,12 @@ GrabberAsset* AssetManager::addGrabber(string name, int devId, int width, int he
 }
 
 //--------------------------------------------------------------
-SyphonAsset* AssetManager::addSyphon(string name) {
+SyphonAsset* AssetManager::addSyphon(const string& name) {
     return NULL;
 }
 
 //--------------------------------------------------------------
-bool AssetManager::hasAlias(string alias) {
+bool AssetManager::hasAlias(const string& alias) {
     return assetAliases.find(alias) != assetAliases.end();
 }
 
