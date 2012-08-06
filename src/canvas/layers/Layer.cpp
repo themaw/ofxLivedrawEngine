@@ -22,11 +22,12 @@
  
  ==============================================================================*/
 
-#include "CanvasLayer.h"
+#include "Layer.h"
+
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos, CanvasLayer* _layerParent) : ofxOscRouterNode(name) {
-    cout << "_layerManager=" << _layerManager << " " << name << " " << pos << " cl=" << endl;
+Layer::Layer(LayerManagerInterface* _layerManager, string name, ofPoint pos, Layer* _layerParent) : ofxOscRouterNode(name) {
+    //cout << "_layerManager=" << _layerManager << " " << name << " " << pos << " cl=" << endl;
     
     
     layerManager = _layerManager;
@@ -37,7 +38,7 @@ CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint
 }
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint pos) : ofxOscRouterNode(name) {
+Layer::Layer(LayerManagerInterface* _layerManager, string name, ofPoint pos) : ofxOscRouterNode(name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = NULL;
@@ -46,7 +47,7 @@ CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name, ofPoint
 }
 
 //--------------------------------------------------------------
-CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : ofxOscRouterNode(name) {
+Layer::Layer(LayerManagerInterface* _layerManager, string name) : ofxOscRouterNode(name) {
     layerManager = _layerManager;
     layerName = name;
     layerParent = NULL;
@@ -54,7 +55,7 @@ CanvasLayer::CanvasLayer(CanvasLayerManager* _layerManager, string name) : ofxOs
 }
 
 //--------------------------------------------------------------
-CanvasLayer::~CanvasLayer() {
+Layer::~Layer() {
     if(fbo != NULL) {
         delete fbo;
         fbo = NULL;
@@ -71,7 +72,7 @@ CanvasLayer::~CanvasLayer() {
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::init() {
+void Layer::init() {
     sourcePlayer = NULL;
     maskPlayer = NULL;
     
@@ -113,152 +114,155 @@ void CanvasLayer::init() {
 }
 
 //--------------------------------------------------------------
-//AssetManager* CanvasLayer::getAssetManager() {
-//    return layerManager->getAssetManager();
-//}
-//
-////--------------------------------------------------------------
-//bool CanvasLayer::hasAssetManager() {
-//    return layerManager->hasAssetManager();
-//}
+bool Layer::dispose() {
+    // disposing
+    return true;
+}
 
+////--------------------------------------------------------------
+//AssetManager* Layer::getAssetManager() {
+//    ofxLivedrawEngine* eng = layerManager->getEngine();
+//    if(eng != NULL) {
+//        return eng->getAssetManager();
+//    } else {
+//        return NULL;
+//    }
+//}
 
 //--------------------------------------------------------------
-//void CanvasLayer::setEffectsManager(EffectsManager* _effectsManager) {
+//void Layer::setEffectsManager(EffectsManager* _effectsManager) {
 //    effectsManager = _effectsManager;
 //    effectsChain.setEffectsManager(effectsManager);
 //}
 
-
-
 //--------------------------------------------------------------
-bool CanvasLayer::bringFoward() {
+bool Layer::bringFoward() {
     return layerManager->bringLayerForward(this);
 }
 //--------------------------------------------------------------
-bool CanvasLayer::sendBackward() {
+bool Layer::sendBackward() {
     return layerManager->sendLayerBackward(this);
 }
 //--------------------------------------------------------------
-bool CanvasLayer::bringToFront() {
-    return layerManager->bringLayerToFront(this);    
+bool Layer::bringToFront() {
+    return layerManager->bringLayerToFront(this);
 }
 //--------------------------------------------------------------
-bool CanvasLayer::sendToBack() {
+bool Layer::sendToBack() {
     return layerManager->sendLayerToBack(this);
 }
 
 // node info
 //--------------------------------------------------------------
-CanvasLayer* CanvasLayer::getLayerRoot() {
+Layer* Layer::getLayerRoot() {
     // recursively locate root
     return layerParent != NULL ? layerParent->getLayerRoot() : NULL;
 }
 
 //--------------------------------------------------------------
-CanvasLayer* CanvasLayer::getLayerParent() {
+Layer* Layer::getLayerParent() {
     return layerParent;
 }
 
 //--------------------------------------------------------------
-vector<CanvasLayer*> CanvasLayer::getLayerChildren() {
+set<Layer*> Layer::getLayerChildren() {
     return layerChildren;
 }
 
+////--------------------------------------------------------------
+//bool Layer::hasChild(Layer* _layerChild) {
+//    return find (layerChildren.begin(), 
+//                 layerChildren.end(), 
+//                 _layerChild) != layerChildren.end();
+//}
+
+////--------------------------------------------------------------
+//set<Layer*>::iterator Layer::findChild(Layer* _layerChild) {
+//    return find (layerChildren.begin(), 
+//                 layerChildren.end(), 
+//                 _layerChild);
+//}
+
+////--------------------------------------------------------------
+//ofxLivedrawEngine* Layer::getEngine() {
+////    cout << "CLM=" << layerManager << endl;
+////    cout << "CLM=" << layerManager->getEngine() << endl;
+//    
+//    return layerManager->getEngine();
+//}
+
+////--------------------------------------------------------------
+//void Layer::setLayerParent(Layer* _layerParent) {
+//    
+//    // setting the layer parent does:
+//    // 0. checks to see if the parent is different.
+//    // 1. removes the layer from an existing parent.
+//    // 2. sets a new parent reference.
+//    // 3. adds the item to the parent.
+//    
+//
+//    if(_layerParent == layerParent) {
+//        // already set
+//        return;
+//    }
+//
+//    
+//    if(layerParent != NULL) { // if it has a parent, remove it
+//        // remove from the current parent
+//        if(!layerParent->removeLayerChild(this)) {
+//            ofLog(OF_LOG_ERROR, "Layer::setLayerParent(): Error removing child from previous parent.");  
+//        } 
+//    }
+//
+//    layerParent = _layerParent; // set a new parent reference
+//    
+//    if(layerParent != NULL) {
+//        layerParent->addLayerChild(this); // add item to the new parent
+//    } else {
+//        //layerManager->addLayerAsRoot(this);
+//    }
+//    
+//}
+////--------------------------------------------------------------
+//bool Layer::addLayerChild(Layer* _layerChild) {
+//    vector<Layer*>::iterator layerParentIter = findChild(this);
+//
+//    if(layerParentIter == layerChildren.end()) {
+//        layerChildren.push_back(_layerChild);
+//        return true;
+//    } else {
+//        return false;
+//    }    
+//}
+//
+////--------------------------------------------------------------
+//bool Layer::removeLayerChild(Layer* _layerChild) {
+//    vector<Layer*>::iterator it = findChild(_layerChild);
+//    if(it != layerChildren.end()) {
+//        _layerChild->setLayerParent(NULL);
+//        layerChildren.erase(it);
+//        return true;
+//    } else {
+//        // did not have it
+//        return false;
+//    }
+//}
+//
 //--------------------------------------------------------------
-bool CanvasLayer::hasChild(CanvasLayer* _layerChild) {
-    return find (layerChildren.begin(), 
-                 layerChildren.end(), 
-                 _layerChild) != layerChildren.end();
-}
-
-//--------------------------------------------------------------
-vector<CanvasLayer*>::iterator CanvasLayer::findChild(CanvasLayer* _layerChild) {
-    return find (layerChildren.begin(), 
-                 layerChildren.end(), 
-                 _layerChild);
-}
-
-//--------------------------------------------------------------
-ofxLivedrawEngine* CanvasLayer::getEngine() {
-    cout << "CLM=" << layerManager << endl;
-    cout << "CLM=" << layerManager->getEngine() << endl;
-    
-    return layerManager->getEngine();
-}
-
-//--------------------------------------------------------------
-void CanvasLayer::setLayerParent(CanvasLayer* _layerParent) {
-    
-    // setting the layer parent does:
-    // 0. checks to see if the parent is different.
-    // 1. removes the layer from an existing parent.
-    // 2. sets a new parent reference.
-    // 3. adds the item to the parent.
-    
-
-    if(_layerParent == layerParent) {
-        // already set
-        return;
-    }
-
-    
-    if(layerParent != NULL) { // if it has a parent, remove it
-        // remove from the current parent
-        if(!layerParent->removeLayerChild(this)) {
-            ofLog(OF_LOG_ERROR, "CanvasLayer::setLayerParent(): Error removing child from previous parent.");  
-        } 
-    }
-
-    layerParent = _layerParent; // set a new parent reference
-    
-    if(layerParent != NULL) {
-        layerParent->addLayerChild(this); // add item to the new parent
-    } else {
-        layerManager->addLayerAsRoot(this);
-    }
-    
-}
-//--------------------------------------------------------------
-bool CanvasLayer::addLayerChild(CanvasLayer* _layerChild) {
-    vector<CanvasLayer*>::iterator layerParentIter = findChild(this);
-
-    if(layerParentIter == layerChildren.end()) {
-        layerChildren.push_back(_layerChild);
-        return true;
-    } else {
-        return false;
-    }    
-}
-
-//--------------------------------------------------------------
-bool CanvasLayer::removeLayerChild(CanvasLayer* _layerChild) {
-    vector<CanvasLayer*>::iterator it = findChild(_layerChild);
-    if(it != layerChildren.end()) {
-        _layerChild->setLayerParent(NULL);
-        layerChildren.erase(it);
-        return true;
-    } else {
-        // did not have it
-        return false;
-    }
-}
-
-//--------------------------------------------------------------
-void CanvasLayer::setPosition(ofPoint pos) {
+void Layer::setPosition(ofPoint pos) {
     getTransform()->setPosition(pos);
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::setRectangle(ofRectangle rect) {
+void Layer::setRectangle(ofRectangle rect) {
     getTransform()->setPosition(ofPoint(rect.x,rect.y));
     getTransform()->setSize(rect.width,rect.height);
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::processOscCommand(const string& command, const ofxOscMessage& m) {
+void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    cout << "CanvasLayer::const string& command, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << command << "/" << endl;
+    cout << "Layer::const string& command, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << command << "/" << endl;
     
     if(isMatch(command,"order")) {
         
@@ -305,7 +309,7 @@ void CanvasLayer::processOscCommand(const string& command, const ofxOscMessage& 
 }
 
 ////--------------------------------------------------------------
-//void CanvasLayer::setSource(MediaAsset* src) {
+//void Layer::setSource(MediaAsset* src) {
 //    /*
 //    if(source->isLoaded()) {
 //        delete source;
@@ -319,7 +323,7 @@ void CanvasLayer::processOscCommand(const string& command, const ofxOscMessage& 
 //}
 //
 ////--------------------------------------------------------------
-//void CanvasLayer::setMask(MediaAsset* src) {
+//void Layer::setMask(MediaAsset* src) {
 //    //mask->loadImage(src->getAssetURI().toString());
 //}
 
@@ -327,7 +331,7 @@ void CanvasLayer::processOscCommand(const string& command, const ofxOscMessage& 
 //--------------------------------------------------------------
 // This must also swap node names, etc.  Better to swap the playe rdata, 
 // rather than the whole frame buffer pointer.
-//void CanvasLayer::swapSourceMaskPlayers() {
+//void Layer::swapSourceMaskPlayers() {
 //    FrameBufferPlayer* tmp;
 //    tmp = getSourcePlayer();
 //    sourcePlayer = getMaskPlayer();
@@ -337,24 +341,24 @@ void CanvasLayer::processOscCommand(const string& command, const ofxOscMessage& 
 
 
 //--------------------------------------------------------------
-string CanvasLayer::getName() {
+string Layer::getName() {
     return layerName;
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::setName(string _name) {
+void Layer::setName(string _name) {
     layerName = _name;
     addOscNodeAlias(layerName);
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::update() {
+void Layer::update() {
 //    sourcePlayer->update();
 //    maskPlayer->update();
 }
 
 //--------------------------------------------------------------
-void CanvasLayer::onEnabled() {}
+void Layer::onEnabled() {}
 
 //--------------------------------------------------------------
-void CanvasLayer::onDisabled() {}
+void Layer::onDisabled() {}

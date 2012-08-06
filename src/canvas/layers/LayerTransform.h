@@ -32,33 +32,33 @@
 
 
 
-class CanvasLayerTransform : public ofxOscRouterNode, public ofxEnablerInterface {
+class LayerTransform : public ofxOscRouterNode, public ofxEnablerInterface {
 	
 public:
 	
     
-    CanvasLayerTransform(ofPoint _position, 
-                         ofPoint _anchorPoint, 
-                         ofPoint _rotation, 
-                         ofPoint _scale, 
-                         int _opacity);
-    CanvasLayerTransform(ofPoint _position, 
-                         ofPoint _anchorPoint, 
-                         ofPoint _rotation, 
-                         ofPoint _scale);
-    CanvasLayerTransform(ofPoint _position, 
-                         ofPoint _anchorPoint, 
-                         ofPoint _rotation);
+    LayerTransform(ofPoint _position, 
+                   ofPoint _anchorPoint, 
+                   ofPoint _rotation, 
+                   ofPoint _scale, 
+                   int _opacity);
+    LayerTransform(ofPoint _position, 
+                   ofPoint _anchorPoint, 
+                   ofPoint _rotation, 
+                   ofPoint _scale);
+    LayerTransform(ofPoint _position, 
+                   ofPoint _anchorPoint, 
+                   ofPoint _rotation);
 
-    CanvasLayerTransform(ofPoint _position, 
-                         ofPoint _anchorPoint);
+    LayerTransform(ofPoint _position, 
+                   ofPoint _anchorPoint);
 
-    CanvasLayerTransform(ofPoint _position);
+    LayerTransform(ofPoint _position);
 
-    CanvasLayerTransform();
+    LayerTransform();
 
     
-    virtual ~CanvasLayerTransform();
+    virtual ~LayerTransform();
     
     void init();
     

@@ -22,10 +22,10 @@
  
  ==============================================================================*/
 
-#include "CanvasLayerTransform.h"
+#include "LayerTransform.h"
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
+LayerTransform::LayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint, 
                      ofPoint _rotation, 
                      ofPoint _scale, 
@@ -44,7 +44,7 @@ ofxOscRouterNode("transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
+LayerTransform::LayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint, 
                      ofPoint _rotation, 
                      ofPoint _scale) : 
@@ -62,7 +62,7 @@ ofxOscRouterNode("transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
+LayerTransform::LayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint, 
                      ofPoint _rotation) : 
 ofxEnablerInterface(true),  
@@ -79,7 +79,7 @@ ofxOscRouterNode("transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform(ofPoint _position, 
+LayerTransform::LayerTransform(ofPoint _position, 
                      ofPoint _anchorPoint) : 
 ofxEnablerInterface(true),  
 ofxOscRouterNode("transform") {
@@ -94,7 +94,7 @@ ofxOscRouterNode("transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform(ofPoint _position) : 
+LayerTransform::LayerTransform(ofPoint _position) : 
 ofxEnablerInterface(true),  
 ofxOscRouterNode("transform") {
     
@@ -107,7 +107,7 @@ ofxOscRouterNode("transform") {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::CanvasLayerTransform() : 
+LayerTransform::LayerTransform() : 
 ofxEnablerInterface(true), 
 ofxOscRouterNode("transform") {
     
@@ -121,7 +121,7 @@ ofxOscRouterNode("transform") {
 
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::init() {
+void LayerTransform::init() {
     addOscMethod("position");
     addOscMethod("anchorpoint");
     addOscMethod("rotate");
@@ -132,10 +132,10 @@ void CanvasLayerTransform::init() {
 }
 
 //--------------------------------------------------------------
-CanvasLayerTransform::~CanvasLayerTransform() {};
+LayerTransform::~LayerTransform() {};
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::processOscCommand(const string& command, const ofxOscMessage& m) {
+void LayerTransform::processOscCommand(const string& command, const ofxOscMessage& m) {
     
     if(isMatch(command,"position")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
@@ -150,7 +150,7 @@ void CanvasLayerTransform::processOscCommand(const string& command, const ofxOsc
                 } else if(c == 'z') {
                     setPositionZ(val);
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
+                    ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
             } else {
@@ -178,7 +178,7 @@ void CanvasLayerTransform::processOscCommand(const string& command, const ofxOsc
                 } else if(c == 'z') {
                     setAnchorPointZ(val);
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
+                    ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
                 
@@ -211,7 +211,7 @@ void CanvasLayerTransform::processOscCommand(const string& command, const ofxOsc
                     setRotationY(m.getArgAsFloat(2));
                     setRotationZ(m.getArgAsFloat(3));
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
+                    ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
                 
@@ -242,7 +242,7 @@ void CanvasLayerTransform::processOscCommand(const string& command, const ofxOsc
                 } else if(c == 'z') {
                     setScaleZ(val);
                 } else {
-                    ofLog(OF_LOG_ERROR, "CanvasLayerTransform: invalid arg type: " + ofToString(c) + " " + command);
+                    ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
             } else {
@@ -274,140 +274,140 @@ void CanvasLayerTransform::processOscCommand(const string& command, const ofxOsc
 
 
 //--------------------------------------------------------------
-int CanvasLayerTransform::getWidth() {return size.getClampedX(); };
+int LayerTransform::getWidth() {return size.getClampedX(); };
 //--------------------------------------------------------------
-int CanvasLayerTransform::getHeight() {return size.getClampedY(); };
+int LayerTransform::getHeight() {return size.getClampedY(); };
 //--------------------------------------------------------------
-void CanvasLayerTransform::setSize(float w, float h) {this->size.set(w, h, 0); onSetSize();}
+void LayerTransform::setSize(float w, float h) {this->size.set(w, h, 0); onSetSize();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setWidth(float w) {this->size.x = w; onSetSize();}
+void LayerTransform::setWidth(float w) {this->size.x = w; onSetSize();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setHeight(float h) {this->size.y = h; onSetSize();}
+void LayerTransform::setHeight(float h) {this->size.y = h; onSetSize();}
 
 
 //--------------------------------------------------------------
-int CanvasLayerTransform::getX() { return position.getClampedX(); };
+int LayerTransform::getX() { return position.getClampedX(); };
 //--------------------------------------------------------------
-int CanvasLayerTransform::getY() { return position.getClampedY(); };
+int LayerTransform::getY() { return position.getClampedY(); };
 //--------------------------------------------------------------
-int CanvasLayerTransform::getZ() { return position.getClampedZ(); };
+int LayerTransform::getZ() { return position.getClampedZ(); };
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getPosition() { return position.getClamped(); };
+ofPoint LayerTransform::getPosition() { return position.getClamped(); };
 //--------------------------------------------------------------
-void CanvasLayerTransform::setPosition(ofPoint const p) { position.set(p.x, p.y, p.z); onSetPosition();}
+void LayerTransform::setPosition(ofPoint const p) { position.set(p.x, p.y, p.z); onSetPosition();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setPositionX(float x) {position.x = x; onSetPosition();}
+void LayerTransform::setPositionX(float x) {position.x = x; onSetPosition();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setPositionY(float y) {position.y = y; onSetPosition();}
+void LayerTransform::setPositionY(float y) {position.y = y; onSetPosition();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setPositionZ(float z) {position.z = z; onSetPosition();}
+void LayerTransform::setPositionZ(float z) {position.z = z; onSetPosition();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getAnchorPoint() { return anchorPoint.getClamped(); };
+ofPoint LayerTransform::getAnchorPoint() { return anchorPoint.getClamped(); };
 //--------------------------------------------------------------
-void CanvasLayerTransform::setAnchorPoint(ofPoint const p) {anchorPoint.set(p.x, p.y, p.z); onSetAnchorPoint();}
+void LayerTransform::setAnchorPoint(ofPoint const p) {anchorPoint.set(p.x, p.y, p.z); onSetAnchorPoint();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setAnchorPointX(float x) {anchorPoint.x = x; onSetAnchorPoint();}
+void LayerTransform::setAnchorPointX(float x) {anchorPoint.x = x; onSetAnchorPoint();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setAnchorPointY(float y) {anchorPoint.y = y; onSetAnchorPoint();}
+void LayerTransform::setAnchorPointY(float y) {anchorPoint.y = y; onSetAnchorPoint();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setAnchorPointZ(float z) {anchorPoint.z = z; onSetAnchorPoint();}
+void LayerTransform::setAnchorPointZ(float z) {anchorPoint.z = z; onSetAnchorPoint();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getRotation()	 { return rotation.getClamped(); };
+ofPoint LayerTransform::getRotation()	 { return rotation.getClamped(); };
 //--------------------------------------------------------------
-void CanvasLayerTransform::setRotation(ofPoint const p) {rotation.set(p.x, p.y, p.z);onSetRotation();}
+void LayerTransform::setRotation(ofPoint const p) {rotation.set(p.x, p.y, p.z);onSetRotation();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setRotationX(float x) {rotation.x = x; onSetRotation();}
+void LayerTransform::setRotationX(float x) {rotation.x = x; onSetRotation();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setRotationY(float y) {rotation.y = y; onSetRotation();}
+void LayerTransform::setRotationY(float y) {rotation.y = y; onSetRotation();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setRotationZ(float z) {rotation.z = z; onSetRotation();}
+void LayerTransform::setRotationZ(float z) {rotation.z = z; onSetRotation();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getOrientation()	 { return orientation.getClamped(); };
+ofPoint LayerTransform::getOrientation()	 { return orientation.getClamped(); };
 //--------------------------------------------------------------
-void CanvasLayerTransform::setOrientation(ofPoint const p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
+void LayerTransform::setOrientation(ofPoint const p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setOrientationX(float x) {orientation.x = x; onSetOrientation();}
+void LayerTransform::setOrientationX(float x) {orientation.x = x; onSetOrientation();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setOrientationY(float y) {orientation.y = y; onSetOrientation();}
+void LayerTransform::setOrientationY(float y) {orientation.y = y; onSetOrientation();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setOrientationZ(float z) {orientation.z = z; onSetOrientation();}
+void LayerTransform::setOrientationZ(float z) {orientation.z = z; onSetOrientation();}
 
 //--------------------------------------------------------------
-ofPoint CanvasLayerTransform::getScale()	 { return scale.getClamped(); };
+ofPoint LayerTransform::getScale()	 { return scale.getClamped(); };
 //--------------------------------------------------------------
-void CanvasLayerTransform::setScale(ofPoint const p) {scale.set(p.x, p.y, p.z);onSetScale();}
+void LayerTransform::setScale(ofPoint const p) {scale.set(p.x, p.y, p.z);onSetScale();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setScaleX(float x) {scale.x = x; onSetScale();}
+void LayerTransform::setScaleX(float x) {scale.x = x; onSetScale();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setScaleY(float y) {scale.y = y; onSetScale();}
+void LayerTransform::setScaleY(float y) {scale.y = y; onSetScale();}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setScaleZ(float z) {scale.z = z; onSetScale();}
+void LayerTransform::setScaleZ(float z) {scale.z = z; onSetScale();}
 
 //--------------------------------------------------------------
-int CanvasLayerTransform::getOpacity()	{ return opacity;}
+int LayerTransform::getOpacity()	{ return opacity;}
 //--------------------------------------------------------------
-void CanvasLayerTransform::setOpacity(int o) { opacity = o; onSetOpacity();};
+void LayerTransform::setOpacity(int o) { opacity = o; onSetOpacity();};
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetSize() {
+void LayerTransform::onSetSize() {
     
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetPosition() {
+void LayerTransform::onSetPosition() {
     //cout << "OSP. x/y/z=" << getPosition().x << "/" << getPosition().y << "/" << getPosition().z << endl;
     //ofNotifyEvent(newPositionEvent,&position,this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetAnchorPoint() {
+void LayerTransform::onSetAnchorPoint() {
     //ofNotifyEvent(newAnchorPointEvent,&anchorPoint,this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetRotation() {
+void LayerTransform::onSetRotation() {
     //ofNotifyEvent(newRotationEvent, &rotation, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetOrientation() {
+void LayerTransform::onSetOrientation() {
     //ofNotifyEvent(newRotationEvent, &rotation, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetScale() {
+void LayerTransform::onSetScale() {
     //ofNotifyEvent(newRotationEvent, &rotation, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetOpacity() {
+void LayerTransform::onSetOpacity() {
     //ofNotifyEvent(newOpacityEvent, &opacity, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetPositionLimit() {
+void LayerTransform::onSetPositionLimit() {
     //ofNotifyEvent(newOpacityEvent, &position, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetAnchorPointLimit() {
+void LayerTransform::onSetAnchorPointLimit() {
     //ofNotifyEvent(newOpacityEvent, &anchorPoint, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onSetRotationLimit() {
+void LayerTransform::onSetRotationLimit() {
     //ofNotifyEvent(newOpacityEvent, &rotation, this);
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onEnabled() {
+void LayerTransform::onEnabled() {
     ofLog(OF_LOG_NOTICE, "Transform enabled");
 }
 
 //--------------------------------------------------------------
-void CanvasLayerTransform::onDisabled() {
+void LayerTransform::onDisabled() {
     ofLog(OF_LOG_NOTICE, "Transform diabled");
 }

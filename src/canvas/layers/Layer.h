@@ -25,34 +25,43 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxOscRouterNode.h"
-#include "ofTexture.h"
-#include "CanvasLayerTransform.h"
-#include "CanvasLayerManager.h"
+//#include "ofxLivedrawEngine.h"
+
 #include "ofxEnablerInterface.h"
-#include "AssetManager.h"
+#include "ofxOscRouterNode.h"
+//#include "ofTexture.h"
+
+#include "LayerManagerInterface.h"
+#include "LayerTransform.h"
+//#include "AssetManager.h"
 #include "BufferPlayerAsset.h"
 //#include "EffectsManager.h"
 //#include "EffectsChain.h"
 
 //class MediaAsset;
-class BufferPlayerAsset;
-class CanvasLayerManager;
-class ofxLivedrawEngine;
+//class BufferPlayerAsset;
+//class LayerManager;
+//class ofxLivedrawEngine;
 
-class CanvasLayer : public ofxOscRouterNode, public ofxEnablerInterface {
+//class LayerManager;
+//class BufferPlayerAsset;
+
+class Layer : public ofxOscRouterNode, public ofxEnablerInterface {
 	
 public:
 
-    CanvasLayer(CanvasLayerManager* clm, string name, ofPoint pos, CanvasLayer* layerParent);
-	CanvasLayer(CanvasLayerManager* clm, string name, ofPoint pos);
-	CanvasLayer(CanvasLayerManager* clm, string name);
+    Layer(LayerManagerInterface* clm, string name, ofPoint pos, Layer* layerParent);
+	Layer(LayerManagerInterface* clm, string name, ofPoint pos);
+	Layer(LayerManagerInterface* clm, string name);
+
     
-	virtual ~CanvasLayer();
+	virtual ~Layer();
 	
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
     void init();
+    
+    bool dispose();
     
 //	void setup();
 	void update();
@@ -69,7 +78,7 @@ public:
     BufferPlayerAsset* getMaskPlayer()   {return maskPlayer;};
 
     
-	CanvasLayerTransform* getTransform() { return &transform; };
+	LayerTransform* getTransform() { return &transform; };
 	
     string getName();
     void setName(string name);
@@ -115,19 +124,18 @@ public:
     
     
     // node info
-    CanvasLayer*         getLayerRoot();
-    CanvasLayer*         getLayerParent();
-    vector<CanvasLayer*> getLayerChildren();
+    Layer*         getLayerRoot();
+    Layer*         getLayerParent();
+    set<Layer*>    getLayerChildren();
 
-    bool hasChild(CanvasLayer* layerChild);
+    bool hasChild(Layer* layerChild);
     
-    void setLayerParent(CanvasLayer* layerParent);
+    void setLayerParent(Layer* layerParent);
     
 //    AssetManager* getAssetManager();
-//    bool hasAssetManager();
     
-    CanvasLayerManager* getCanvasLayerManager();
-    ofxLivedrawEngine* getEngine();
+//    LayerManager* getLayerManager();
+//    ofxLivedrawEngine* getEngine();
     
 private:
 	
@@ -145,7 +153,7 @@ private:
 
 	// Masker compositer;
 	// width / height are all taken from the source
-	CanvasLayerTransform transform;
+	LayerTransform transform;
 	//vector<BaseCanvasEffect*> effects;
 	
 	bool solo;
@@ -156,18 +164,26 @@ private:
     // fbo
     bool useMSAA;
 
-    CanvasLayerManager* layerManager;
+    LayerManagerInterface* layerManager;
     
     
     // node 
-    CanvasLayer*         layerParent;
-    vector<CanvasLayer*> layerChildren;
+    Layer*      layerParent;
+    set<Layer*> layerChildren;
     
     // private
-    vector<CanvasLayer*>::iterator findChild(CanvasLayer* layerChild);
-    bool addLayerChild(CanvasLayer* layerChild);
-    bool removeLayerChild(CanvasLayer* layerChild);
+//    vector<Layer*>::iterator findChild(Layer* layerChild);
+//    bool addLayerChild(Layer* layerChild);
+//    bool removeLayerChild(Layer* layerChild);
 
+//    set<Layer*>& getChildLayersRef();
+//    bool containsChildLayer(Layer* _keyword) const;
+//    bool addChildLayer(Layer* _keyword);
+//    bool removeChildLayer(Layer* _keyword);
+//    int  getNumChildLayers() const;
+
+    
+    
     
 	// -> should this be in the gui?
 	//ofColor labelColor;

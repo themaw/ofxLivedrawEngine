@@ -24,70 +24,93 @@
 
 #pragma once
 
-#include "ofMain.h"
-#include "ofxLivedrawEngine.h"
+//#include "ofMain.h"
+//#include "ofxLivedrawEngine.h"
 #include "ofxOscRouterNode.h"
-#include "CanvasLayer.h"
-#include "AssetManager.h"
+#include "LayerManagerInterface.h"
+#include "Layer.h"
+//#include "AssetManager.h"
 
 //#include "EffectsManager.h"
 
-class ofxLivedrawEngine;
-class CanvasLayer;
-
-class CanvasLayerManager : public ofxOscRouterNode {
+class LayerManager :
+public ofxOscRouterNode,
+public LayerManagerInterface {
 public:
     
-    CanvasLayerManager();
-    virtual ~CanvasLayerManager();
+    LayerManager();
+    virtual ~LayerManager();
     
     void update();
     void draw();
     
-//    void setEffectsManager(EffectsManager* _effectsManager);
-    
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
-	CanvasLayer* newLayer(string layerName, ofPoint point = ofPoint(0.0,0.0,0.0), CanvasLayer* parentLayer = NULL);
-	bool deleteLayer(string layerName);
+    // adding layer schedules the addition of a layer
+	Layer* addLayer(const string& alias, ofPoint point = ofPoint(), Layer* parentLayer = NULL);
 
-    bool hasLayer(string name);
+    //--------------------------------------------------------------
+    bool queueRegisterLayer(Layer* asset);
+    bool queueUnregisterLayer(const string& alias);
+    bool queueUnregisterLayer(Layer* asset);
+    
+    //--------------------------------------------------------------
+    bool hasAlias(const string& alias);
+    Layer* getLayer(const string& alias);
+    
+    //--------------------------------------------------------------
+    // layer ordering
+    bool bringLayerForward(Layer* layer);
+    bool sendLayerBackward(Layer* layer);
+    bool sendLayerToBack(Layer* layer);
+    bool bringLayerToFront(Layer* layer);
+    bool sendLayerTo(Layer* layer, int targetLayerIndex);
+   
+    int  getLayerIndex(const string& alias);
+    int  getLayerIndex(Layer* layer);
 
-    CanvasLayer* getLayerByName(string name);
-    
-    int  getLayerIndex(string layerName);
-    
-    
-    bool addLayerAsRoot(CanvasLayer* layer);
-    
-    
-    
-    bool bringLayerForward(CanvasLayer* layer);
-    bool sendLayerBackward(CanvasLayer* layer);
-    bool sendLayerToBack(CanvasLayer* layer);
-    bool bringLayerToFront(CanvasLayer* layer);
-    bool sendLayerTo(CanvasLayer* layer, int targetLayerIndex);
-    
-    void setLayerSolo(CanvasLayer* layer, bool solo);
-    void setLayerLock(CanvasLayer* layer, bool lock);
-    
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
+    void setLayerSolo(Layer* layer, bool solo);
+    void setLayerLock(Layer* layer, bool lock);
+
+//    void setEngine(ofxLivedrawEngine* _engine) {
+//        engine = _engine;    
+//    };
+//    ofxLivedrawEngine* getEngine() {return engine;}    
 
     void dump();
+
+    
+    //    void setEffectsManager(EffectsManager* _effectsManager);
+    
 
     
     
 protected:
     
-    ofxLivedrawEngine* engine;
+//    ofxLivedrawEngine* engine;
     
 private:
     
-    vector<CanvasLayer*>::iterator it;
+    void processQueues();
+    void updateLayers();
+    
+    // these are private.
+    bool registerLayer(Layer* layer);
+    bool unregisterLayer(Layer* layer);
+    
+    string validateAlias(const string& name);
+    
+    set<Layer*> registerQueue; // items are scheduled for registration here.
+    set<Layer*> unregisterQueue; // items are scheduled for removal here.
 
-    vector<CanvasLayer*> layers;  // a collection of all layers
-    vector<CanvasLayer*> renderTree; // root layers in here 
+    set<Layer*>::iterator it;
+    set<Layer*> layers;  // a collection of all layers
+    
+    map<string, Layer*> aliases;
+    
+    
+    
+    vector<Layer*> renderTree; // root layers in here
     
 
 };
