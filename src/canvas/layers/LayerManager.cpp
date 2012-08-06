@@ -87,33 +87,19 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
 
 //--------------------------------------------------------------
 Layer* LayerManager::addLayer(const string& layerName, ofPoint point, Layer* parentLayer) {
-
     cout << "making new layer |"<< layerName << "| " << point << " parent=" << (parentLayer == NULL ? "X" : parentLayer->getName()) << endl;
-    
     // rename if needed
     string validLayerName = validateAlias(layerName);
-
-    Layer* cl = new Layer(this,validLayerName,point,parentLayer); // MAKE SURE THESE ARE DELETED
-    
-//
-    cl->setPosition(point);
-//   cl->setAssetManager(assetManager);
-//    cl->setEffectsManager(effectsManager);
-
-    //LayerTransform* xform = cl->getTransform();
-    //ofPoint p = xform->getPosition();
-
-    layers.insert(cl);
-
-    addOscChild(cl);
-
-    return cl;
+    Layer* layer = new Layer(this,validLayerName,point,parentLayer); // MAKE SURE THESE ARE DELETED
+    queueRegisterLayer(layer);
+    return layer;
 }
 
 
 //--------------------------------------------------------------
-bool LayerManager::queueRegisterLayer(Layer* asset) {
-    
+bool LayerManager::queueRegisterLayer(Layer* layer) {
+    layer->setNodeActive(false);
+    return registerQueue.insert(layer).second;
 }
 
 //--------------------------------------------------------------
@@ -127,8 +113,9 @@ bool LayerManager::queueUnregisterLayer(const string& alias) {
 }
 
 //--------------------------------------------------------------
-bool LayerManager::queueUnregisterLayer(Layer* asset) {
-    
+bool LayerManager::queueUnregisterLayer(Layer* layer) {
+    layer->setNodeActive(false);
+    return unregisterQueue.insert(layer).second;
 }
 
 
@@ -245,9 +232,10 @@ void LayerManager::draw() {
         
  //       ofFill();
         
-        if(layer->getSourcePlayer()->isLoaded()) {
-            layer->getSourcePlayer()->draw(-a.x, -a.y);
+        if(layer->hasSource()) {
+            layer->getSourceSink().getFrame()->draw(-a.x, -a.y);
         } else {
+        
             ofPushStyle();
             ofSetColor(127);
             ofNoFill();
@@ -257,8 +245,8 @@ void LayerManager::draw() {
             ofPopStyle();
         }
             
-        if(layer->getMaskPlayer()->isLoaded()) {
-            layer->getMaskPlayer()->draw(-a.x, -a.y);
+        if(layer->hasMask()) {
+            layer->getMaskSink().getFrame()->draw(-a.x, -a.y);
         } else {
             ofPushStyle();
             ofSetColor(127);
@@ -344,12 +332,12 @@ bool LayerManager::registerLayer(Layer* layer) {
     if(!hasAlias(layer->getName())) {
         aliases[layer->getName()] = layer;
     } else {
-        ofLog(OF_LOG_ERROR, "LayerManager::registerLayer - alias already exists");
+        ofLogError() << "LayerManager::registerLayer - alias already exists";
         return false;
     }
     
     if(!addOscChild(layer)) {
-        ofLog(OF_LOG_ERROR, "LayerManager::registerLayer - failed to add as an osc child node");
+        ofLogError() << "LayerManager::registerLayer - failed to add as an osc child node";
         return false;
     }
     

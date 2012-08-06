@@ -68,6 +68,10 @@ void CanvasRenderer::init() {
     
 }
 
+//--------------------------------------------------------------
+void CanvasRenderer::update() {
+    // 
+}
 
 //--------------------------------------------------------------
 void CanvasRenderer::begin() {
@@ -163,7 +167,7 @@ void CanvasRenderer:: setBackground(ofColor _color) {
 }
 
 //--------------------------------------------------------------
-void CanvasRenderer:: setSize(int w, int h) {
+void CanvasRenderer::setSize(int w, int h) {
     if(width != w || height != h) { 
         width = w;
         height = h;
@@ -172,10 +176,9 @@ void CanvasRenderer:: setSize(int w, int h) {
 }
 
 //--------------------------------------------------------------
-void CanvasRenderer:: setPosition(int _x, int _y) {
+void CanvasRenderer::setPosition(int _x, int _y) {
     x = _x;
     y = _y;
-
 }
 
 //--------------------------------------------------------------

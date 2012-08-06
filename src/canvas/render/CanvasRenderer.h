@@ -42,8 +42,11 @@ public:
 
     void init();
 
+    void update();
+
     void begin();
     void end();
+    
     
 	void draw(float x, float y) {
         fbo.draw(x,y);

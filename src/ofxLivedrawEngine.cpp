@@ -40,20 +40,18 @@ void ofxLivedrawEngine::setup() {
     oscRouter.addOscNodeAlias("l");
     oscRouter.addOscNodeAlias("ld");
 
-//    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
-//    cout << oscRouter.isValidOscCommand("chr") << endl;
-//    cout << oscRouter.isValidOscCommand("chr?i\\s/topher.paul.baker[a]") << endl;
+    //  assetManager.setEngine(this);
+    oscRouter.addOscChild(&assetManager);
     
+    //  layerManager.setEngine(this);
+    oscRouter.addOscChild(&layerManager);
     
-//    assetManager.setEngine(this);
-//    oscRouter.addOscChild(&assetManager);
+    //  canvas.setEngine(this);
+    oscRouter.addOscChild(&canvas);
     
 //    effectsManager.setEngine(this);
 //    oscRouter.addOscChild(&effectsManager);
-    
-   // canvasRenderer.setEngine(this);
-   // oscRouter.addOscChild(&canvasRenderer);
-    
+
 //    sessionManager.setEngine(this);
 //    oscRouter.addOscChild(&sessionManager); 
     
@@ -65,14 +63,19 @@ void ofxLivedrawEngine::update() {
     oscRouter.update();
     
     // run asset manager updates (look for new files, etc)
-//    assetManager.update();
+    assetManager.update();
 
+    // update layer manager
+    layerManager.update();
+    
+    // update renderer
+    canvas.update();
+    
     // updated effects
-//    effectsManager.update();
-
+    // effectsManager.update();
 
     // session manager
-//    sessionManager.update();
+    // sessionManager.update();
     
 }
 
@@ -82,43 +85,54 @@ void ofxLivedrawEngine::draw() {
     ofFill();
     ofRect(0,0, 300,300);
     
-   // canvasRenderer.begin();
-    //canvasLayerManager.draw();
-  //  canvasRenderer.end();
+    // render to the canvas
+    canvas.begin();
+    layerManager.draw();
+    canvas.end();
 
+    // do any canvas warping (i.e. for triple head) here
+    // canvasMapper.map(canvas.getFbo());
     
     // do work with canvas renderer fbo, or just draw it
-  //  canvasRenderer.draw(0,0);
+    canvas.draw(0,0);
     
     // draw gui here.
+    // gui.draw();
     
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::windowResized(int w, int h) {
-  //  canvasRenderer.resize(w,h);
+    canvas.resize(w,h);
 }
 
-////--------------------------------------------------------------
-//ofxOscRouter* ofxLivedrawEngine::getOscRouter() {
-//    return &oscRouter;
-//}
-////--------------------------------------------------------------
-//AssetManager* ofxLivedrawEngine::getAssetManager() {
-//    return &assetManager;
-//}
+//--------------------------------------------------------------
+ofxOscRouter* ofxLivedrawEngine::getOscRouter() {
+    return &oscRouter;
+}
+
+//--------------------------------------------------------------
+AssetManager* ofxLivedrawEngine::getAssetManager() {
+    return &assetManager;
+}
+
+//--------------------------------------------------------------
+LayerManager* ofxLivedrawEngine::getLayerManager() {
+    return &layerManager;
+}
+
+//--------------------------------------------------------------
+CanvasRenderer* ofxLivedrawEngine::getCanvasRenderer() {
+    return &canvas;
+}
+
 ////--------------------------------------------------------------
 //EffectsManager* ofxLivedrawEngine::getEffectsManager() {
 //    return &effectsManager;
 //}
-//--------------------------------------------------------------
-//LayerManager* ofxLivedrawEngine::getLayerManager() {
-//    return canvas->getLayerManager();
-//}
-//--------------------------------------------------------------
-//CanvasRenderer* ofxLivedrawEngine::getCanvasRenderer() {
-//    return &canvas;
-//}
+
+
+
 ////--------------------------------------------------------------
 //SessionManager* ofxLivedrawEngine::getSessionManager() {
 //    return &sessionManager;

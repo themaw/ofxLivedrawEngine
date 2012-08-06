@@ -57,6 +57,7 @@
 		FD480F21155F029500660A6F /* ofxIpVideoGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD480F18155F029500660A6F /* ofxIpVideoGrabber.cpp */; };
 		FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53218F15B0B68600B3517B /* ofxOscRouterNode.cpp */; };
 		FD6FD75615AF3ABD00DABC38 /* ofxOscRouterEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */; };
+		FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */; };
 		FD8B972F156441710099B79F /* osc_match.c in Sources */ = {isa = PBXBuildFile; fileRef = FD8B9727156441710099B79F /* osc_match.c */; };
 		FD8B9730156441710099B79F /* ofxOscRouter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8B972B156441710099B79F /* ofxOscRouter.cpp */; };
 		FD8B9731156441710099B79F /* ofxOscRouterBaseNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8B972D156441710099B79F /* ofxOscRouterBaseNode.cpp */; };
@@ -73,8 +74,6 @@
 		FDF978E615A80FD2000ADECA /* BaseMediaAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978CE15A80FD2000ADECA /* BaseMediaAsset.cpp */; };
 		FDF978E715A80FD2000ADECA /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978DE15A80FD2000ADECA /* AssetManager.cpp */; };
 		FDF978E815A80FD2000ADECA /* AssetMetaData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978E115A80FD2000ADECA /* AssetMetaData.cpp */; };
-		FDF978EB15A8C912000ADECA /* FrameSourceAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978EA15A8C912000ADECA /* FrameSourceAsset.cpp */; };
-		FDF978ED15A8CA1E000ADECA /* FrameSinkAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978EC15A8CA1E000ADECA /* FrameSinkAsset.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +197,8 @@
 		FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouterEvent.cpp; sourceTree = "<group>"; };
 		FD6FD75D15AF62A300DABC38 /* CacheableAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheableAsset.h; sourceTree = "<group>"; };
 		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxLivedrawEngineChild.h; sourceTree = "<group>"; };
+		FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerRenderSink.h; sourceTree = "<group>"; };
+		FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerRenderSink.cpp; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
 		FD8B9728156441710099B79F /* osc_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osc_match.h; sourceTree = "<group>"; };
 		FD8B972B156441710099B79F /* ofxOscRouter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouter.cpp; sourceTree = "<group>"; };
@@ -250,14 +251,10 @@
 		FDF978D615A80FD2000ADECA /* StreamAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamAsset.h; sourceTree = "<group>"; };
 		FDF978D715A80FD2000ADECA /* SyphonAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonAsset.h; sourceTree = "<group>"; };
 		FDF978DA15A80FD2000ADECA /* DiskBasedAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskBasedAsset.h; sourceTree = "<group>"; };
-		FDF978DB15A80FD2000ADECA /* FrameSinkAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameSinkAsset.h; sourceTree = "<group>"; };
-		FDF978DC15A80FD2000ADECA /* FrameSourceAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FrameSourceAsset.h; sourceTree = "<group>"; };
 		FDF978DE15A80FD2000ADECA /* AssetManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = AssetManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FDF978DF15A80FD2000ADECA /* AssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AssetManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FDF978E115A80FD2000ADECA /* AssetMetaData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = AssetMetaData.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FDF978E215A80FD2000ADECA /* AssetMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AssetMetaData.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FDF978EA15A8C912000ADECA /* FrameSourceAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSourceAsset.cpp; sourceTree = "<group>"; };
-		FDF978EC15A8CA1E000ADECA /* FrameSinkAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FrameSinkAsset.cpp; sourceTree = "<group>"; };
 		FDFAA0B815CC9189007577B9 /* LayerManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerManagerInterface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -550,6 +547,8 @@
 				FD26741D15607A6E006323C7 /* LayerTransform.cpp */,
 				FD26741E15607A6E006323C7 /* LayerTransform.h */,
 				FDFAA0B815CC9189007577B9 /* LayerManagerInterface.h */,
+				FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */,
+				FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */,
 			);
 			path = layers;
 			sourceTree = "<group>";
@@ -899,10 +898,6 @@
 				FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */,
 				FDF978DA15A80FD2000ADECA /* DiskBasedAsset.h */,
 				FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */,
-				FDF978DB15A80FD2000ADECA /* FrameSinkAsset.h */,
-				FDF978EC15A8CA1E000ADECA /* FrameSinkAsset.cpp */,
-				FDF978DC15A80FD2000ADECA /* FrameSourceAsset.h */,
-				FDF978EA15A8C912000ADECA /* FrameSourceAsset.cpp */,
 			);
 			path = interfaces;
 			sourceTree = "<group>";
@@ -1047,8 +1042,6 @@
 				FDF978E615A80FD2000ADECA /* BaseMediaAsset.cpp in Sources */,
 				FDF978E715A80FD2000ADECA /* AssetManager.cpp in Sources */,
 				FDF978E815A80FD2000ADECA /* AssetMetaData.cpp in Sources */,
-				FDF978EB15A8C912000ADECA /* FrameSourceAsset.cpp in Sources */,
-				FDF978ED15A8CA1E000ADECA /* FrameSinkAsset.cpp in Sources */,
 				FD118AB715AE25A900532B54 /* ofxSyphonClient.mm in Sources */,
 				FD118AB815AE25A900532B54 /* ofxSyphonServer.mm in Sources */,
 				FD118B1615AE465500532B54 /* SyphonNameboundClient.m in Sources */,
@@ -1063,6 +1056,7 @@
 				FD084F3515AFB0E4001CC08F /* CacheableAsset.cpp in Sources */,
 				FD084F3715AFB157001CC08F /* DiskBasedAsset.cpp in Sources */,
 				FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */,
+				FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

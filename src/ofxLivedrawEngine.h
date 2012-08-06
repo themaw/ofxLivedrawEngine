@@ -29,22 +29,12 @@
 #include "ofMain.h"
 #include "ofxOscRouter.h"
 
-
-//#include "CanvasRenderer.h"
 #include "LayerManager.h"
+#include "AssetManager.h"
+#include "CanvasRenderer.h"
 
-//#include "AssetManager.h"
-
-//#include "SessionManager.h"
-//#include "EffectsManager.h"
-
-
-//class ofxOscRouter;
-//class AssetManager;
-//class EffectsManager;
-////class LayerManager;
-//class CanvasRenderer;
-//class SessionManager;
+//  #include "EffectsManager.h"
+//  #include "SessionManager.h"
 
 class ofxLivedrawEngine {
 public:
@@ -59,19 +49,21 @@ public:
     void windowResized(int w, int h);
     
     ofxOscRouter*   getOscRouter();
-//    AssetManager*   getAssetManager();
-//    EffectsManager*     getEffectsManager();
-//    CanvasRenderer*     getCanvasRenderer();
-  //  LayerManager*       getLayerManager();
-//    SessionManager*     getSessionManager();
+    AssetManager*   getAssetManager();
+    LayerManager*   getLayerManager();
+    CanvasRenderer* getCanvasRenderer();
+
+    //    EffectsManager*     getEffectsManager();
+    //    SessionManager*     getSessionManager();
     
 
 protected:
-    ofxOscRouter oscRouter;
-//    AssetManager assetManager;
+    ofxOscRouter    oscRouter;
+    AssetManager    assetManager;
+    LayerManager    layerManager;
+    CanvasRenderer  canvas;
+    
     //    EffectsManager  effectsManager;
-   LayerManager    layerManager;
-  //  CanvasRenderer  canvasRenderer; // owns the layer manager
     //    SessionManager  sessionManager;
     
 };
