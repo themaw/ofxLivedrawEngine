@@ -74,7 +74,10 @@ protected:
         // TODO: this should only be called as needed
         // there is likely no reason to do a readback here.  
         // probably can just bind to the texture directly.
-        // but we need to bring it into the shared pointer 
+        // but we need to bring it into the shared pointer
+        
+        // TODO: this all goes back to the issue with creating
+        // a more efficient and all around useful ofImage
         mTex.readToPixels(pixels);
     }
     
