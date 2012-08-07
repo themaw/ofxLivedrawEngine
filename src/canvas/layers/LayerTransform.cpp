@@ -274,9 +274,11 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
 
 
 //--------------------------------------------------------------
-int LayerTransform::getWidth() {return size.getClampedX(); };
+int LayerTransform::getWidth() const {return size.getClampedX(); };
 //--------------------------------------------------------------
-int LayerTransform::getHeight() {return size.getClampedY(); };
+int LayerTransform::getHeight() const {return size.getClampedY(); };
+//--------------------------------------------------------------
+ofPoint LayerTransform::getSize() const {return size.getClamped(); };
 //--------------------------------------------------------------
 void LayerTransform::setSize(float w, float h) {this->size.set(w, h, 0); onSetSize();}
 //--------------------------------------------------------------
@@ -286,15 +288,15 @@ void LayerTransform::setHeight(float h) {this->size.y = h; onSetSize();}
 
 
 //--------------------------------------------------------------
-int LayerTransform::getX() { return position.getClampedX(); };
+int LayerTransform::getX() const { return position.getClampedX(); };
 //--------------------------------------------------------------
-int LayerTransform::getY() { return position.getClampedY(); };
+int LayerTransform::getY() const { return position.getClampedY(); };
 //--------------------------------------------------------------
-int LayerTransform::getZ() { return position.getClampedZ(); };
+int LayerTransform::getZ() const { return position.getClampedZ(); };
 //--------------------------------------------------------------
-ofPoint LayerTransform::getPosition() { return position.getClamped(); };
+ofPoint LayerTransform::getPosition() const { return position.getClamped(); };
 //--------------------------------------------------------------
-void LayerTransform::setPosition(ofPoint const p) { position.set(p.x, p.y, p.z); onSetPosition();}
+void LayerTransform::setPosition(const ofPoint& p) { position.set(p.x, p.y, p.z); onSetPosition();}
 //--------------------------------------------------------------
 void LayerTransform::setPositionX(float x) {position.x = x; onSetPosition();}
 //--------------------------------------------------------------
@@ -303,9 +305,9 @@ void LayerTransform::setPositionY(float y) {position.y = y; onSetPosition();}
 void LayerTransform::setPositionZ(float z) {position.z = z; onSetPosition();}
 
 //--------------------------------------------------------------
-ofPoint LayerTransform::getAnchorPoint() { return anchorPoint.getClamped(); };
+ofPoint LayerTransform::getAnchorPoint() const { return anchorPoint.getClamped(); };
 //--------------------------------------------------------------
-void LayerTransform::setAnchorPoint(ofPoint const p) {anchorPoint.set(p.x, p.y, p.z); onSetAnchorPoint();}
+void LayerTransform::setAnchorPoint(const ofPoint& p) {anchorPoint.set(p.x, p.y, p.z); onSetAnchorPoint();}
 //--------------------------------------------------------------
 void LayerTransform::setAnchorPointX(float x) {anchorPoint.x = x; onSetAnchorPoint();}
 //--------------------------------------------------------------
@@ -314,9 +316,9 @@ void LayerTransform::setAnchorPointY(float y) {anchorPoint.y = y; onSetAnchorPoi
 void LayerTransform::setAnchorPointZ(float z) {anchorPoint.z = z; onSetAnchorPoint();}
 
 //--------------------------------------------------------------
-ofPoint LayerTransform::getRotation()	 { return rotation.getClamped(); };
+ofPoint LayerTransform::getRotation() const { return rotation.getClamped(); };
 //--------------------------------------------------------------
-void LayerTransform::setRotation(ofPoint const p) {rotation.set(p.x, p.y, p.z);onSetRotation();}
+void LayerTransform::setRotation(const ofPoint& p) {rotation.set(p.x, p.y, p.z);onSetRotation();}
 //--------------------------------------------------------------
 void LayerTransform::setRotationX(float x) {rotation.x = x; onSetRotation();}
 //--------------------------------------------------------------
@@ -325,9 +327,9 @@ void LayerTransform::setRotationY(float y) {rotation.y = y; onSetRotation();}
 void LayerTransform::setRotationZ(float z) {rotation.z = z; onSetRotation();}
 
 //--------------------------------------------------------------
-ofPoint LayerTransform::getOrientation()	 { return orientation.getClamped(); };
+ofPoint LayerTransform::getOrientation() const { return orientation.getClamped(); };
 //--------------------------------------------------------------
-void LayerTransform::setOrientation(ofPoint const p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
+void LayerTransform::setOrientation(const ofPoint& p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
 //--------------------------------------------------------------
 void LayerTransform::setOrientationX(float x) {orientation.x = x; onSetOrientation();}
 //--------------------------------------------------------------
@@ -336,9 +338,9 @@ void LayerTransform::setOrientationY(float y) {orientation.y = y; onSetOrientati
 void LayerTransform::setOrientationZ(float z) {orientation.z = z; onSetOrientation();}
 
 //--------------------------------------------------------------
-ofPoint LayerTransform::getScale()	 { return scale.getClamped(); };
+ofPoint LayerTransform::getScale() const { return scale.getClamped(); };
 //--------------------------------------------------------------
-void LayerTransform::setScale(ofPoint const p) {scale.set(p.x, p.y, p.z);onSetScale();}
+void LayerTransform::setScale(const ofPoint& p) {scale.set(p.x, p.y, p.z);onSetScale();}
 //--------------------------------------------------------------
 void LayerTransform::setScaleX(float x) {scale.x = x; onSetScale();}
 //--------------------------------------------------------------
@@ -347,7 +349,7 @@ void LayerTransform::setScaleY(float y) {scale.y = y; onSetScale();}
 void LayerTransform::setScaleZ(float z) {scale.z = z; onSetScale();}
 
 //--------------------------------------------------------------
-int LayerTransform::getOpacity()	{ return opacity;}
+int LayerTransform::getOpacity() const { return opacity;}
 //--------------------------------------------------------------
 void LayerTransform::setOpacity(int o) { opacity = o; onSetOpacity();};
 

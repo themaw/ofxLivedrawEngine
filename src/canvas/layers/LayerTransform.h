@@ -64,46 +64,47 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
     
-    int getWidth();
-    int getHeight();
+    int getWidth() const;
+    int getHeight() const;
+    ofPoint getSize() const;
 	void setWidth(float w);
 	void setHeight(float h);
     void setSize(float w, float h);
     
-    int getX();
-    int getY();
-    int getZ();
-	ofPoint getPosition();
-	void setPosition(ofPoint const p);
+    int getX() const;
+    int getY() const;
+    int getZ() const;
+	ofPoint getPosition() const;
+	void setPosition(const ofPoint& p);
 	void setPositionX(float x);
 	void setPositionY(float y);
 	void setPositionZ(float z);
 	
-	ofPoint getAnchorPoint();
-	void setAnchorPoint(ofPoint const p);
+	ofPoint getAnchorPoint() const;
+	void setAnchorPoint(const ofPoint& p);
 	void setAnchorPointX(float x);
 	void setAnchorPointY(float y);
 	void setAnchorPointZ(float z);
 	
-	ofPoint getRotation();
-	void setRotation(ofPoint const p);
+	ofPoint getRotation() const;
+	void setRotation(const ofPoint& p);
 	void setRotationX(float x);
 	void setRotationY(float y);
 	void setRotationZ(float z);
 	
-	ofPoint getOrientation();
-	void setOrientation(ofPoint const p);
+	ofPoint getOrientation() const;
+	void setOrientation(const ofPoint& p);
 	void setOrientationX(float x);
 	void setOrientationY(float y);
 	void setOrientationZ(float z);
 	
-	ofPoint getScale();
-	void setScale(ofPoint p);
+	ofPoint getScale() const;
+	void setScale(const ofPoint& p);
 	void setScaleX(float x);
 	void setScaleY(float y);
 	void setScaleZ(float z);
 	
-    int  getOpacity();
+    int  getOpacity() const;
 	void setOpacity(int o);
     
     void onSetSize();
