@@ -165,6 +165,11 @@ public:
         ss << "[Layer: name: " << getName();
         ss << " hasSource: " << hasSource();
         ss << " hasMask: " << hasMask();
+        ss << " [xform: ";
+        ss << " [size: " << transform.getSize() << "]";
+        ss << " [pos: " << transform.getPosition() << "]";
+        ss << " [scale: " << transform.getScale() << "]";
+        ss << " [rot: " << transform.getRotation() << "]";
         ss << "]";
         return ss.str();
     }
