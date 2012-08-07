@@ -30,7 +30,7 @@
 int main( ){
 
     ofAppGlutWindow window;
-	ofSetupOpenGL(&window, 50,50, OF_WINDOW);			// <-------- setup the GL context
+	ofSetupOpenGL(&window, 1024,768, OF_WINDOW);			// <-------- setup the GL context
 
 	
 	testApp* app = new testApp;

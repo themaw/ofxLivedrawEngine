@@ -199,6 +199,7 @@
 		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxLivedrawEngineChild.h; sourceTree = "<group>"; };
 		FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerRenderSink.h; sourceTree = "<group>"; };
 		FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerRenderSink.cpp; sourceTree = "<group>"; };
+		FD85F5E815D0C4F0005CA399 /* alphanum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alphanum.hpp; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
 		FD8B9728156441710099B79F /* osc_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osc_match.h; sourceTree = "<group>"; };
 		FD8B972B156441710099B79F /* ofxOscRouter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouter.cpp; sourceTree = "<group>"; };
@@ -615,6 +616,7 @@
 			isa = PBXGroup;
 			children = (
 				FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */,
+				FD85F5E815D0C4F0005CA399 /* alphanum.hpp */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
