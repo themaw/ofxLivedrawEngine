@@ -33,6 +33,14 @@
 
 //#include "EffectsManager.h"
 
+#include "alphanum.hpp"
+
+struct layerSetOrder {
+    bool operator()(const Layer* l0, const Layer* l1) const {
+        return doj::alphanum_comp(l0->getName(), l1->getName()) < 0;
+    }
+};
+
 class LayerManager :
 public ofxOscRouterNode,
 public LayerManagerInterface {
@@ -100,16 +108,16 @@ private:
     
     string validateAlias(const string& name);
     
-    set<Layer*> registerQueue; // items are scheduled for registration here.
-    set<Layer*> unregisterQueue; // items are scheduled for removal here.
+    set<Layer*,layerSetOrder> registerQueue; // items are scheduled for registration here.
+    set<Layer*,layerSetOrder> unregisterQueue; // items are scheduled for removal here.
 
-    set<Layer*>::iterator it;
-    set<Layer*> layers;  // a collection of all layers
+    set<Layer*,layerSetOrder>::iterator it;
+    set<Layer*,layerSetOrder> layers;  // a collection of all layers
     
-    map<string, Layer*> aliases;
+    map<string, Layer*, doj::alphanum_less<std::string> >::iterator aliasesIt;
+    map<string, Layer*, doj::alphanum_less<std::string> > aliases;
     
-    
-    
+    vector<Layer*>::iterator renderTreeIter;
     vector<Layer*> renderTree; // root layers in here
     
 

@@ -24,6 +24,8 @@
 
 #include "LayerManager.h"
 
+
+
 //--------------------------------------------------------------
 LayerManager::LayerManager() : ofxOscRouterNode("layers") {
     addOscNodeAlias("lay");
@@ -50,9 +52,6 @@ LayerManager::~LayerManager() {
 
 //--------------------------------------------------------------
 void LayerManager::processOscCommand(const string& command, const ofxOscMessage& m) {
-    
-    cout << "LayerManager::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << endl;
-    
     
     if(isMatch(command,"new")) {
         // /livedraw/canvas/layer/new      LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
@@ -135,10 +134,10 @@ bool LayerManager::hasAlias(const string& alias) {
 
 //--------------------------------------------------------------
 Layer* LayerManager::getLayer(const string& alias) {
-    map<string,Layer*>::iterator iter = aliases.find(alias);
+    aliasesIt = aliases.find(alias);
     
-    if(iter!=aliases.end()) {
-        return iter->second;
+    if(aliasesIt != aliases.end()) {
+        return aliasesIt->second;
     } else {
         return NULL;
     }
@@ -192,94 +191,18 @@ void LayerManager::draw() {
     // reset it to white
 //    ofSetColor(255,255,255,80);
     
-    for ( it=layers.begin(); it != layers.end(); it++ ) {
+    for (renderTreeIter=renderTree.begin();
+         renderTreeIter != renderTree.end();
+         renderTreeIter++ ) {
 		
-		Layer* layer = *it;
-		
-		LayerTransform* xform = layer->getTransform();
-		ofPoint a = xform->getAnchorPoint();
-		ofPoint p = xform->getPosition();
-		ofPoint r = xform->getRotation();
-		ofPoint s = xform->getScale();
-        int opacity = xform->getOpacity();
-
-		
-        int w = xform->getWidth();
-        int h = xform->getHeight();
-        
-        //cout << layer->getName() << ": " << p.x << "/" << p.y << "/" << p.z << endl;
-        
-		glPushMatrix();
-		
-        if (opacity < 255) ofEnableAlphaBlending();
-        
-        ofTranslate(p.x, p.y, p.z);
-
-        ofRotateX(r.x);
-		ofRotateY(r.y);
-		ofRotateZ(r.z);
-        
-        ofScale(s.x, s.y, s.z);
-        
-		// do effects
-		
-		// get image reference and draw it
-		//layer->getSource()->getImage()->draw(0,0);
-		
-        //        layer->draw();
-        
-        //layer->getFbo()->begin();
-
-        ofSetColor(255,255,255,opacity);
-
-        
- //       ofFill();
-        
-        if(layer->hasSource()) {
-            layer->getSourceSink().getFrame()->draw(-a.x, -a.y);
-        } else {
-        
-            ofPushStyle();
-            ofSetColor(127);
-            ofNoFill();
-            ofRect(-a.x, -a.y,w,h);
-            ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
-            ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
-            ofPopStyle();
-        }
-            
-        if(layer->hasMask()) {
-            layer->getMaskSink().getFrame()->draw(-a.x, -a.y);
-        } else {
-            ofPushStyle();
-            ofSetColor(127);
-            ofNoFill();
-            ofRect(-a.x, -a.y,w,h);
-            ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
-            ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
-            ofPopStyle();
-        }
-
-
-        
-        //        ofRect(-a.x, -a.y,0,w,h);
-//        ofNoFill();
-        //layer->getFbo()->end();
-        
-        //layer->getFbo()->draw(0,0);
-
-        if (opacity < 255) ofDisableAlphaBlending();
-
-        
-		glPopMatrix();
-         
-        
+		(*renderTreeIter)->draw();
         
 	}
     
     ofSetColor(255);
     
 }
+
 
 //--------------------------------------------------------------
 int LayerManager::getLayerIndex(const string& alias) {
@@ -349,6 +272,11 @@ bool LayerManager::registerLayer(Layer* layer) {
 
     // add it to the collection
     layers.insert(layer);
+    
+    // if it is a null parent, then it belongs in the render tree
+    if(layer->getLayerParent() == NULL) {
+        renderTree.push_back(layer);
+    }
     
     return true;
     
@@ -430,8 +358,29 @@ string LayerManager::validateAlias(const string& name) {
     // get the normalized name for OSC purposes
     string assetId = normalizeOscNodeName(assetName);
     
-    // if the alias exists, add a random suffix
-    if(hasAlias(assetId)) assetId +=  ("_" + ofToString((int)ofRandom(10000)));
+    // if the alias exists, add an incremental
+    bool     foundIt = false;
+    int      maxSuffix = -1;
+    
+    // with the new natural ordering we probably don't need to
+    // go through all of the items, but rather reverse_iterator from the end
+    for ( it=layers.begin() ; it != layers.end(); it++ ) {
+        string thisName = (*it)->getName();
+        if(isMatch(assetId,thisName.substr(0,assetId.length()))) {
+            if(thisName.length() > assetId.length()) {
+                string suffix = thisName.substr(assetId.length()+1);
+                string number = suffix.substr(suffix.find_first_of("0123456789"));
+                if(number.length() > 0) {
+                    maxSuffix = MAX(maxSuffix,ofToInt(number));
+                }
+            }
+            foundIt = true;
+        }
+    }
+    
+    if(foundIt) {
+        assetId +=  ("_" + ofToString(maxSuffix + 1));
+    }
     
     // toss a warning if the asset id differs from the asset's original name
     if(!isMatch(assetName, assetId)) {
@@ -446,16 +395,18 @@ string LayerManager::validateAlias(const string& name) {
 //--------------------------------------------------------------
 void LayerManager::dump() {
 
-    cout << "layers:" << endl;
+    ofLogNotice() << "-------------------";
+    ofLogNotice() << "Layer Manager Dump:";
+    ofLogNotice() << "layers:";
     for(it = layers.begin(); it != layers.end(); it++) {
-        cout << (*it)->getName() << endl;
+        ofLogNotice() << setw(4) << (*it)->toString();
     }
     
-    cout << "renderTree:" << endl;
-    vector<Layer*>::iterator it2;
-
-    for(it2 = renderTree.begin(); it2 != renderTree.end(); it2++) {
-        cout << (*it)->getName() << endl;
+    ofLogNotice() << "renderTree:";
+    for(renderTreeIter = renderTree.begin();
+        renderTreeIter != renderTree.end();
+        renderTreeIter++) {
+        ofLogNotice() << setw(4) << (*renderTreeIter)->toString();
     }
 
 }
