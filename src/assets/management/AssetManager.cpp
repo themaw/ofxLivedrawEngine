@@ -850,13 +850,35 @@ void AssetManager::dump() {
 string AssetManager::validateAssetId(const string& name) {
     // get the original asset name
     string assetName = name;
-
+    
     // get the normalized name for OSC purposes
     string assetId = normalizeOscNodeName(assetName);
     
-    // if the alias exists, add a random suffix
-    if(hasAlias(assetId)) assetId +=  ("_" + ofToString((int)ofRandom(10000)));
+    // if the alias exists, add an incremental
+    bool     foundIt = false;
+    int      maxSuffix = -1;
     
+    // with the new natural ordering we probably don't need to
+    // go through all of the items, but rather reverse_iterator from the end
+    for(assetsIter=assets.begin();
+        assetsIter != assets.end();
+        assetsIter++) {
+        
+        string thisName = (*assetsIter)->getName();
+        if(isMatch(assetId,thisName.substr(0,assetId.length()))) {
+            if(thisName.length() > assetId.length()) {
+                string suffix = thisName.substr(assetId.length()+1);
+                string number = suffix.substr(suffix.find_first_of("0123456789"));
+                if(number.length() > 0) maxSuffix = MAX(maxSuffix,ofToInt(number));
+            }
+            foundIt = true;
+        }
+    }
+    
+    if(foundIt) {
+        assetId +=  ("_" + ofToString(maxSuffix + 1));
+    }
+        
     // toss a warning if the asset id differs from the asset's original name
     if(!isMatch(assetName, assetId)) {
         ofLog(OF_LOG_WARNING, "AssetManager::generateAssetId() - " + assetName + " produced variant : " + assetId + ".");
