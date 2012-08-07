@@ -64,7 +64,7 @@ bool BufferAsset::dispose() {
 void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& m) {}
 
 //--------------------------------------------------------------
-bool BufferAsset::frameReceived(ofxVideoFrame frame) {};
+bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {};
 
 //--------------------------------------------------------------
 bool BufferAsset::isCacheBuffer() {

@@ -48,7 +48,7 @@ public:
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
     // From FrameSink
-    bool frameReceived(ofxVideoFrame frame);
+    bool frameReceived(ofxSharedVideoFrame frame);
 
     bool isCacheBuffer();
     CacheableAsset* getCacheSource();
