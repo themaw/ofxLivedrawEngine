@@ -49,6 +49,8 @@
 //class LayerManager;
 //class BufferPlayerAsset;
 
+#include "alphanum.hpp"
+
 class Layer : public ofxOscRouterNode,
               public ofxVideoSourceInterface,
               public ofxEnablerInterface
@@ -56,22 +58,20 @@ class Layer : public ofxOscRouterNode,
 	
 public:
 
-    Layer(LayerManagerInterface* clm, string name, ofPoint pos, Layer* layerParent);
-	Layer(LayerManagerInterface* clm, string name, ofPoint pos);
 	Layer(LayerManagerInterface* clm, string name);
+	Layer(LayerManagerInterface* clm, string name, ofPoint pos);
+    Layer(LayerManagerInterface* clm, string name, ofPoint pos, Layer* layerParent);
 
-    
 	virtual ~Layer();
 	
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
+    void update();
     void init();
-    
+    bool dispose();
+
     bool isFrameNew() { return true;} ;
 
-    // TODO: readback like this is not efficient, especially when it's all going right back
-    // onto the graphics card.  need a better way to pass textures as video frames w/o all the
-    // other info.
     ofPixelsRef getPixelsRef() {
         fbo->readToPixels(pix);
         return pix;
@@ -80,27 +80,18 @@ public:
     bool isLoaded() {return true;}
 
     
-    bool dispose();
-    
-//	void setup();
-	void update();
     
     void render();
     void draw();
 
     // player assets
-    bool hasSource() {
+    bool hasSource() const {
         return sourceSink.hasFrame();
     }
     
-    bool hasMask() {
+    bool hasMask() const {
         return maskSink.hasFrame();
     }
-    
-    //void setSourcePlayer(MediaAsset* src);
-    //void setMaskPlayer(MediaAsset* src);
-
-   
     
     LayerRenderSink& getSourceSink() {
         return sourceSink;
@@ -110,12 +101,10 @@ public:
         return maskSink;
     }
 
-
-	
     LayerTransform* getTransform() { return &transform; };
 	
-    string getName();
-    void setName(string name);
+    string getName() const;
+    void setName(const string& name);
     
 	/*
 	bool addEffect(BaseCanvasEffect* effect);
@@ -131,21 +120,21 @@ public:
 	void sendEffectToBack(BaseCanvasEffect* effect);
      
 	vector<BaseCanvasEffect*> getEffectsChain() { return effects;};
-     */
+    */
 
 	// settings	
-	bool isSolo() {return solo;};
+	bool isSolo() const {return solo;};
 	bool setSolo(bool _solo) {solo = _solo;};
 
-	bool isLocked() {return locked;};
+	bool isLocked() const {return locked;};
 	bool setLocked(bool _locked) {locked = _locked;};
 	
     void onEnabled();
     void onDisabled();
     
-    void setPosition(ofPoint pos);
+    void setPosition(const ofPoint& pos);
     void setSize(int width, int height);
-    void setRectangle(ofRectangle rect);
+    void setRectangle(const ofRectangle& rect);
 	
     //ofFbo* getFbo() {
     //    return &fbo;
@@ -156,14 +145,14 @@ public:
     bool bringToFront();
     bool sendToBack();
     
-    
     // node info
-    Layer*         getLayerRoot();
-    Layer*         getLayerParent();
-    set<Layer*>    getLayerChildren();
+    Layer*          getLayerRoot();
+    Layer*          getLayerParent();
+    vector<Layer*>& getLayerChildrenRef();
 
-    bool hasChild(Layer* layerChild);
-    
+    bool hasChild(Layer* layerChild) const;
+    unsigned int findChild(Layer* layerChild) const;
+
     void setLayerParent(Layer* layerParent);
     
 //    AssetManager* getAssetManager();
@@ -171,9 +160,18 @@ public:
 //    LayerManager* getLayerManager();
 //    ofxLivedrawEngine* getEngine();
     
+    string toString() const {
+        stringstream ss;
+        ss << "[Layer: name: " << getName();
+        ss << " hasSource: " << hasSource();
+        ss << " hasMask: " << hasMask();
+        ss << "]";
+        return ss.str();
+    }
+
 private:
 	
-    ofPixels pix;
+    ofPixels pix; // TODO:
     ofFbo* fbo;
     
     string layerName;
@@ -208,8 +206,8 @@ private:
     
     
     // node 
-    Layer*      layerParent;
-    set<Layer*> layerChildren;
+    Layer*         layerParent;
+    vector<Layer*> layerChildren;
     
     // private
 //    vector<Layer*>::iterator findChild(Layer* layerChild);

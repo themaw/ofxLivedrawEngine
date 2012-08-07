@@ -154,23 +154,19 @@ Layer* Layer::getLayerParent() {
 }
 
 //--------------------------------------------------------------
-set<Layer*> Layer::getLayerChildren() {
+vector<Layer*>& Layer::getLayerChildrenRef() {
     return layerChildren;
 }
 
-////--------------------------------------------------------------
-//bool Layer::hasChild(Layer* _layerChild) {
-//    return find (layerChildren.begin(), 
-//                 layerChildren.end(), 
-//                 _layerChild) != layerChildren.end();
-//}
+//--------------------------------------------------------------
+bool Layer::hasChild(Layer* _layerChild) const {
+    return ofContains(layerChildren,_layerChild);
+}
 
-////--------------------------------------------------------------
-//set<Layer*>::iterator Layer::findChild(Layer* _layerChild) {
-//    return find (layerChildren.begin(), 
-//                 layerChildren.end(), 
-//                 _layerChild);
-//}
+//--------------------------------------------------------------
+unsigned int Layer::findChild(Layer* _layerChild) const {
+    return ofFind(layerChildren,_layerChild);
+}
 
 ////--------------------------------------------------------------
 //ofxLivedrawEngine* Layer::getEngine() {
@@ -238,12 +234,12 @@ set<Layer*> Layer::getLayerChildren() {
 //}
 //
 //--------------------------------------------------------------
-void Layer::setPosition(ofPoint pos) {
+void Layer::setPosition(const ofPoint& pos) {
     getTransform()->setPosition(pos);
 }
 
 //--------------------------------------------------------------
-void Layer::setRectangle(ofRectangle rect) {
+void Layer::setRectangle(const ofRectangle& rect) {
     getTransform()->setPosition(ofPoint(rect.x,rect.y));
     getTransform()->setSize(rect.width,rect.height);
 }
@@ -330,20 +326,97 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
 
 
 //--------------------------------------------------------------
-string Layer::getName() {
+string Layer::getName() const {
     return layerName;
 }
 
 //--------------------------------------------------------------
-void Layer::setName(string _name) {
+void Layer::setName(const string& _name) {
     layerName = _name;
     addOscNodeAlias(layerName);
 }
 
 //--------------------------------------------------------------
 void Layer::update() {
-//    sourcePlayer->update();
-//    maskPlayer->update();
+
+}
+
+void Layer::draw() {
+    
+    LayerTransform* xform = getTransform();
+    ofPoint a = xform->getAnchorPoint();
+    ofPoint p = xform->getPosition();
+    ofPoint r = xform->getRotation();
+    ofPoint s = xform->getScale();
+    int opacity = xform->getOpacity();
+    
+    
+    int w = xform->getWidth();
+    int h = xform->getHeight();
+    
+    //cout << layer->getName() << ": " << p.x << "/" << p.y << "/" << p.z << endl;
+    
+    ofPushMatrix();
+    
+    if (opacity < 255) ofEnableAlphaBlending();
+    
+    ofTranslate(p.x, p.y, p.z);
+    
+    ofRotateX(r.x);
+    ofRotateY(r.y);
+    ofRotateZ(r.z);
+    
+    ofScale(s.x, s.y, s.z);
+    
+    ofSetColor(255,255,255,opacity);
+    
+    
+    if(hasSource()) {
+        getSourceSink().getFrame()->draw(-a.x, -a.y);
+    } else {
+        
+        ofPushStyle();
+        ofSetColor(127);
+        ofNoFill();
+        ofRect(-a.x, -a.y,w,h);
+        ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
+        ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
+        ofPopStyle();
+    }
+    
+    if(hasMask()) {
+        getMaskSink().getFrame()->draw(-a.x, -a.y);
+    } else {
+        ofPushStyle();
+        ofSetColor(127);
+        ofNoFill();
+        ofRect(-a.x, -a.y,w,h);
+        ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
+        ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
+        ofPopStyle();
+    }
+    
+    
+    
+    //        ofRect(-a.x, -a.y,0,w,h);
+    //        ofNoFill();
+    //layer->getFbo()->end();
+    
+    //layer->getFbo()->draw(0,0);
+    
+    if (opacity < 255) ofDisableAlphaBlending();
+    
+    
+    
+    // draw those children
+    vector<Layer*>& children = getLayerChildrenRef();
+    for(int i = 0; i < children.size(); i++) {
+        children[i]->draw();
+    }
+    
+    
+    ofPopMatrix();
+
 }
 
 //--------------------------------------------------------------
