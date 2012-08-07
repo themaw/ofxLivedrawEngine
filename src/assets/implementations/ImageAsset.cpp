@@ -34,7 +34,7 @@ ImageAsset::ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_
 //    name      = _name;
     
     // go directly to the frame source file
-    frame = ofPtr<ofImage>(new ofImage());
+    frame = ofxSharedVideoFrame(new ofxVideoFrame());
     frame->loadImage(filename);
 }
 
