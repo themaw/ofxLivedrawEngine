@@ -70,6 +70,7 @@
 		FDB9C44215641551005AA48E /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C43215641551005AA48E /* ofxOscMessage.cpp */; };
 		FDB9C44315641551005AA48E /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C43415641551005AA48E /* ofxOscReceiver.cpp */; };
 		FDB9C44415641551005AA48E /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C43615641551005AA48E /* ofxOscSender.cpp */; };
+		FDD38B1515D1913E0066ABC1 /* ofxStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDD38B1315D1913E0066ABC1 /* ofxStringUtils.cpp */; };
 		FDEA183B15645D3E0064F235 /* osc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FDEA183015645D3E0064F235 /* osc.a */; };
 		FDF978E615A80FD2000ADECA /* BaseMediaAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978CE15A80FD2000ADECA /* BaseMediaAsset.cpp */; };
 		FDF978E715A80FD2000ADECA /* AssetManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDF978DE15A80FD2000ADECA /* AssetManager.cpp */; };
@@ -199,7 +200,6 @@
 		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxLivedrawEngineChild.h; sourceTree = "<group>"; };
 		FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerRenderSink.h; sourceTree = "<group>"; };
 		FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerRenderSink.cpp; sourceTree = "<group>"; };
-		FD85F5E815D0C4F0005CA399 /* alphanum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = alphanum.hpp; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
 		FD8B9728156441710099B79F /* osc_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osc_match.h; sourceTree = "<group>"; };
 		FD8B972B156441710099B79F /* ofxOscRouter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouter.cpp; sourceTree = "<group>"; };
@@ -241,6 +241,9 @@
 		FDB9C43515641551005AA48E /* ofxOscReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOscReceiver.h; sourceTree = "<group>"; };
 		FDB9C43615641551005AA48E /* ofxOscSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscSender.cpp; sourceTree = "<group>"; };
 		FDB9C43715641551005AA48E /* ofxOscSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOscSender.h; sourceTree = "<group>"; };
+		FDD38B0D15D191240066ABC1 /* alphanum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = alphanum.hpp; sourceTree = "<group>"; };
+		FDD38B1315D1913E0066ABC1 /* ofxStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxStringUtils.cpp; sourceTree = "<group>"; };
+		FDD38B1415D1913E0066ABC1 /* ofxStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxStringUtils.h; sourceTree = "<group>"; };
 		FDEA183015645D3E0064F235 /* osc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = osc.a; sourceTree = "<group>"; };
 		FDF978CE15A80FD2000ADECA /* BaseMediaAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseMediaAsset.cpp; sourceTree = "<group>"; };
 		FDF978CF15A80FD2000ADECA /* BaseMediaAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BaseMediaAsset.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -289,6 +292,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				FDD38B0415D18F4F0066ABC1 /* ofxStringUtils */,
 				FD118A8A15AE25A900532B54 /* ofxSyphon */,
 				FD8DEB2A15A64AE000AD0DE3 /* ofxUtils */,
 				FDB9C40715641551005AA48E /* ofxOsc */,
@@ -616,7 +620,6 @@
 			isa = PBXGroup;
 			children = (
 				FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */,
-				FD85F5E815D0C4F0005CA399 /* alphanum.hpp */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
@@ -856,6 +859,50 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		FDD38B0415D18F4F0066ABC1 /* ofxStringUtils */ = {
+			isa = PBXGroup;
+			children = (
+				FDD38B1215D1913E0066ABC1 /* src */,
+				FDD38B0A15D191240066ABC1 /* libs */,
+			);
+			name = ofxStringUtils;
+			sourceTree = "<group>";
+		};
+		FDD38B0A15D191240066ABC1 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				FDD38B0B15D191240066ABC1 /* alphanum */,
+			);
+			name = libs;
+			path = ../../ofxStringUtils/libs;
+			sourceTree = "<group>";
+		};
+		FDD38B0B15D191240066ABC1 /* alphanum */ = {
+			isa = PBXGroup;
+			children = (
+				FDD38B0C15D191240066ABC1 /* src */,
+			);
+			path = alphanum;
+			sourceTree = "<group>";
+		};
+		FDD38B0C15D191240066ABC1 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FDD38B0D15D191240066ABC1 /* alphanum.hpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		FDD38B1215D1913E0066ABC1 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FDD38B1315D1913E0066ABC1 /* ofxStringUtils.cpp */,
+				FDD38B1415D1913E0066ABC1 /* ofxStringUtils.h */,
+			);
+			name = src;
+			path = ../../ofxStringUtils/src;
+			sourceTree = "<group>";
+		};
 		FDEA182415645D3E0064F235 /* lib */ = {
 			isa = PBXGroup;
 			children = (
@@ -1059,6 +1106,7 @@
 				FD084F3715AFB157001CC08F /* DiskBasedAsset.cpp in Sources */,
 				FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */,
 				FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */,
+				FDD38B1515D1913E0066ABC1 /* ofxStringUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
