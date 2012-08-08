@@ -30,14 +30,34 @@ LayerTransform::LayerTransform() :
 ofxEnablerInterface(true), 
 ofxOscRouterNode("transform") {
     
+    addOscNodeAlias("t");
     addOscNodeAlias("xform");
     
     addOscMethod("position");
+    addOscMethod("p");
+
     addOscMethod("anchorpoint");
+    addOscMethod("a");
+
     addOscMethod("rotate");
+    addOscMethod("r");
+
     addOscMethod("scale");
+    addOscMethod("s");
+
     addOscMethod("opacity");
+    addOscMethod("o");
+
     addOscMethod("size");
+    addOscMethod("sz");
+    
+    addOscMethod("width");
+    addOscMethod("w");
+    
+    addOscMethod("height");
+    addOscMethod("h");
+    
+    
     
     size = ofPoint(640,480);
     
@@ -66,7 +86,7 @@ LayerTransform::~LayerTransform() {};
 //--------------------------------------------------------------
 void LayerTransform::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    if(isMatch(command,"position")) {
+    if(isMatch(command,"position") || isMatch(command,"p")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 char c = tolower(getArgAsStringUnchecked(m,0)[0]);
@@ -94,7 +114,8 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
             }
         }
         
-    } else if(isMatch(command,"anchorpoint")) {
+    } else if(isMatch(command,"anchorpoint") || isMatch(command,"a")) {
+
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
@@ -124,7 +145,7 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
             }
         }
         
-    } else if(isMatch(command,"rotate")) {
+    } else if(isMatch(command,"rotate") || isMatch(command,"r")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if][if]?[if]?)", m)) {
             
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
@@ -159,7 +180,7 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
             
             
         }
-    } else if(isMatch(command,"scale")) {            
+    } else if(isMatch(command,"scale") || isMatch(command,"s")) {
         if(validateOscSignature("([f][f]?[f]?)|([s][f])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
@@ -187,7 +208,7 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
             }
         }
         
-    } else if(isMatch(command,"opacity")) {
+    } else if(isMatch(command,"opacity") || isMatch(command,"o")) {
         if(validateOscSignature("[if]|[s][if]", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 char  c = tolower(getArgAsStringUnchecked(m,0)[0]);
@@ -198,9 +219,17 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 setOpacity(getArgAsFloatUnchecked(m,0));
             }
         }
-    } else if(isMatch(command,"size")) {
+    } else if(isMatch(command,"size") || isMatch(command, "sz")) {
         if(validateOscSignature("[if][if]", m)) {
             setSize(getArgAsFloatUnchecked(m,0),getArgAsFloatUnchecked(m,1));
+        }
+    } else if(isMatch(command,"width") || isMatch(command, "w")) {
+        if(validateOscSignature("[if]", m)) {
+            setWidth(getArgAsFloatUnchecked(m,0));
+        }
+    } else if(isMatch(command,"height") || isMatch(command, "h")) {
+        if(validateOscSignature("[if]", m)) {
+            setHeight(getArgAsFloatUnchecked(m,0));
         }
     }
     
