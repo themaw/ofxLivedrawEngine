@@ -81,12 +81,9 @@ void ofxLivedrawEngine::update() {
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::draw() {
-    ofSetColor(255,0,0);
-    ofFill();
-    ofRect(0,0, 300,300);
-    
-    // render to the canvas
+
     canvas.begin();
+    // render to the canvas
     layerManager.draw();
     canvas.end();
 
@@ -98,7 +95,7 @@ void ofxLivedrawEngine::draw() {
     
     // draw gui here.
     // gui.draw();
-    
+
 }
 
 //--------------------------------------------------------------
