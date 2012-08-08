@@ -29,6 +29,7 @@ public:
     virtual void processOscCommand(const string& command, const ofxOscMessage& m) = 0;
 
     set<string>& getOscNodeAliasesRef();
+    const set<string>& getOscNodeAliasesRef() const;
     
 	MediaAssetType  getAssetType() const;   
 	string          getAssetTypeString() const;
@@ -45,6 +46,7 @@ public:
     string toString() const;
 
     set<string>& getAliasesRef();
+    
     string getFirstAlias() const;
     bool hasAlias(const string& alias) const;
     bool addAlias(const string& alias);

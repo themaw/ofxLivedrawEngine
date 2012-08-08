@@ -48,6 +48,11 @@ set<string>& BaseMediaAsset::getOscNodeAliasesRef() {
     return aliases;
 }
 
+const set<string>& BaseMediaAsset::getOscNodeAliasesRef() const {
+    return aliases;
+}
+
+
 //--------------------------------------------------------------
 string BaseMediaAsset::getName() const {
     return getFirstAlias();
