@@ -346,16 +346,26 @@ void Layer::update() {
 void Layer::draw() {
     
     LayerTransform* xform = getTransform();
-    ofPoint a = xform->getAnchorPoint();
-    ofPoint p = xform->getPosition();
-    ofPoint r = xform->getRotation();
-    ofPoint s = xform->getScale();
-    int opacity = xform->getOpacity();
-    
     
     int w = xform->getWidth();
     int h = xform->getHeight();
-        
+
+    ofPoint a = xform->getAnchorPoint();
+    if(xform->isAnchorPointNormalized()) {
+        a.x *= w;
+        a.y *= h;
+    }
+    
+    ofPoint p = xform->getPosition();
+    if(xform->isPositionNormalized()) ofLogWarning() << "Normalized position is not yet supported.";
+
+    ofPoint r = xform->getRotation();
+    if(xform->isRotationNormalized()) r *= 360.0f;
+    
+    ofPoint s = xform->getScale();
+    float opacity = xform->getOpacity();
+    if(xform->isOpacityNormalized()) opacity *= 255;
+    
     ofPushMatrix();
     
     if (opacity < 255) ofEnableAlphaBlending();
@@ -366,7 +376,9 @@ void Layer::draw() {
     ofRotateY(r.y);
     ofRotateZ(r.z);
     
-    ofScale(s.x, s.y, s.z);
+    ofScale(s.x,
+            s.y,
+            s.z);
     
     ofSetColor(255,opacity);
     
