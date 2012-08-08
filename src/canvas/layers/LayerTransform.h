@@ -36,32 +36,10 @@ class LayerTransform : public ofxOscRouterNode, public ofxEnablerInterface {
 	
 public:
 	
-    
-    LayerTransform(ofPoint _position, 
-                   ofPoint _anchorPoint, 
-                   ofPoint _rotation, 
-                   ofPoint _scale, 
-                   int _opacity);
-    LayerTransform(ofPoint _position, 
-                   ofPoint _anchorPoint, 
-                   ofPoint _rotation, 
-                   ofPoint _scale);
-    LayerTransform(ofPoint _position, 
-                   ofPoint _anchorPoint, 
-                   ofPoint _rotation);
-
-    LayerTransform(ofPoint _position, 
-                   ofPoint _anchorPoint);
-
-    LayerTransform(ofPoint _position);
-
     LayerTransform();
-
     
     virtual ~LayerTransform();
-    
-    void init();
-    
+        
     void processOscCommand(const string& command, const ofxOscMessage& m);
     
     int getWidth() const;
@@ -75,22 +53,28 @@ public:
     int getY() const;
     int getZ() const;
 	ofPoint getPosition() const;
-	void setPosition(const ofPoint& p);
+    void setPosition(const ofPoint& p);
 	void setPositionX(float x);
 	void setPositionY(float y);
 	void setPositionZ(float z);
-	
+	bool isPositionNormalized() const;
+    void setPositionNormalized(bool norm);
+    
 	ofPoint getAnchorPoint() const;
 	void setAnchorPoint(const ofPoint& p);
 	void setAnchorPointX(float x);
 	void setAnchorPointY(float y);
 	void setAnchorPointZ(float z);
-	
+    bool isAnchorPointNormalized() const;
+    void setAnchorPointNormalized(bool norm);
+    
 	ofPoint getRotation() const;
 	void setRotation(const ofPoint& p);
 	void setRotationX(float x);
 	void setRotationY(float y);
 	void setRotationZ(float z);
+    bool isRotationNormalized() const;
+    void setRotationNormalized(bool norm);
 	
 	ofPoint getOrientation() const;
 	void setOrientation(const ofPoint& p);
@@ -123,8 +107,13 @@ public:
 //protected:
 	
 	ofxClampedPoint position;
+    bool bIsPositionNormalized;
+
 	ofxClampedPoint anchorPoint;
+    bool bIsAnchorPointNormalized;
+    
 	ofxClampedPoint rotation;
+    bool bIsRotationNormalized;
 	
 	// A NOTE ON ORIENTATION 
 	// http://help.adobe.com/en_US/aftereffects/cs/using/WS3878526689cb91655866c1103906c6dea-7e33a.html

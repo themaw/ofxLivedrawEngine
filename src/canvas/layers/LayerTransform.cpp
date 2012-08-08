@@ -24,104 +24,11 @@
 
 #include "LayerTransform.h"
 
-//--------------------------------------------------------------
-LayerTransform::LayerTransform(ofPoint _position, 
-                     ofPoint _anchorPoint, 
-                     ofPoint _rotation, 
-                     ofPoint _scale, 
-                     int _opacity) : 
-ofxEnablerInterface(true),  
-ofxOscRouterNode("transform") {
-    
-    position = ofxClampedPoint(_position);
-    anchorPoint = ofxClampedPoint(_anchorPoint);
-    rotation = ofxClampedPoint(_rotation);
-    scale = ofxClampedPoint(_scale);
-    opacity = _opacity;
-    size = ofPoint(640,480);
-    
-    init();
-}
-
-//--------------------------------------------------------------
-LayerTransform::LayerTransform(ofPoint _position, 
-                     ofPoint _anchorPoint, 
-                     ofPoint _rotation, 
-                     ofPoint _scale) : 
-ofxEnablerInterface(true),  
-ofxOscRouterNode("transform") {
-    
-    position = ofxClampedPoint(_position);
-    anchorPoint = ofxClampedPoint(_anchorPoint);
-    rotation = ofxClampedPoint(_rotation);
-    scale = ofxClampedPoint(_scale);
-    opacity = 255;
-    size = ofPoint(640,480);
-    
-    init();
-}
-
-//--------------------------------------------------------------
-LayerTransform::LayerTransform(ofPoint _position, 
-                     ofPoint _anchorPoint, 
-                     ofPoint _rotation) : 
-ofxEnablerInterface(true),  
-ofxOscRouterNode("transform") {
-    
-    position = ofxClampedPoint(_position);
-    anchorPoint = ofxClampedPoint(_anchorPoint);
-    rotation = ofxClampedPoint(_rotation);
-    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
-    opacity = 255;
-    size = ofPoint(640,480);
-    
-    init();
-}
-
-//--------------------------------------------------------------
-LayerTransform::LayerTransform(ofPoint _position, 
-                     ofPoint _anchorPoint) : 
-ofxEnablerInterface(true),  
-ofxOscRouterNode("transform") {
-    
-    position = ofxClampedPoint(_position);
-    anchorPoint = ofxClampedPoint(_anchorPoint);
-    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
-    opacity = 255;
-    size = ofPoint(640,480);
-    
-    init();
-}
-
-//--------------------------------------------------------------
-LayerTransform::LayerTransform(ofPoint _position) : 
-ofxEnablerInterface(true),  
-ofxOscRouterNode("transform") {
-    
-    position = ofxClampedPoint(_position);
-    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
-    opacity = 255;
-    size = ofPoint(640,480);
-    
-    init();
-}
 
 //--------------------------------------------------------------
 LayerTransform::LayerTransform() : 
 ofxEnablerInterface(true), 
 ofxOscRouterNode("transform") {
-    
-    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
-    opacity = 255;
-    size = ofPoint(640,480);
-    
-    init();
-}
-
-
-
-//--------------------------------------------------------------
-void LayerTransform::init() {
     
     addOscNodeAlias("xform");
     
@@ -132,7 +39,25 @@ void LayerTransform::init() {
     addOscMethod("opacity");
     addOscMethod("size");
     
+    size = ofPoint(640,480);
+    
+    position = ofxClampedPoint(ofPoint(0.0f,0.0f,0.0f));
+    bIsPositionNormalized = false;
+
+    anchorPoint = ofxClampedPoint(ofPoint(0.5f,0.5f,0.5f));
+    bIsAnchorPointNormalized = true;
+
+    rotation = ofxClampedPoint(ofPoint(0.0f,0.0f,0.0f));
+    bIsRotationNormalized = false;
+
+    scale = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
+
+    orientation = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
+    
+    opacity = 255;
+
 }
+
 
 //--------------------------------------------------------------
 LayerTransform::~LayerTransform() {};
@@ -144,14 +69,15 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 char c = tolower(getArgAsStringUnchecked(m,0)[0]);
-                float val = getArgAsFloatUnchecked(m,1);
                 
                 if(c == 'x') {
-                    setPositionX(val);
+                    setPositionX(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'y') {
-                    setPositionY(val);
+                    setPositionY(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'z') {
-                    setPositionZ(val);
+                    setPositionZ(getArgAsFloatUnchecked(m,1));
+                } else if(c == 'n') {
+                    setPositionNormalized(getArgAsBoolean(m,1));
                 } else {
                     ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
@@ -172,14 +98,15 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
                 char c = tolower(getArgAsStringUnchecked(m,0)[0]);
-                float  val = getArgAsFloatUnchecked(m,1);
                 
                 if(c == 'x') {
-                    setAnchorPointX(val);
+                    setAnchorPointX(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'y') {
-                    setAnchorPointY(val);
+                    setAnchorPointY(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'z') {
-                    setAnchorPointZ(val);
+                    setAnchorPointZ(getArgAsFloatUnchecked(m,1));
+                } else if(c == 'n') {
+                    setAnchorPointNormalized(getArgAsBoolean(m,1));
                 } else {
                     ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
@@ -211,6 +138,8 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                     setRotationZ(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'd') {
                     setRotation(getArgsAsPoint(m, 1));
+                } else if(c == 'n') {
+                    setRotationNormalized(getArgAsBoolean(m,1));
                 } else {
                     ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
@@ -303,6 +232,12 @@ void LayerTransform::setPositionY(float y) {position.y = y; onSetPosition();}
 void LayerTransform::setPositionZ(float z) {position.z = z; onSetPosition();}
 
 //--------------------------------------------------------------
+bool LayerTransform::isPositionNormalized() const { return bIsPositionNormalized; }
+//--------------------------------------------------------------
+void LayerTransform::setPositionNormalized(bool norm) { bIsPositionNormalized = norm;}
+
+
+//--------------------------------------------------------------
 ofPoint LayerTransform::getAnchorPoint() const { return anchorPoint.getClamped(); };
 //--------------------------------------------------------------
 void LayerTransform::setAnchorPoint(const ofPoint& p) {anchorPoint.set(p.x, p.y, p.z); onSetAnchorPoint();}
@@ -314,6 +249,11 @@ void LayerTransform::setAnchorPointY(float y) {anchorPoint.y = y; onSetAnchorPoi
 void LayerTransform::setAnchorPointZ(float z) {anchorPoint.z = z; onSetAnchorPoint();}
 
 //--------------------------------------------------------------
+bool LayerTransform::isAnchorPointNormalized() const { return bIsAnchorPointNormalized; }
+//--------------------------------------------------------------
+void LayerTransform::setAnchorPointNormalized(bool norm) { bIsAnchorPointNormalized = norm;}
+
+//--------------------------------------------------------------
 ofPoint LayerTransform::getRotation() const { return rotation.getClamped(); };
 //--------------------------------------------------------------
 void LayerTransform::setRotation(const ofPoint& p) {rotation.set(p.x, p.y, p.z);onSetRotation();}
@@ -323,6 +263,11 @@ void LayerTransform::setRotationX(float x) {rotation.x = x; onSetRotation();}
 void LayerTransform::setRotationY(float y) {rotation.y = y; onSetRotation();}
 //--------------------------------------------------------------
 void LayerTransform::setRotationZ(float z) {rotation.z = z; onSetRotation();}
+
+//--------------------------------------------------------------
+bool LayerTransform::isRotationNormalized() const { return bIsRotationNormalized; }
+//--------------------------------------------------------------
+void LayerTransform::setRotationNormalized(bool norm) { bIsRotationNormalized = norm;}
 
 //--------------------------------------------------------------
 ofPoint LayerTransform::getOrientation() const { return orientation.getClamped(); };
