@@ -56,14 +56,12 @@ Layer::Layer(LayerManagerInterface* _layerManager, string name) : ofxOscRouterNo
 
 //--------------------------------------------------------------
 Layer::~Layer() {
-    if(fbo != NULL) {
-        delete fbo;
-        fbo = NULL;
-    }
 }
 
 //--------------------------------------------------------------
 void Layer::init() {
+    
+    debugInfo = true;
     
 //    sourcePlayer = new FrameBufferPlayer(this);
 //    sourcePlayer->addOscNodeAlias("source");
@@ -94,9 +92,9 @@ void Layer::init() {
     
     addOscMethod("swap");
     
+    cout << "LAYER--" << toString() << endl;
     
-    
-    fbo = new ofFbo();
+    fbo = ofPtr<ofFbo>(new ofFbo());
     fbo->allocate(getTransform()->getWidth(), getTransform()->getHeight());
     
 
@@ -247,15 +245,15 @@ void Layer::setRectangle(const ofRectangle& rect) {
 //--------------------------------------------------------------
 void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    cout << "Layer::const string& command, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << command << "/" << endl;
+//    cout << "Layer::const string& command, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << command << "/" << endl;
     
     if(isMatch(command,"order")) {
         
-        cout << "IN HERE " << endl;
+//        cout << "IN HERE " << endl;
         
         if(validateOscSignature("[sfi]", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
-                string command = toLower(m.getArgAsString(0));
+                string command = toLower(getArgAsStringUnchecked(m,0));
                 if(isMatch(command, "forward")) {
                     bringFoward();
                 } else if(isMatch(command,"backward")) {
@@ -267,9 +265,9 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                 }
             } else {
                 
-                int targetLayer = m.getArgAsInt32(0);
+                int targetLayer = getArgAsIntUnchecked(m,0);
                 
-                cout << "moving to " << targetLayer << endl;
+//              cout << "moving to " << targetLayer << endl;
                 
             }
 
@@ -286,6 +284,10 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
     } else if(isMatch(command,"label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
             label = getArgsAsColor(m, 0);
+        }
+    } else if(isMatch(command,"debug")) {
+        if(validateOscSignature("[sfi]", m)) {
+            debugInfo = getArgAsBoolean(m, 0);
         }
     }/* else if(isMatch(address, "/swap")) {
         swapSourceMaskPlayers();
@@ -353,9 +355,7 @@ void Layer::draw() {
     
     int w = xform->getWidth();
     int h = xform->getHeight();
-    
-    //cout << layer->getName() << ": " << p.x << "/" << p.y << "/" << p.z << endl;
-    
+        
     ofPushMatrix();
     
     if (opacity < 255) ofEnableAlphaBlending();
@@ -368,13 +368,11 @@ void Layer::draw() {
     
     ofScale(s.x, s.y, s.z);
     
-    ofSetColor(255,255,255,opacity);
-    
+    ofSetColor(255,opacity);
     
     if(hasSource()) {
         getSourceSink().getFrame()->draw(-a.x, -a.y);
     } else {
-        
         ofPushStyle();
         ofSetColor(127);
         ofNoFill();
@@ -382,6 +380,7 @@ void Layer::draw() {
         ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
         ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
         ofPopStyle();
+        
     }
     
     if(hasMask()) {
@@ -396,24 +395,21 @@ void Layer::draw() {
         ofPopStyle();
     }
     
-    
-    
-    //        ofRect(-a.x, -a.y,0,w,h);
-    //        ofNoFill();
-    //layer->getFbo()->end();
-    
-    //layer->getFbo()->draw(0,0);
-    
+    if(debugInfo) {
+        ofPushStyle();
+        ofSetColor(255);
+        ofDrawBitmapString("Layer: " + getName(), ofPoint(0,0,0));
+        ofPopStyle();
+    }
+
     if (opacity < 255) ofDisableAlphaBlending();
-    
-    
     
     // draw those children
     vector<Layer*>& children = getLayerChildrenRef();
     for(int i = 0; i < children.size(); i++) {
         children[i]->draw();
+        cout << "drawing child." << endl;
     }
-    
     
     ofPopMatrix();
 

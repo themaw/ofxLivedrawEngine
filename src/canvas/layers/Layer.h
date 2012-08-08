@@ -168,16 +168,21 @@ public:
         ss << " [xform: ";
         ss << " [size: " << transform.getSize() << "]";
         ss << " [pos: " << transform.getPosition() << "]";
+        ss << " [anch: " << transform.getAnchorPoint() << "]";
         ss << " [scale: " << transform.getScale() << "]";
         ss << " [rot: " << transform.getRotation() << "]";
+        ss << " [orient: " << transform.getOrientation() << "]";
+        ss << " [opacity: " << transform.getOpacity() << "]";
         ss << "]";
         return ss.str();
     }
 
 private:
 	
+    bool debugInfo;
+    
     ofPixels pix; // TODO:
-    ofFbo* fbo;
+    ofPtr<ofFbo> fbo;
     
     string layerName;
     
