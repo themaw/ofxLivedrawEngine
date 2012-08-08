@@ -78,27 +78,25 @@ public:
     };
     
     bool isLoaded() {return true;}
-
-    
     
     void render();
     void draw();
 
     // player assets
-    bool hasSource() const {
-        return sourceSink.hasFrame();
+    bool hasSource(int index = 0) const {
+        return sources[index].hasFrame();
     }
     
-    bool hasMask() const {
-        return maskSink.hasFrame();
+    bool hasMask(int index = 0) const {
+        return masks[index].hasFrame();
     }
     
-    LayerRenderSink& getSourceSink() {
-        return sourceSink;
+    LayerRenderSink& getSourceSink(int index = 0) {
+        return sources[index];
     }
     
-    LayerRenderSink& getMaskSink() {
-        return maskSink;
+    LayerRenderSink& getMaskSink(int index = 0) {
+        return masks[index];
     }
 
     LayerTransform* getTransform() { return &transform; };
@@ -190,9 +188,9 @@ private:
     
 //    EffectsChain effectsChain;
 
-    LayerRenderSink sourceSink;
-    LayerRenderSink maskSink;
-
+    // why not more?
+    vector<LayerRenderSink> sources;
+    vector<LayerRenderSink> masks;
     
 //    LayerRenderSink sourceSinkA;
 //    LayerRenderSink sourceSinkB;

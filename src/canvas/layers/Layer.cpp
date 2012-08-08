@@ -71,6 +71,16 @@ void Layer::init() {
 //    addOscChild(sourcePlayer);
 //    addOscChild(maskPlayer);
     
+    
+    // A
+    sources.push_back(LayerRenderSink());
+    masks.push_back(LayerRenderSink());
+
+    // B
+    sources.push_back(LayerRenderSink());
+    masks.push_back(LayerRenderSink());
+
+    
     //    effectsChain.setup();
     solo = false;
     locked = false;
@@ -83,6 +93,9 @@ void Layer::init() {
     
     addOscChild(&transform); // add the transform as an OSC child
     //    addOscChild(&effectsChain); // add the associated effects chain as a child
+    
+    addOscMethod("sink");
+    
     
     addOscMethod("order");
     addOscMethod("lock");
@@ -382,29 +395,44 @@ void Layer::draw() {
     
     ofSetColor(255,opacity);
     
-    if(hasSource()) {
-        getSourceSink().getFrame()->draw(-a.x, -a.y);
-    } else {
+    
+    // 
+    for(int i = 0; i < sources.size(); i++) {
+        
         ofPushStyle();
-        ofSetColor(127);
-        ofNoFill();
-        ofRect(-a.x, -a.y,w,h);
-        ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
-        ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
+        ofSetColor(255,255,0);
+        ofDrawBitmapString("Source/Mask: " + ofToString(i), ofPoint(0,(i+1)*12,0));
         ofPopStyle();
         
-    }
-    
-    if(hasMask()) {
-        getMaskSink().getFrame()->draw(-a.x, -a.y);
-    } else {
-        ofPushStyle();
-        ofSetColor(127);
-        ofNoFill();
-        ofRect(-a.x, -a.y,w,h);
-        ofLine(-a.x, -a.y, -a.x + w, -a.y + h );
-        ofLine(-a.x, -a.y + h, -a.x + w, -a.y );
-        ofPopStyle();
+        ofPushMatrix();
+        ofTranslate(-a.x, -a.y); // anchor point offset
+        
+        if(hasSource(i)) {
+            getSourceSink(i).getFrame()->draw(0,0);
+        } else {
+            ofPushStyle();
+            ofSetColor(127);
+            ofNoFill();
+            ofRect(0,0,w,h);
+            ofLine(0,0,w,h);
+            ofLine(0,h,w,0);
+            ofPopStyle();
+            
+        }
+        
+        if(hasMask(i)) {
+            getMaskSink(i).getFrame()->draw(0,0);
+        } else {
+            ofPushStyle();
+            ofSetColor(127);
+            ofNoFill();
+            ofRect(0,0,w,h);
+            ofLine(0,0,w,h);
+            ofLine(0,h,w,0);
+            ofPopStyle();
+        }
+        
+        ofPopMatrix();
     }
     
     if(debugInfo) {
