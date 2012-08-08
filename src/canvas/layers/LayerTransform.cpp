@@ -55,6 +55,7 @@ ofxOscRouterNode("transform") {
     orientation = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     
     opacity = 255;
+    bIsOpacityNormalized = false;
 
 }
 
@@ -187,8 +188,15 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
         }
         
     } else if(isMatch(command,"opacity")) {
-        if(validateOscSignature("[if]", m)) {
-            setOpacity(getArgAsFloatUnchecked(m,0));
+        if(validateOscSignature("[if]|[s][if]", m)) {
+            if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
+                char  c = tolower(getArgAsStringUnchecked(m,0)[0]);
+                if(c == 'n') {
+                    setOpacityNormalized(getArgAsBoolean(m,1));
+                }
+            } else {
+                setOpacity(getArgAsFloatUnchecked(m,0));
+            }
         }
     } else if(isMatch(command,"size")) {
         if(validateOscSignature("[if][if]", m)) {
@@ -295,6 +303,11 @@ void LayerTransform::setScaleZ(float z) {scale.z = z; onSetScale();}
 int LayerTransform::getOpacity() const { return opacity;}
 //--------------------------------------------------------------
 void LayerTransform::setOpacity(int o) { opacity = o; onSetOpacity();};
+
+//--------------------------------------------------------------
+bool LayerTransform::isOpacityNormalized() const { return bIsOpacityNormalized; }
+//--------------------------------------------------------------
+void LayerTransform::setOpacityNormalized(bool norm) { bIsOpacityNormalized = norm;}
 
 //--------------------------------------------------------------
 void LayerTransform::onSetSize() {

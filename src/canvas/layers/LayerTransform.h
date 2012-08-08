@@ -90,7 +90,9 @@ public:
 	
     int  getOpacity() const;
 	void setOpacity(int o);
-    
+    bool isOpacityNormalized() const;
+    void setOpacityNormalized(bool norm);
+
     void onSetSize();
 	void onSetPosition();
 	void onSetAnchorPoint();
@@ -126,6 +128,7 @@ public:
     ofxClampedPoint size;
     
 	float opacity; // 0-255
+    bool bIsOpacityNormalized;
 	
 	/*
 	ofEvent<ofxLimitedPoint*> newPositionEvent;
