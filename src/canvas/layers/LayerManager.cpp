@@ -28,6 +28,7 @@
 
 //--------------------------------------------------------------
 LayerManager::LayerManager() : ofxOscRouterNode("layers") {
+    
     addOscNodeAlias("lay");
     addOscNodeAlias("l");
  

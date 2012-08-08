@@ -176,9 +176,6 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                     }
                 }
             }
-            
-            
-            
         }
     } else if(isMatch(command,"scale") || isMatch(command,"s")) {
         if(validateOscSignature("([f][f]?[f]?)|([s][f])", m)) {
