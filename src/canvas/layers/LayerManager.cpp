@@ -171,26 +171,14 @@ void LayerManager::update() {
 //--------------------------------------------------------------
 void LayerManager::draw() {
     // we are going to draw onto the caller's drawing context (namely, canvas renderer)
-    
-    // TODO: perhaps best to manage groups within layers manager????
-    // /livedraw/canvas/layer/group/(GROUP_NAME)/add/layer
-    // everything automatically shows up in a group manager
-    
-    // reset it to white
-//    ofSetColor(255,255,255,80);
-    
-    for (renderTreeIter=renderTree.begin();
+        
+    for (renderTreeIter  = renderTree.begin();
          renderTreeIter != renderTree.end();
          renderTreeIter++ ) {
 		
 		(*renderTreeIter)->draw();
         
 	}
-    
-
-    ofSetColor(255);
-    ofFill();
-    ofRect(0,0,50,50);
 }
 
 
