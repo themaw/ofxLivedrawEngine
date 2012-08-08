@@ -55,9 +55,9 @@ public:
             if(validateOscSignature("([if][if][if])([if][if][if])([if][if][if])", m)) {
                 int j = 0;
                 for(int i = 0; i < 3; i++) {
-                    dataLUT[i][0] = m.getArgAsInt32(j++);
-                    dataLUT[i][1] = m.getArgAsInt32(j++);
-                    dataLUT[i][2] = m.getArgAsInt32(j++);
+                    dataLUT[i][0] = getArgAsIntUnchecked(m,j++);
+                    dataLUT[i][1] = getArgAsIntUnchecked(m,j++);
+                    dataLUT[i][2] = getArgAsIntUnchecked(m,j++);
                 }
             }
         } else if(isMatch(command,"enable")) {
@@ -124,8 +124,8 @@ public:
         
         setUniform1i("LUT_LENGTH",settings->getLUTTexture());
         
-        glBindTexture (GL_TEXTURE_1D, settings->getLUTTexture());	// Bind This Texture. From Now On It Will Be 1D
-        glTexImage1D (GL_TEXTURE_1D, 0, GL_RGB, settings->getLUTLength(), 0, GL_RGB , GL_FLOAT, settings->getLUT());
+        glBindTexture(GL_TEXTURE_1D, settings->getLUTTexture());	// Bind This Texture. From Now On It Will Be 1D
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, settings->getLUTLength(), 0, GL_RGB , GL_FLOAT, settings->getLUT());
         glDisable(GL_TEXTURE_1D);
     }
     

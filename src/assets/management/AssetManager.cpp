@@ -151,8 +151,8 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
 
 //    if(isMatch(command,"alias")) {
 //        if(validateOscSignature("ss", m)) {
-//            string existingAlias = m.getArgAsString(0);
-//            string additionalAlias = m.getArgAsString(1);
+//            string existingAlias = getArgAsStringUnchecked(m,0);
+//            string additionalAlias = getArgAsStringUnchecked(m,1);
 //            BaseMediaAsset * a = getAsset(existingAlias);
 //            if(a != NULL) {
 //                addAlias(a,additionalAlias);
@@ -164,19 +164,19 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
 //    
     if(isMatch(command,"delete")) {
         if(validateOscSignature("s", m)) {
-            string alias = m.getArgAsString(0);
+            string alias = getArgAsStringUnchecked(m,0);
             bool ret = queueUnregisterAsset(alias);
             if(!ret) {
                 cout << "error deleting " << alias << endl; 
             }
         }
     } else if(isMatch(command,"start")) {
-        string alias = m.getArgAsString(0);
+        string alias = getArgAsStringUnchecked(m,0);
         if(validateOscSignature("s", m)) {
             startAsset(alias);
         }
     } else if(isMatch(command,"stop")) {
-        string alias = m.getArgAsString(0);
+        string alias = getArgAsStringUnchecked(m,0);
         if(validateOscSignature("s", m)) {
             stopAsset(alias);
         }
@@ -192,13 +192,13 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
 //                int numArgs = m.getNumArgs();
 //                
 //                if(numArgs > 0) {
-//                    string alias = m.getArgAsString(0);
+//                    string alias = getArgAsStringUnchecked(m,0);
 //                    int    size = 1;
 //                    ofxVideoBufferType type = OFX_VIDEO_BUFFER_FIXED;
 //                    
-//                    if(numArgs > 1) size  = m.getArgAsInt32(1);
+//                    if(numArgs > 1) size  = getArgAsIntUnchecked(m,1);
 //                    if(numArgs > 2) {
-//                        string type = m.getArgAsString(2);
+//                        string type = getArgAsStringUnchecked(m,2);
 //                        if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
 //                            type = OFX_VIDEO_BUFFER_FIXED;
 //                        } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "cirular")) {

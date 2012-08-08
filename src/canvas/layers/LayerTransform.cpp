@@ -122,6 +122,9 @@ ofxOscRouterNode("transform") {
 
 //--------------------------------------------------------------
 void LayerTransform::init() {
+    
+    addOscNodeAlias("xform");
+    
     addOscMethod("position");
     addOscMethod("anchorpoint");
     addOscMethod("rotate");
@@ -140,8 +143,8 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
     if(isMatch(command,"position")) {
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
-                char c = tolower(m.getArgAsString(0)[0]);
-                float  val = m.getArgAsFloat(1);
+                char c = tolower(getArgAsStringUnchecked(m,0)[0]);
+                float val = getArgAsFloatUnchecked(m,1);
                 
                 if(c == 'x') {
                     setPositionX(val);
@@ -154,11 +157,11 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 }
                 
             } else {
-                setPositionX(m.getArgAsFloat(0));
+                setPositionX(getArgAsFloatUnchecked(m,0));
                 if(m.getNumArgs() > 1) {
-                    setPositionY(m.getArgAsFloat(1));
+                    setPositionY(getArgAsFloatUnchecked(m,1));
                     if(m.getNumArgs() > 2) {
-                        setPositionZ(m.getArgAsFloat(2));
+                        setPositionZ(getArgAsFloatUnchecked(m,2));
                     }
                 }
             }
@@ -168,8 +171,8 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
         if(validateOscSignature("([if][if]?[if]?)|([s][if])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
-                char c = tolower(m.getArgAsString(0)[0]);
-                float  val = m.getArgAsFloat(1);
+                char c = tolower(getArgAsStringUnchecked(m,0)[0]);
+                float  val = getArgAsFloatUnchecked(m,1);
                 
                 if(c == 'x') {
                     setAnchorPointX(val);
@@ -183,11 +186,11 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 
                 
             } else {
-                setAnchorPointX(m.getArgAsFloat(0));
+                setAnchorPointX(getArgAsFloatUnchecked(m,0));
                 if(m.getNumArgs() > 1) {
-                    setAnchorPointY(m.getArgAsFloat(1));
+                    setAnchorPointY(getArgAsFloatUnchecked(m,1));
                     if(m.getNumArgs() > 2) {
-                        setAnchorPointZ(m.getArgAsFloat(2));
+                        setAnchorPointZ(getArgAsFloatUnchecked(m,2));
                     }
                 }
             }
@@ -198,29 +201,27 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
             
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
-                char c = tolower(m.getArgAsString(0)[0]);
-                
+                char c = tolower(getArgAsStringUnchecked(m,0)[0]);
+
                 if(c == 'x') {
-                    setRotationX(m.getArgAsFloat(1));
+                    setRotationX(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'y') {
-                    setRotationY(m.getArgAsFloat(1));
+                    setRotationY(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'z') {
-                    setRotationZ(m.getArgAsFloat(1));
+                    setRotationZ(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'd') {
-                    setRotationX(m.getArgAsFloat(1));
-                    setRotationY(m.getArgAsFloat(2));
-                    setRotationZ(m.getArgAsFloat(3));
+                    setRotation(getArgsAsPoint(m, 1));
                 } else {
                     ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
                 
                 
             } else {
-                setRotationX(m.getArgAsFloat(0));
+                setRotationX(getArgAsFloatUnchecked(m,0));
                 if(m.getNumArgs() > 1) {
-                    setRotationY(m.getArgAsFloat(1));
+                    setRotationY(getArgAsFloatUnchecked(m,1));
                     if(m.getNumArgs() > 2) {
-                        setRotationZ(m.getArgAsFloat(2));
+                        setRotationZ(getArgAsFloatUnchecked(m,2));
                     }
                 }
             }
@@ -232,8 +233,8 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
         if(validateOscSignature("([f][f]?[f]?)|([s][f])", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 
-                char c = tolower(m.getArgAsString(0)[0]);
-                float val = m.getArgAsFloat(1);
+                char  c = tolower(getArgAsStringUnchecked(m,0)[0]);
+                float val = getArgAsFloatUnchecked(m,1);
                 
                 if(c == 'x') {
                     setScaleX(val);
@@ -246,11 +247,11 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 }
                 
             } else {
-                setScaleX(m.getArgAsFloat(0));
+                setScaleX(getArgAsFloatUnchecked(m,0));
                 if(m.getNumArgs() > 1) {
-                    setScaleY(m.getArgAsFloat(1));
+                    setScaleY(getArgAsFloatUnchecked(m,1));
                     if(m.getNumArgs() > 2) {
-                        setScaleZ(m.getArgAsFloat(2));
+                        setScaleZ(getArgAsFloatUnchecked(m,2));
                     }
                 }
             }
@@ -258,14 +259,11 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
         
     } else if(isMatch(command,"opacity")) {
         if(validateOscSignature("[if]", m)) {
-            float  val = m.getArgAsFloat(0);
-            setOpacity(val);
+            setOpacity(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"size")) {
         if(validateOscSignature("[if][if]", m)) {
-            int w = m.getArgAsFloat(0);
-            int h = m.getArgAsFloat(1);
-            setSize(w,h);
+            setSize(getArgAsFloatUnchecked(m,0),getArgAsFloatUnchecked(m,1));
         }
     }
     

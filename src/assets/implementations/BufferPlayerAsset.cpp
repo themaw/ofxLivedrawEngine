@@ -89,7 +89,7 @@ void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMes
      
      if(validateOscSignature("[s][sfi]?", m)) {
      
-     string assetId = m.getArgAsString(0);
+     string assetId = getArgAsStringUnchecked(m,0);
      bool useDisk = getArgAsBoolean(m,1);
      
      cout << "asset=" << assetId << " useDisk= " << useDisk << endl; 
@@ -130,7 +130,7 @@ void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMes
         }
     } else if(isMatch(command,"loopmode")) {
         if(validateOscSignature("s", m)) {
-            string loopMode = m.getArgAsString(0);
+            string loopMode = getArgAsStringUnchecked(m,0);
             if(isMatch(loopMode,"NONE")) {
                 player->setLoopType(OF_LOOP_NONE);
             } else if(isMatch(loopMode,"LOOP")) {
@@ -143,39 +143,39 @@ void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMes
         }
     } else if(isMatch(command,"looppoints")) {
         if(validateOscSignature("[fi][fi]", m)) {
-            player->setLoopPoints(m.getArgAsFloat(0),m.getArgAsFloat(1));
+            player->setLoopPoints(getArgAsFloatUnchecked(m,0),getArgAsFloatUnchecked(m,1));
         }
     } else if(isMatch(command,"looppointstart")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setLoopPointStart(m.getArgAsFloat(0));
+            player->setLoopPointStart(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"looppointend")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setLoopPointStart(m.getArgAsFloat(0));
+            player->setLoopPointStart(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"looppointsn")) {
         if(validateOscSignature("[fi][fi]", m)) {
-            player->setLoopPointsNorm(m.getArgAsFloat(0),m.getArgAsFloat(1));
+            player->setLoopPointsNorm(getArgAsFloatUnchecked(m,0),getArgAsFloatUnchecked(m,1));
         }
     } else if(isMatch(command,"looppointstartn")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setLoopPointStartNorm(m.getArgAsFloat(0));
+            player->setLoopPointStartNorm(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"looppointendn")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setLoopPointStartNorm(m.getArgAsFloat(0));
+            player->setLoopPointStartNorm(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"frame")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setFrame(m.getArgAsFloat(0));
+            player->setFrame(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"/framen")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setFrameNorm(m.getArgAsFloat(0));
+            player->setFrameNorm(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"speed")) {
         if(validateOscSignature("[fi]", m)) {
-            player->setSpeed(m.getArgAsFloat(0));
+            player->setSpeed(getArgAsFloatUnchecked(m,0));
         }
     } else {
         // unknown command

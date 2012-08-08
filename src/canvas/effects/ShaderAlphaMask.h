@@ -58,7 +58,7 @@ public:
     void processOscCommand(const string& command, const ofxOscMessage& m) {
         if(isMatch(command,"alphamode")) {
             if(validateOscSignature("[if]", m)) {
-                setAlphaMode(m.getArgAsInt32(0));
+                setAlphaMode(getArgAsIntUnchecked(m,0));
             }
         } else if(isMatch(command,"invertmask")) {
             if(validateOscSignature("[sfi]", m)) {
@@ -70,20 +70,20 @@ public:
             }
         } else if(isMatch(command,"threshold")) {
             if(validateOscSignature("[fi]", m)) {
-                setThreshold(m.getArgAsFloat(0));
+                setThreshold(getArgAsFloatUnchecked(m,0));
             }
         } else if(isMatch(command,"spread")) {
             if(validateOscSignature("[fi]", m)) {
-                setSpread(m.getArgAsFloat(0));
+                setSpread(getArgAsFloatUnchecked(m,0));
             }
             
         } else if(isMatch(command,"gain")) {
             if(validateOscSignature("[fi]", m)) {
-                setGain(m.getArgAsFloat(0));
+                setGain(getArgAsFloatUnchecked(m,0));
             }     
         } else if(isMatch(command,"enable")) {
             if(validateOscSignature("[sfi]", m)) {
-                setEnabled(getArgAsBoolean(m,0));
+                setEnabled(getArgAsFloatUnchecked(m,0));
             }
         }
     }
