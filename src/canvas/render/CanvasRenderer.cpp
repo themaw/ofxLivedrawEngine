@@ -87,12 +87,13 @@ void CanvasRenderer::begin() {
 //    ofRect(0,0,fbo.getWidth(),fbo.getHeight());
 
 //    layerManager.draw();
-    fbo.end(); // end the fbo
 }
 
 //--------------------------------------------------------------
 void CanvasRenderer::end() {
-    fbo.draw(0,0);
+//    fbo.draw(0,0);
+    fbo.end(); // end the fbo
+
 }
 
 //--------------------------------------------------------------
@@ -104,8 +105,8 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
     if(isMatch(command,"position")) {
         if(validateOscSignature("[if][if]",m)) {
             cout << m.getAddress() << endl;
-            int _x = m.getArgAsInt32(0);
-            int _y = m.getArgAsInt32(1);
+            int _x = getArgAsIntUnchecked(m,0);
+            int _y = getArgAsIntUnchecked(m,1);
             
             ofSetWindowPosition(_x,_y); // TODO: this will behave differently when the GUI comes online
                                       // actual window position will be handled one level shallower
@@ -114,8 +115,8 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
         
     } else if(isMatch(command,"size")) {
         if(validateOscSignature("[if][if]",m)) {
-            int w = MAX(0,m.getArgAsInt32(0));
-            int h = MAX(0,m.getArgAsInt32(1));
+            int w = MAX(0,getArgAsIntUnchecked(m,0));
+            int h = MAX(0,getArgAsIntUnchecked(m,1));
             
             ofSetWindowShape(w,h);  // TODO: this will be have differently when the GUI comes online
                                      // actual window shape will be handled one level shallower
@@ -126,14 +127,14 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
         if(validateOscSignature("[if][if][if][if]?",m)) {
             ofColor _bgColor;
             if(m.getNumArgs() >= 3) {
-                int r = ofClamp(m.getArgAsInt32(0),0,255);
-                int g = ofClamp(m.getArgAsInt32(1),0,255);
-                int b = ofClamp(m.getArgAsInt32(2),0,255);
+                int r = ofClamp(getArgAsIntUnchecked(m,0),0,255);
+                int g = ofClamp(getArgAsIntUnchecked(m,1),0,255);
+                int b = ofClamp(getArgAsIntUnchecked(m,2),0,255);
                 _bgColor = ofColor(r,g,b);
             }
             
             if(m.getNumArgs() == 4) {
-                int a = ofClamp(m.getArgAsInt32(3),0,255);
+                int a = ofClamp(getArgAsIntUnchecked(m,3),0,255);
                 _bgColor = ofColor(_bgColor, a);
             }
             
@@ -149,7 +150,7 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
         }
     } else if(isMatch(command,"fps")) {
         if(validateOscSignature("[if]",m)) {
-            setFPS(MAX(0,m.getArgAsInt32(0)));
+            setFPS(MAX(0,getArgAsIntUnchecked(m,0)));
         }
     } else {
         ofLog(OF_LOG_WARNING, "CanvasRenderer: Unknown command: " + command);
