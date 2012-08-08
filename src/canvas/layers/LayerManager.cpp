@@ -56,27 +56,15 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
     if(isMatch(command,"new")) {
         // /livedraw/canvas/layer/new      LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
         if(validateOscSignature("s[fi][fi][fi]?", m)) {
-
-            ofPoint p(0.0f,0.0f,0.0f);
-
-            string layerName = m.getArgAsString(0);
-            
-            if(m.getNumArgs() > 1) {
-                p.x = m.getArgAsFloat(1);
-                p.y = m.getArgAsFloat(2);
-                if(m.getNumArgs() > 3) {
-                    p.z = m.getArgAsFloat(3);
-                }
-            }
-
+            string layerName = getArgAsStringUnchecked(m,0);
+            ofPoint p = getArgsAsPoint(m, 1);
             // make a new layer
             addLayer(layerName, p);
-            
         }
     } else if(isMatch(command, "delete")) {
         // /livedraw/canvas/layer/new      LAYER_NAME
         if(validateOscSignature("s", m)) {
-            string layerName = m.getArgAsString(0);
+            string layerName = getArgAsStringUnchecked(m,0);
             // delete a layer
             queueUnregisterLayer(layerName);
         }
@@ -199,8 +187,10 @@ void LayerManager::draw() {
         
 	}
     
+
     ofSetColor(255);
-    
+    ofFill();
+    ofRect(0,0,50,50);
 }
 
 
@@ -312,6 +302,18 @@ bool LayerManager::unregisterLayer(Layer* layer) {
     
     // remove the asset pointer from the assets set
     layers.erase(layer);
+    
+    // erase it from the render tree
+    bool foundIt = false;
+    int i = ofFind(renderTree, layer);
+    if(i < renderTree.size()) {
+        foundIt = true;
+        renderTree.erase(renderTree.begin() + i);
+    }
+    
+    if(layer->getLayerParent() == NULL && !foundIt) {
+        ofLogError() << "A layer had a null parent, but wasn't found in the render tree root.";
+    }
     
     // free the memory
     delete layer; // free the memory
