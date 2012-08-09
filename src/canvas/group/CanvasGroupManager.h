@@ -39,8 +39,8 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
     
-	CanvasGroup* newGroup(string groupName, vector<Layer*> layers);
-	bool deleteGroup(string groupName);
+	CanvasGroup* newGroup(const string& groupName, vector<Layer*> layers);
+	bool deleteGroup(const string& groupName);
     
 private:
     LayerManager* layerManager;

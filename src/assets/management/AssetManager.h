@@ -106,7 +106,7 @@ protected:
     SyphonAsset*        addSyphon(const string& name);
     
     //--------------------------------------------------------------
-    BaseMediaAsset* getAsset(string alias);
+    BaseMediaAsset* getAsset(const string& alias);
 
     //--------------------------------------------------------------
     bool queueRegisterAsset(BaseMediaAsset* asset);

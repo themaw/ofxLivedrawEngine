@@ -32,7 +32,7 @@
 class CanvasGroup {
 public:    
     
-    CanvasGroup(string name);
+    CanvasGroup(const string& name);
     virtual ~CanvasGroup();
     
     bool addLayer(Layer* layer);

@@ -848,7 +848,7 @@ int AssetManager::getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset
 }
 
 //--------------------------------------------------------------
-BaseMediaAsset* AssetManager::getAsset(string alias) {
+BaseMediaAsset* AssetManager::getAsset(const string& alias) {
     map<string,BaseMediaAsset*>::iterator iter = assetAliases.find(alias);
     
     if(iter!=assetAliases.end()) {

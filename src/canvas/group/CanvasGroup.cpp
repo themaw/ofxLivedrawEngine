@@ -25,7 +25,7 @@
 #include "CanvasGroup.h"
 
 //--------------------------------------------------------------
-CanvasGroup::CanvasGroup(string _name) {
+CanvasGroup::CanvasGroup(const string& _name) {
     name = _name;
 }
 
