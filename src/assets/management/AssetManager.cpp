@@ -103,50 +103,8 @@ void AssetManager::update() {
     // update assets
     updateAssets();
     
-    
-
-    
-    
-    
 }
 
-//--------------------------------------------------------------
-bool AssetManager::attachSourceToSink(const string& sourceAlias, const string& sinkAlias) {
-    BaseMediaAsset* source = getAsset(sourceAlias);
-    BaseMediaAsset* sink = getAsset(sinkAlias);
-
-    return attachSourceToSink(source,sink);
-}
-
-//--------------------------------------------------------------
-bool AssetManager::attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAsset) {
-    
-    if(!sourceAsset->isSource()) {
-        ofLogError() << "AssetManager::attachSourceToSink : " << sourceAsset->getName() << " is not a source.";
-        return false;
-    }
-    
-    if(!sinkAsset->isSink()) {
-        ofLogError() << "AssetManager::attachSourceToSink : " << sinkAsset->getName() + " is not a sink.";
-        return false;
-    }
-    
-    ofxVideoSourceInterface* source = dynamic_cast<ofxVideoSourceInterface*>(sourceAsset);
-    if(source == NULL) {
-        ofLogError() << "AssetManager::attachSourceToSink : " << sourceAsset->getName() + " could not be cast to source.";
-        return false;
-    }
-    
-    ofxVideoSinkInterface* sink = dynamic_cast<ofxVideoSinkInterface*>(sinkAsset);
-    if(sink == NULL) {
-        ofLogError() << "AssetManager::attachSourceToSink : " << sinkAsset->getName() + " could not be cast to sink.";
-        return false;
-    }
-    
-
-    return source->attachToSink(sink);
-    
-}
 
 //--------------------------------------------------------------
 void AssetManager::processOscCommand(const string& command, const ofxOscMessage& m) {
@@ -232,6 +190,65 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
     }                      
                       
      
+}
+
+//--------------------------------------------------------------
+ofxVideoSourceInterface* AssetManager::getSourceAsset(const string& alias) {
+    BaseMediaAsset* sourceAsset = getAsset(alias);
+
+    if(sourceAsset == NULL) {
+        ofLogError() << "AssetManager::getSourceAsset : " << alias << " is not the name of a known asset.";
+        return NULL;
+    }
+
+    if(!sourceAsset->isSource()) {
+        ofLogError() << "AssetManager::getSourceAsset : " << sourceAsset->getName() << " is not a source.";
+        return false;
+    }
+
+    ofxVideoSourceInterface* source = dynamic_cast<ofxVideoSourceInterface*>(sourceAsset);
+    if(source == NULL) {
+        ofLogError() << "AssetManager::getSourceAsset : " << sourceAsset->getName() + " could not be cast to source.";
+        return false;
+    }
+
+    return source;
+}
+
+//--------------------------------------------------------------
+ofxVideoSinkInterface* AssetManager::getSinkAsset(const string& alias) {
+    BaseMediaAsset* sinkAsset = getAsset(alias);
+    
+    if(sinkAsset == NULL) {
+        ofLogError() << "AssetManager::getSinkAsset : " << alias << " is not the name of a known asset.";
+        return NULL;
+    }
+    
+    if(!sinkAsset->isSink()) {
+        ofLogError() << "AssetManager::getSinkAsset : " << sinkAsset->getName() << " is not a source.";
+        return false;
+    }
+    
+    ofxVideoSinkInterface* sink = dynamic_cast<ofxVideoSinkInterface*>(sinkAsset);
+    if(sink == NULL) {
+        ofLogError() << "AssetManager::getSinkAsset : " << sinkAsset->getName() + " could not be cast to source.";
+        return false;
+    }
+    
+    return sink;
+}
+
+bool AssetManager::attachSourceToSink(const string& sourceAlias, const string& sinkAlias) {
+    ofxVideoSourceInterface* source = getSourceAsset(sourceAlias);
+    ofxVideoSinkInterface*   sink = getSinkAsset(sinkAlias);
+
+    if(source != NULL && sink != NULL) {
+        return source->attachToSink(sink);
+    } else {
+        return false;
+    }
+    
+
 }
 
 

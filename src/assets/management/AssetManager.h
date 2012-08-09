@@ -69,8 +69,15 @@ public:
     //--------------------------------------------------------------
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
+    
+    ofxVideoSourceInterface* getSourceAsset(const string& alias);
+    ofxVideoSinkInterface*   getSinkAsset(const string& alias);
+    
+    bool attachSourceToSink(const string& sourceAlias, const string& sinkAlias);
+    
     ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
     void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
+    
     
 protected:
     
@@ -106,10 +113,6 @@ protected:
     bool queueUnregisterAsset(const string& alias);
     bool queueUnregisterAsset(BaseMediaAsset* asset);
     
-    //--------------------------------------------------------------
-    bool attachSourceToSink(const string& sourceAlias, const string& sinkAlias);
-    bool attachSourceToSink(BaseMediaAsset* sourceAsset, BaseMediaAsset* sinkAsset);
-
     //--------------------------------------------------------------
     bool cacheAsset(CacheableAsset* asset);
     bool uncacheAsset(CacheableAsset* asset);
