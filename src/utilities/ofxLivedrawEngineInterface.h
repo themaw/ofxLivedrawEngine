@@ -24,18 +24,26 @@
 
 #pragma once
 
-#include "ofxLivedrawEngine.h"
+class ofxOscRouter;
+class AssetManager;
+class LayerManager;
+class CanvasRenderer;
+class EffectsManager;
+class SessionManager;
 
-class ofxLivedrawEngine;
-
-class ofxLivedrawEngineChild {
+class ofxLivedrawEngineInterface {
+  
 public:
-    ofxLivedrawEngineChild() {}
-    virtual ~ofxLivedrawEngineChild() {}
-
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
-    
-protected:
-    ofxLivedrawEngine* engine;
+    virtual ofxOscRouter*         getOscRouter() = 0;
+    virtual const ofxOscRouter*   getOscRouter() const = 0;
+    virtual AssetManager*         getAssetManager() = 0;
+    virtual const AssetManager*   getAssetManager() const = 0;
+    virtual LayerManager*         getLayerManager() = 0;
+    virtual const LayerManager*   getLayerManager() const = 0;
+    virtual CanvasRenderer*       getCanvasRenderer() = 0;
+    virtual const CanvasRenderer* getCanvasRenderer() const = 0;
+    virtual EffectsManager*       getEffectsManager() = 0;
+    virtual const EffectsManager* getEffectsManager() const = 0;
+    virtual SessionManager*       getSessionManager() = 0;
+    virtual const SessionManager* getSessionManager() const = 0;
 };
