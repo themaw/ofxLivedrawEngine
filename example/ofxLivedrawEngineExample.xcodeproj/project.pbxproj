@@ -197,7 +197,7 @@
 		FD6FD75415AF3A0600DABC38 /* ofxOscRouterEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscRouterEvent.h; sourceTree = "<group>"; };
 		FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouterEvent.cpp; sourceTree = "<group>"; };
 		FD6FD75D15AF62A300DABC38 /* CacheableAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheableAsset.h; sourceTree = "<group>"; };
-		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxLivedrawEngineChild.h; sourceTree = "<group>"; };
+		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxLivedrawEngineInterface.h; path = utilities/ofxLivedrawEngineInterface.h; sourceTree = "<group>"; };
 		FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerRenderSink.h; sourceTree = "<group>"; };
 		FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerRenderSink.cpp; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
@@ -584,6 +584,7 @@
 				FD3F84C0156064BC0022CE42 /* utilities */,
 				FD3F84E6156064D80022CE42 /* ofxLivedrawEngine.h */,
 				FD3F84E7156064E90022CE42 /* ofxLivedrawEngine.cpp */,
+				FD731E50157DDE1F00D7256C /* ofxLivedrawEngineInterface.h */,
 			);
 			name = src;
 			path = ../src;
@@ -619,7 +620,6 @@
 		FD3F84C0156064BC0022CE42 /* utilities */ = {
 			isa = PBXGroup;
 			children = (
-				FD731E50157DDE1F00D7256C /* ofxLivedrawEngineChild.h */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
