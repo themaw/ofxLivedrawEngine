@@ -27,6 +27,8 @@
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 
+#include "ofxLivedrawEngineInterface.h"
+
 #include "ofxOscRouterNode.h"
 #include "CacheProvider.h"
 #include "DiskBasedAsset.h"
@@ -67,10 +69,12 @@ public:
     //--------------------------------------------------------------
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
-//    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-//    ofxLivedrawEngine* getEngine() {return engine;}    
-
+    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
+    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
+    
 protected:
+    
+    ofxLivedrawEngineInterface* engine;
 
     //--------------------------------------------------------------
     bool hasAlias(const string& alias);
@@ -134,11 +138,7 @@ protected:
 
     
     void dump();    
-    
-protected:
-    
-//    ofxLivedrawEngine* engine;
-    
+
 private:
 
     void processQueues();

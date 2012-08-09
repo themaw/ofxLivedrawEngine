@@ -27,16 +27,18 @@
 #define OSC_PORT 5433
 
 #include "ofMain.h"
+#include "ofxLivedrawEngineInterface.h"
+
 #include "ofxOscRouter.h"
 
 #include "LayerManager.h"
 #include "AssetManager.h"
 #include "CanvasRenderer.h"
 
-//  #include "EffectsManager.h"
-//  #include "SessionManager.h"
+#include "EffectsManager.h"
+#include "SessionManager.h"
 
-class ofxLivedrawEngine {
+class ofxLivedrawEngine : public ofxLivedrawEngineInterface {
 public:
     
     ofxLivedrawEngine();
@@ -48,22 +50,30 @@ public:
     
     void windowResized(int w, int h);
     
-    ofxOscRouter*   getOscRouter();
-    AssetManager*   getAssetManager();
-    LayerManager*   getLayerManager();
-    CanvasRenderer* getCanvasRenderer();
+    ofxOscRouter*         getOscRouter();
+    const ofxOscRouter*   getOscRouter() const;
 
-    //    EffectsManager*     getEffectsManager();
-    //    SessionManager*     getSessionManager();
+    AssetManager*         getAssetManager();
+    const AssetManager*   getAssetManager() const;
     
+    LayerManager*         getLayerManager();
+    const LayerManager*   getLayerManager() const;
+    
+    CanvasRenderer*       getCanvasRenderer();
+    const CanvasRenderer* getCanvasRenderer() const;
 
+    EffectsManager*       getEffectsManager();
+    const EffectsManager* getEffectsManager() const;
+
+    SessionManager*       getSessionManager();
+    const SessionManager* getSessionManager() const;
+    
 protected:
     ofxOscRouter    oscRouter;
     AssetManager    assetManager;
     LayerManager    layerManager;
     CanvasRenderer  canvas;
-    
-    //    EffectsManager  effectsManager;
-    //    SessionManager  sessionManager;
+    EffectsManager  effectsManager;
+    SessionManager  sessionManager;
     
 };

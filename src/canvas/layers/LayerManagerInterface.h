@@ -27,6 +27,8 @@
 #include "ofMain.h"
 
 class Layer;
+class AssetManager;
+class ofxLivedrawEngineInterface;
 
 class LayerManagerInterface {
 public:
@@ -46,5 +48,8 @@ public:
     // layer properties
     virtual void setLayerSolo(Layer* layer, bool solo) = 0;
     virtual void setLayerLock(Layer* layer, bool lock) = 0;
+    
+    virtual ofxLivedrawEngineInterface* getEngineInterface() = 0;
+    
     
 };

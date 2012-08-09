@@ -26,13 +26,12 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
 
 #include "SessionPreset.h"
 #include "SessionPerformance.h"
-#include "ofxLivedrawEngine.h"
 
-class ofxLivedrawEngine;
 
 class SessionManager : public ofxOscRouterNode {
 	
@@ -45,12 +44,12 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
 	
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
+    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
+    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
     
 protected:
     
-    ofxLivedrawEngine* engine;
+    ofxLivedrawEngineInterface* engine;
 
     
 };

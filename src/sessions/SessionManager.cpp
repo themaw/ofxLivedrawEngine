@@ -29,6 +29,8 @@
 SessionManager::SessionManager() : ofxOscRouterNode("sessions") {
     addOscNodeAlias("ses");
     addOscNodeAlias("s");
+    
+    engine = NULL;
 }
 
 //--------------------------------------------------------------

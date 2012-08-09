@@ -40,20 +40,20 @@ void ofxLivedrawEngine::setup() {
     oscRouter.addOscNodeAlias("l");
     oscRouter.addOscNodeAlias("ld");
 
-    //  assetManager.setEngine(this);
+    assetManager.setEngineInterface(this);
     oscRouter.addOscChild(&assetManager);
     
-    //  layerManager.setEngine(this);
+    layerManager.setEngineInterface(this);
     oscRouter.addOscChild(&layerManager);
     
-    //  canvas.setEngine(this);
+    canvas.setEngineInterface(this);
     oscRouter.addOscChild(&canvas);
     
-//    effectsManager.setEngine(this);
-//    oscRouter.addOscChild(&effectsManager);
+    effectsManager.setEngineInterface(this);
+    oscRouter.addOscChild(&effectsManager);
 
-//    sessionManager.setEngine(this);
-//    oscRouter.addOscChild(&sessionManager); 
+    sessionManager.setEngineInterface(this);
+    oscRouter.addOscChild(&sessionManager); 
     
 }
 
@@ -72,10 +72,10 @@ void ofxLivedrawEngine::update() {
     canvas.update();
     
     // updated effects
-    // effectsManager.update();
+    effectsManager.update();
 
     // session manager
-    // sessionManager.update();
+    sessionManager.update();
     
 }
 
@@ -109,7 +109,17 @@ ofxOscRouter* ofxLivedrawEngine::getOscRouter() {
 }
 
 //--------------------------------------------------------------
+const ofxOscRouter* ofxLivedrawEngine::getOscRouter() const {
+    return &oscRouter;
+}
+
+//--------------------------------------------------------------
 AssetManager* ofxLivedrawEngine::getAssetManager() {
+    return &assetManager;
+}
+
+//--------------------------------------------------------------
+const AssetManager* ofxLivedrawEngine::getAssetManager() const {
     return &assetManager;
 }
 
@@ -119,19 +129,37 @@ LayerManager* ofxLivedrawEngine::getLayerManager() {
 }
 
 //--------------------------------------------------------------
+const LayerManager* ofxLivedrawEngine::getLayerManager() const {
+    return &layerManager;
+}
+
+//--------------------------------------------------------------
 CanvasRenderer* ofxLivedrawEngine::getCanvasRenderer() {
     return &canvas;
 }
 
-////--------------------------------------------------------------
-//EffectsManager* ofxLivedrawEngine::getEffectsManager() {
-//    return &effectsManager;
-//}
+//--------------------------------------------------------------
+const CanvasRenderer* ofxLivedrawEngine::getCanvasRenderer() const {
+    return &canvas;
+}
 
+//--------------------------------------------------------------
+EffectsManager* ofxLivedrawEngine::getEffectsManager() {
+    return &effectsManager;
+}
 
+//--------------------------------------------------------------
+const EffectsManager* ofxLivedrawEngine::getEffectsManager() const {
+    return &effectsManager;
+}
 
-////--------------------------------------------------------------
-//SessionManager* ofxLivedrawEngine::getSessionManager() {
-//    return &sessionManager;
-//}
+//--------------------------------------------------------------
+SessionManager* ofxLivedrawEngine::getSessionManager() {
+    return &sessionManager;
+}
+
+//--------------------------------------------------------------
+const SessionManager* ofxLivedrawEngine::getSessionManager() const {
+    return &sessionManager;
+}
 

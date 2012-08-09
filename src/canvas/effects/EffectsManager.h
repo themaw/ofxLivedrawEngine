@@ -26,12 +26,13 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
 
 #include "ShaderAlphaMask.h"
 #include "ShaderCurves.h"
 
-#include "ofxLivedrawEngine.h"
+//#include "ofxLivedrawEngine.h"
 
 //class ofxLivedrawEngine;
 
@@ -52,12 +53,12 @@ public:
     ShaderAlphaMask* getShaderAlphaMask();
     ShaderAlphaMask* getShaderCurves();
    
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;};
-    ofxLivedrawEngine* getEngine() {return engine;}    
+    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
+    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
     
 protected:
     
-    ofxLivedrawEngine* engine;
+    ofxLivedrawEngineInterface* engine;
 private:
 
     // we keep a single collection of shaders here

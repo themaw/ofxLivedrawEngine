@@ -26,9 +26,9 @@
 // communication between layers
 
 #pragma once
+#include "ofMain.h"
+#include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
-
-class ofxLivedrawEngine; // we only use the pointer
 
 class CanvasRenderer :
 public ofBaseDraws,
@@ -94,13 +94,12 @@ public:
     
     void resize(int w, int h);
 
-    void setEngine(ofxLivedrawEngine* _engine) {engine = _engine;}
-    ofxLivedrawEngine* getEngine() {return engine;}
-
+    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
+    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
     
 protected:
     
-    ofxLivedrawEngine* engine; // just the pointer
+    ofxLivedrawEngineInterface* engine;
     
     
 private:

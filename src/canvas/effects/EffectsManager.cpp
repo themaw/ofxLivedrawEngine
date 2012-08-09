@@ -26,6 +26,8 @@
 
 //--------------------------------------------------------------
 EffectsManager::EffectsManager() : ofxOscRouterNode("effects") {
+    engine = NULL;
+    
     addOscNodeAlias("eff");
     addOscNodeAlias("e");
 }

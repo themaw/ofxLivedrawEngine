@@ -29,6 +29,8 @@
 //--------------------------------------------------------------
 LayerManager::LayerManager() : ofxOscRouterNode("layers") {
     
+    engine = NULL;
+    
     addOscNodeAlias("lay");
     addOscNodeAlias("l");
  

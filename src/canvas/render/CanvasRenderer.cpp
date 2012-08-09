@@ -26,6 +26,9 @@
 
 //--------------------------------------------------------------
 CanvasRenderer::CanvasRenderer() : ofxOscRouterNode("canvas") {
+    
+    engine = NULL;
+    
     addOscNodeAlias("c");
     addOscNodeAlias("can");
     
@@ -34,14 +37,6 @@ CanvasRenderer::CanvasRenderer() : ofxOscRouterNode("canvas") {
     width = 1024;
     height = 768;
 
-    init();
-}
-
-//--------------------------------------------------------------
-CanvasRenderer::~CanvasRenderer() {}
-
-void CanvasRenderer::init() {
-    
     addOscMethod("position");
     addOscMethod("size");
     addOscMethod("background");
@@ -51,9 +46,9 @@ void CanvasRenderer::init() {
     
     
     useMSAA = true;
-        
+    
     bgColor = ofColor(0,0,0,255);
-
+    
     /*
      ofFbo::Settings s;
      s.width				= width;
@@ -65,8 +60,11 @@ void CanvasRenderer::init() {
      */
     
     fbo.allocate(width,height);
-    
 }
+
+//--------------------------------------------------------------
+CanvasRenderer::~CanvasRenderer() {}
+
 
 //--------------------------------------------------------------
 void CanvasRenderer::update() {

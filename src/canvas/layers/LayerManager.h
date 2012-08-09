@@ -25,7 +25,7 @@
 #pragma once
 
 //#include "ofMain.h"
-//#include "ofxLivedrawEngine.h"
+#include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
 #include "LayerManagerInterface.h"
 #include "Layer.h"
@@ -91,11 +91,12 @@ public:
     //    void setEffectsManager(EffectsManager* _effectsManager);
     
 
-    
+    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
+    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
     
 protected:
     
-//    ofxLivedrawEngine* engine;
+    ofxLivedrawEngineInterface* engine;
     
 private:
     
