@@ -251,8 +251,10 @@ void AssetManager::attachSourceToSink(const string& sourceAlias, const string& s
 
 //--------------------------------------------------------------
 bool AssetManager::queueRegisterAsset(BaseMediaAsset* asset) {
-    asset->setNodeActive(false);
-    return registerQueue.insert(asset).second;
+    return registerAsset(asset);
+    
+    //    asset->setNodeActive(false);
+//    return registerQueue.insert(asset).second;
 }
 
 //--------------------------------------------------------------
@@ -304,8 +306,6 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
 //--------------------------------------------------------------
 bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
-    cout << "unregistering asset --- " << asset->getName() << endl;
-    
     // is there a there there?
     if(asset == NULL) {
         ofLogWarning() << "AssetManager::unregisterAsset - asset is NULL ";
@@ -341,8 +341,6 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
 //--------------------------------------------------------------
 bool AssetManager::cacheAsset(CacheableAsset* asset) {
-    cout << "AssetManager::cacheAsset" << endl;
-    
     if(asset == NULL) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset is NULL");
         return false;
@@ -857,7 +855,7 @@ BaseMediaAsset* AssetManager::getAsset(const string& alias) {
 
 void AssetManager::dump() {
     for(assetsIter = assets.begin(); assetsIter != assets.end(); assetsIter++) {
-        cout << (*assetsIter)->toString() << endl;
+        ofLogNotice() << (*assetsIter)->toString() << endl;
     }
 }
 
