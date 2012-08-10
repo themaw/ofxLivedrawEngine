@@ -54,24 +54,19 @@ void CacheableAsset::update() {
 
 //--------------------------------------------------------------
 void CacheableAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "processing command in cachable." << endl;
     
     if(isMatch(command,"cache")) {
         cache();
     } else if(isMatch(command,"uncache")) {
         uncache();
     } else {
-        cout << "unknown command in cache." << endl;
+       ofLogWarning() << "CacheableAsset::processOscCommand : unknown command for cache.";
     }
 }
 
 //--------------------------------------------------------------
 void CacheableAsset::cache() {
-    cout << "CacheableAsset::processOscCommand " << endl;
-
-    
     if(!isCached()) {
-        cout << "here  " << endl;
         cached = doCache();
     }
 }

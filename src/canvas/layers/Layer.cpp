@@ -27,9 +27,6 @@
 
 //--------------------------------------------------------------
 Layer::Layer(LayerManagerInterface* _layerManager, string name, ofPoint pos, Layer* _layerParent) : ofxOscRouterNode(name) {
-    //cout << "_layerManager=" << _layerManager << " " << name << " " << pos << " cl=" << endl;
-    
-    
     layerManager = _layerManager;
     layerName = name;
     layerParent = _layerParent;
@@ -66,15 +63,6 @@ void Layer::init() {
     bDrawAxis = true;
     bDrawOverFlow = false;
     
-//    sourcePlayer = new FrameBufferPlayer(this);
-//    sourcePlayer->addOscNodeAlias("source");
-//    maskPlayer = new FrameBufferPlayer(this);
-//    maskPlayer->addOscNodeAlias("mask");
-//
-//    addOscChild(sourcePlayer);
-//    addOscChild(maskPlayer);
-    
-    
     // A
     inputs.push_back(LayerRenderSink());
     masks.push_back(LayerRenderSink());
@@ -109,40 +97,16 @@ void Layer::init() {
     addOscMethod("stretchmode");
     addOscMethod("clipping");
     
-//    addOscMethod("swap");
-    
-    cout << toString() << endl;
-    
     fbo = ofPtr<ofFbo>(new ofFbo());
     fbo->allocate(getTransform()->getWidth(), getTransform()->getHeight());
-    
-
 }
 
 //--------------------------------------------------------------
 bool Layer::dispose() {
-    cout << "DISPOSING OF LAYER " << getName() << endl;
-
     unsinkInputs();
     unsinkMasks();
     return true;
 }
-
-////--------------------------------------------------------------
-//AssetManager* Layer::getAssetManager() {
-//    ofxLivedrawEngine* eng = layerManager->getEngine();
-//    if(eng != NULL) {
-//        return eng->getAssetManager();
-//    } else {
-//        return NULL;
-//    }
-//}
-
-//--------------------------------------------------------------
-//void Layer::setEffectsManager(EffectsManager* _effectsManager) {
-//    effectsManager = _effectsManager;
-//    effectsChain.setEffectsManager(effectsManager);
-//}
 
 //--------------------------------------------------------------
 bool Layer::bringFoward() {
@@ -565,38 +529,6 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
     }
     
 }
-
-////--------------------------------------------------------------
-//void Layer::setSource(MediaAsset* src) {
-//    /*
-//    if(source->isLoaded()) {
-//        delete source;
-//        source = NULL;
-//        source = new ofVideoPlayer();
-//    }
-//    
-//    source->loadMovie(src->getAssetURI().toString());
-//    source->play();
-//     */
-//}
-//
-////--------------------------------------------------------------
-//void Layer::setMask(MediaAsset* src) {
-//    //mask->loadImage(src->getAssetURI().toString());
-//}
-
-
-//--------------------------------------------------------------
-// This must also swap node names, etc.  Better to swap the playe rdata, 
-// rather than the whole frame buffer pointer.
-//void Layer::swapSourceMaskPlayers() {
-//    FrameBufferPlayer* tmp;
-//    tmp = getSourcePlayer();
-//    sourcePlayer = getMaskPlayer();
-//    maskPlayer = tmp;
-//}
-
-
 
 //--------------------------------------------------------------
 string Layer::getName() const {

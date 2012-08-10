@@ -81,7 +81,7 @@ bool BufferPlayerAsset::dispose() {
 //--------------------------------------------------------------
 void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    cout << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;
+    ofLogNotice() << "BufferPlayerAsset::processOscCommand(): " << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;
     
     /*
      if(isMatch(command,"buffer")) {

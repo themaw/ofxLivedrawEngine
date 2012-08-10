@@ -102,7 +102,6 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
     
     if(isMatch(command,"position")) {
         if(validateOscSignature("[if][if]",m)) {
-            cout << m.getAddress() << endl;
             int _x = getArgAsIntUnchecked(m,0);
             int _y = getArgAsIntUnchecked(m,1);
             

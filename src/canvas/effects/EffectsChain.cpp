@@ -49,7 +49,7 @@ void EffectsChain::draw() {}
 
 //--------------------------------------------------------------
 void EffectsChain::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "EFFECTS CHAIN GOT AN OSC MESSAGE";
+    ofLogNotice() << "EffectsChain::processOscCommand() : EFFECTS CHAIN GOT AN OSC MESSAGE";
 }
 
 //--------------------------------------------------------------

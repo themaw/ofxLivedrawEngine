@@ -59,7 +59,6 @@ void ImageAsset::processOscCommand(const string& command, const ofxOscMessage& m
 
 //--------------------------------------------------------------
 bool ImageAsset::dispose() {
-    cout << "disposing of image " << getName() << endl;
     detachFromSinks();
     return true;
 }

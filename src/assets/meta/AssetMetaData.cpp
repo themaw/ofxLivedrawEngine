@@ -41,9 +41,8 @@ AssetMetaData::~AssetMetaData() {};
 //--------------------------------------------------------------
 void AssetMetaData::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    cout << "processing meta data." << endl;
+    ofLogNotice() << "processing meta data." << endl;
     
-    //    ofLog(OF_LOG_ERROR, "AssetMetaData::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m) - unimplemented.");
 }
 
 //--------------------------------------------------------------

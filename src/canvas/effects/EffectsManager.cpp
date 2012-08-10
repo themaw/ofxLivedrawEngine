@@ -48,10 +48,7 @@ void EffectsManager::update() {
 
 //--------------------------------------------------------------
 void EffectsManager::processOscCommand(const string& command, const ofxOscMessage& m) {
- 
-    cout << "effects manager"  << endl;
-    
-    
+    ofLogNotice() << "EffectsManager::processOscCommand() : EFFECTS manager GOT AN OSC MESSAGE";
 }
 
 // get access to shaders
