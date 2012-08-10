@@ -54,7 +54,7 @@ void ImageAsset::update() {
 
 //--------------------------------------------------------------
 void ImageAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "processing image asset command " << getName() << endl;
+    ofLogNotice() << "ImageAsset::processOscCommand() processing image asset command " << getName() << endl;
 }
 
 //--------------------------------------------------------------
@@ -76,12 +76,12 @@ ofPixelsRef ImageAsset::getPixelsRef() {
 
 //--------------------------------------------------------------
 void ImageAsset::open() {
-    ofLog(OF_LOG_NOTICE, "ImageAsset::open() : open not implemented.");
+    ofLogVerbose() << "ImageAsset::open() : open not implemented.";
 }
 
 //--------------------------------------------------------------
 void ImageAsset::close() {
-    ofLog(OF_LOG_NOTICE, "ImageAsset::close() : open not implemented.");
+    ofLogVerbose() << "ImageAsset::close() : close not implemented.";
 }
 
 //--------------------------------------------------------------
