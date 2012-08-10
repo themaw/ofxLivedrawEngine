@@ -109,6 +109,19 @@ bool Layer::dispose() {
 }
 
 //--------------------------------------------------------------
+bool Layer::isFrameNew() { return true;} ;
+
+//--------------------------------------------------------------
+ofPixelsRef Layer::getPixelsRef() {
+    fbo->readToPixels(pix);
+    return pix;
+};
+
+//--------------------------------------------------------------
+bool Layer::isLoaded() {return true;}
+
+
+//--------------------------------------------------------------
 bool Layer::bringFoward() {
     return layerManager->bringLayerForward(this);
 }
@@ -224,10 +237,8 @@ void Layer::clearMask(int index) {
     }
 }
 
-
 //--------------------------------------------------------------
 void Layer::unsinkInputs() {
-    
     for(sinkIter = inputs.begin();
         sinkIter != inputs.end();
         sinkIter++) {
@@ -272,71 +283,6 @@ unsigned int Layer::findChild(Layer* _layerChild) const {
     return ofFind(layerChildren,_layerChild);
 }
 
-////--------------------------------------------------------------
-//ofxLivedrawEngine* Layer::getEngine() {
-////    cout << "CLM=" << layerManager << endl;
-////    cout << "CLM=" << layerManager->getEngine() << endl;
-//    
-//    return layerManager->getEngine();
-//}
-
-////--------------------------------------------------------------
-//void Layer::setLayerParent(Layer* _layerParent) {
-//    
-//    // setting the layer parent does:
-//    // 0. checks to see if the parent is different.
-//    // 1. removes the layer from an existing parent.
-//    // 2. sets a new parent reference.
-//    // 3. adds the item to the parent.
-//    
-//
-//    if(_layerParent == layerParent) {
-//        // already set
-//        return;
-//    }
-//
-//    
-//    if(layerParent != NULL) { // if it has a parent, remove it
-//        // remove from the current parent
-//        if(!layerParent->removeLayerChild(this)) {
-//            ofLog(OF_LOG_ERROR, "Layer::setLayerParent(): Error removing child from previous parent.");  
-//        } 
-//    }
-//
-//    layerParent = _layerParent; // set a new parent reference
-//    
-//    if(layerParent != NULL) {
-//        layerParent->addLayerChild(this); // add item to the new parent
-//    } else {
-//        //layerManager->addLayerAsRoot(this);
-//    }
-//    
-//}
-////--------------------------------------------------------------
-//bool Layer::addLayerChild(Layer* _layerChild) {
-//    vector<Layer*>::iterator layerParentIter = findChild(this);
-//
-//    if(layerParentIter == layerChildren.end()) {
-//        layerChildren.push_back(_layerChild);
-//        return true;
-//    } else {
-//        return false;
-//    }    
-//}
-//
-////--------------------------------------------------------------
-//bool Layer::removeLayerChild(Layer* _layerChild) {
-//    vector<Layer*>::iterator it = findChild(_layerChild);
-//    if(it != layerChildren.end()) {
-//        _layerChild->setLayerParent(NULL);
-//        layerChildren.erase(it);
-//        return true;
-//    } else {
-//        // did not have it
-//        return false;
-//    }
-//}
-//
 //--------------------------------------------------------------
 void Layer::setPosition(const ofPoint& pos) {
     getTransform()->setPosition(pos);
@@ -350,8 +296,6 @@ void Layer::setRectangle(const ofRectangle& rect) {
 
 //--------------------------------------------------------------
 void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
-    
-//    cout << "Layer::const string& command, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)" << command << "/" << endl;
     
     if(isMatch(command, "clipping")) {
         if(validateOscSignature("[sfi]", m)) {
@@ -473,9 +417,6 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
         }
 
     } if(isMatch(command,"order")) {
-        
-//        cout << "IN HERE " << endl;
-        
         if(validateOscSignature("[sfi]", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 string command = toLower(getArgAsStringUnchecked(m,0));
@@ -489,14 +430,9 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                     sendToBack();
                 }
             } else {
-                
                 int targetLayer = getArgAsIntUnchecked(m,0);
-                
-//              cout << "moving to " << targetLayer << endl;
-                
+                // TODO::
             }
-
-            
         }
     } else if(isMatch(command,"lock")) {
         if(validateOscSignature("[fi]", m)) {
@@ -527,7 +463,6 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
             }
         }
     }
-    
 }
 
 //--------------------------------------------------------------
@@ -665,12 +600,9 @@ void Layer::draw() {
 
     ofPopMatrix();
     
-    
-    
-
 }
 
-
+//--------------------------------------------------------------
 void Layer::drawFrame(ofxSharedVideoFrame frame) {
     
     LayerTransform* xform = getTransform();
@@ -715,7 +647,99 @@ void Layer::drawFrame(ofxSharedVideoFrame frame) {
 }
 
 //--------------------------------------------------------------
+bool Layer::hasInputFrame(int index) const {
+    return inputs[index].hasFrame();
+}
+
+//--------------------------------------------------------------
+bool Layer::hasMaskFrame(int index) const {
+    return masks[index].hasFrame();
+}
+
+//--------------------------------------------------------------
+LayerRenderSink& Layer::getInputSink(int index) {
+    return inputs[index];
+}
+
+//--------------------------------------------------------------
+LayerRenderSink& Layer::getMaskSink(int index) {
+    return masks[index];
+}
+
+//--------------------------------------------------------------
+const LayerRenderSink& Layer::getInputSink(int index) const {
+    return inputs[index];
+}
+
+//--------------------------------------------------------------
+const LayerRenderSink& Layer::getMaskSink(int index) const {
+    return masks[index];
+}
+
+//--------------------------------------------------------------
+LayerTransform* Layer::getTransform() { return &transform; };
+
+//--------------------------------------------------------------
+LayerStretchMode Layer::getLayerStretchMode() {
+    return layerStretchMode;
+}
+
+//--------------------------------------------------------------
+void Layer::setLayerStretchMode(LayerStretchMode mode) {
+    layerStretchMode = mode;
+}
+
+//--------------------------------------------------------------
+bool Layer::isSolo() const {return solo;};
+//--------------------------------------------------------------
+bool Layer::setSolo(bool _solo) {solo = _solo;};
+
+//--------------------------------------------------------------
+bool Layer::isLocked() const {return locked;};
+//--------------------------------------------------------------
+bool Layer::setLocked(bool _locked) {locked = _locked;};
+
+
+//--------------------------------------------------------------
 void Layer::onEnabled() {}
 
 //--------------------------------------------------------------
 void Layer::onDisabled() {}
+
+//--------------------------------------------------------------
+void Layer::setDrawDebugInfo(bool b) { bDrawDebugInfo = b; }
+//--------------------------------------------------------------
+bool Layer::getDrawDebugInfo() { return bDrawDebugInfo; }
+//--------------------------------------------------------------
+void Layer::setDrawWireframe(bool b) { bDrawWireframe = b; }
+//--------------------------------------------------------------
+bool Layer::getDrawWireframe() { return bDrawWireframe; }
+//--------------------------------------------------------------
+void Layer::setDrawAxis(bool b) { bDrawAxis = b; }
+//--------------------------------------------------------------
+bool Layer::getDrawAxis() { return bDrawAxis; }
+//--------------------------------------------------------------
+void Layer::setDrawOverflow(bool b) { bDrawOverFlow = b; }
+//--------------------------------------------------------------
+bool Layer::getDrawOverflow() { return bDrawOverFlow; }
+
+//--------------------------------------------------------------
+string Layer::toString() const {
+    stringstream ss;
+    ss << "[Layer: name: " << getName();
+    ss << " hasInput: " << hasInputFrame();
+    ss << " isInputSinking: " << getInputSink().isSinking();
+    ss << " hasMask: " << hasMaskFrame();
+    ss << " isMaskSinking: " << getMaskSink().isSinking() << endl;
+    ss << " [xform: " << endl;
+    ss << "   [size: " << transform.getSize() << "]"<< endl;;
+    ss << "   [pos: " << transform.getPosition() << "]"<< endl;;
+    ss << "   [anch: " << transform.getAnchorPoint() << "]"<< endl;;
+    ss << "   [scale: " << transform.getScale() << "]"<< endl;;
+    ss << "   [rot: " << transform.getRotation() << "]"<< endl;;
+    ss << "   [orient: " << transform.getOrientation() << "]"<< endl;;
+    ss << "   [opacity: " << transform.getOpacity() << "]"<< endl;;
+    ss << "]]";
+    return ss.str();
+}
+

@@ -28,23 +28,10 @@
 
 class LayerRenderSink : public ofxVideoSinkInterface {
 public:
-    
-    bool frameReceived(ofxSharedVideoFrame _frame) {
-        frame = _frame;
-    }
-    
-    void clear() {
-        frame.reset();
-    }
-
-    bool hasFrame() const {
-        return frame != NULL;
-    }
-    
-    ofxSharedVideoFrame getFrame() {
-        return frame;
-    }
-    
+    bool frameReceived(ofxSharedVideoFrame _frame);
+    void clear();
+    bool hasFrame() const;
+    ofxSharedVideoFrame getFrame();
 protected:
     ofxSharedVideoFrame frame;
     

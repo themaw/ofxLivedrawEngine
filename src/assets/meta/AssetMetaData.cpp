@@ -40,9 +40,7 @@ AssetMetaData::~AssetMetaData() {};
 
 //--------------------------------------------------------------
 void AssetMetaData::processOscCommand(const string& command, const ofxOscMessage& m) {
-    
-    ofLogNotice() << "processing meta data." << endl;
-    
+    ofLogNotice() << "AssetMetaData::processOscCommand() : processing meta data osc." << endl;
 }
 
 //--------------------------------------------------------------

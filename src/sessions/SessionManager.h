@@ -22,7 +22,6 @@
  
  ==============================================================================*/
 
-
 #pragma once
 
 #include "ofMain.h"
@@ -31,7 +30,6 @@
 
 #include "SessionPreset.h"
 #include "SessionPerformance.h"
-
 
 class SessionManager : public ofxOscRouterNode {
 	
@@ -48,10 +46,7 @@ public:
     void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
     
 protected:
-    
     ofxLivedrawEngineInterface* engine;
-
-    
 };
 
 

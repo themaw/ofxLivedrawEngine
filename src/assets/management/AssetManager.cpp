@@ -92,7 +92,7 @@ AssetManager::AssetManager() : ofxOscRouterNode("media") {
 
 //--------------------------------------------------------------
 AssetManager::~AssetManager() {
-    ofLog(OF_LOG_NOTICE, "Destroying Asset Manager.");
+    ofLog(OF_LOG_NOTICE, "AssetManager::~AssetManager() : Destroying Asset Manager.");
 }
 
 //--------------------------------------------------------------
@@ -106,23 +106,8 @@ void AssetManager::update() {
     
 }
 
-
 //--------------------------------------------------------------
 void AssetManager::processOscCommand(const string& command, const ofxOscMessage& m) {
-
-//    if(isMatch(command,"alias")) {
-//        if(validateOscSignature("ss", m)) {
-//            string existingAlias = getArgAsStringUnchecked(m,0);
-//            string additionalAlias = getArgAsStringUnchecked(m,1);
-//            BaseMediaAsset * a = getAsset(existingAlias);
-//            if(a != NULL) {
-//                addAlias(a,additionalAlias);
-//            } else {
-//                ofLog(OF_LOG_WARNING,"Attempted to set alias, but media asset did not exist.");
-//            }
-//        }
-//    } else 
-//    
     if(isMatch(command,"delete")) {
         if(validateOscSignature("s", m)) {
             string alias = getArgAsStringUnchecked(m,0);
@@ -189,8 +174,6 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
     } else if(isMatch(command,"player")) {
         cout << "in player manager" << endl;
     }                      
-                      
-     
 }
 
 //--------------------------------------------------------------
@@ -252,9 +235,8 @@ void AssetManager::attachSourceToSink(const string& sourceAlias, const string& s
 //--------------------------------------------------------------
 bool AssetManager::queueRegisterAsset(BaseMediaAsset* asset) {
     return registerAsset(asset);
-    
     //    asset->setNodeActive(false);
-//    return registerQueue.insert(asset).second;
+    //    return registerQueue.insert(asset).second;
 }
 
 //--------------------------------------------------------------
@@ -298,7 +280,6 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
     if(isMovieAsset(asset)) {
         toMovieAsset(asset)->setCacheProvider(this);
     }
-    
 
     return true;
 }
@@ -350,7 +331,6 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
         ofLogError("AssetManager::cacheAsset - Asset is already cached.");
         return false;
     }
-    
     
     BufferAsset* cacheAsset = addBuffer("BUFFER_" + asset->getName(), 1, OFX_VIDEO_BUFFER_FIXED);
     
@@ -552,94 +532,6 @@ SyphonAsset* AssetManager::addSyphon(const string& name) {
 bool AssetManager::hasAlias(const string& alias) {
     return assetAliases.find(alias) != assetAliases.end();
 }
-
-////--------------------------------------------------------------
-//bool AssetManager::addAlias(BaseMediaAsset* asset, string alias) {
-//    if(!hasAlias(alias)) {
-//        assetAliases[alias] = asset;
-//        asset->addOscNodeAlias(alias); // add the osc node alias
-//        return true;
-//    } else {
-//        ofLog(OF_LOG_WARNING, "AssetManager::addAlias - failed to add alias because it already exists.");
-//        return false;
-//    }
-//} 
-
-////--------------------------------------------------------------
-//bool AssetManager::removeAlias(string alias) {
-//    
-//    BaseMediaAsset* asset = getAsset(alias);
-//    if(asset == NULL) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::removeAlias - alias doesn't exist.");
-//        return false;
-//    }
-//    
-//    vector<string> aliases = getAliases(asset);
-//    
-//    if(aliases.size() > 1) {
-//        assetAliases.erase(alias); // remove the alias
-//        asset->removeOscNodeAlias(alias); // remove the node alias
-//        return true;
-//    } else if(aliases.size() == 0) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::removeAlias - found an asset with no aliases.  This is a problem.");
-//        return false;
-//    } else {
-//        ofLog(OF_LOG_WARNING, "AssetManager::removeAlias - failed to remove alias because it was the last one for that asset.");
-//        return false;
-//    }
-//}
-
-//bool AssetManager::removeAliasesForAsset(BaseMediaAsset* asset) {
-//    
-//    if(asset == NULL) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::removeAliases - asset is null.");
-//        return false;
-//    }
-//
-//    vector<string> aliases = getAliases(asset);
-//    for(int i = 0; i < aliases.size(); i++) {
-//        assetAliases.erase(aliases[i]); // remove the alias
-//        asset->removeOscNodeAlias(aliases[i]); // remove the node alias
-//    }
-//    
-//    return true;
-//}
-
-
-
-////--------------------------------------------------------------
-//bool AssetManager::changeAlias(string fromAlias, string toAlias) {
-//    
-//    if(hasAlias(toAlias)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::changeAlias - target alias already exists");
-//        return false;
-//    }
-//    
-//    map<string,BaseMediaAsset*>::iterator iter = assetAliases.find(fromAlias);
-//    
-//    if(iter!=assetAliases.end()) {
-//        std::swap(assetAliases[toAlias], iter->second);
-//        assetAliases.erase(iter);
-//        return true;
-//    } else {
-//        ofLog(OF_LOG_ERROR, "AssetManager::changeAlias - fromAlias does not exist");
-//        return false;
-//    }
-//    
-//}
-
-////--------------------------------------------------------------
-//vector<string> AssetManager::getAliases(BaseMediaAsset* asset) {
-//    vector<string> aliases;
-//    
-//    map<string,BaseMediaAsset*>::iterator iter = assetAliases.begin();
-//    
-//    for(; iter != assetAliases.end(); iter++) {
-//        if(iter->second == asset) aliases.push_back(iter->first);
-//    }
-//    
-//    return aliases;
-//}
 
 //--------------------------------------------------------------
 void AssetManager::loadAssets() {
@@ -853,12 +745,12 @@ BaseMediaAsset* AssetManager::getAsset(const string& alias) {
     }
 }
 
+//--------------------------------------------------------------
 void AssetManager::dump() {
     for(assetsIter = assets.begin(); assetsIter != assets.end(); assetsIter++) {
         ofLogNotice() << (*assetsIter)->toString() << endl;
     }
 }
-
 
 //--------------------------------------------------------------
 string AssetManager::validateAssetId(const string& name) {

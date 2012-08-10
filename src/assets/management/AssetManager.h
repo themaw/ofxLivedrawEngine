@@ -43,20 +43,8 @@
 #include "StreamAsset.h"
 #include "SyphonAsset.h"
 
-//class BaseMediaAsset;
-//class ImageAsset;
-//class MovieAsset;
-//class BufferAsset;
-//class BufferPlayerAsset;
-//class GrabberAsset;
-//class StreamAsset;
-//class SyphonAsset;
-
-//class ofxLivedrawEngine;  // we only use the pointer below, so no need to include
-
 class AssetManager : public ofxOscRouterNode, 
                      public CacheProvider
-
 {
 public:
     //--------------------------------------------------------------
@@ -85,14 +73,8 @@ protected:
 
     //--------------------------------------------------------------
     bool hasAlias(const string& alias);
-    //bool addAlias(BaseMediaAsset* asset, string alias);
-    //bool removeAlias(string alias);
-    //bool removeAliasesForAsset(BaseMediaAsset* asset);
-    //bool changeAlias(string fromAlias, string toAlias);
-    //vector<string> getAliases(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
-    
     ImageAsset*         addImage(const string& name, const string& filename);
     MovieAsset*         addMovie(const string& name, const string& filename);
     StreamAsset*        addStream(const string& name,
@@ -134,11 +116,8 @@ protected:
     int getNumAssetsInUnregisterQueue(MediaAssetType assetType);
     int getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset*> _assets);
 
-    
-    
 	//  TODO: for file watchers	
 	//	void onNewAsset(MediaAsset* asset);
-
     
     void dump();    
 

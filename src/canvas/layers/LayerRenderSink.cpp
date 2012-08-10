@@ -23,3 +23,23 @@
  ==============================================================================*/
 
 #include "LayerRenderSink.h"
+
+//--------------------------------------------------------------
+bool LayerRenderSink::frameReceived(ofxSharedVideoFrame _frame) {
+    frame = _frame;
+}
+
+//--------------------------------------------------------------
+void LayerRenderSink::clear() {
+    frame.reset();
+}
+
+//--------------------------------------------------------------
+bool LayerRenderSink::hasFrame() const {
+    return frame != NULL;
+}
+
+//--------------------------------------------------------------
+ofxSharedVideoFrame LayerRenderSink::getFrame() {
+    return frame;
+}

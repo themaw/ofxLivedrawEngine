@@ -22,7 +22,6 @@
  
  ==============================================================================*/
 
-
 #pragma once
 
 #include "ofMain.h"
@@ -31,10 +30,6 @@
 
 #include "ShaderAlphaMask.h"
 #include "ShaderCurves.h"
-
-//#include "ofxLivedrawEngine.h"
-
-//class ofxLivedrawEngine;
 
 class EffectsManager : public ofxOscRouterNode {
     

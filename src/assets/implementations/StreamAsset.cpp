@@ -51,7 +51,6 @@ StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, str
     
     addOscMethod("open");
     addOscMethod("close");
-//    addOscMethod("size");  // TODO: this is tricky to do 
 }
 
 //--------------------------------------------------------------
@@ -81,7 +80,6 @@ void StreamAsset::processOscCommand(const string& command, const ofxOscMessage& 
 
 //--------------------------------------------------------------
 bool StreamAsset::dispose() {
-    cout << "disposing of stream " << getName() << ":" << getUrl() << endl;
     detachFromSinks();
     return true;
 }
@@ -106,7 +104,7 @@ ofPixelsRef StreamAsset::getPixelsRef() {
 
 //--------------------------------------------------------------
 void StreamAsset::open() {
-    cout << "opening stream asset " << getName() << ":" << getUrl() << endl;
+    ofLogNotice() << "StreamAsset::open() : opening stream asset " << getName() << ":" << getUrl() << endl;
     if(isIpVideo) {
         ipcam->connect();
     } else {
@@ -116,8 +114,7 @@ void StreamAsset::open() {
 
 //--------------------------------------------------------------
 void StreamAsset::close()  {
-    cout << "closing stream asset " << getName()  << ":" << getUrl() << endl;
-
+    ofLogNotice() << "StreamAsset::open() : closing stream asset " << getName() << ":" << getUrl() << endl;
     if(isIpVideo) {
         ipcam->close();
     } else {

@@ -24,8 +24,6 @@
 
 #include "LayerManager.h"
 
-
-
 //--------------------------------------------------------------
 LayerManager::LayerManager() : ofxOscRouterNode("layers") {
     
@@ -46,12 +44,6 @@ LayerManager::~LayerManager() {
         layers.erase(it);
     }
 }
-
-
-//--------------------------------------------------------------
-//void LayerManager::setEffectsManager(EffectsManager* _effectsManager) {
-//    effectsManager = _effectsManager;
-//}
 
 //--------------------------------------------------------------
 void LayerManager::processOscCommand(const string& command, const ofxOscMessage& m) {
@@ -77,7 +69,6 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
     
 }
 
-
 //--------------------------------------------------------------
 Layer* LayerManager::addLayer(const string& layerName, ofPoint point, Layer* parentLayer) {
     // rename if needed
@@ -87,7 +78,6 @@ Layer* LayerManager::addLayer(const string& layerName, ofPoint point, Layer* par
     registerLayer(layer);
     return layer;
 }
-
 
 //--------------------------------------------------------------
 bool LayerManager::queueRegisterLayer(Layer* layer) {
@@ -111,7 +101,6 @@ bool LayerManager::queueUnregisterLayer(Layer* layer) {
     return unregisterQueue.insert(layer).second;
 }
 
-
 ////--------------------------------------------------------------
 //bool LayerManager::addLayerAsRoot(Layer* layer) {
 //    renderTree.push_back(layer);
@@ -134,33 +123,6 @@ Layer* LayerManager::getLayer(const string& alias) {
     }
 }
 
-
-//--------------------------------------------------------------
-//bool LayerManager::deleteLayer(const string& alias) {
-//    bool success = false;
-//        
-//    for ( it=layers.begin(); it != layers.end(); it++ ) {
-//        if(isMatch(alias,(*it)->getName())) {
-//            break;
-//        }
-//    }
-//
-//    // delete first, then erase from the vector
-//    if(it != layers.end()) {
-//        removeOscChild(*it); // remove it from the OSC tree!
-//        delete *it;       // free the memory
-//        *it = NULL;
-//        layers.erase(it); // erase it from the vector
-//        success = true;
-//    } else {
-//        success = false; // something went wrong
-//    }
-//    
-//    return success;
-//
-//}
-
-
 //--------------------------------------------------------------
 void LayerManager::update() {
     // process all de/registration queues
@@ -178,9 +140,7 @@ void LayerManager::draw() {
     for (renderTreeIter  = renderTree.begin();
          renderTreeIter != renderTree.end();
          renderTreeIter++ ) {
-		
 		(*renderTreeIter)->draw();
-        
 	}
 }
 
@@ -202,36 +162,36 @@ int  LayerManager::getLayerIndex(Layer* layer) {
 
 //--------------------------------------------------------------
 bool LayerManager::bringLayerForward(Layer* layer) {
-    cout << "sending layer forward " << layer->getName() << endl;
+    ofLogNotice() << "LayerManager::bringLayerForward() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerBackward(Layer* layer) {
-    cout << "sending layer backward " << layer->getName() << endl;
+    ofLogNotice() << "LayerManager::sendLayerBackward() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerToBack(Layer* layer) {
-    cout << "sending layer to back " << layer->getName() << endl;
+    ofLogNotice() << "LayerManager::sendLayerToBack() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::bringLayerToFront(Layer* layer) {
-    cout << "sending layer to front " << layer->getName() << endl;
+    ofLogNotice() << "LayerManager::bringLayerToFront() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerTo(Layer* layer, int targetLayerIndex) {
-    cout << "sending layer " << layer->getName() << " to " << targetLayerIndex << endl;
+    ofLogNotice() << "LayerManager::sendLayerTo() " << layer->getName() << " to " << targetLayerIndex << endl;
 }
 
 //--------------------------------------------------------------
 void LayerManager::setLayerSolo(Layer* layer, bool solo) {
-    cout << "solo layer " << layer->getName() << " solo = " << solo << endl;
+    ofLogNotice() << "LayerManager::setLayerSolo() " << layer->getName() << " solo = " << solo << endl;
 }
 //--------------------------------------------------------------
 void LayerManager::setLayerLock(Layer* layer, bool lock) {
-    cout << "lock layer " << layer->getName() << " lock =" << lock <<  endl;
+    ofLogNotice() << "LayerManager::setLayerLock() " << layer->getName() << " lock =" << lock <<  endl;
 }
 
 //--------------------------------------------------------------
@@ -265,8 +225,6 @@ bool LayerManager::registerLayer(Layer* layer) {
 
 //--------------------------------------------------------------
 bool LayerManager::unregisterLayer(Layer* layer) {
-    
-    //cout << "unregistering layer --- " << layer->getName() << endl;
     
     // is there a there there?
     if(layer == NULL) {

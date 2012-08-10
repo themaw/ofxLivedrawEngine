@@ -22,7 +22,6 @@
  
  ==============================================================================*/
 
-
 #include "MovieAsset.h"
 
 //--------------------------------------------------------------
@@ -48,32 +47,13 @@ bool MovieAsset::dispose() {
     return true;
 }
 
-// TODO: we don't even need this if we don't have any other messages.
-//   void processOscCommand(const string& command, const ofxOscMessage& m) {
-//       
-//       if(isMatch(pattern, "/cache") || isMatch(pattern, "/uncache")) {
-//           Cacheable::processOscCommand(pattern, m);
-//       } else {
-//           cout << "processing message inside of movie asset." << endl;
-//       }
-//
-//       
-//       
-//   }
-
-
 //--------------------------------------------------------------
 bool MovieAsset::doCache() {
-    
-    cout << "MovieAsset::doCache  " << endl;
-
     if(hasCacheProvider()) {
-        cout << "MovieAsset::caching asset  " << endl;
-
+        ofLogVerbose() << "MovieAsset::doCache() : caching.";
         return cacheProvider->cacheAsset(this);
     } else {
-        cout << "didn't have a cache provider  " << endl;
-        
+        ofLogVerbose() << "MovieAsset::doCache() : failing - no cache provider.";
         return false;
     }
     
@@ -81,17 +61,11 @@ bool MovieAsset::doCache() {
 
 //--------------------------------------------------------------
 bool MovieAsset::doUncache() {
-
-    cout << "MovieAsset::doUncache  " << endl;
-
-    
     if(hasCacheProvider()) {
-        cout << "MovieAsset::uncaching asset  " << endl;
-        
+        ofLogVerbose() << "MovieAsset::doUncache() : uncaching.";
         return cacheProvider->uncacheAsset(this);
     } else {
-        cout << "didn't have a cache provider  " << endl;
-        
+        ofLogVerbose() << "MovieAsset::doUncache() : failing - no cache provider.";
         return false;
     }
 

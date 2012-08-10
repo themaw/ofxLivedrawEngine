@@ -22,7 +22,6 @@
  
  ==============================================================================*/
 
-
 #include "BufferAsset.h"
 
 //--------------------------------------------------------------
@@ -50,9 +49,7 @@ BufferAsset::~BufferAsset() {}
 
 //--------------------------------------------------------------
 void BufferAsset::update() {
-    
     buffer->update(); // update the buffer
-
 }
 
 //--------------------------------------------------------------
@@ -62,10 +59,14 @@ bool BufferAsset::dispose() {
 }
 
 //--------------------------------------------------------------
-void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& m) {}
+void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
+    ofLogNotice() << "BufferAsset::processOscCommand() : got message.";
+}
 
 //--------------------------------------------------------------
-bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {};
+bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {
+    ofLogNotice() << "BufferAsset::frameReceived() : !";
+};
 
 //--------------------------------------------------------------
 bool BufferAsset::isCacheBuffer() {

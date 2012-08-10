@@ -22,12 +22,10 @@
  
  ==============================================================================*/
 
-
 #include "BufferPlayerAsset.h"
 
 //--------------------------------------------------------------
-BufferPlayerAsset::BufferPlayerAsset(const string& _name) 
-{
+BufferPlayerAsset::BufferPlayerAsset(const string& _name) {
     
     canSource = true;
     
@@ -35,7 +33,6 @@ BufferPlayerAsset::BufferPlayerAsset(const string& _name)
     
     addAlias(_name);
     
-//    name = _name;
     player = ofPtr<ofxVideoBufferPlayer>(new ofxVideoBufferPlayer());
     
     addOscMethod("buffer");
@@ -205,12 +202,12 @@ ofPixelsRef BufferPlayerAsset::getPixelsRef() {
 
 //--------------------------------------------------------------
 void BufferPlayerAsset::open()   {
-    // Not applicable.
+    ofLogVerbose() << "BufferPlayerAsset::open(): is not implemented.";
 }
 
 //--------------------------------------------------------------
 void BufferPlayerAsset::close() {
-    // Not applicable.
+    ofLogVerbose() << "BufferPlayerAsset::close(): is not implemented.";
 }
 
 //--------------------------------------------------------------

@@ -30,7 +30,6 @@
 #include "Layer.h"
 #include "LayerManager.h"
 
-
 class CanvasGroupManager : public ofxOscRouterBaseNode {
 public:
     
@@ -45,7 +44,5 @@ public:
 private:
     LayerManager* layerManager;
     vector<CanvasGroup*> groups;
-    
 
-    
 };

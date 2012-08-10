@@ -49,12 +49,11 @@ void SyphonAsset::update() {
 
 //--------------------------------------------------------------
 void SyphonAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "processing message in syphon asset." << endl;
+    ofLogNotice() << "SyphonAsset::processOscCommand() : processing message in syphon asset.";
 }
 
 //--------------------------------------------------------------
 bool SyphonAsset::dispose() {
-    cout << "disposing of syphon " << getName() << endl;
     detachFromSinks();
     return true;
 }

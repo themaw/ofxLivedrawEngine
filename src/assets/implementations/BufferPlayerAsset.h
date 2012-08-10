@@ -29,7 +29,6 @@
 
 #include "BaseMediaAsset.h"
 
-
 class BufferPlayerAsset : public virtual BaseMediaAsset, 
                           public virtual ofxVideoSourceInterface 
 {

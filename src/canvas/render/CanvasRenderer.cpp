@@ -72,41 +72,14 @@ void CanvasRenderer::update() {
 }
 
 //--------------------------------------------------------------
-void CanvasRenderer::begin() {
-    fbo.begin(); // start the FBO
-    // clear the background
-    
-    glClearColor(bgColor.r/255.0,bgColor.g/255.0,bgColor.b/255.0,bgColor.a/255.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    
-//    ofSetColor(bgColor);
-//    ofFill();
-//    ofRect(0,0,fbo.getWidth(),fbo.getHeight());
-
-//    layerManager.draw();
-}
-
-//--------------------------------------------------------------
-void CanvasRenderer::end() {
-//    fbo.draw(0,0);
-    fbo.end(); // end the fbo
-
-}
-
-//--------------------------------------------------------------
 void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessage& m) {
-    // got one for the canvas!
-
-//    ofLog(OF_LOG_NOTICE, "CanvasRenderer::processOscCommand : " + m.getAddress());
-    
     if(isMatch(command,"position")) {
         if(validateOscSignature("[if][if]",m)) {
             int _x = getArgAsIntUnchecked(m,0);
             int _y = getArgAsIntUnchecked(m,1);
             
             ofSetWindowPosition(_x,_y); // TODO: this will behave differently when the GUI comes online
-                                      // actual window position will be handled one level shallower
+            // actual window position will be handled one level shallower
             setPosition(x,y);
         }
         
@@ -116,7 +89,7 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
             int h = MAX(0,getArgAsIntUnchecked(m,1));
             
             ofSetWindowShape(w,h);  // TODO: this will be have differently when the GUI comes online
-                                     // actual window shape will be handled one level shallower
+            // actual window shape will be handled one level shallower
             setSize(w,h);
         }
         
@@ -136,7 +109,7 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
             }
             
             setBackground(_bgColor); // redundant ...
-        }            
+        }
     } else if(isMatch(command,"fullscreen")) {
         if(validateOscSignature("[if]",m)) {
             ofSetFullscreen(getArgAsBoolean(m,0));
@@ -150,8 +123,42 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
             setFPS(MAX(0,getArgAsIntUnchecked(m,0)));
         }
     } else {
-        ofLog(OF_LOG_WARNING, "CanvasRenderer: Unknown command: " + command);
+        ofLogWarning() << "CanvasRenderer::processOscCommand() : Unknown command: " << command;
     }
+}
+
+
+//--------------------------------------------------------------
+void CanvasRenderer::begin() {
+    fbo.begin(); // start the FBO
+    // clear the background
+    glClearColor(bgColor.r/255.0,bgColor.g/255.0,bgColor.b/255.0,bgColor.a/255.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+//--------------------------------------------------------------
+void CanvasRenderer::end() {
+    fbo.end(); // end the fbo
+}
+
+//--------------------------------------------------------------
+void CanvasRenderer::draw(float x, float y) {
+    fbo.draw(x,y);
+}
+
+//--------------------------------------------------------------
+void CanvasRenderer::draw(float x, float y, float w, float h) {
+    fbo.draw(x,y,w,h);
+}
+
+//--------------------------------------------------------------
+float CanvasRenderer::getHeight() {
+    return fbo.getHeight();
+}
+
+//--------------------------------------------------------------
+float CanvasRenderer::getWidth() {
+    return fbo.getWidth();
 }
 
 //--------------------------------------------------------------

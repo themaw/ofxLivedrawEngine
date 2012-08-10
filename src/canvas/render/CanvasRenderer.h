@@ -22,10 +22,8 @@
  
  ==============================================================================*/
 
-// a collection of convas layers
-// communication between layers
-
 #pragma once
+
 #include "ofMain.h"
 #include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
@@ -40,30 +38,18 @@ public:
     
 	virtual ~CanvasRenderer();
 
-    void init();
-
     void update();
+	
+    void processOscCommand(const string& command, const ofxOscMessage& m);
 
     void begin();
     void end();
     
-    
-	void draw(float x, float y) {
-        fbo.draw(x,y);
-    }
-    
-	void draw(float x, float y, float w, float h) {
-        fbo.draw(x,y,w,h);
-    }
+	void draw(float x, float y);
+	void draw(float x, float y, float w, float h);
 
-	float getHeight() {
-        return fbo.getHeight();
-    }
-    
-	float getWidth() {
-        return fbo.getWidth();
-    }
-	
+	float getHeight();
+	float getWidth();
     
 	// /livedraw/canvas/fullscreen
 	void setFullscreen(bool _fullscreen);
@@ -82,8 +68,6 @@ public:
 	
     void setMsaa(bool _msaa);
     
-	
-    void processOscCommand(const string& command, const ofxOscMessage& m);
 
 
 	// /livedraw/canvas/layer/delete   LAYER_NAME
@@ -100,7 +84,6 @@ public:
 protected:
     
     ofxLivedrawEngineInterface* engine;
-    
     
 private:
     

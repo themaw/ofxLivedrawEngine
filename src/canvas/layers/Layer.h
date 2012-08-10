@@ -30,23 +30,12 @@
 
 #include "ofxEnablerInterface.h"
 #include "ofxOscRouterNode.h"
-//#include "ofTexture.h"
 
 #include "LayerManagerInterface.h"
 #include "LayerTransform.h"
 #include "AssetManager.h"
-//#include "EffectsManager.h"
-//#include "EffectsChain.h"
 
 #include "LayerRenderSink.h"
-
-//class MediaAsset;
-//class BufferPlayerAsset;
-//class LayerManager;
-//class ofxLivedrawEngine;
-
-//class LayerManager;
-//class BufferPlayerAsset;
 
 #include "alphanum.hpp"
 
@@ -77,53 +66,28 @@ public:
     void init();
     bool dispose();
 
-    bool isFrameNew() { return true;} ;
+    bool isFrameNew();
 
-    ofPixelsRef getPixelsRef() {
-        fbo->readToPixels(pix);
-        return pix;
-    };
+    ofPixelsRef getPixelsRef();
     
-    bool isLoaded() {return true;}
+    bool isLoaded();
     
     void render();
     void draw();
     void drawFrame(ofxSharedVideoFrame frame);
 
     // player assets
-    bool hasInputFrame(int index = 0) const {
-        return inputs[index].hasFrame();
-    }
-    
-    bool hasMaskFrame(int index = 0) const {
-        return masks[index].hasFrame();
-    }
-    
-    LayerRenderSink& getInputSink(int index = 0) {
-        return inputs[index];
-    }
-    
-    LayerRenderSink& getMaskSink(int index = 0) {
-        return masks[index];
-    }
+    bool hasInputFrame(int index = 0) const;
+    bool hasMaskFrame(int index = 0) const;
+    LayerRenderSink& getInputSink(int index = 0);
+    LayerRenderSink& getMaskSink(int index = 0);
+    const LayerRenderSink& getInputSink(int index = 0) const;
+    const LayerRenderSink& getMaskSink(int index = 0) const;
 
-    const LayerRenderSink& getInputSink(int index = 0) const {
-        return inputs[index];
-    }
-    
-    const LayerRenderSink& getMaskSink(int index = 0) const {
-        return masks[index];
-    }
-
-    LayerTransform* getTransform() { return &transform; };
+    LayerTransform* getTransform();
 	
-    LayerStretchMode getLayerStretchMode() {
-        return layerStretchMode;
-    }
-    
-    void setLayerStretchMode(LayerStretchMode mode) {
-        layerStretchMode = mode;
-    }
+    LayerStretchMode getLayerStretchMode();
+    void setLayerStretchMode(LayerStretchMode mode);
     
     
     string getName() const;
@@ -145,12 +109,12 @@ public:
 	vector<BaseCanvasEffect*> getEffectsChain() { return effects;};
     */
 
-	// settings	
-	bool isSolo() const {return solo;};
-	bool setSolo(bool _solo) {solo = _solo;};
+	// settings
+	bool isSolo() const;
+	bool setSolo(bool _solo);
 
-	bool isLocked() const {return locked;};
-	bool setLocked(bool _locked) {locked = _locked;};
+	bool isLocked() const;
+	bool setLocked(bool _locked);
 	
     void onEnabled();
     void onDisabled();
@@ -159,10 +123,7 @@ public:
     void setSize(int width, int height);
     void setRectangle(const ofRectangle& rect);
 	
-    //ofFbo* getFbo() {
-    //    return &fbo;
-   // }
-    
+    // layer position
     bool bringFoward();
     bool sendBackward();
     bool bringToFront();
@@ -190,39 +151,16 @@ public:
 
     void setLayerParent(Layer* layerParent);
     
-//    AssetManager* getAssetManager();
+    void setDrawDebugInfo(bool b);
+    bool getDrawDebugInfo();
+    void setDrawWireframe(bool b);
+    bool getDrawWireframe();
+    void setDrawAxis(bool b);
+    bool getDrawAxis();
+    void setDrawOverflow(bool b);
+    bool getDrawOverflow();
     
-//    LayerManager* getLayerManager();
-//    ofxLivedrawEngine* getEngine();
-    
-    string toString() const {
-        stringstream ss;
-        ss << "[Layer: name: " << getName();
-        ss << " hasInput: " << hasInputFrame();
-        ss << " isInputSinking: " << getInputSink().isSinking();
-        ss << " hasMask: " << hasMaskFrame();
-        ss << " isMaskSinking: " << getMaskSink().isSinking() << endl;
-        ss << " [xform: " << endl;
-        ss << "   [size: " << transform.getSize() << "]"<< endl;;
-        ss << "   [pos: " << transform.getPosition() << "]"<< endl;;
-        ss << "   [anch: " << transform.getAnchorPoint() << "]"<< endl;;
-        ss << "   [scale: " << transform.getScale() << "]"<< endl;;
-        ss << "   [rot: " << transform.getRotation() << "]"<< endl;;
-        ss << "   [orient: " << transform.getOrientation() << "]"<< endl;;
-        ss << "   [opacity: " << transform.getOpacity() << "]"<< endl;;
-        ss << "]]";
-        return ss.str();
-    }
-    
-    
-    void setDrawDebugInfo(bool b) { bDrawDebugInfo = b; }
-    bool getDrawDebugInfo() { return bDrawDebugInfo; }
-    void setDrawWireframe(bool b) { bDrawWireframe = b; }
-    bool getDrawWireframe() { return bDrawWireframe; }
-    void setDrawAxis(bool b) { bDrawAxis = b; }
-    bool getDrawAxis() { return bDrawAxis; }
-    void setDrawOverflow(bool b) { bDrawOverFlow = b; }
-    bool getDrawOverflow() { return bDrawOverFlow; }
+    string toString() const;
     
 private:
 	
@@ -236,26 +174,11 @@ private:
     
     string layerName;
     
-//    EffectsManager* effectsManager;
-    
-//    EffectsChain effectsChain;
-
-    // why not more?
-
-    
     vector<LayerRenderSink>::iterator sinkIter;
     vector<LayerRenderSink> inputs;
     vector<LayerRenderSink> masks;
     
-//    LayerRenderSink sourceSinkA;
-//    LayerRenderSink sourceSinkB;
-//    LayerRenderSink maskSinkA;
-//    LayerRenderSink maskSinkB;
-
-	// Masker compositer;
-	// width / height are all taken from the source
 	LayerTransform transform;
-	//vector<BaseCanvasEffect*> effects;
 	
 	bool solo;
 	bool locked;
@@ -267,26 +190,10 @@ private:
 
     LayerManagerInterface* layerManager;
     
-    
-    // node 
+    // node
     Layer*         layerParent;
     vector<Layer*> layerChildren;
     
-    // private
-//    vector<Layer*>::iterator findChild(Layer* layerChild);
-//    bool addLayerChild(Layer* layerChild);
-//    bool removeLayerChild(Layer* layerChild);
-
-//    set<Layer*>& getChildLayersRef();
-//    bool containsChildLayer(Layer* _keyword) const;
-//    bool addChildLayer(Layer* _keyword);
-//    bool removeChildLayer(Layer* _keyword);
-//    int  getNumChildLayers() const;
-
-    
     LayerStretchMode layerStretchMode;
     
-	// -> should this be in the gui?
-	//ofColor labelColor;
-		
 };

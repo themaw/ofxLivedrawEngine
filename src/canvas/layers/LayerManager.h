@@ -24,14 +24,11 @@
 
 #pragma once
 
-//#include "ofMain.h"
+#include "ofMain.h"
 #include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
 #include "LayerManagerInterface.h"
 #include "Layer.h"
-//#include "AssetManager.h"
-
-//#include "EffectsManager.h"
 
 #include "alphanum.hpp"
 
@@ -41,9 +38,9 @@ struct layerSetOrder {
     }
 };
 
-class LayerManager :
-public ofxOscRouterNode,
-public LayerManagerInterface {
+class LayerManager : public ofxOscRouterNode,
+                     public LayerManagerInterface
+{
 public:
     
     LayerManager();
@@ -80,16 +77,7 @@ public:
     void setLayerSolo(Layer* layer, bool solo);
     void setLayerLock(Layer* layer, bool lock);
 
-//    void setEngine(ofxLivedrawEngine* _engine) {
-//        engine = _engine;    
-//    };
-//    ofxLivedrawEngine* getEngine() {return engine;}    
-
     void dump();
-
-    
-    //    void setEffectsManager(EffectsManager* _effectsManager);
-    
 
     ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
     void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
@@ -121,5 +109,4 @@ private:
     vector<Layer*>::iterator renderTreeIter;
     vector<Layer*> renderTree; // root layers in here
     
-
 };
