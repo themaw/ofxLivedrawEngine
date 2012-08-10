@@ -25,8 +25,7 @@
 #pragma once
 
 #include "ofMain.h"
-//#include "ofxLivedrawEngine.h"
-
+#include "ofxLivedrawEngineInterface.h"
 #include "ofxVideoSourceInterface.h"
 
 #include "ofxEnablerInterface.h"
@@ -35,7 +34,7 @@
 
 #include "LayerManagerInterface.h"
 #include "LayerTransform.h"
-//#include "AssetManager.h"
+#include "AssetManager.h"
 //#include "EffectsManager.h"
 //#include "EffectsChain.h"
 
@@ -50,6 +49,14 @@
 //class BufferPlayerAsset;
 
 #include "alphanum.hpp"
+
+enum LayerStretchMode {
+    CENTER = 0, // centers in layer at actual size
+    FILL, // zooms to no remaining white space, aspect ratio preserved
+    FIT, // fits maximum size to screen without losing any image
+    STRETCH, // stretches in X / Y to fit layer dimensions
+};
+
 
 class Layer : public ofxOscRouterNode,
               public ofxVideoSourceInterface,
@@ -81,26 +88,44 @@ public:
     
     void render();
     void draw();
+    void drawFrame(ofxSharedVideoFrame frame);
 
     // player assets
-    bool hasSource(int index = 0) const {
-        return sources[index].hasFrame();
+    bool hasInputFrame(int index = 0) const {
+        return inputs[index].hasFrame();
     }
     
-    bool hasMask(int index = 0) const {
+    bool hasMaskFrame(int index = 0) const {
         return masks[index].hasFrame();
     }
     
-    LayerRenderSink& getSourceSink(int index = 0) {
-        return sources[index];
+    LayerRenderSink& getInputSink(int index = 0) {
+        return inputs[index];
     }
     
     LayerRenderSink& getMaskSink(int index = 0) {
         return masks[index];
     }
 
+    const LayerRenderSink& getInputSink(int index = 0) const {
+        return inputs[index];
+    }
+    
+    const LayerRenderSink& getMaskSink(int index = 0) const {
+        return masks[index];
+    }
+
     LayerTransform* getTransform() { return &transform; };
 	
+    LayerStretchMode getLayerStretchMode() {
+        return layerStretchMode;
+    }
+    
+    void setLayerStretchMode(LayerStretchMode mode) {
+        layerStretchMode = mode;
+    }
+    
+    
     string getName() const;
     void setName(const string& name);
     
@@ -143,6 +168,13 @@ public:
     bool bringToFront();
     bool sendToBack();
     
+    void sinkInput(int index, const string& asset);
+    void sinkMask(int index, const string& asset);
+    
+    void unsinkInput(int index);
+    void unsinkMask(int index);
+
+    
     // node info
     Layer*          getLayerRoot();
     Layer*          getLayerParent();
@@ -161,23 +193,38 @@ public:
     string toString() const {
         stringstream ss;
         ss << "[Layer: name: " << getName();
-        ss << " hasSource: " << hasSource();
-        ss << " hasMask: " << hasMask();
-        ss << " [xform: ";
-        ss << " [size: " << transform.getSize() << "]";
-        ss << " [pos: " << transform.getPosition() << "]";
-        ss << " [anch: " << transform.getAnchorPoint() << "]";
-        ss << " [scale: " << transform.getScale() << "]";
-        ss << " [rot: " << transform.getRotation() << "]";
-        ss << " [orient: " << transform.getOrientation() << "]";
-        ss << " [opacity: " << transform.getOpacity() << "]";
-        ss << "]";
+        ss << " hasInput: " << hasInputFrame();
+        ss << " isInputSinking: " << getInputSink().isSinking();
+        ss << " hasMask: " << hasMaskFrame();
+        ss << " isMaskSinking: " << getMaskSink().isSinking() << endl;
+        ss << " [xform: " << endl;
+        ss << "   [size: " << transform.getSize() << "]"<< endl;;
+        ss << "   [pos: " << transform.getPosition() << "]"<< endl;;
+        ss << "   [anch: " << transform.getAnchorPoint() << "]"<< endl;;
+        ss << "   [scale: " << transform.getScale() << "]"<< endl;;
+        ss << "   [rot: " << transform.getRotation() << "]"<< endl;;
+        ss << "   [orient: " << transform.getOrientation() << "]"<< endl;;
+        ss << "   [opacity: " << transform.getOpacity() << "]"<< endl;;
+        ss << "]]";
         return ss.str();
     }
-
+    
+    
+    void setDrawDebugInfo(bool b) { bDrawDebugInfo = b; }
+    bool getDrawDebugInfo() { return bDrawDebugInfo; }
+    void setDrawWireframe(bool b) { bDrawWireframe = b; }
+    bool getDrawWireframe() { return bDrawWireframe; }
+    void setDrawAxis(bool b) { bDrawAxis = b; }
+    bool getDrawAxis() { return bDrawAxis; }
+    void setDrawOverflow(bool b) { bDrawOverFlow = b; }
+    bool getDrawOverflow() { return bDrawOverFlow; }
+    
 private:
 	
-    bool debugInfo;
+    bool bDrawDebugInfo;
+    bool bDrawWireframe;
+    bool bDrawAxis;
+    bool bDrawOverFlow;
     
     ofPixels pix; // TODO:
     ofPtr<ofFbo> fbo;
@@ -189,7 +236,10 @@ private:
 //    EffectsChain effectsChain;
 
     // why not more?
-    vector<LayerRenderSink> sources;
+
+    
+    
+    vector<LayerRenderSink> inputs;
     vector<LayerRenderSink> masks;
     
 //    LayerRenderSink sourceSinkA;
@@ -229,7 +279,7 @@ private:
 //    int  getNumChildLayers() const;
 
     
-    
+    LayerStretchMode layerStretchMode;
     
 	// -> should this be in the gui?
 	//ofColor labelColor;
