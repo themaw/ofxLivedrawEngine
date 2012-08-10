@@ -53,13 +53,14 @@ SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<Syphon
 
 //--------------------------------------------------------------
 AssetManager::AssetManager() : ofxOscRouterNode("media") {
+
     
     engine = NULL;
     
     // TODO: move some of these to their respective asset implementations
     
-//    addOscNodeAlias("med");
-//    addOscNodeAlias("m");
+    addOscNodeAlias("med");
+    addOscNodeAlias("m");
     
 //    // give an asset a new alias
 //    addOscMethod("alias"); // allows id aliasing
