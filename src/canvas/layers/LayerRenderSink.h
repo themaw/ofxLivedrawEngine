@@ -32,6 +32,10 @@ public:
     bool frameReceived(ofxSharedVideoFrame _frame) {
         frame = _frame;
     }
+    
+    void clear() {
+        frame.reset();
+    }
 
     bool hasFrame() const {
         return frame != NULL;
