@@ -73,7 +73,7 @@ public:
     ofxVideoSourceInterface* getSourceAsset(const string& alias);
     ofxVideoSinkInterface*   getSinkAsset(const string& alias);
     
-    bool attachSourceToSink(const string& sourceAlias, const string& sinkAlias);
+    void attachSourceToSink(const string& sourceAlias, const string& sinkAlias);
     
     ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
     void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}

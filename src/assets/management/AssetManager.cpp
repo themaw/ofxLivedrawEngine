@@ -238,17 +238,13 @@ ofxVideoSinkInterface* AssetManager::getSinkAsset(const string& alias) {
     return sink;
 }
 
-bool AssetManager::attachSourceToSink(const string& sourceAlias, const string& sinkAlias) {
+void AssetManager::attachSourceToSink(const string& sourceAlias, const string& sinkAlias) {
     ofxVideoSourceInterface* source = getSourceAsset(sourceAlias);
     ofxVideoSinkInterface*   sink = getSinkAsset(sinkAlias);
 
     if(source != NULL && sink != NULL) {
-        return source->attachToSink(sink);
-    } else {
-        return false;
+        source->attachToSink(sink);
     }
-    
-
 }
 
 

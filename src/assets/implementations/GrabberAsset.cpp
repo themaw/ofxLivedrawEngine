@@ -55,14 +55,14 @@ void GrabberAsset::update() {
 
 //--------------------------------------------------------------
 bool GrabberAsset::dispose() {
-    detachFromAllSinks();
+    detachFromSinks();
     close();
     return true;
 }
 
 //--------------------------------------------------------------
 void GrabberAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "cout process osc message" << endl;
+    cout << "cout grabbery process osc message" << endl;
 }
 
 //--------------------------------------------------------------

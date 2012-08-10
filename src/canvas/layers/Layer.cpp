@@ -121,7 +121,10 @@ void Layer::init() {
 
 //--------------------------------------------------------------
 bool Layer::dispose() {
-    // disposing
+    cout << "DISPOSING OF LAYER " << getName() << endl;
+
+    unsinkInputs();
+    unsinkMasks();
     return true;
 }
 
@@ -172,12 +175,8 @@ void Layer::sinkInput(int index, const string& asset) {
             if(assetManager != NULL) {
                 ofxVideoSourceInterface* src = assetManager->getSourceAsset(asset);
                 if(src != NULL) {
-                    
                     unsinkInput(index); // release any current ones
-
-                    if(!src->attachToSink(&inputs[index])) {
-                        ofLogError() << "Layer::sinkSource: error attaching source to layer sink.";
-                    }
+                    src->attachToSink(&inputs[index]);
                 } else {
                     ofLogError() << "Layer::sinkSource: " << asset << " was not a valid source.";
                 }
@@ -206,12 +205,8 @@ void Layer::sinkMask(int index, const string& asset) {
             if(assetManager != NULL) {
                 ofxVideoSourceInterface* src = assetManager->getSourceAsset(asset);
                 if(src != NULL) {
-
                     unsinkMask(index); // release any current ones
-                    
-                    if(!src->attachToSink(&masks[index])) {
-                        ofLogError() << "Layer::sinkMask: error attaching source to layer sink.";
-                    }
+                    src->attachToSink(&masks[index]);
                 } else {
                     ofLogError() << "Layer::sinkMask: " << asset << " was not a valid source.";
                 }
@@ -230,23 +225,42 @@ void Layer::sinkMask(int index, const string& asset) {
 //--------------------------------------------------------------
 void Layer::unsinkInput(int index) {
     if(index < inputs.size()) {
-        inputs[index].detachFromAllSources();
+        inputs[index].detachFromSources();
     } else {
         ofLogError() << "Layer::unsinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
-        return;
     }
 }
 
 //--------------------------------------------------------------
 void Layer::unsinkMask(int index) {
     if(index < masks.size()) {
-        masks[index].detachFromAllSources();
+        masks[index].detachFromSources();
     } else {
         ofLogError() << "Layer::unsinkMask: invalid source index.  Must be less than " << masks.size() << ".";
         return;
     }
 }
 
+//--------------------------------------------------------------
+void Layer::unsinkInputs() {
+    
+    for(sinkIter = inputs.begin();
+        sinkIter != inputs.end();
+        sinkIter++) {
+        cout << "Layer::unsinkInputs: detaching from input" << endl;
+        (*sinkIter).detachFromSources();
+    }
+}
+
+//--------------------------------------------------------------
+void Layer::unsinkMasks() {
+    for(sinkIter = masks.begin();
+        sinkIter != masks.end();
+        sinkIter++) {
+        cout << "Layer::unsinkMasks : detaching from input" << endl;
+        (*sinkIter).detachFromSources();
+    }
+}
 
 
 // node info
@@ -585,8 +599,6 @@ void Layer::draw() {
         a.y *= h;
     }
     
-    ofRectangle s
-    
     ofPoint p = xform->getPosition();
     if(xform->isPositionNormalized()) ofLogWarning() << "Normalized position is not yet supported.";
 
@@ -610,7 +622,8 @@ void Layer::draw() {
     ofScale(s.x,
             s.y,
             s.z);
-    
+
+// TODO: for this to work, we need to give it screen coords
 //    if(!bDrawOverFlow) {
 //        glEnable(GL_SCISSOR_TEST);
 //        glScissor(0,0,w,h);
@@ -637,12 +650,12 @@ void Layer::draw() {
 
     for(int i = 0; i < inputs.size(); i++) {
         
-//        if(bDrawDebugInfo) {
-//            ofPushStyle();
-//            ofSetColor(255,255,0);
-//            ofDrawBitmapString("Source/Mask: " + ofToString(i), ofPoint(0,(i+1)*12,0));
-//            ofPopStyle();
-//        }
+        if(bDrawDebugInfo) {
+            ofPushStyle();
+            ofSetColor(255,255,0);
+            ofDrawBitmapString("Source/Mask: " + ofToString(i), ofPoint(0,(i+1)*12,0));
+            ofPopStyle();
+        }
         
         // BEGIN EFFECTS COMPOSITION
         
@@ -686,6 +699,7 @@ void Layer::draw() {
     }
     
     
+    // TODO: See above
     //if(!bDrawOverFlow) glDisable(GL_SCISSOR_TEST);
     
 

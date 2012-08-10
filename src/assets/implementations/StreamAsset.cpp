@@ -51,9 +51,7 @@ StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, str
     
     addOscMethod("open");
     addOscMethod("close");
-    addOscMethod("start");
-    addOscMethod("stop");
-    addOscMethod("size");
+//    addOscMethod("size");  // TODO: this is tricky to do 
 }
 
 //--------------------------------------------------------------
@@ -63,9 +61,9 @@ StreamAsset::~StreamAsset() {
 
 void StreamAsset::update() {
     if(isIpVideo) {
-        return ipcam->update();
+        ipcam->update();
     } else {
-        return qtcam->update();
+        qtcam->update();
     }
 
     // everybody has some work
@@ -73,13 +71,19 @@ void StreamAsset::update() {
 }
 //--------------------------------------------------------------
 void StreamAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "Stream asset processing osc." << endl;
+
+    if(isMatch(command,"open")) {
+        open();
+    } else if(isMatch(command, "close")) {
+        close();
+    }
 }
 
 //--------------------------------------------------------------
 bool StreamAsset::dispose() {
-    cout << "disposing of stream " << getName() << endl;
-    return detachFromAllSinks();
+    cout << "disposing of stream " << getName() << ":" << getUrl() << endl;
+    detachFromSinks();
+    return true;
 }
 
 //--------------------------------------------------------------
@@ -101,7 +105,8 @@ ofPixelsRef StreamAsset::getPixelsRef() {
 }
 
 //--------------------------------------------------------------
-void StreamAsset::open()   {
+void StreamAsset::open() {
+    cout << "opening stream asset " << getName() << ":" << getUrl() << endl;
     if(isIpVideo) {
         ipcam->connect();
     } else {
@@ -111,6 +116,8 @@ void StreamAsset::open()   {
 
 //--------------------------------------------------------------
 void StreamAsset::close()  {
+    cout << "closing stream asset " << getName()  << ":" << getUrl() << endl;
+
     if(isIpVideo) {
         ipcam->close();
     } else {

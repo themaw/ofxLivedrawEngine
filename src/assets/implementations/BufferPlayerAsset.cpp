@@ -74,7 +74,8 @@ void BufferPlayerAsset::update() {
 
 //--------------------------------------------------------------
 bool BufferPlayerAsset::dispose() {
-    return detachFromAllSinks();
+    detachFromSinks();
+    return true;
 }
 
 //--------------------------------------------------------------

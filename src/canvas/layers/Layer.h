@@ -174,6 +174,8 @@ public:
     void unsinkInput(int index);
     void unsinkMask(int index);
 
+    void unsinkInputs();
+    void unsinkMasks();
     
     // node info
     Layer*          getLayerRoot();
@@ -238,7 +240,7 @@ private:
     // why not more?
 
     
-    
+    vector<LayerRenderSink>::iterator sinkIter;
     vector<LayerRenderSink> inputs;
     vector<LayerRenderSink> masks;
     

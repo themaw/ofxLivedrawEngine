@@ -54,13 +54,14 @@ void ImageAsset::update() {
 
 //--------------------------------------------------------------
 void ImageAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "processing image asset " << getName() << endl;
+    cout << "processing image asset command " << getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool ImageAsset::dispose() {
     cout << "disposing of image " << getName() << endl;
-    return detachFromAllSinks();
+    detachFromSinks();
+    return true;
 }
 
 //--------------------------------------------------------------

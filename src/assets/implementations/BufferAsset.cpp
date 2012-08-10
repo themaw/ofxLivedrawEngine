@@ -57,7 +57,8 @@ void BufferAsset::update() {
 
 //--------------------------------------------------------------
 bool BufferAsset::dispose() {
-    return detachFromAllSources();
+    detachFromSources();
+    return true;
 }
 
 //--------------------------------------------------------------
