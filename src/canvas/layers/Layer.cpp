@@ -83,7 +83,7 @@ void Layer::init() {
     inputs.push_back(LayerRenderSink());
     masks.push_back(LayerRenderSink());
 
-    layerStretchMode = CENTER;
+    layerStretchMode = FIT;
     
     //    effectsChain.setup();
     solo = false;
@@ -242,12 +242,31 @@ void Layer::unsinkMask(int index) {
 }
 
 //--------------------------------------------------------------
+void Layer::clearInput(int index) {
+    if(index < inputs.size()) {
+        inputs[index].clear();
+    } else {
+        ofLogError() << "Layer::unsinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
+    }
+}
+
+//--------------------------------------------------------------
+void Layer::clearMask(int index) {
+    if(index < masks.size()) {
+        masks[index].clear();
+    } else {
+        ofLogError() << "Layer::unsinkMask: invalid source index.  Must be less than " << masks.size() << ".";
+        return;
+    }
+}
+
+
+//--------------------------------------------------------------
 void Layer::unsinkInputs() {
     
     for(sinkIter = inputs.begin();
         sinkIter != inputs.end();
         sinkIter++) {
-        cout << "Layer::unsinkInputs: detaching from input" << endl;
         (*sinkIter).detachFromSources();
     }
 }
@@ -257,7 +276,6 @@ void Layer::unsinkMasks() {
     for(sinkIter = masks.begin();
         sinkIter != masks.end();
         sinkIter++) {
-        cout << "Layer::unsinkMasks : detaching from input" << endl;
         (*sinkIter).detachFromSources();
     }
 }
@@ -421,6 +439,10 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                         targetLayer = 0;
                         action = "unsink";
                         success = true;
+                    } else if(isMatch(s,"clear")) {
+                        targetLayer = 0;
+                        action = "clear";
+                        success = true;
                     } else {
                         ofLogNotice() << "Source Command, string value expected.";
                     }
@@ -460,7 +482,13 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
             
             if(success) {
                 if(targetLayer < inputs.size()) {
-                    if(isMatch(action, "unsink")) {
+                    if(isMatch(action, "clear")) {
+                        if(isMatch(command, "input") ) {
+                            clearInput(targetLayer);
+                        } else {
+                            clearMask(targetLayer);
+                        }
+                    } else if(isMatch(action, "unsink")) {
                         if(isMatch(command, "input") ) {
                             unsinkInput(targetLayer);
                         } else {

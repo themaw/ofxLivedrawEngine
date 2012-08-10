@@ -174,6 +174,9 @@ public:
     void unsinkInput(int index);
     void unsinkMask(int index);
 
+    void clearInput(int index);
+    void clearMask(int index);
+    
     void unsinkInputs();
     void unsinkMasks();
     
