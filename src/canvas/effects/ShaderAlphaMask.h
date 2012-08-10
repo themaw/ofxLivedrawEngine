@@ -135,7 +135,7 @@ public:
     
     void setup() {
         load("application/shaders/maw.shader.passthrough.vert",   
-                        "application/shaders/maw.shader.alphamasker.frag");
+             "application/shaders/maw.shader.alphamasker.frag");
        
          //set the texture parameters for the maks shader. just do this at the beginning
          /*

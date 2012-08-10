@@ -117,7 +117,7 @@ public:
     
     void setup() {
         load("application/shaders/maw.shader.passthrough.vert",   
-                        "application/shaders/maw.shader.curves.frag");
+             "application/shaders/maw.shader.curves.frag");
     }
     
     void applySettings(ShaderCurvesSettings* settings) {
