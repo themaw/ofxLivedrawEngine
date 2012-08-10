@@ -80,11 +80,11 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
 
 //--------------------------------------------------------------
 Layer* LayerManager::addLayer(const string& layerName, ofPoint point, Layer* parentLayer) {
-    cout << "making new layer |"<< layerName << "| " << point << " parent=" << (parentLayer == NULL ? "X" : parentLayer->getName()) << endl;
     // rename if needed
     string validLayerName = validateAlias(layerName);
     Layer* layer = new Layer(this,validLayerName,point,parentLayer); // MAKE SURE THESE ARE DELETED
-    queueRegisterLayer(layer);
+    //queueRegisterLayer(layer);
+    registerLayer(layer);
     return layer;
 }
 
@@ -266,7 +266,7 @@ bool LayerManager::registerLayer(Layer* layer) {
 //--------------------------------------------------------------
 bool LayerManager::unregisterLayer(Layer* layer) {
     
-    cout << "unregistering layer --- " << layer->getName() << endl;
+    //cout << "unregistering layer --- " << layer->getName() << endl;
     
     // is there a there there?
     if(layer == NULL) {
