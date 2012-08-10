@@ -39,6 +39,9 @@ GrabberAsset::GrabberAsset(const string& _name, int _devId, int _width, int _hei
     devId  = _devId;
     grabber = ofPtr<ofVideoGrabber>(new ofVideoGrabber());
     
+    addOscMethod("open");
+    addOscMethod("close");
+    
     //        grabber->initGrabber(width, height);
 }
 
@@ -56,13 +59,16 @@ void GrabberAsset::update() {
 //--------------------------------------------------------------
 bool GrabberAsset::dispose() {
     detachFromSinks();
-    close();
     return true;
 }
 
 //--------------------------------------------------------------
 void GrabberAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "cout grabbery process osc message" << endl;
+    if(isMatch(command,"open")) {
+        open();
+    } else if(isMatch(command, "close")) {
+        close();
+    }
 }
 
 //--------------------------------------------------------------
