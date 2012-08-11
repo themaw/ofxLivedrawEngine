@@ -78,8 +78,8 @@ string BaseMediaAsset::getAssetTypeString() const {
             return "STREAM";
         case MEDIA_ASSET_BUFFER:
             return "BUFFER";
-        case MEDIA_ASSET_BUFFERPLAYER:
-            return "BUFFERPLAYER";
+        case MEDIA_ASSET_PLAYER:
+            return "PLAYER";
         case MEDIA_ASSET_SYPHON:
             return "SYPHON";
         default:

@@ -24,7 +24,7 @@
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		FD084F2715AFAC0C001CC08F /* BufferAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2615AFAC0B001CC08F /* BufferAsset.cpp */; };
-		FD084F2915AFAC7E001CC08F /* BufferPlayerAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2815AFAC7D001CC08F /* BufferPlayerAsset.cpp */; };
+		FD084F2915AFAC7E001CC08F /* PlayerAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2815AFAC7D001CC08F /* PlayerAsset.cpp */; };
 		FD084F2B15AFADEE001CC08F /* GrabberAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2A15AFADED001CC08F /* GrabberAsset.cpp */; };
 		FD084F2D15AFAE64001CC08F /* ImageAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2C15AFAE64001CC08F /* ImageAsset.cpp */; };
 		FD084F2F15AFAF0F001CC08F /* MovieAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */; };
@@ -129,7 +129,7 @@
 		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		FD084F2615AFAC0B001CC08F /* BufferAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferAsset.cpp; sourceTree = "<group>"; };
-		FD084F2815AFAC7D001CC08F /* BufferPlayerAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = BufferPlayerAsset.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FD084F2815AFAC7D001CC08F /* PlayerAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = PlayerAsset.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FD084F2A15AFADED001CC08F /* GrabberAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GrabberAsset.cpp; sourceTree = "<group>"; };
 		FD084F2C15AFAE64001CC08F /* ImageAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageAsset.cpp; sourceTree = "<group>"; };
 		FD084F2E15AFAF0F001CC08F /* MovieAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MovieAsset.cpp; sourceTree = "<group>"; };
@@ -248,7 +248,7 @@
 		FDF978CE15A80FD2000ADECA /* BaseMediaAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseMediaAsset.cpp; sourceTree = "<group>"; };
 		FDF978CF15A80FD2000ADECA /* BaseMediaAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BaseMediaAsset.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FDF978D115A80FD2000ADECA /* BufferAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BufferAsset.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FDF978D215A80FD2000ADECA /* BufferPlayerAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BufferPlayerAsset.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		FDF978D215A80FD2000ADECA /* PlayerAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PlayerAsset.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FDF978D315A80FD2000ADECA /* GrabberAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrabberAsset.h; sourceTree = "<group>"; };
 		FDF978D415A80FD2000ADECA /* ImageAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAsset.h; sourceTree = "<group>"; };
 		FDF978D515A80FD2000ADECA /* MovieAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieAsset.h; sourceTree = "<group>"; };
@@ -924,8 +924,8 @@
 			children = (
 				FDF978D115A80FD2000ADECA /* BufferAsset.h */,
 				FD084F2615AFAC0B001CC08F /* BufferAsset.cpp */,
-				FDF978D215A80FD2000ADECA /* BufferPlayerAsset.h */,
-				FD084F2815AFAC7D001CC08F /* BufferPlayerAsset.cpp */,
+				FDF978D215A80FD2000ADECA /* PlayerAsset.h */,
+				FD084F2815AFAC7D001CC08F /* PlayerAsset.cpp */,
 				FDF978D315A80FD2000ADECA /* GrabberAsset.h */,
 				FD084F2A15AFADED001CC08F /* GrabberAsset.cpp */,
 				FDF978D415A80FD2000ADECA /* ImageAsset.h */,
@@ -1096,7 +1096,7 @@
 				FD118B1615AE465500532B54 /* SyphonNameboundClient.m in Sources */,
 				FD6FD75615AF3ABD00DABC38 /* ofxOscRouterEvent.cpp in Sources */,
 				FD084F2715AFAC0C001CC08F /* BufferAsset.cpp in Sources */,
-				FD084F2915AFAC7E001CC08F /* BufferPlayerAsset.cpp in Sources */,
+				FD084F2915AFAC7E001CC08F /* PlayerAsset.cpp in Sources */,
 				FD084F2B15AFADEE001CC08F /* GrabberAsset.cpp in Sources */,
 				FD084F2D15AFAE64001CC08F /* ImageAsset.cpp in Sources */,
 				FD084F2F15AFAF0F001CC08F /* MovieAsset.cpp in Sources */,

@@ -38,7 +38,7 @@
 #include "ImageAsset.h"
 #include "MovieAsset.h"
 #include "BufferAsset.h"
-#include "BufferPlayerAsset.h"
+#include "PlayerAsset.h"
 #include "GrabberAsset.h"
 #include "StreamAsset.h"
 #include "SyphonAsset.h"
@@ -83,7 +83,7 @@ protected:
                                   const string& username,
                                   const string& password);
     BufferAsset*        addBuffer(const string& name, int size, ofxVideoBufferType t);
-    BufferPlayerAsset*  addBufferPlayer(const string& name);
+    PlayerAsset*        addPlayer(const string& name);
     GrabberAsset*       addGrabber(const string& name, int devId, int width, int height);
     SyphonAsset*        addSyphon(const string& name);
     

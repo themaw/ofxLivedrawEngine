@@ -38,17 +38,17 @@ bool isGrabberAsset(BaseMediaAsset* m)      { return m->getAssetType() == MEDIA_
 bool isMovieAsset(BaseMediaAsset* m)        { return m->getAssetType() == MEDIA_ASSET_MOVIE;     }
 bool isStreamAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_STREAM;    }
 bool isBufferAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_BUFFER;    }
-bool isBufferPlayerAsset(BaseMediaAsset* m) { return m->getAssetType() == MEDIA_ASSET_BUFFERPLAYER; }
+bool isPlayerAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_PLAYER;    }
 bool isSyphonAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_SYPHON;    }
 
 
-ImageAsset*   toImageAsset(BaseMediaAsset* asset)   { return dynamic_cast<ImageAsset*>(asset); }
-MovieAsset*   toMovieAsset(BaseMediaAsset* asset)   { return dynamic_cast<MovieAsset*>(asset); }
-BufferAsset*  toBufferAsset(BaseMediaAsset* asset)  { return dynamic_cast<BufferAsset*>(asset); }
-BufferPlayerAsset* toBufferPlayerAsset(BaseMediaAsset* asset) { return dynamic_cast<BufferPlayerAsset*>(asset); }
+ImageAsset*   toImageAsset(BaseMediaAsset* asset)   { return dynamic_cast<ImageAsset*>(asset);   }
+MovieAsset*   toMovieAsset(BaseMediaAsset* asset)   { return dynamic_cast<MovieAsset*>(asset);   }
+BufferAsset*  toBufferAsset(BaseMediaAsset* asset)  { return dynamic_cast<BufferAsset*>(asset);  }
+PlayerAsset*  toPlayerAsset(BaseMediaAsset* asset)  { return dynamic_cast<PlayerAsset*>(asset);  }
 GrabberAsset* toGrabberAsset(BaseMediaAsset* asset) { return dynamic_cast<GrabberAsset*>(asset); }
-StreamAsset*  toStreamAsset(BaseMediaAsset* asset)  { return dynamic_cast<StreamAsset*>(asset); }
-SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<SyphonAsset*>(asset); }
+StreamAsset*  toStreamAsset(BaseMediaAsset* asset)  { return dynamic_cast<StreamAsset*>(asset);  }
+SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<SyphonAsset*>(asset);  }
 
 
 //--------------------------------------------------------------
@@ -486,8 +486,8 @@ BufferAsset* AssetManager::addBuffer(const string& name, int size, ofxVideoBuffe
 }
 
 //--------------------------------------------------------------
-BufferPlayerAsset* AssetManager::addBufferPlayer(const string& name) {
-    BufferPlayerAsset* asset = new BufferPlayerAsset(validateAssetId(name));
+PlayerAsset* AssetManager::addPlayer(const string& name) {
+    PlayerAsset* asset = new PlayerAsset(validateAssetId(name));
     queueRegisterAsset(asset);
 
 //    if(!registerAsset(asset)) {
@@ -724,8 +724,8 @@ int AssetManager::getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset
             return count_if(_assets.begin(), _assets.end(), isStreamAsset);
         case MEDIA_ASSET_BUFFER:
             return count_if(_assets.begin(), _assets.end(), isBufferAsset);
-        case MEDIA_ASSET_BUFFERPLAYER:
-            return count_if(_assets.begin(), _assets.end(), isBufferPlayerAsset);
+        case MEDIA_ASSET_PLAYER:
+            return count_if(_assets.begin(), _assets.end(), isPlayerAsset);
         case MEDIA_ASSET_SYPHON:
             return count_if(_assets.begin(), _assets.end(), isSyphonAsset);
         default:
