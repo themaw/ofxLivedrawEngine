@@ -29,12 +29,16 @@
 
 #include "BaseMediaAsset.h"
 
-class BufferPlayerAsset : public virtual BaseMediaAsset, 
+#include "BufferAsset.h"
+#include "ImageAsset.h"
+#include "MovieAsset.h"
+
+class PlayerAsset : public virtual BaseMediaAsset, 
                           public virtual ofxVideoSourceInterface 
 {
 public:
-    BufferPlayerAsset(const string& _name);
-    virtual ~BufferPlayerAsset();
+    PlayerAsset(const string& _name);
+    virtual ~PlayerAsset();
 
     void update();
     
@@ -43,6 +47,10 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
+    void load(BufferAsset* buffer);
+    void load(ImageAsset* image);
+    void load(MovieAsset* movie);
+    
     void  draw(float x,float y);
 	void  draw(float x,float y,float w, float h);
 
@@ -55,10 +63,8 @@ public:
     void close();
     bool isLoaded();
 
-    //    void loadBufferAsset(BufferAsset* buffer); // set the internal buffer to the pointer
-    //    void loadMovieAsset(BufferAsset* buffer); // set the internal buffer to the pointer
     
-
+    ofPtr<ofxVideoBufferPlayer> getPlayer();
     
 protected:
     ofPtr<ofxVideoBufferPlayer> player;

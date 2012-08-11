@@ -22,14 +22,14 @@
  
  ==============================================================================*/
 
-#include "BufferPlayerAsset.h"
+#include "PlayerAsset.h"
 
 //--------------------------------------------------------------
-BufferPlayerAsset::BufferPlayerAsset(const string& _name) {
+PlayerAsset::PlayerAsset(const string& _name) {
     
     canSource = true;
     
-    assetType = MEDIA_ASSET_BUFFERPLAYER;
+    assetType = MEDIA_ASSET_PLAYER;
     
     addAlias(_name);
     
@@ -59,10 +59,10 @@ BufferPlayerAsset::BufferPlayerAsset(const string& _name) {
 }
 
 //--------------------------------------------------------------
-BufferPlayerAsset::~BufferPlayerAsset() {}
+PlayerAsset::~PlayerAsset() {}
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::update() {
+void PlayerAsset::update() {
     player->update();
     
     // everybody has some work to do
@@ -70,15 +70,15 @@ void BufferPlayerAsset::update() {
 }
 
 //--------------------------------------------------------------
-bool BufferPlayerAsset::dispose() {
+bool PlayerAsset::dispose() {
     detachFromSinks();
     return true;
 }
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
+void PlayerAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    ofLogNotice() << "BufferPlayerAsset::processOscCommand(): " << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;
+    ofLogNotice() << "PlayerAsset::processOscCommand(): " << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;
     
     /*
      if(isMatch(command,"buffer")) {
@@ -181,37 +181,58 @@ void BufferPlayerAsset::processOscCommand(const string& command, const ofxOscMes
 }
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::draw(float x,float y) {
+void PlayerAsset::load(BufferAsset* buffer) {
+    
+}
+
+//--------------------------------------------------------------
+void PlayerAsset::load(ImageAsset* image) {
+    
+}
+
+//--------------------------------------------------------------
+void PlayerAsset::load(MovieAsset* movie) {
+    
+}
+
+//--------------------------------------------------------------
+void PlayerAsset::draw(float x,float y) {
     player->draw(x,y);
 }
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::draw(float x,float y,float w, float h) {
+void PlayerAsset::draw(float x,float y,float w, float h) {
     player->draw(x,y,w,h);
 }
 
 //--------------------------------------------------------------
-bool BufferPlayerAsset::isFrameNew() {
+bool PlayerAsset::isFrameNew() {
     return player->isFrameNew(); // we loaded it once.
 }
 
 //--------------------------------------------------------------
-ofPixelsRef BufferPlayerAsset::getPixelsRef() {
+ofPixelsRef PlayerAsset::getPixelsRef() {
     return player->getPixelsRef();
 }
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::open()   {
-    ofLogVerbose() << "BufferPlayerAsset::open(): is not implemented.";
+void PlayerAsset::open()   {
+    ofLogVerbose() << "PlayerAsset::open(): is not implemented.";
 }
 
 //--------------------------------------------------------------
-void BufferPlayerAsset::close() {
-    ofLogVerbose() << "BufferPlayerAsset::close(): is not implemented.";
+void PlayerAsset::close() {
+    ofLogVerbose() << "PlayerAsset::close(): is not implemented.";
 }
 
 //--------------------------------------------------------------
-bool BufferPlayerAsset::isLoaded() {
+bool PlayerAsset::isLoaded() {
     return player->isLoaded();
+}
+
+
+//--------------------------------------------------------------
+ofPtr<ofxVideoBufferPlayer> PlayerAsset::getPlayer() {
+    return player;
 }
 
