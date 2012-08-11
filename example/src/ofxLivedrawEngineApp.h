@@ -28,7 +28,7 @@
 #include "ofxLivedrawEngine.h"
 
 //--------------------------------------------------------
-class testApp : public ofBaseApp {
+class ofxLivedrawEngineApp : public ofBaseApp {
 
 public:
 

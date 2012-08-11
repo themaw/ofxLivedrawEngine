@@ -22,10 +22,10 @@
  
  ==============================================================================*/
 
-#include "testApp.h"
+#include "ofxLivedrawEngineApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ofxLivedrawEngineApp::setup(){
 	// main window setup
 	ofSetFrameRate(60);
 	ofBackground(0);
@@ -34,17 +34,17 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ofxLivedrawEngineApp::update(){
     livedraw.update();
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ofxLivedrawEngineApp::draw(){
     livedraw.draw();
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed (int key){
+void ofxLivedrawEngineApp::keyPressed (int key){
 	if(key == ' ') {
 		ofToggleFullscreen();   
     } else if(key == 'a') {
@@ -61,35 +61,35 @@ void testApp::keyPressed (int key){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void ofxLivedrawEngineApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void ofxLivedrawEngineApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void ofxLivedrawEngineApp::mousePressed(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void ofxLivedrawEngineApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void ofxLivedrawEngineApp::windowResized(int w, int h){
     livedraw.windowResized(w,h);
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo) {
+void ofxLivedrawEngineApp::dragEvent(ofDragInfo dragInfo) {
     
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg) {
+void ofxLivedrawEngineApp::gotMessage(ofMessage msg) {
 
 }
