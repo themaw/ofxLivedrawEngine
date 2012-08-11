@@ -60,13 +60,40 @@ bool BufferAsset::dispose() {
 
 //--------------------------------------------------------------
 void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    ofLogNotice() << "BufferAsset::processOscCommand() : got message.";
+    if(isMatch(command,"type")) {
+        if(validateOscSignature("[s]",m)) {
+            string type = getArgAsStringUnchecked(m,0);
+            if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
+                buffer->setBufferType(OFX_VIDEO_BUFFER_FIXED);
+            } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "cirular")) {
+                buffer->setBufferType(OFX_VIDEO_BUFFER_CIRCULAR);
+            } else if(isMatch(type, "pass") || isMatch(type, "passthrough")) {
+                buffer->setBufferType(OFX_VIDEO_BUFFER_PASSTHROUGH);
+            } else {
+                ofLog(OF_LOG_WARNING,"Unknown buffer type, using default.");
+            }    
+        }
+    } else if(isMatch(command, "size")) {
+        if(validateOscSignature("[i]",m)) {
+            int size = getArgAsIntUnchecked(m,0);
+            if(size > -1) buffer->setSize(size);
+        }
+    } else if(isMatch(command, "clear")) {
+        buffer->clear();
+    } else if(isMatch(command, "framerate")) {
+        if(validateOscSignature("[fi]",m)) {
+            float frameRate = getArgAsFloatUnchecked(m,0);
+            if(frameRate > -1) buffer->setFrameRate(frameRate);
+        }
+    }
 }
 
 //--------------------------------------------------------------
 bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {
-    ofLogNotice() << "BufferAsset::frameReceived() : !";
-};
+    if(isSinking()) {
+        buffer->bufferFrame(frame);
+    }
+}
 
 //--------------------------------------------------------------
 bool BufferAsset::isCacheBuffer() {
