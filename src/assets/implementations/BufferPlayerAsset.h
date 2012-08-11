@@ -54,6 +54,11 @@ public:
     void open();
     void close();
     bool isLoaded();
+
+    //    void loadBufferAsset(BufferAsset* buffer); // set the internal buffer to the pointer
+    //    void loadMovieAsset(BufferAsset* buffer); // set the internal buffer to the pointer
+    
+
     
 protected:
     ofPtr<ofxVideoBufferPlayer> player;

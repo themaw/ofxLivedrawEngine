@@ -23,17 +23,16 @@
  ==============================================================================*/
 
 #include "ofMain.h"
-#include "testApp.h"
+#include "ofxLivedrawEngineApp.h"
 #include "ofAppGlutWindow.h"
 
 //========================================================================
 int main( ){
 
     ofAppGlutWindow window;
-	ofSetupOpenGL(&window, 1024,768, OF_WINDOW);			// <-------- setup the GL context
-
+	ofSetupOpenGL(&window, 1024,768, OF_WINDOW); // <-------- setup the GL context
 	
-	testApp* app = new testApp;
+	ofxLivedrawEngineApp* app = new ofxLivedrawEngineApp();
 	
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

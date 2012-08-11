@@ -49,7 +49,7 @@
 		FD3F84DD156064BC0022CE42 /* SessionPerformance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84AD156064BC0022CE42 /* SessionPerformance.cpp */; };
 		FD3F84DE156064BC0022CE42 /* SessionPreset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84AF156064BC0022CE42 /* SessionPreset.cpp */; };
 		FD3F84E8156064E90022CE42 /* ofxLivedrawEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84E7156064E90022CE42 /* ofxLivedrawEngine.cpp */; };
-		FD3F84EB156065210022CE42 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84E9156065210022CE42 /* testApp.cpp */; };
+		FD3F84EB156065210022CE42 /* ofxLivedrawEngineApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84E9156065210022CE42 /* ofxLivedrawEngineApp.cpp */; };
 		FD3F8539156066F40022CE42 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F8525156066F40022CE42 /* tinyxml.cpp */; };
 		FD3F853A156066F40022CE42 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F8527156066F40022CE42 /* tinyxmlerror.cpp */; };
 		FD3F853B156066F40022CE42 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F8528156066F40022CE42 /* tinyxmlparser.cpp */; };
@@ -179,8 +179,8 @@
 		FD3F84B0156064BC0022CE42 /* SessionPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionPreset.h; sourceTree = "<group>"; };
 		FD3F84E6156064D80022CE42 /* ofxLivedrawEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxLivedrawEngine.h; sourceTree = "<group>"; };
 		FD3F84E7156064E90022CE42 /* ofxLivedrawEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxLivedrawEngine.cpp; sourceTree = "<group>"; };
-		FD3F84E9156065210022CE42 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testApp.cpp; sourceTree = "<group>"; };
-		FD3F84EA156065210022CE42 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
+		FD3F84E9156065210022CE42 /* ofxLivedrawEngineApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxLivedrawEngineApp.cpp; sourceTree = "<group>"; };
+		FD3F84EA156065210022CE42 /* ofxLivedrawEngineApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLivedrawEngineApp.h; sourceTree = "<group>"; };
 		FD3F84F1156066F30022CE42 /* ofxDirList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDirList.h; sourceTree = "<group>"; };
 		FD3F8525156066F40022CE42 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
 		FD3F8526156066F40022CE42 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
@@ -368,8 +368,8 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				FD3F84E9156065210022CE42 /* testApp.cpp */,
-				FD3F84EA156065210022CE42 /* testApp.h */,
+				FD3F84E9156065210022CE42 /* ofxLivedrawEngineApp.cpp */,
+				FD3F84EA156065210022CE42 /* ofxLivedrawEngineApp.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1063,7 +1063,7 @@
 				FD3F84DD156064BC0022CE42 /* SessionPerformance.cpp in Sources */,
 				FD3F84DE156064BC0022CE42 /* SessionPreset.cpp in Sources */,
 				FD3F84E8156064E90022CE42 /* ofxLivedrawEngine.cpp in Sources */,
-				FD3F84EB156065210022CE42 /* testApp.cpp in Sources */,
+				FD3F84EB156065210022CE42 /* ofxLivedrawEngineApp.cpp in Sources */,
 				FD3F8539156066F40022CE42 /* tinyxml.cpp in Sources */,
 				FD3F853A156066F40022CE42 /* tinyxmlerror.cpp in Sources */,
 				FD3F853B156066F40022CE42 /* tinyxmlparser.cpp in Sources */,
