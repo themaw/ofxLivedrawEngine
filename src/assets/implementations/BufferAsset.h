@@ -51,6 +51,8 @@ public:
     bool frameReceived(ofxSharedVideoFrame frame);
 
     bool isCacheBuffer();
+    // here we keep a link to the source file
+    void unlinkCacheSource();  // used when the original source is disposed
     CacheableAsset* getCacheSource();
     ofPtr<ofxVideoBuffer> getBuffer();
     

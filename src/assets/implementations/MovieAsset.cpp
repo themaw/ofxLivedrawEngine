@@ -43,7 +43,10 @@ void MovieAsset::update() {
 
 //--------------------------------------------------------------
 bool MovieAsset::dispose() {
-    uncache();
+    if(isCached()) {
+        getCacheBuffer()->unlinkCacheSource();
+    }
+
     return true;
 }
 

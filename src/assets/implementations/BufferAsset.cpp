@@ -106,6 +106,11 @@ CacheableAsset* BufferAsset::getCacheSource() {
 }
 
 //--------------------------------------------------------------
+void BufferAsset::unlinkCacheSource() {
+    return cacheSource = NULL;
+}
+
+//--------------------------------------------------------------
 ofPtr<ofxVideoBuffer> BufferAsset::getBuffer() {
     return buffer;
 }
