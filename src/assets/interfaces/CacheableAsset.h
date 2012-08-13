@@ -53,7 +53,8 @@ public:
     void setCacheProvider(CacheProvider* cacheProvider);
     
 protected:
-    bool cached;
+    bool cached; // an explicit boolean b/c caching can be
+                 // multi-threaded, not returning a !NULL buffer immediately
     BufferAsset* cacheBuffer;
     CacheProvider* cacheProvider;
 };

@@ -42,13 +42,13 @@ CacheableAsset::CacheableAsset(const string& _filename) : DiskBasedAsset(_filena
 
 //--------------------------------------------------------------
 CacheableAsset::~CacheableAsset() {
-    uncache(); // TODO : here or in dispose?
+    // cachable assets do not destroy their cache buffer asset upon destruction
 }
 
 //--------------------------------------------------------------
 void CacheableAsset::update() {
 
-    // call subclass
+    // call super class
     DiskBasedAsset::update();
 }
 
@@ -73,7 +73,7 @@ void CacheableAsset::cache() {
 
 //--------------------------------------------------------------
 void CacheableAsset::uncache() {
-    if(isCached()) {
+    if(isCached() && cacheBuffer != NULL) {
         if(doUncache()) {
             cached = false;
         } else {
