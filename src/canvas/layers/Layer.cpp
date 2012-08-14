@@ -366,8 +366,8 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                     assetName = getArgAsStringUnchecked(m,1);
                     success = true;
                 } else if((m.getArgType(0) == OFXOSC_TYPE_INT32 ||
-                          m.getArgType(0) == OFXOSC_TYPE_FLOAT) &&
-                          m.getArgType(1) == OFXOSC_TYPE_STRING) {
+                           m.getArgType(0) == OFXOSC_TYPE_FLOAT) &&
+                           m.getArgType(1) == OFXOSC_TYPE_STRING) {
                     targetLayer = getArgAsIntUnchecked(m,0);
                     action      = getArgAsStringUnchecked(m,1);
                     success     = true;
