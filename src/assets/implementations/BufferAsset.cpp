@@ -65,7 +65,7 @@ void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& 
             string type = getArgAsStringUnchecked(m,0);
             if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
                 buffer->setBufferType(OFX_VIDEO_BUFFER_FIXED);
-            } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "cirular")) {
+            } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "circular")) {
                 buffer->setBufferType(OFX_VIDEO_BUFFER_CIRCULAR);
             } else if(isMatch(type, "pass") || isMatch(type, "passthrough")) {
                 buffer->setBufferType(OFX_VIDEO_BUFFER_PASSTHROUGH);
@@ -85,6 +85,8 @@ void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& 
             float frameRate = getArgAsFloatUnchecked(m,0);
             if(frameRate > -1) buffer->setFrameRate(frameRate);
         }
+    } else if(isMatch(command, "dump")) {
+        ofLogNotice("BufferAsset") << buffer->toString();
     }
 }
 
