@@ -25,7 +25,7 @@
 #include "StreamAsset.h"
 
 //--------------------------------------------------------------
-StreamAsset::StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password) {
+StreamAsset::StreamAsset(AssetManagerInterface* man, const string& _name, StreamType _type, string _url, string _username, string _password) : BaseMediaAsset(man) {
     canSource = true;
     
     assetType  = MEDIA_ASSET_STREAM;

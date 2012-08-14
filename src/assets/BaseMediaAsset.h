@@ -27,6 +27,7 @@
 #include "ofMain.h"
 
 #include "ofxOscRouterBaseNode.h"
+#include "AssetManagerInterface.h"
 #include "AssetMetaData.h"
 
 enum MediaAssetType
@@ -43,7 +44,7 @@ enum MediaAssetType
 
 class BaseMediaAsset : virtual public ofxOscRouterBaseNode, public ofBaseUpdates {
 public:
-	BaseMediaAsset();
+	BaseMediaAsset(AssetManagerInterface* man);
 	virtual ~BaseMediaAsset();
 
     virtual void update() = 0;
@@ -60,8 +61,9 @@ public:
     string  getName() const;
     
     // interface capabilities
-    bool isSource() const;
-    bool isSink()   const;
+    bool isPlayable()  const;
+    bool isSource()    const;
+    bool isSink()      const;
     bool isCacheable() const;
     bool isDiskAsset() const;
     
@@ -75,11 +77,21 @@ public:
     bool addAlias(const string& alias);
     bool removeAlias(const string& alias);
     
+    bool hasAssetManager() const;
+    AssetManagerInterface* getAssetManager() const;
+    void setAssetManager(AssetManagerInterface* man);
+    
 protected:
+    
+    AssetManagerInterface* assetManager;
+
+
+    
     set<string> aliases; // normal ascending order, reverse iterate later
     
     MediaAssetType assetType;
 
+    bool canPlay;
     bool canSource;
     bool canSink;
     bool canCache;

@@ -26,12 +26,14 @@
 
 #include "BaseMediaAsset.h"
 #include "CacheableAsset.h"
+#include "PlayableAsset.h"
 
 class MovieAsset : public virtual BaseMediaAsset,
-                   public virtual CacheableAsset
+                   public virtual CacheableAsset,
+                   public virtual PlayableAsset
 {
 public:
-    MovieAsset(const string& _name, const string& _filename);
+    MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename);
     virtual ~MovieAsset();
     
     void update();

@@ -25,7 +25,7 @@
 #include "DiskBasedAsset.h"
 
 //--------------------------------------------------------------
-DiskBasedAsset::DiskBasedAsset(const string& _filename) {
+DiskBasedAsset::DiskBasedAsset(AssetManagerInterface* man, const string& _filename) : BaseMediaAsset(man){
     filename  = _filename;
     diskAsset = true;
 }

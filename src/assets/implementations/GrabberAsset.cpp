@@ -25,7 +25,7 @@
 #include "GrabberAsset.h"
 
 //--------------------------------------------------------------
-GrabberAsset::GrabberAsset(const string& _name, int _devId, int _width, int _height) {
+GrabberAsset::GrabberAsset(AssetManagerInterface* man, const string& _name, int _devId, int _width, int _height) : BaseMediaAsset(man){
     
     canSource = true;
     

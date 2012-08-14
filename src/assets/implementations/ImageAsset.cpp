@@ -25,7 +25,7 @@
 #include "ImageAsset.h"
 
 //--------------------------------------------------------------
-ImageAsset::ImageAsset(const string& _name, string _filename) : DiskBasedAsset(_filename) {
+ImageAsset::ImageAsset(AssetManagerInterface* man, const string& _name, string _filename) : BaseMediaAsset(man), DiskBasedAsset(man, _filename) {
     
     canSource = true;
     

@@ -25,7 +25,7 @@
 #include "SyphonAsset.h"
 
 //--------------------------------------------------------------
-SyphonAsset::SyphonAsset(const string& _name) {
+SyphonAsset::SyphonAsset(AssetManagerInterface* man, const string& _name) : BaseMediaAsset(man) {
     canSource = true;
     
     assetType = MEDIA_ASSET_SYPHON;

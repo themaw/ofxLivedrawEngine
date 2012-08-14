@@ -33,7 +33,7 @@ class CacheableAsset : public virtual BaseMediaAsset,
                        public virtual DiskBasedAsset
 {
 public:
-    CacheableAsset(const string& _filename);
+    CacheableAsset(AssetManagerInterface* man, const string& _filename);
     virtual ~CacheableAsset();
 
     virtual void update();
@@ -43,6 +43,8 @@ public:
     virtual bool doCache()   = 0; // must implement in subclasses
     virtual bool doUncache() = 0; // must implement in subclasses
 
+    virtual void cacheComplete() = 0;
+    
     void cache();
     void uncache();
     bool isCached();
@@ -51,6 +53,8 @@ public:
     
     bool hasCacheProvider();
     void setCacheProvider(CacheProvider* cacheProvider);
+    
+    
     
 protected:
     bool cached; // an explicit boolean b/c caching can be

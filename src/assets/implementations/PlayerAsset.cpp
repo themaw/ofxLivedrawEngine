@@ -25,7 +25,7 @@
 #include "PlayerAsset.h"
 
 //--------------------------------------------------------------
-PlayerAsset::PlayerAsset(const string& _name) {
+PlayerAsset::PlayerAsset(AssetManagerInterface* man, const string& _name) : BaseMediaAsset(man){
     
     canSource = true;
     
@@ -55,6 +55,8 @@ PlayerAsset::PlayerAsset(const string& _name) {
     addOscMethod("framen");    
     
     addOscMethod("speed");
+    
+    addOscMethod("dump");
     
 }
 

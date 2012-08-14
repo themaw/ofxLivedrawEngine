@@ -26,18 +26,19 @@
 
 #include "ofxVideoBufferPlayer.h"
 #include "ofxVideoSourceInterface.h"
-
-#include "BaseMediaAsset.h"
+#include "PlayableAsset.h"
+#include "PlayerAssetInterface.h"
 
 #include "BufferAsset.h"
 #include "ImageAsset.h"
 #include "MovieAsset.h"
 
-class PlayerAsset : public virtual BaseMediaAsset, 
-                          public virtual ofxVideoSourceInterface 
+class PlayerAsset : public virtual BaseMediaAsset,
+                    public virtual ofxVideoSourceInterface,
+                    public virtual PlayerAssetInterface
 {
 public:
-    PlayerAsset(const string& _name);
+    PlayerAsset(AssetManagerInterface* man, const string& _name);
     virtual ~PlayerAsset();
 
     void update();
@@ -47,25 +48,23 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
-    void load(BufferAsset* buffer);
-    void load(ImageAsset* image);
-    void load(MovieAsset* movie);
-    
+    void load(PlayableAsset* asset);
+    void cacheComplete();
+
     void  draw(float x,float y);
 	void  draw(float x,float y,float w, float h);
 
     // Frame Source
     bool isFrameNew();
-    
+
     ofPixelsRef getPixelsRef();
-    
+
     void open();
     void close();
     bool isLoaded();
 
-    
-    ofPtr<ofxVideoBufferPlayer> getPlayer();
-    
 protected:
+    
+    PlayableAsset* currentAssetLink;
     ofPtr<ofxVideoBufferPlayer> player;
 };

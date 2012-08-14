@@ -25,7 +25,9 @@
 #include "MovieAsset.h"
 
 //--------------------------------------------------------------
-MovieAsset::MovieAsset(const string& _name, const string& _filename) : CacheableAsset(_filename), DiskBasedAsset(_filename){
+MovieAsset::MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename) : BaseMediaAsset(man), CacheableAsset(man, _filename),
+                                                                       DiskBasedAsset(man, _filename),
+                                                                       PlayableAsset(man) {
     assetType = MEDIA_ASSET_MOVIE;
     addAlias(_name);
 }
@@ -59,7 +61,6 @@ bool MovieAsset::doCache() {
         ofLogVerbose() << "MovieAsset::doCache() : failing - no cache provider.";
         return false;
     }
-    
 }
 
 //--------------------------------------------------------------

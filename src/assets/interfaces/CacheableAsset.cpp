@@ -25,7 +25,7 @@
 #include "CacheableAsset.h"
 
 //--------------------------------------------------------------
-CacheableAsset::CacheableAsset(const string& _filename) : DiskBasedAsset(_filename){
+CacheableAsset::CacheableAsset(AssetManagerInterface* man, const string& _filename) : DiskBasedAsset(man, _filename), BaseMediaAsset(man){
     cacheProvider = NULL;
     cacheBuffer = NULL;
     

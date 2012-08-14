@@ -40,7 +40,13 @@ class StreamAsset : public virtual BaseMediaAsset,
                     public virtual ofxVideoSourceInterface
 {
 public:
-    StreamAsset(const string& _name, StreamType _type, string _url, string _username, string _password);
+    StreamAsset(AssetManagerInterface* man,
+                const string& _name,
+                StreamType _type,
+                string _url,
+                string _username,
+                string _password);
+
     virtual ~StreamAsset();
     
     void update();

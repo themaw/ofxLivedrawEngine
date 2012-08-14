@@ -44,7 +44,8 @@
 #include "SyphonAsset.h"
 
 class AssetManager : public ofxOscRouterNode, 
-                     public CacheProvider
+                     public CacheProvider,
+                     public AssetManagerInterface
 {
 public:
     //--------------------------------------------------------------

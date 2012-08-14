@@ -26,13 +26,12 @@
 
 #include "ofxVideoSourceInterface.h"
 #include "BaseMediaAsset.h"
-#include "FrameSourceAsset.h"
 
 class GrabberAsset : public virtual BaseMediaAsset, 
                      public virtual ofxVideoSourceInterface
 {
 public:
-    GrabberAsset(const string& _name, int _devId, int _width, int _height);
+    GrabberAsset(AssetManagerInterface* man, const string& _name, int _devId, int _width, int _height);
     virtual ~GrabberAsset();
 
     void update();

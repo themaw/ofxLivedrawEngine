@@ -26,16 +26,21 @@
 #include "AssetManager.h"
 
 //--------------------------------------------------------------
-BaseMediaAsset::BaseMediaAsset() {
+BaseMediaAsset::BaseMediaAsset(AssetManagerInterface* man) {
+    
+    assetManager = man;
     
 	assetType = MEDIA_ASSET_UNDEFINED;
     
+    canPlay   = false;
     canSource = false;
     canSink   = false;
     canCache  = false;
     diskAsset = false;
     
     bNodeActive = false;
+    
+    assetManager = NULL;
     
     addOscChild(&meta);
 }
@@ -48,10 +53,10 @@ set<string>& BaseMediaAsset::getOscNodeAliasesRef() {
     return aliases;
 }
 
+//--------------------------------------------------------------
 const set<string>& BaseMediaAsset::getOscNodeAliasesRef() const {
     return aliases;
 }
-
 
 //--------------------------------------------------------------
 string BaseMediaAsset::getName() const {
@@ -88,6 +93,10 @@ string BaseMediaAsset::getAssetTypeString() const {
     }
 }
 
+//--------------------------------------------------------------
+bool BaseMediaAsset::isPlayable() const {
+    return canPlay;
+}
 
 //--------------------------------------------------------------
 bool BaseMediaAsset::isSource() const {
@@ -144,11 +153,27 @@ bool BaseMediaAsset::removeAlias(const string& alias) {
 }
 
 //--------------------------------------------------------------
+bool BaseMediaAsset::hasAssetManager() const {
+    return assetManager == NULL;
+}
+
+//--------------------------------------------------------------
+AssetManagerInterface* BaseMediaAsset::getAssetManager() const {
+    return assetManager;
+}
+
+//--------------------------------------------------------------
+void BaseMediaAsset::setAssetManager(AssetManagerInterface* man) {
+    assetManager = man;
+}
+
+//--------------------------------------------------------------
 string BaseMediaAsset::toString() const {
     stringstream ss;
     ss << "MEDIA ASSET:" << endl;
     ss << "\tgetType()     = " << getAssetTypeString() << endl;
     ss << "\tgetName()     = " << getName() << endl;
+    ss << "\tisPlayable()  = " << (isPlayable()  ? "TRUE" : "FALSE") << endl;
     ss << "\tisCacheable() = " << (isCacheable() ? "TRUE" : "FALSE") << endl;
     ss << "\tisSource()    = " << (isSource()    ? "TRUE" : "FALSE") << endl;
     ss << "\tisSink()      = " << (isSink()      ? "TRUE" : "FALSE") << endl;

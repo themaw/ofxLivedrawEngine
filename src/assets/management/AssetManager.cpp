@@ -411,7 +411,7 @@ bool AssetManager::stopAsset(const string& alias) {
 
 //--------------------------------------------------------------
 ImageAsset* AssetManager::addImage(const string& name, const string& filename) {
-    ImageAsset* asset = new ImageAsset(validateAssetId(name), filename);
+    ImageAsset* asset = new ImageAsset(this, validateAssetId(name), filename);
 
     queueRegisterAsset(asset);
     
@@ -431,7 +431,7 @@ ImageAsset* AssetManager::addImage(const string& name, const string& filename) {
 
 //--------------------------------------------------------------
 MovieAsset* AssetManager::addMovie(const string& name, const string& filename) {
-    MovieAsset* asset = new MovieAsset(validateAssetId(name), filename);
+    MovieAsset* asset = new MovieAsset(this, validateAssetId(name), filename);
     
     queueRegisterAsset(asset);
 
@@ -451,7 +451,7 @@ MovieAsset* AssetManager::addMovie(const string& name, const string& filename) {
 
 //--------------------------------------------------------------
 StreamAsset* AssetManager::addStream(const string& name, StreamType type, const string& url, const string& username, const string& password) {
-    StreamAsset* asset = new StreamAsset(validateAssetId(name), type, url, username, password);
+    StreamAsset* asset = new StreamAsset(this, validateAssetId(name), type, url, username, password);
     
     queueRegisterAsset(asset);
 
@@ -471,7 +471,7 @@ StreamAsset* AssetManager::addStream(const string& name, StreamType type, const 
 
 //--------------------------------------------------------------
 BufferAsset* AssetManager::addBuffer(const string& name, int size, ofxVideoBufferType t) {
-    BufferAsset* asset = new BufferAsset(validateAssetId(name), size, t);
+    BufferAsset* asset = new BufferAsset(this, validateAssetId(name), size, t);
     
     queueRegisterAsset(asset);
 
@@ -491,7 +491,7 @@ BufferAsset* AssetManager::addBuffer(const string& name, int size, ofxVideoBuffe
 
 //--------------------------------------------------------------
 PlayerAsset* AssetManager::addPlayer(const string& name) {
-    PlayerAsset* asset = new PlayerAsset(validateAssetId(name));
+    PlayerAsset* asset = new PlayerAsset(this, validateAssetId(name));
     queueRegisterAsset(asset);
 
 //    if(!registerAsset(asset)) {
@@ -510,7 +510,7 @@ PlayerAsset* AssetManager::addPlayer(const string& name) {
 
 //--------------------------------------------------------------
 GrabberAsset* AssetManager::addGrabber(const string& name, int devId, int width, int height) {
-    GrabberAsset* asset = new GrabberAsset(validateAssetId(name), devId, width, height);
+    GrabberAsset* asset = new GrabberAsset(this, validateAssetId(name), devId, width, height);
     queueRegisterAsset(asset);
 
 //    if(!registerAsset(asset)) {

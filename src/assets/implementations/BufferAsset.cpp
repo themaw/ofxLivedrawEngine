@@ -25,7 +25,7 @@
 #include "BufferAsset.h"
 
 //--------------------------------------------------------------
-BufferAsset::BufferAsset(const string& _name, int size, ofxVideoBufferType t)
+BufferAsset::BufferAsset(AssetManagerInterface* man, const string& _name, int size, ofxVideoBufferType t) : BaseMediaAsset(man), PlayableAsset(man)
 {
     canSink = true;
     

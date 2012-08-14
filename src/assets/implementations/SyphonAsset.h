@@ -32,7 +32,7 @@ class SyphonAsset : public virtual BaseMediaAsset,
                     public virtual ofxVideoSourceInterface
 {
 public:
-    SyphonAsset(const string& _name);
+    SyphonAsset(AssetManagerInterface* man, const string& _name);
     virtual ~SyphonAsset();
 
     void update();

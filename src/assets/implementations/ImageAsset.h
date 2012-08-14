@@ -33,7 +33,7 @@ class ImageAsset : public virtual BaseMediaAsset,
                    public virtual ofxVideoSourceInterface
 {
 public:
-    ImageAsset(const string& _name, string _filename);
+    ImageAsset(AssetManagerInterface* man, const string& _name, string _filename);
     virtual ~ImageAsset();
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
