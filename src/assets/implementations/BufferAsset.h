@@ -47,6 +47,14 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
+    void loadMovie(const string& filename) {
+        buffer->loadMovie(filename);
+    }
+    
+    bool isLoading() {
+        return buffer->isLoading();
+    }
+    
     // From FrameSink
     bool frameReceived(ofxSharedVideoFrame frame);
 
