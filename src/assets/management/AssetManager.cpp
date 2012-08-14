@@ -108,7 +108,51 @@ void AssetManager::update() {
 
 //--------------------------------------------------------------
 void AssetManager::processOscCommand(const string& command, const ofxOscMessage& m) {
-    if(isMatch(command,"delete")) {
+    
+    if(isMatch(command,"new")) {
+        // /livedraw/media/new player NAME
+        // /livedraw/media/new buffer NAME [SIZE [TYPE]]
+        if(validateOscSignature("ss(is?)?", m)) {
+            string assetType = getArgAsStringUnchecked(m,0);
+            string name = getArgAsStringUnchecked(m,1);
+
+            if(isMatch(assetType,"buffer") || isMatch(assetType,"buf")) {
+                int size = 1;
+                ofxVideoBufferType type = OFX_VIDEO_BUFFER_FIXED;
+
+                if(m.getNumArgs() > 2) {
+                    size  = getArgAsIntUnchecked(m,2);
+                    if(size < 0) {
+                        ofLog(OF_LOG_WARNING,"Invalid buffer size, using default.");
+                        size = 1;
+                    }
+                }
+                
+                if(m.getNumArgs() > 3) {
+                    string bufTypStr = getArgAsStringUnchecked(m,2);
+                    if(isMatch(bufTypStr, "norm") || isMatch(bufTypStr, "fixed") || isMatch(bufTypStr, "default")) {
+                        type = OFX_VIDEO_BUFFER_FIXED;
+                    } else if(isMatch(bufTypStr, "ring") || isMatch(bufTypStr, "circ") || isMatch(bufTypStr, "circular")) {
+                        type = OFX_VIDEO_BUFFER_CIRCULAR;
+                    } else if(isMatch(bufTypStr, "pass") || isMatch(bufTypStr, "passthrough")) {
+                        type = OFX_VIDEO_BUFFER_PASSTHROUGH;
+                    } else {
+                        ofLog(OF_LOG_WARNING,"Unknown buffer type, using default.");
+                    }
+                }
+
+                addBuffer(name, size, type);
+                
+            } else if(isMatch(assetType,"player") || isMatch(assetType,"play")) {
+
+                addPlayer(name);
+            
+            } else {
+                ofLog(OF_LOG_ERROR,"Unknown asset type " + assetType + " returning.");
+            }
+        }
+        
+    } else if(isMatch(command,"delete")) {
         if(validateOscSignature("s", m)) {
             string alias = getArgAsStringUnchecked(m,0);
             bool ret = queueUnregisterAsset(alias);
@@ -131,46 +175,6 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
     } else if(isMatch(command, "buffer")) {
         cout << "in buffer manager" << endl;
         
-//        if(isMatch(command,"new")) {
-//            cout << "making new buffer" << endl;
-//            
-//            if(validateOscSignature("s(is?)?", m)) {
-//                int numArgs = m.getNumArgs();
-//                
-//                if(numArgs > 0) {
-//                    string alias = getArgAsStringUnchecked(m,0);
-//                    int    size = 1;
-//                    ofxVideoBufferType type = OFX_VIDEO_BUFFER_FIXED;
-//                    
-//                    if(numArgs > 1) size  = getArgAsIntUnchecked(m,1);
-//                    if(numArgs > 2) {
-//                        string type = getArgAsStringUnchecked(m,2);
-//                        if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
-//                            type = OFX_VIDEO_BUFFER_FIXED;
-//                        } else if(isMatch(type, "ring") || isMatch(type, "circ") || isMatch(type, "cirular")) {
-//                            type = OFX_VIDEO_BUFFER_CIRCULAR;
-//                        } else if(isMatch(type, "pass") || isMatch(type, "passthrough")) {
-//                            type = OFX_VIDEO_BUFFER_PASSTHROUGH;
-//                        } else {
-//                            ofLog(OF_LOG_WARNING,"Unknown buffer type, using default.");
-//                        }    
-//                    }
-//                    
-//                    assetManager->addBuffer(alias, size, type);
-//                    
-//                } else {
-//                    cout << "unknown num args." << endl;
-//                }
-//            }
-//        } else if(isMatch(command,"dump")) {
-//            vector<FrameBuffer*> b = buffers.toArray();
-//            cout << "dumping buffer" << endl;
-//            for(int i = 0; i < b.size(); i++) {
-//                cout << b[i]->toString() << endl;
-//            }
-//            
-//        }
-
     } else if(isMatch(command,"player")) {
         cout << "in player manager" << endl;
     }                      
