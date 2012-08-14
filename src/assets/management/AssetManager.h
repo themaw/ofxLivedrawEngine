@@ -26,6 +26,7 @@
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
+#include "AssetManagerInterface.h"
 
 #include "ofxLivedrawEngineInterface.h"
 
@@ -92,7 +93,6 @@ protected:
     BaseMediaAsset* getAsset(const string& alias);
 
     //--------------------------------------------------------------
-    bool queueRegisterAsset(BaseMediaAsset* asset);
     bool queueUnregisterAsset(const string& alias);
     bool queueUnregisterAsset(BaseMediaAsset* asset);
     

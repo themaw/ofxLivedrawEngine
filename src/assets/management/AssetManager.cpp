@@ -235,14 +235,6 @@ void AssetManager::attachSourceToSink(const string& sourceAlias, const string& s
     }
 }
 
-
-//--------------------------------------------------------------
-bool AssetManager::queueRegisterAsset(BaseMediaAsset* asset) {
-    return registerAsset(asset);
-    //    asset->setNodeActive(false);
-    //    return registerQueue.insert(asset).second;
-}
-
 //--------------------------------------------------------------
 bool AssetManager::queueUnregisterAsset(const string& alias) {
     BaseMediaAsset* toDelete = getAsset(alias);
@@ -398,132 +390,47 @@ bool AssetManager::stopAsset(const string& alias) {
         ofLog(OF_LOG_WARNING, "AssetManager::stopAsset - Asset not found " + alias);
         return false;
     }
-    
-//    if(asset->isLiveAsset()) {
-//        cout << "stopping cam." << endl;
-//
-//    } else {
-//        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Only live assets can be stopped " + alias);
-//        return false;
-//    }
-
 }
 
 //--------------------------------------------------------------
 ImageAsset* AssetManager::addImage(const string& name, const string& filename) {
     ImageAsset* asset = new ImageAsset(this, validateAssetId(name), filename);
-
-    queueRegisterAsset(asset);
-    
-//    if(!registerAsset(asset)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed to add image");
-//        if(!unregisterAsset(asset)) {
-//            ofLog(OF_LOG_ERROR, "AssetManager::addImage - failed unregister problem image.");
-//            assert(asset == NULL);
-//            return asset;
-//        } else {
-//            return asset;
-//        }
-//    }
-
+    registerAsset(asset);
     return asset;
 }
 
 //--------------------------------------------------------------
 MovieAsset* AssetManager::addMovie(const string& name, const string& filename) {
     MovieAsset* asset = new MovieAsset(this, validateAssetId(name), filename);
-    
-    queueRegisterAsset(asset);
-
-//    if(!registerAsset(asset)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::addMovie - failed to add image");
-//        if(!unregisterAsset(asset)) {
-//            ofLog(OF_LOG_ERROR, "AssetManager::addMovie - failed unregister problem image.");
-//            assert(asset == NULL);
-//            return asset;
-//        } else {
-//            return asset;
-//        }
-//    }
-    
+    registerAsset(asset);
     return asset;
 }
 
 //--------------------------------------------------------------
 StreamAsset* AssetManager::addStream(const string& name, StreamType type, const string& url, const string& username, const string& password) {
     StreamAsset* asset = new StreamAsset(this, validateAssetId(name), type, url, username, password);
-    
-    queueRegisterAsset(asset);
-
-//    if(!registerAsset(asset)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::addStream - failed to add image");
-//        if(!unregisterAsset(asset)) {
-//            ofLog(OF_LOG_ERROR, "AssetManager::addStream - failed unregister problem image.");
-//            assert(asset == NULL);
-//            return asset;
-//        } else {
-//            return asset;
-//        }
-//    }
-    
+    registerAsset(asset);
     return asset;
 }
 
 //--------------------------------------------------------------
 BufferAsset* AssetManager::addBuffer(const string& name, int size, ofxVideoBufferType t) {
     BufferAsset* asset = new BufferAsset(this, validateAssetId(name), size, t);
-    
-    queueRegisterAsset(asset);
-
-//    if(!registerAsset(asset)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::addBuffer - failed to add image");
-//        if(!unregisterAsset(asset)) {
-//            ofLog(OF_LOG_ERROR, "AssetManager::addBuffer - failed unregister problem image.");
-//            assert(asset == NULL);
-//            return asset;
-//        } else {
-//            return asset;
-//        }
-//    }
-    
+    registerAsset(asset);
     return asset;
 }
 
 //--------------------------------------------------------------
 PlayerAsset* AssetManager::addPlayer(const string& name) {
     PlayerAsset* asset = new PlayerAsset(this, validateAssetId(name));
-    queueRegisterAsset(asset);
-
-//    if(!registerAsset(asset)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::addBufferPlayer - failed to add image");
-//        if(!unregisterAsset(asset)) {
-//            ofLog(OF_LOG_ERROR, "AssetManager::addBufferPlayer - failed unregister problem image.");
-//            assert(asset == NULL);
-//            return asset;
-//        } else {
-//            return asset;
-//        }
-//    }
-    
+    registerAsset(asset);
     return asset;
 }
 
 //--------------------------------------------------------------
 GrabberAsset* AssetManager::addGrabber(const string& name, int devId, int width, int height) {
     GrabberAsset* asset = new GrabberAsset(this, validateAssetId(name), devId, width, height);
-    queueRegisterAsset(asset);
-
-//    if(!registerAsset(asset)) {
-//        ofLog(OF_LOG_ERROR, "AssetManager::addGrabber - failed to add image");
-//        if(!unregisterAsset(asset)) {
-//            ofLog(OF_LOG_ERROR, "AssetManager::addGrabber - failed unregister problem image.");
-//            assert(asset == NULL);
-//            return asset;
-//        } else {
-//            return asset;
-//        }
-//    }    
-    
+    registerAsset(asset);
     return asset;
 }
 
