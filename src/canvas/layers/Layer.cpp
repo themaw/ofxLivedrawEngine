@@ -352,11 +352,11 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                         action = "clear";
                         success = true;
                     } else {
-                        ofLogNotice() << "Source Command, string value expected.";
+                        ofLogNotice("Layer") << "Source Command, string value expected.";
                     }
                     
                 } else {
-                    ofLogNotice() << "Source Command, string value expected.";
+                    ofLogNotice("Layer") << "Source Command, string value expected.";
                 }
             } else if(m.getNumArgs() < 3) {
                 if(m.getArgType(0) == OFXOSC_TYPE_STRING &&
@@ -372,7 +372,7 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                     action      = getArgAsStringUnchecked(m,1);
                     success     = true;
                 } else {
-                    ofLogNotice() << "Source Command, invalid string.";
+                    ofLogNotice("Layer") << "Source Command, invalid string.";
                 }
             } else if(m.getNumArgs() < 4) {
                 if((m.getArgType(0) == OFXOSC_TYPE_INT32 ||
@@ -384,8 +384,10 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                     assetName   = getArgAsStringUnchecked(m,2);
                     success     = true;
                 } else {
-                    ofLogNotice() << "Source Command, invalid number of args.";
+                    ofLogNotice("Layer") << "Source Command, invalid number of args.";
                 }
+            } else {
+                ofLogNotice("Layer") << "Source Command, invalid number of args.";
             }
             
             if(success) {
@@ -409,11 +411,18 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                             sinkMask(targetLayer,assetName);
                         }
                     } else {
-                        ofLogNotice() << "Source Command, invalid command : " << action;
+                        ofLogNotice("Layer") << "Source Command, invalid command : " << action;
                     }
+                } else {
+                    ofLogNotice("Layer") << "Invalid : " << action;
                 }
+            } else {
+                ofLogError("Layer") << "Error : " << action;
             }
             
+        } else {
+            ofLogError("Layer") << "Error : invalid signature";
+
         }
 
     } if(isMatch(command,"order")) {
