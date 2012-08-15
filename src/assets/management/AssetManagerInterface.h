@@ -28,6 +28,7 @@
 
 class Layer;
 class AssetManager;
+class BaseMediaAsset;
 class ofxLivedrawEngineInterface;
 
 class AssetManagerInterface {
@@ -35,7 +36,9 @@ public:
     AssetManagerInterface() {}
     virtual ~AssetManagerInterface() {}
     
-    
+    virtual bool hasAlias(const string& alias) const = 0;
+
+    virtual BaseMediaAsset* getAsset(const string& alias) const = 0;
     
     virtual ofxLivedrawEngineInterface* getEngineInterface() = 0;
     
