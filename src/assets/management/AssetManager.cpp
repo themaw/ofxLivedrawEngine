@@ -129,7 +129,7 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
                 }
                 
                 if(m.getNumArgs() > 3) {
-                    string bufTypStr = getArgAsStringUnchecked(m,2);
+                    string bufTypStr = getArgAsStringUnchecked(m,3);
                     if(isMatch(bufTypStr, "norm") || isMatch(bufTypStr, "fixed") || isMatch(bufTypStr, "default")) {
                         type = OFX_VIDEO_BUFFER_FIXED;
                     } else if(isMatch(bufTypStr, "ring") || isMatch(bufTypStr, "circ") || isMatch(bufTypStr, "circular")) {
@@ -344,17 +344,17 @@ bool AssetManager::cacheAsset(CacheableAsset* asset) {
 bool AssetManager::uncacheAsset(CacheableAsset* asset) {
 
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::uncacheAsset - Asset is NULL");
+        ofLogError("AssetManager") << "::uncacheAsset - Asset is NULL";
         return false;
     }
 
     if(!asset->isCached()) {
-        ofLogError("AssetManager::uncacheAsset - Asset has no cache.");
+        ofLogError("AssetManager") << "::uncacheAsset - Asset has no cache.";
         return false;
     }
     
     if(!queueUnregisterAsset(asset->getCacheBuffer())) {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Unable to uncache buffer.");
+        ofLogError("AssetManager") << "::uncacheAsset - Unable to uncache buffer.";
         return false;
     } else {
         asset->setCacheBuffer(NULL);
@@ -440,7 +440,7 @@ SyphonAsset* AssetManager::addSyphon(const string& name) {
 }
 
 //--------------------------------------------------------------
-bool AssetManager::hasAlias(const string& alias) {
+bool AssetManager::hasAlias(const string& alias) const {
     return assetAliases.find(alias) != assetAliases.end();
 }
 
@@ -646,8 +646,8 @@ int AssetManager::getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset
 }
 
 //--------------------------------------------------------------
-BaseMediaAsset* AssetManager::getAsset(const string& alias) {
-    map<string,BaseMediaAsset*>::iterator iter = assetAliases.find(alias);
+BaseMediaAsset* AssetManager::getAsset(const string& alias) const {
+    map<string,BaseMediaAsset*>::const_iterator iter = assetAliases.find(alias);
     
     if(iter!=assetAliases.end()) {
         return iter->second;

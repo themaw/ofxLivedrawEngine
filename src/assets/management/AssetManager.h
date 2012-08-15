@@ -74,7 +74,7 @@ protected:
     ofxLivedrawEngineInterface* engine;
 
     //--------------------------------------------------------------
-    bool hasAlias(const string& alias);
+    bool hasAlias(const string& alias) const;
     
     //--------------------------------------------------------------
     ImageAsset*         addImage(const string& name, const string& filename);
@@ -90,7 +90,7 @@ protected:
     SyphonAsset*        addSyphon(const string& name);
     
     //--------------------------------------------------------------
-    BaseMediaAsset* getAsset(const string& alias);
+    BaseMediaAsset* getAsset(const string& alias) const;
 
     //--------------------------------------------------------------
     bool queueUnregisterAsset(const string& alias);
