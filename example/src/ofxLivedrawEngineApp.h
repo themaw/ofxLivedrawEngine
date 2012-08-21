@@ -27,6 +27,9 @@
 #include "ofMain.h"
 #include "ofxLivedrawEngine.h"
 
+#include "ofxVideoBuffer.h"
+#include "ofxVideoBufferPlayer.h"
+
 //--------------------------------------------------------
 class ofxLivedrawEngineApp : public ofBaseApp {
 
@@ -46,6 +49,9 @@ public:
     void gotMessage(ofMessage msg);		
 
 private:
+    
+    ofxSharedVideoBuffer buffer;
+    ofxSharedVideoBufferPlayer player;
     
     ofxLivedrawEngine livedraw;
   

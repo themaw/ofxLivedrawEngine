@@ -27,7 +27,6 @@
 #include "BaseMediaAsset.h"
 #include "DiskBasedAsset.h"
 #include "BufferAsset.h"
-#include "CacheProvider.h"
 
 class CacheableAsset : public virtual BaseMediaAsset,
                        public virtual DiskBasedAsset
@@ -40,25 +39,21 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);    
 
-    virtual bool doCache()   = 0; // must implement in subclasses
-    virtual bool doUncache() = 0; // must implement in subclasses
-
-    virtual void cacheComplete() = 0;
-    
     void cache();
     void uncache();
-    bool isCached();
+    // TODO: add cancel cache
+    
+    bool isCached() const;
+    bool isCaching() const;
+    
+    bool hasCacheBuffer() const;
     BufferAsset* getCacheBuffer();
     void setCacheBuffer(BufferAsset* _cacheBuffer);
     
-    bool hasCacheProvider();
-    void setCacheProvider(CacheProvider* cacheProvider);
-    
-    
-    
 protected:
-    bool cached; // an explicit boolean b/c caching can be
-                 // multi-threaded, not returning a !NULL buffer immediately
+
+    virtual void doCache()   = 0; // must implement in subclasses
+    virtual void doUncache() = 0; // must implement in subclasses
+
     BufferAsset* cacheBuffer;
-    CacheProvider* cacheProvider;
 };

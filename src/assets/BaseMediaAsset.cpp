@@ -27,7 +27,7 @@
 
 //--------------------------------------------------------------
 BaseMediaAsset::BaseMediaAsset(AssetManagerInterface* man) {
-    
+        
     assetManager = man;
     
 	assetType = MEDIA_ASSET_UNDEFINED;
@@ -39,10 +39,9 @@ BaseMediaAsset::BaseMediaAsset(AssetManagerInterface* man) {
     diskAsset = false;
     
     bNodeActive = false;
-    
-    assetManager = NULL;
-    
+        
     addOscChild(&meta);
+
 }
 
 //--------------------------------------------------------------
@@ -154,7 +153,7 @@ bool BaseMediaAsset::removeAlias(const string& alias) {
 
 //--------------------------------------------------------------
 bool BaseMediaAsset::hasAssetManager() const {
-    return assetManager == NULL;
+    return assetManager != NULL;
 }
 
 //--------------------------------------------------------------

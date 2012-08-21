@@ -58,7 +58,7 @@ public:
 	MediaAssetType  getAssetType() const;   
 	string          getAssetTypeString() const;
 
-    string  getName() const;
+    virtual string  getName() const;
     
     // interface capabilities
     bool isPlayable()  const;

@@ -46,6 +46,8 @@ ImageAsset*   toImageAsset(BaseMediaAsset* asset)   { return dynamic_cast<ImageA
 MovieAsset*   toMovieAsset(BaseMediaAsset* asset)   { return dynamic_cast<MovieAsset*>(asset);   }
 BufferAsset*  toBufferAsset(BaseMediaAsset* asset)  { return dynamic_cast<BufferAsset*>(asset);  }
 PlayerAsset*  toPlayerAsset(BaseMediaAsset* asset)  { return dynamic_cast<PlayerAsset*>(asset);  }
+PlayableAsset*  toPlayableAsset(BaseMediaAsset* asset)  { return dynamic_cast<PlayableAsset*>(asset);  }
+CacheableAsset*  toCacheableAsset(BaseMediaAsset* asset)  { return dynamic_cast<CacheableAsset*>(asset);  }
 GrabberAsset* toGrabberAsset(BaseMediaAsset* asset) { return dynamic_cast<GrabberAsset*>(asset); }
 StreamAsset*  toStreamAsset(BaseMediaAsset* asset)  { return dynamic_cast<StreamAsset*>(asset);  }
 SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<SyphonAsset*>(asset);  }
@@ -272,39 +274,50 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
     // add it to our collection
     assets.insert(asset);
     
-    // special procedures
-    if(isMovieAsset(asset)) {
-        toMovieAsset(asset)->setCacheProvider(this);
-    }
-
+//    // special procedures
+//    if(isMovieAsset(asset)) {
+//        toMovieAsset(asset)->setCacheProvider(this);
+//    }
+//
     return true;
 }
 
 //--------------------------------------------------------------
 bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
+    cout << "unregistering asset " << asset->getName() << endl;
+    
     // is there a there there?
     if(asset == NULL) {
-        ofLogWarning() << "AssetManager::unregisterAsset - asset is NULL ";
+        ofLogWarning("AssetManager") << "AssetManager::unregisterAsset - asset is NULL ";
         return false;
     }
     
+    cout << "0. unregistering asset " << asset->getName() << endl;
+
     // tell the object to dispose of itself (free connections, kill other things, etc)
     if(!asset->dispose()) {
-        ofLogWarning() << "AssetManager::unregisterAsset - unable to dispose " << asset->getName();
+        ofLogWarning("AssetManager") << "AssetManager::unregisterAsset - unable to dispose " << asset->getName();
         return false;
     }
     
+    cout << "1. unregistering asset " << asset->getName() << endl;
+
     // get rid of the alias
     if(hasAlias(asset->getName())) { // double check
         assetAliases.erase(asset->getName());
     }
     
+    cout << "2. unregistering asset " << asset->getName() << endl;
+
     
     if(hasOscChild(asset) && !removeOscChild(asset)) {
-        ofLogError() << "AssetManager::registerAsset - failed to remove as an osc child node";
+        ofLogError("AssetManager") << "AssetManager::registerAsset - failed to remove as an osc child node";
         return false;
     }
+    
+    cout << "3. unregistering asset " << asset->getName() << endl;
+
     
     // remove the asset pointer from the assets set
     assets.erase(asset);
@@ -313,52 +326,57 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
     delete asset; // free the memory
     asset = NULL;
     // success
+    
+    cout << "4. unregistering asset " << asset << endl;
+
     return true;
 }
 
 //--------------------------------------------------------------
-bool AssetManager::cacheAsset(CacheableAsset* asset) {
+void AssetManager::cacheAsset(CacheableAsset* asset) {
     if(asset == NULL) {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset is NULL");
-        return false;
+        return;
     }
     
     if(asset->isCached()) {
         ofLogError("AssetManager::cacheAsset - Asset is already cached.");
-        return false;
+        return;
     }
     
     BufferAsset* cacheAsset = addBuffer("BUFFER_" + asset->getName(), 1, OFX_VIDEO_BUFFER_FIXED);
     
     if(cacheAsset != NULL) {
-        cacheAsset->getBuffer()->loadMovie(asset->getFilename());
+        cacheAsset->loadMovie(asset->getFilename());
         asset->setCacheBuffer(cacheAsset);
-        return true;
+        assetsBeingCached.insert(asset);
+        return;
     } else {
         ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - could not create buffer.");
-        return false;
+        return;
     }
 }
 
+
 //--------------------------------------------------------------
-bool AssetManager::uncacheAsset(CacheableAsset* asset) {
+void AssetManager::uncacheAsset(CacheableAsset* asset) {
 
     if(asset == NULL) {
         ofLogError("AssetManager") << "::uncacheAsset - Asset is NULL";
-        return false;
+        return;
     }
 
     if(!asset->isCached()) {
         ofLogError("AssetManager") << "::uncacheAsset - Asset has no cache.";
-        return false;
+        return;
     }
     
     if(!queueUnregisterAsset(asset->getCacheBuffer())) {
         ofLogError("AssetManager") << "::uncacheAsset - Unable to uncache buffer.";
-        return false;
+        return;
     } else {
         asset->setCacheBuffer(NULL);
-        return true;
+        return;
     }
 }
 
@@ -366,7 +384,7 @@ bool AssetManager::uncacheAsset(CacheableAsset* asset) {
 bool AssetManager::startAsset(const string& alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset not found " + alias);
+        ofLogWarning("AssetManager") << "::startAsset - Asset not found " << alias;
         return false;
     }
 
@@ -387,7 +405,7 @@ bool AssetManager::startAsset(const string& alias) {
 bool AssetManager::stopAsset(const string& alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::stopAsset - Asset not found " + alias);
+        ofLogWarning("AssetManager") << "::stopAsset - Asset not found " << alias;
         return false;
     }
 }
@@ -598,19 +616,13 @@ void AssetManager::loadStreamAssets(){
 
 //--------------------------------------------------------------
 int AssetManager::getTotalNumAssets() {
-    return assets.size() + registerQueue.size() - unregisterQueue.size();
+    return assets.size() - unregisterQueue.size();
 }
 
 //--------------------------------------------------------------
 int AssetManager::getTotalNumAssets(MediaAssetType assetType) {
-    return getNumAssetsInSet(assetType, assets) +
-           getNumAssetsInRegisterQueue(assetType) -
+    return getNumAssetsInSet(assetType, assets) -
            getNumAssetsInUnregisterQueue(assetType);
-}
-
-//--------------------------------------------------------------
-int AssetManager::getNumAssetsInRegisterQueue(MediaAssetType assetType) {
-    return getNumAssetsInSet(assetType, registerQueue);
 }
 
 //--------------------------------------------------------------
@@ -708,16 +720,6 @@ string AssetManager::validateAssetId(const string& name) {
 //--------------------------------------------------------------
 void AssetManager::processQueues() {
     
-    // clear register queues
-    if(!registerQueue.empty()) {
-        for(assetsIter = registerQueue.begin(); 
-            assetsIter != registerQueue.end(); 
-            assetsIter++) {
-            registerAsset(*assetsIter);
-        }
-        registerQueue.clear(); // done!
-    }
-    
     // clear unregister queue
     if(!unregisterQueue.empty()) {
         for(assetsIter = unregisterQueue.begin(); 
@@ -740,6 +742,33 @@ void AssetManager::updateAssets() {
             (*assetsIter)->update();
         }
     }
+    
+    // look through loading assets
+    if(!assetsBeingCached.empty()) {
+        for(assetsBeingCachedIter = assetsBeingCached.begin();
+            assetsBeingCachedIter != assetsBeingCached.end();
+            ) {
+            if(!(*assetsBeingCachedIter)->isCaching()) {
+                // tell someone that it's done caching here
+                //(*assetsBeingCachedIter)->getCacheSource()->cacheComplete();
+                //
+                if((*assetsBeingCachedIter)->isPlayable()) {
+                    
+                    PlayableAsset* a = toPlayableAsset(*assetsBeingCachedIter);
+                    CacheableAsset* b = toCacheableAsset(*assetsBeingCachedIter);
+                    if(a != NULL && b != NULL) {
+                        cout << "reporting cache complete!" << endl;
+                        a->reportCacheComplete(b);
+                    }
+                }
+                
+                assetsBeingCached.erase(*assetsBeingCachedIter++); // erase it
+            } else {
+                assetsBeingCachedIter++;
+            }
+        }
+    }
+
 }
 
 

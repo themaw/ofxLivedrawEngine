@@ -41,7 +41,7 @@ LayerManager::LayerManager() : ofxOscRouterNode("layers") {
 LayerManager::~LayerManager() {
     for (it = layers.begin(); it != layers.end(); it++) {
         delete *it;
-        layers.erase(it);
+        layers.erase(*it++);
     }
 }
 
@@ -319,10 +319,11 @@ string LayerManager::validateAlias(const string& name) {
         string thisName = (*it)->getName();
         if(isMatch(assetId,thisName.substr(0,assetId.length()))) {
             if(thisName.length() > assetId.length()) {
-                string suffix = thisName.substr(assetId.length()+1);
-                string number = suffix.substr(suffix.find_first_of("0123456789"));
-                if(number.length() > 0) {
-                    maxSuffix = MAX(maxSuffix,ofToInt(number));
+                if(thisName[assetId.length()] == '_') {
+                    string number = thisName.substr(assetId.length() + 1);
+                    if(number.length() > 0) {
+                        maxSuffix = MAX(maxSuffix,ofToInt(number));
+                    }
                 }
             }
             foundIt = true;
@@ -330,7 +331,7 @@ string LayerManager::validateAlias(const string& name) {
     }
     
     if(foundIt) {
-        assetId +=  ("_" + ofToString(maxSuffix + 1));
+        assetId +=  ('_' + ofToString(maxSuffix + 1));
     }
     
     // toss a warning if the asset id differs from the asset's original name

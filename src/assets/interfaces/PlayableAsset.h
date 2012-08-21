@@ -31,6 +31,7 @@
 #include "PlayerAssetInterface.h"
 
 class PlayerAsset;
+class CacheableAsset;
 
 class PlayableAsset : public virtual BaseMediaAsset {
 public:
@@ -47,7 +48,7 @@ public:
     void addPlayer(PlayerAssetInterface* player);
     void removePlayer(PlayerAssetInterface* player);
     
-    void reportCacheComplete();
+    void reportCacheComplete(CacheableAsset* asset);
     
     void detatchFromAllPlayers();
     

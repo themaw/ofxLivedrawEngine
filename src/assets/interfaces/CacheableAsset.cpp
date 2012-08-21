@@ -26,11 +26,9 @@
 
 //--------------------------------------------------------------
 CacheableAsset::CacheableAsset(AssetManagerInterface* man, const string& _filename) : DiskBasedAsset(man, _filename), BaseMediaAsset(man){
-    cacheProvider = NULL;
     cacheBuffer = NULL;
     
     canCache = true;
-    cached = false;
     //buffer.setReadOnly(true);
     
     addOscMethod("cache");
@@ -67,24 +65,36 @@ void CacheableAsset::processOscCommand(const string& command, const ofxOscMessag
 //--------------------------------------------------------------
 void CacheableAsset::cache() {
     if(!isCached()) {
-        cached = doCache();
+        if(!isCaching()) {
+            doCache();
+        } else {
+            ofLogWarning("CacheableAsset") << getName() << " is not cached, but it is being cached.";
+        }
+    } else {
+        ofLogWarning("CacheableAsset") << getName() << " is already cached";
     }
 }
 
 //--------------------------------------------------------------
 void CacheableAsset::uncache() {
-    if(isCached() && cacheBuffer != NULL) {
-        if(doUncache()) {
-            cached = false;
-        } else {
-            cached = true;
-        }
+    if(isCached()) {
+        doUncache();
     }
 }
 
 //--------------------------------------------------------------
-bool CacheableAsset::isCached() {
-    return cached;
+bool CacheableAsset::isCached() const {
+    return hasCacheBuffer() && cacheBuffer->isLoaded();
+}
+
+//--------------------------------------------------------------
+bool CacheableAsset::isCaching() const {
+    return hasCacheBuffer() && cacheBuffer->isLoading();
+}
+
+//--------------------------------------------------------------
+bool CacheableAsset::hasCacheBuffer() const {
+    return cacheBuffer != NULL;
 }
 
 //--------------------------------------------------------------
@@ -96,14 +106,3 @@ BufferAsset* CacheableAsset::getCacheBuffer() {
 void CacheableAsset::setCacheBuffer(BufferAsset* _cacheBuffer) {
     cacheBuffer = _cacheBuffer;
 }
-
-//--------------------------------------------------------------
-bool CacheableAsset::hasCacheProvider() {
-    return cacheProvider != NULL;
-}
-
-//--------------------------------------------------------------
-void CacheableAsset::setCacheProvider(CacheProvider* _cacheProvider) {
-    cacheProvider = _cacheProvider;
-}
-

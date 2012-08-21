@@ -54,6 +54,8 @@ void BufferAsset::update() {
 
 //--------------------------------------------------------------
 bool BufferAsset::dispose() {
+    PlayableAsset::dispose();
+
     detachFromSources();
     return true;
 }
@@ -91,6 +93,22 @@ void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& 
 }
 
 //--------------------------------------------------------------
+void BufferAsset::loadMovie(const string& filename) {
+    buffer->loadMovieAsync(filename);
+}
+
+//--------------------------------------------------------------
+bool BufferAsset::isLoaded() const {
+    return buffer->isLoaded();
+}
+
+//--------------------------------------------------------------
+bool BufferAsset::isLoading() const {
+    return buffer->isLoading();
+}
+
+
+//--------------------------------------------------------------
 bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {
     if(isSinking()) {
         buffer->bufferFrame(frame);
@@ -98,7 +116,7 @@ bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {
 }
 
 //--------------------------------------------------------------
-bool BufferAsset::isCacheBuffer() {
+bool BufferAsset::isCacheBuffer() const {
     return cacheSource != NULL;
 }
 

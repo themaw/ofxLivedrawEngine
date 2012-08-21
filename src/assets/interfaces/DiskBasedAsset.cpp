@@ -34,6 +34,11 @@ DiskBasedAsset::DiskBasedAsset(AssetManagerInterface* man, const string& _filena
 DiskBasedAsset::~DiskBasedAsset() {}
 
 //--------------------------------------------------------------
+void DiskBasedAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
+    cout << "Disk based asset got a osc." << endl;
+}
+
+//--------------------------------------------------------------
 void DiskBasedAsset::update() {
 // TODO: keep an eye on the files here?
 }

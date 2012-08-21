@@ -36,12 +36,13 @@ public:
     MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename);
     virtual ~MovieAsset();
     
+    void processOscCommand(const string& command, const ofxOscMessage& m);
+
     void update();
     
     bool dispose();
 
-    bool doCache();
-    bool doUncache();
-    
+    void doCache();
+    void doUncache();
     
 };

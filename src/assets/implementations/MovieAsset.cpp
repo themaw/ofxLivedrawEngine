@@ -25,7 +25,7 @@
 #include "MovieAsset.h"
 
 //--------------------------------------------------------------
-MovieAsset::MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename) : BaseMediaAsset(man), CacheableAsset(man, _filename),
+MovieAsset::MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename) : BaseMediaAsset(man),CacheableAsset(man, _filename),
                                                                        DiskBasedAsset(man, _filename),
                                                                        PlayableAsset(man) {
     assetType = MEDIA_ASSET_MOVIE;
@@ -34,6 +34,17 @@ MovieAsset::MovieAsset(AssetManagerInterface* man, const string& _name, const st
 
 //--------------------------------------------------------------
 MovieAsset::~MovieAsset() {}
+
+//--------------------------------------------------------------
+void MovieAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
+    CacheableAsset::processOscCommand(command, m);
+    
+    cout << "movie asset got a command" << endl;
+    
+    
+    cout << "MOVIEDASSET: " << getName() << " we are connected to : " << players.size() << " players." << endl;
+    
+}
 
 //--------------------------------------------------------------
 void MovieAsset::update() {
@@ -45,6 +56,9 @@ void MovieAsset::update() {
 
 //--------------------------------------------------------------
 bool MovieAsset::dispose() {
+    
+    PlayableAsset::dispose();
+    
     if(isCached() && getCacheBuffer() != NULL) {
         getCacheBuffer()->unlinkCacheSource();
     }
@@ -53,24 +67,22 @@ bool MovieAsset::dispose() {
 }
 
 //--------------------------------------------------------------
-bool MovieAsset::doCache() {
-    if(hasCacheProvider()) {
+void MovieAsset::doCache() {
+    if(hasAssetManager()) {
         ofLogVerbose() << "MovieAsset::doCache() : caching.";
-        return cacheProvider->cacheAsset(this);
+        getAssetManager()->cacheAsset(this);
     } else {
         ofLogVerbose() << "MovieAsset::doCache() : failing - no cache provider.";
-        return false;
     }
 }
 
 //--------------------------------------------------------------
-bool MovieAsset::doUncache() {
-    if(hasCacheProvider()) {
+void MovieAsset::doUncache() {
+    if(hasAssetManager()) {
         ofLogVerbose() << "MovieAsset::doUncache() : uncaching.";
-        return cacheProvider->uncacheAsset(this);
+        getAssetManager()->uncacheAsset(this);
     } else {
         ofLogVerbose() << "MovieAsset::doUncache() : failing - no cache provider.";
-        return false;
     }
-
 }
+

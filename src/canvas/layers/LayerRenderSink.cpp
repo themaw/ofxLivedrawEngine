@@ -26,6 +26,7 @@
 
 //--------------------------------------------------------------
 bool LayerRenderSink::frameReceived(ofxSharedVideoFrame _frame) {
+//    cout << " new frame!" << endl;
     frame = _frame;
 }
 

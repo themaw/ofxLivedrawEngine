@@ -24,8 +24,16 @@
 
 #pragma once
 
-class PlayerAssetInterface {
+#include "BaseMediaAsset.h"
+
+class CacheableAsset;
+
+class PlayerAssetInterface : public virtual BaseMediaAsset {
 public:
+    PlayerAssetInterface(AssetManagerInterface* man) : BaseMediaAsset(man) {}
+    virtual ~PlayerAssetInterface() {}
+    
+    
     virtual void close() = 0;
-    virtual void cacheComplete() = 0;
+    virtual void cacheComplete(CacheableAsset* asset) = 0;
 };

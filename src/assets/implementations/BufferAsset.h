@@ -47,24 +47,20 @@ public:
     
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
-    void loadMovie(const string& filename) {
-        buffer->loadMovie(filename);
-    }
-    
-    bool isLoading() {
-        return buffer->isLoading();
-    }
+    void loadMovie(const string& filename);
+    bool isLoaded() const;
+    bool isLoading() const;
     
     // From FrameSink
     bool frameReceived(ofxSharedVideoFrame frame);
 
-    bool isCacheBuffer();
+    bool isCacheBuffer() const;
     // here we keep a link to the source file
     void unlinkCacheSource();  // used when the original source is disposed
     CacheableAsset* getCacheSource();
     ofPtr<ofxVideoBuffer> getBuffer();
-    
+        
 protected:
     CacheableAsset* cacheSource;
-    ofPtr<ofxVideoBuffer> buffer;
+    ofxSharedVideoBuffer buffer;
 };

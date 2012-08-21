@@ -104,7 +104,7 @@ ofPixelsRef StreamAsset::getPixelsRef() {
 
 //--------------------------------------------------------------
 void StreamAsset::open() {
-    ofLogNotice() << "StreamAsset::open() : opening stream asset " << getName() << ":" << getUrl() << endl;
+    ofLogNotice() << "StreamAsset::open() : opening stream asset " << getName() << ":" << getUrl();
     if(isIpVideo) {
         ipcam->connect();
     } else {
@@ -114,7 +114,7 @@ void StreamAsset::open() {
 
 //--------------------------------------------------------------
 void StreamAsset::close()  {
-    ofLogNotice() << "StreamAsset::open() : closing stream asset " << getName() << ":" << getUrl() << endl;
+    ofLogNotice() << "StreamAsset::open() : closing stream asset " << getName() << ":" << getUrl();
     if(isIpVideo) {
         ipcam->close();
     } else {

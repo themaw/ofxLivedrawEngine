@@ -80,8 +80,8 @@ void Layer::init() {
     // fbo
     useMSAA = true;
     
-    getTransform()->setWidth(640);
-    getTransform()->setHeight(480); // standard canvas layer size
+    getTransform()->setWidth(80);
+    getTransform()->setHeight(60); // standard canvas layer size
     
     addOscChild(&transform); // add the transform as an OSC child
     //    addOscChild(&effectsChain); // add the associated effects chain as a child
@@ -152,8 +152,13 @@ void Layer::sinkInput(int index, const string& asset) {
             if(assetManager != NULL) {
                 ofxVideoSourceInterface* src = assetManager->getSourceAsset(asset);
                 if(src != NULL) {
-                    unsinkInput(index); // release any current ones
-                    src->attachToSink(&inputs[index]);
+                    if(!inputs[index].hasSource(src)) {
+                        unsinkInput(index); // release any current ones
+                        src->attachToSink(&inputs[index]);
+                    } else {
+                        ofLogError() << "Layer::sinkSource: " << asset << " was already attached.  Ignoring.";
+                    }
+                    
                 } else {
                     ofLogError() << "Layer::sinkSource: " << asset << " was not a valid source.";
                 }
@@ -166,6 +171,7 @@ void Layer::sinkInput(int index, const string& asset) {
     } else {
         ofLogError() << "Layer::sinkSource: LayerManagerInterface was NULL.";
     }
+
 }
 
 //--------------------------------------------------------------
@@ -613,7 +619,7 @@ void Layer::draw() {
 
 //--------------------------------------------------------------
 void Layer::drawFrame(ofxSharedVideoFrame frame) {
-    
+//    cout << "drawing frame!" << frame->getWidth() << "/" << frame->getHeight() << endl;
     LayerTransform* xform = getTransform();
     
     float w = xform->getWidth();

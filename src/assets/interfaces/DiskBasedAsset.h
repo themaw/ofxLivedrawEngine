@@ -31,6 +31,7 @@ class DiskBasedAsset : public virtual BaseMediaAsset
 public:
     DiskBasedAsset(AssetManagerInterface* man, const string& _filename);
     virtual ~DiskBasedAsset();
+    virtual void processOscCommand(const string& command, const ofxOscMessage& m);
     virtual void update();
     string getFilename() const;
 //    void fileMoved(const string& newLocation) {};

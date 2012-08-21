@@ -32,6 +32,7 @@
 #include "BufferAsset.h"
 #include "ImageAsset.h"
 #include "MovieAsset.h"
+#include "CacheableAsset.h"
 
 class PlayerAsset : public virtual BaseMediaAsset,
                     public virtual ofxVideoSourceInterface,
@@ -49,7 +50,7 @@ public:
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
     void load(PlayableAsset* asset);
-    void cacheComplete();
+    void cacheComplete(CacheableAsset* asset);
 
     void  draw(float x,float y);
 	void  draw(float x,float y,float w, float h);
@@ -62,6 +63,10 @@ public:
     void open();
     void close();
     bool isLoaded();
+    
+    void dump() {
+        ofLogNotice("PlayerAsset") << "dump() : " << player->toString();
+    }
 
 protected:
     

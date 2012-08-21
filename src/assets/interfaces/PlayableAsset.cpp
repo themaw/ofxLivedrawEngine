@@ -79,13 +79,13 @@ void PlayableAsset::removePlayer(PlayerAssetInterface* player) {
 }
 
 //--------------------------------------------------------------
-void PlayableAsset::reportCacheComplete() {
+void PlayableAsset::reportCacheComplete(CacheableAsset* asset) {
+    cout << getName() << "  << I AM CONNECTED TO " << players.size() << " players." << endl;
     for(playersIter  = players.begin();
         playersIter != players.end();
         playersIter++) {
-        (*playersIter)->cacheComplete();
+        (*playersIter)->cacheComplete(asset);
     }
-    players.clear();
 }
 
 

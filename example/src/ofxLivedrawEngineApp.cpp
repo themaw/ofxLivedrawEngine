@@ -31,16 +31,33 @@ void ofxLivedrawEngineApp::setup(){
 	ofBackground(0);
 	//ofSetLogLevel(OF_LOG_VERBOSE);
     livedraw.setup();
+    
+    
+//    buffer = ofxSharedVideoBuffer(new ofxVideoBuffer());
+//    buffer->loadMovieAsync("media/oh.mov");
+//    
+//    player = ofxSharedVideoBufferPlayer(new ofxVideoBufferPlayer());
+//    player->loadVideoBuffer(buffer);
+//    //player->loadMovie("media/oh.mov");
+//    player->start();
+//
+    
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngineApp::update(){
     livedraw.update();
+//    buffer->update();
+//    player->update();
 }
 
 //--------------------------------------------------------------
 void ofxLivedrawEngineApp::draw(){
     livedraw.draw();
+//    ofBackground(0,255,0);
+//    ofSetColor(255);
+//    player->draw(100,100);
+    
 }
 
 //--------------------------------------------------------------

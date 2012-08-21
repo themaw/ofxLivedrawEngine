@@ -29,6 +29,8 @@
 class Layer;
 class AssetManager;
 class BaseMediaAsset;
+class CacheableAsset;
+
 class ofxLivedrawEngineInterface;
 
 class AssetManagerInterface {
@@ -41,5 +43,9 @@ public:
     virtual BaseMediaAsset* getAsset(const string& alias) const = 0;
     
     virtual ofxLivedrawEngineInterface* getEngineInterface() = 0;
+    
+    // caching interface
+    virtual void cacheAsset(CacheableAsset* asset) = 0;
+    virtual void uncacheAsset(CacheableAsset* asset) = 0;
     
 };

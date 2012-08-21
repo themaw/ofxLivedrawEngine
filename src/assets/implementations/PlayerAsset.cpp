@@ -25,7 +25,7 @@
 #include "PlayerAsset.h"
 
 //--------------------------------------------------------------
-PlayerAsset::PlayerAsset(AssetManagerInterface* man, const string& _name) : BaseMediaAsset(man){
+PlayerAsset::PlayerAsset(AssetManagerInterface* man, const string& _name) : BaseMediaAsset(man), PlayerAssetInterface(man) {
     
     canSource = true;
     
@@ -35,7 +35,7 @@ PlayerAsset::PlayerAsset(AssetManagerInterface* man, const string& _name) : Base
     
     player = ofPtr<ofxVideoBufferPlayer>(new ofxVideoBufferPlayer());
     
-    addOscMethod("buffer");
+    //addOscMethod("buffer");
     
     addOscMethod("start");
     addOscMethod("stop");
@@ -66,7 +66,6 @@ PlayerAsset::~PlayerAsset() {}
 //--------------------------------------------------------------
 void PlayerAsset::update() {
     player->update();
-    
     // everybody has some work to do
     ofxVideoSourceInterface::update();
 }
@@ -74,53 +73,43 @@ void PlayerAsset::update() {
 //--------------------------------------------------------------
 bool PlayerAsset::dispose() {
     detachFromSinks();
+    if(currentAssetLink != NULL) {
+        currentAssetLink->playerDisposed(this);
+    }
     return true;
 }
 
 //--------------------------------------------------------------
 void PlayerAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    ofLogNotice() << "PlayerAsset::processOscCommand(): " << getFirstOscNodeAlias() << " got a meessssaaaage!!!!" << endl;
-    
-    /*
-     if(isMatch(command,"buffer")) {
-     
-     cout << "buffer ";
-     
-     if(validateOscSignature("[s][sfi]?", m)) {
-     
-     string assetId = getArgAsStringUnchecked(m,0);
-     bool useDisk = getArgAsBoolean(m,1);
-     
-     cout << "asset=" << assetId << " useDisk= " << useDisk << endl; 
-     
-     if(hasParentLayer()) {
-     
-     cout << parentLayer->getEngine() << endl;;
-     
-     AssetManager* assets = parentLayer->getEngine()->getAssetManager();
-     
-     BaseMediaAsset* asset = assets->getAsset(assetId);
-     //assets->getAssetBackedBuffer(<#MediaAsset *asset#>, <#bool wantDiskBackedAsset#>)
-     
-     if(asset != NULL) {
-     //cout << asset->toString() << endl;
-     cout << "STRINGGGG" << endl;
-     } else {
-     cout << "INVALID ASSET.  Does not exist." << endl;
-     }
-     
-     
-     
-     
-     } else {
-     ofLog(OF_LOG_ERROR, "FrameBufferPlayer::const string& pattern, const ofxOscMessage& m(const string& pattern, ofxOscMessage& m)() - player has no parent layer!");
-     }
-     }
-     } else 
-     */
-    
-    if(isMatch(command,"start")) { 
+    if(isMatch(command,"load")) {
+        if(validateOscSignature("s", m)) {
+            string assetAlias = getArgAsStringUnchecked(m, 0);
+            
+            if(hasAssetManager()) {
+                BaseMediaAsset* asset = getAssetManager()->getAsset(assetAlias);
+                
+                if(asset != NULL) {
+                    if(asset->isPlayable()) {
+                        PlayableAsset* playableAsset = dynamic_cast<PlayableAsset*>(asset);
+                        if(playableAsset != NULL) {
+                            load(playableAsset);
+                        } else {
+                            ofLogError("PlayerAsset") << assetAlias << " could not be cast to a playable asset.";
+                        }
+                        
+                    } else {
+                        ofLogError("PlayerAsset") << assetAlias << " is not a playable asset.";
+                    }
+                } else {
+                    ofLogError("PlayerAsset") << "no asset called " << assetAlias << " exists.";
+                }
+            }
+            
+            
+            
+        }
+    } else if(isMatch(command,"start")) {
         player->start();
     } else if(isMatch(command,"stop")) {
         player->stop();
@@ -169,7 +158,7 @@ void PlayerAsset::processOscCommand(const string& command, const ofxOscMessage& 
         if(validateOscSignature("[fi]", m)) {
             player->setFrame(getArgAsFloatUnchecked(m,0));
         }
-    } else if(isMatch(command,"/framen")) {
+    } else if(isMatch(command,"framen")) {
         if(validateOscSignature("[fi]", m)) {
             player->setFrameNorm(getArgAsFloatUnchecked(m,0));
         }
@@ -177,24 +166,84 @@ void PlayerAsset::processOscCommand(const string& command, const ofxOscMessage& 
         if(validateOscSignature("[fi]", m)) {
             player->setSpeed(getArgAsFloatUnchecked(m,0));
         }
+    } else if(isMatch(command,"dump")) {
+        dump();
     } else {
         // unknown command
     }
 }
 
 //--------------------------------------------------------------
-void PlayerAsset::load(BufferAsset* buffer) {
+void PlayerAsset::load(PlayableAsset* asset) {
     
+    if(asset->getAssetType() == MEDIA_ASSET_MOVIE) {
+        MovieAsset* movie = dynamic_cast<MovieAsset*>(asset);
+        if(movie != NULL) {
+            
+            currentAssetLink = movie;
+            currentAssetLink->addPlayer(this);
+
+            if(movie->isCached() &&
+               movie->getCacheBuffer() != NULL &&
+               movie->getCacheBuffer()->getBuffer() != NULL) {
+                movie->getCacheBuffer()->addPlayer(this); // link player to buffer
+                
+                // TODO, if buffer is deleted, attempt to buffer's parent file
+                
+                player->loadVideoBuffer(movie->getCacheBuffer()->getBuffer());
+            } else {
+                player->loadMovie(movie->getFilename());
+            }
+            
+        } else {
+            ofLogError("PlayerAsset") << "::load : unable to load, dynamic cast failed.";
+        }
+        
+    } else if(asset->getAssetType() == MEDIA_ASSET_BUFFER) {
+        BufferAsset* buffer = dynamic_cast<BufferAsset*>(asset);
+        if(buffer != NULL) {
+            currentAssetLink = buffer;
+            currentAssetLink->addPlayer(this);
+            player->loadVideoBuffer(buffer->getBuffer());
+        } else {
+            ofLogError("PlayerAsset") << "::load : unable to load, dynamic cast failed.";
+        }
+        
+    } else {
+        ofLogError("PlayerAsset") << "::load : a playable asset, but unknown type : " << asset->getAssetType();
+    }
+
 }
 
 //--------------------------------------------------------------
-void PlayerAsset::load(ImageAsset* image) {
-    
-}
+void PlayerAsset::cacheComplete(CacheableAsset* asset) {
+    ofLogError("PlayerAsset") << "::cacheComplete from " << getName() << " reported () " ;
 
-//--------------------------------------------------------------
-void PlayerAsset::load(MovieAsset* movie) {
+    if(currentAssetLink != NULL) {
+        if(currentAssetLink->isCacheable()) {
+            CacheableAsset* currentAssetLinkAsCachable = dynamic_cast<CacheableAsset*>(currentAssetLink);
+            if(currentAssetLinkAsCachable == asset) {
+                cout << "0. >>" << player->toString() << endl;
+                player->replaceMovieWithBuffer(asset->getCacheBuffer()->getBuffer());
+                cout << "1. >>" << player->toString() << endl;
+                
+                
+            } else {
+               
+                cout << "not a match" << endl;
+                // the incoming asset did not match our currently linked asset
+            }
+        
+        } else {
+            cout << "not cachable" << endl;
+            // was not cachable.  odd.
+        }
+    } else {
+        cout << "was null" << endl;
+        // was null
+    }
     
+    cout << "done." << endl;
 }
 
 //--------------------------------------------------------------
@@ -224,17 +273,10 @@ void PlayerAsset::open()   {
 
 //--------------------------------------------------------------
 void PlayerAsset::close() {
-    ofLogVerbose() << "PlayerAsset::close(): is not implemented.";
+    player->close();
 }
 
 //--------------------------------------------------------------
 bool PlayerAsset::isLoaded() {
     return player->isLoaded();
 }
-
-
-//--------------------------------------------------------------
-ofPtr<ofxVideoBufferPlayer> PlayerAsset::getPlayer() {
-    return player;
-}
-

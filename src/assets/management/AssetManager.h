@@ -31,7 +31,6 @@
 #include "ofxLivedrawEngineInterface.h"
 
 #include "ofxOscRouterNode.h"
-#include "CacheProvider.h"
 #include "DiskBasedAsset.h"
 #include "CacheableAsset.h"
 
@@ -45,7 +44,6 @@
 #include "SyphonAsset.h"
 
 class AssetManager : public ofxOscRouterNode, 
-                     public CacheProvider,
                      public AssetManagerInterface
 {
 public:
@@ -97,8 +95,8 @@ protected:
     bool queueUnregisterAsset(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
-    bool cacheAsset(CacheableAsset* asset);
-    bool uncacheAsset(CacheableAsset* asset);
+    void cacheAsset(CacheableAsset* asset);
+    void uncacheAsset(CacheableAsset* asset);
 
     bool startAsset(const string& alias);
     bool stopAsset(const string& alias);
@@ -113,7 +111,6 @@ protected:
     
     int getTotalNumAssets();
     int getTotalNumAssets(MediaAssetType assetType);
-    int getNumAssetsInRegisterQueue(MediaAssetType assetType);
     int getNumAssetsInUnregisterQueue(MediaAssetType assetType);
     int getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset*> _assets);
 
@@ -133,13 +130,17 @@ private:
 
     string validateAssetId(const string& name);
 
-    set<BaseMediaAsset*> registerQueue; // items are scheduled for registration here.
+    //set<BaseMediaAsset*> registerQueue; // items are scheduled for registration here.
     set<BaseMediaAsset*> unregisterQueue; // items are scheduled for removal here.
     
 	set<BaseMediaAsset*> assets;   // this is the actual collection of assets that have been allocated
 	set<BaseMediaAsset*>::iterator assetsIter;   // this is the actual collection of assets that have been allocated
     
     map<string,BaseMediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
+    
+    
+    set<CacheableAsset*> assetsBeingCached;   // this is the actual collection of assets that have been allocated
+    set<CacheableAsset*>::iterator assetsBeingCachedIter;
     
     ofDirectory dir;
     

@@ -37,6 +37,8 @@
 		FD118B0D15AE31F900532B54 /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD118B0C15AE31F900532B54 /* Syphon.framework */; };
 		FD118B1515AE465500532B54 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD118B1115AE465500532B54 /* Syphon.framework */; };
 		FD118B1615AE465500532B54 /* SyphonNameboundClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FD118B1415AE465500532B54 /* SyphonNameboundClient.m */; };
+		FD25AB5715DC4405002BC27A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD25AB5615DC4405002BC27A /* QuartzCore.framework */; };
+		FD25AB5915DC4414002BC27A /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD25AB5815DC4414002BC27A /* QTKit.framework */; };
 		FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740D15607A6E006323C7 /* EffectsChain.cpp */; };
 		FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740F15607A6E006323C7 /* EffectsManager.cpp */; };
 		FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741415607A6E006323C7 /* CanvasGroup.cpp */; };
@@ -55,6 +57,7 @@
 		FD3F853B156066F40022CE42 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F8528156066F40022CE42 /* tinyxmlparser.cpp */; };
 		FD3F853C156066F40022CE42 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F852A156066F40022CE42 /* ofxXmlSettings.cpp */; };
 		FD480F21155F029500660A6F /* ofxIpVideoGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD480F18155F029500660A6F /* ofxIpVideoGrabber.cpp */; };
+		FD49220515D980EB00E72D68 /* PlayableAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD49220415D980EA00E72D68 /* PlayableAsset.cpp */; };
 		FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53218F15B0B68600B3517B /* ofxOscRouterNode.cpp */; };
 		FD6FD75615AF3ABD00DABC38 /* ofxOscRouterEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */; };
 		FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */; };
@@ -137,7 +140,6 @@
 		FD084F3215AFB009001CC08F /* SyphonAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyphonAsset.cpp; sourceTree = "<group>"; };
 		FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CacheableAsset.cpp; sourceTree = "<group>"; };
 		FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskBasedAsset.cpp; sourceTree = "<group>"; };
-		FD084F3C15AFC0C3001CC08F /* CacheProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheProvider.h; sourceTree = "<group>"; };
 		FD118AA615AE25A900532B54 /* ofxSyphon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphon.h; sourceTree = "<group>"; };
 		FD118AA715AE25A900532B54 /* ofxSyphonClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonClient.h; sourceTree = "<group>"; };
 		FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonClient.mm; sourceTree = "<group>"; };
@@ -152,6 +154,8 @@
 		FD12C05015B720700031D2E6 /* ofxDataBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDataBuffer.h; sourceTree = "<group>"; };
 		FD12C05115B720700031D2E6 /* ofxRandomSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxRandomSampler.h; sourceTree = "<group>"; };
 		FD12C05315B720700031D2E6 /* ofxClampedPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxClampedPoint.h; sourceTree = "<group>"; };
+		FD25AB5615DC4405002BC27A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../../../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
+		FD25AB5815DC4414002BC27A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = ../../../../../../../../../System/Library/Frameworks/QTKit.framework; sourceTree = "<group>"; };
 		FD26740C15607A6E006323C7 /* AbstractShaderEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractShaderEffect.h; sourceTree = "<group>"; };
 		FD26740D15607A6E006323C7 /* EffectsChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsChain.cpp; sourceTree = "<group>"; };
 		FD26740E15607A6E006323C7 /* EffectsChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsChain.h; sourceTree = "<group>"; };
@@ -190,6 +194,9 @@
 		FD3F852B156066F40022CE42 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
 		FD480F18155F029500660A6F /* ofxIpVideoGrabber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxIpVideoGrabber.cpp; sourceTree = "<group>"; };
 		FD480F19155F029500660A6F /* ofxIpVideoGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxIpVideoGrabber.h; sourceTree = "<group>"; };
+		FD49220315D9792700E72D68 /* PlayableAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayableAsset.h; sourceTree = "<group>"; };
+		FD49220415D980EA00E72D68 /* PlayableAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayableAsset.cpp; sourceTree = "<group>"; };
+		FD49221015D9A8C000E72D68 /* PlayerAssetInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerAssetInterface.h; sourceTree = "<group>"; };
 		FD53218E15B0B67500B3517B /* ofxOscRouterNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscRouterNode.h; sourceTree = "<group>"; };
 		FD53218F15B0B68600B3517B /* ofxOscRouterNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouterNode.cpp; sourceTree = "<group>"; };
 		FD6856D815A76C52005F9A08 /* ofxVideoGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoGrabber.h; sourceTree = "<group>"; };
@@ -241,6 +248,7 @@
 		FDB9C43515641551005AA48E /* ofxOscReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOscReceiver.h; sourceTree = "<group>"; };
 		FDB9C43615641551005AA48E /* ofxOscSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscSender.cpp; sourceTree = "<group>"; };
 		FDB9C43715641551005AA48E /* ofxOscSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxOscSender.h; sourceTree = "<group>"; };
+		FDBF590D15DAD2B300A4D7E7 /* AssetManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetManagerInterface.h; sourceTree = "<group>"; };
 		FDD38B0D15D191240066ABC1 /* alphanum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = alphanum.hpp; sourceTree = "<group>"; };
 		FDD38B1315D1913E0066ABC1 /* ofxStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxStringUtils.cpp; sourceTree = "<group>"; };
 		FDD38B1415D1913E0066ABC1 /* ofxStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxStringUtils.h; sourceTree = "<group>"; };
@@ -283,6 +291,8 @@
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 				FDEA183B15645D3E0064F235 /* osc.a in Frameworks */,
 				FD118B1515AE465500532B54 /* Syphon.framework in Frameworks */,
+				FD25AB5715DC4405002BC27A /* QuartzCore.framework in Frameworks */,
+				FD25AB5915DC4414002BC27A /* QTKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +320,8 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FD25AB5815DC4414002BC27A /* QTKit.framework */,
+				FD25AB5615DC4405002BC27A /* QuartzCore.framework */,
 				E4C2424410CC5A17004149E2 /* AppKit.framework */,
 				E4C2424510CC5A17004149E2 /* Cocoa.framework */,
 				E4C2424610CC5A17004149E2 /* IOKit.framework */,
@@ -947,6 +959,9 @@
 				FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */,
 				FDF978DA15A80FD2000ADECA /* DiskBasedAsset.h */,
 				FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */,
+				FD49220315D9792700E72D68 /* PlayableAsset.h */,
+				FD49220415D980EA00E72D68 /* PlayableAsset.cpp */,
+				FD49221015D9A8C000E72D68 /* PlayerAssetInterface.h */,
 			);
 			path = interfaces;
 			sourceTree = "<group>";
@@ -956,7 +971,7 @@
 			children = (
 				FDF978DE15A80FD2000ADECA /* AssetManager.cpp */,
 				FDF978DF15A80FD2000ADECA /* AssetManager.h */,
-				FD084F3C15AFC0C3001CC08F /* CacheProvider.h */,
+				FDBF590D15DAD2B300A4D7E7 /* AssetManagerInterface.h */,
 			);
 			path = management;
 			sourceTree = "<group>";
@@ -1107,6 +1122,7 @@
 				FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */,
 				FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */,
 				FDD38B1515D1913E0066ABC1 /* ofxStringUtils.cpp in Sources */,
+				FD49220515D980EB00E72D68 /* PlayableAsset.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1199,6 +1215,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
+				SDKROOT = macosx10.6;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1224,6 +1241,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.6;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
