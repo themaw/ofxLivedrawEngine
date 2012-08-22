@@ -60,6 +60,10 @@ public:
     CacheableAsset* getCacheSource();
     ofPtr<ofxVideoBuffer> getBuffer();
         
+    void sink(const string& asset); // only allow to sink one source for now.
+    void unsink();
+    
+    
 protected:
     CacheableAsset* cacheSource;
     ofxSharedVideoBuffer buffer;

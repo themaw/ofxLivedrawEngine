@@ -62,7 +62,17 @@ bool BufferAsset::dispose() {
 
 //--------------------------------------------------------------
 void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    if(isMatch(command,"type")) {
+    if(isMatch(command,"record")) {
+        if(validateOscSignature("[sfi]",m)) {
+            setSinking(getArgAsBoolean(m,0));
+        }
+    } else if(isMatch(command,"sink")) {
+        if(validateOscSignature("[s]",m)) {
+            sink(getArgAsStringUnchecked(m,0));
+        }
+    } else if(isMatch(command,"unsink")) {
+        unsink();
+    } else if(isMatch(command,"type")) {
         if(validateOscSignature("[s]",m)) {
             string type = getArgAsStringUnchecked(m,0);
             if(isMatch(type, "norm") || isMatch(type, "fixed") || isMatch(type, "default")) {
@@ -107,7 +117,6 @@ bool BufferAsset::isLoading() const {
     return buffer->isLoading();
 }
 
-
 //--------------------------------------------------------------
 bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {
     if(isSinking()) {
@@ -134,3 +143,29 @@ void BufferAsset::unlinkCacheSource() {
 ofPtr<ofxVideoBuffer> BufferAsset::getBuffer() {
     return buffer;
 }
+
+//--------------------------------------------------------------
+void BufferAsset::sink(const string& asset) {
+    if(assetManager != NULL) {
+        ofxVideoSourceInterface* src = assetManager->getSourceAsset(asset);
+        if(src != NULL) {
+            if(!hasSource(src)) {
+                unsink(); // release any current ones
+                src->attachToSink(this);
+            } else {
+                ofLogError("BufferAsset") << "sink: " << asset << " was already attached.  Ignoring.";
+            }
+        } else {
+            ofLogError("BufferAsset") << "sink: " << asset << " was not a valid source.";
+        }
+    } else {
+        ofLogError("BufferAsset") << "sink: AssetManager was NULL.";
+    }
+    
+}
+
+//--------------------------------------------------------------
+void BufferAsset::unsink() {
+    detachFromSources();
+}
+
