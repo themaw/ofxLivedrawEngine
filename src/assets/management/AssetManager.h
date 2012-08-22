@@ -58,8 +58,8 @@ public:
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
     
-    ofxVideoSourceInterface* getSourceAsset(const string& alias);
-    ofxVideoSinkInterface*   getSinkAsset(const string& alias);
+    ofxVideoSourceInterface* getSourceAsset(const string& alias) const;
+    ofxVideoSinkInterface*   getSinkAsset(const string& alias) const;
     
     void attachSourceToSink(const string& sourceAlias, const string& sinkAlias);
     

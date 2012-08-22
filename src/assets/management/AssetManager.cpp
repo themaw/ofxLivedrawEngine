@@ -183,7 +183,7 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
 }
 
 //--------------------------------------------------------------
-ofxVideoSourceInterface* AssetManager::getSourceAsset(const string& alias) {
+ofxVideoSourceInterface* AssetManager::getSourceAsset(const string& alias) const {
     BaseMediaAsset* sourceAsset = getAsset(alias);
 
     if(sourceAsset == NULL) {
@@ -206,7 +206,7 @@ ofxVideoSourceInterface* AssetManager::getSourceAsset(const string& alias) {
 }
 
 //--------------------------------------------------------------
-ofxVideoSinkInterface* AssetManager::getSinkAsset(const string& alias) {
+ofxVideoSinkInterface* AssetManager::getSinkAsset(const string& alias) const {
     BaseMediaAsset* sinkAsset = getAsset(alias);
     
     if(sinkAsset == NULL) {
@@ -757,7 +757,7 @@ void AssetManager::updateAssets() {
                     PlayableAsset* a = toPlayableAsset(*assetsBeingCachedIter);
                     CacheableAsset* b = toCacheableAsset(*assetsBeingCachedIter);
                     if(a != NULL && b != NULL) {
-                        cout << "reporting cache complete!" << endl;
+//                        cout << "reporting cache complete!" << endl;
                         a->reportCacheComplete(b);
                     }
                 }
