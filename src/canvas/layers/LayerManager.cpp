@@ -40,9 +40,9 @@ LayerManager::LayerManager() : ofxOscRouterNode("layers") {
 //--------------------------------------------------------------
 LayerManager::~LayerManager() {
     for (it = layers.begin(); it != layers.end(); it++) {
-        delete *it;
-        layers.erase(*it++);
+        delete *it; // free it
     }
+    layers.clear(); // clear it;
 }
 
 //--------------------------------------------------------------
