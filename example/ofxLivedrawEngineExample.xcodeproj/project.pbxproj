@@ -60,6 +60,7 @@
 		FD49220515D980EB00E72D68 /* PlayableAsset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD49220415D980EA00E72D68 /* PlayableAsset.cpp */; };
 		FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53218F15B0B68600B3517B /* ofxOscRouterNode.cpp */; };
 		FD6FD75615AF3ABD00DABC38 /* ofxOscRouterEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */; };
+		FD78004115E4596F0002D634 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD78004015E4596F0002D634 /* Accelerate.framework */; };
 		FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */; };
 		FD8B972F156441710099B79F /* osc_match.c in Sources */ = {isa = PBXBuildFile; fileRef = FD8B9727156441710099B79F /* osc_match.c */; };
 		FD8B9730156441710099B79F /* ofxOscRouter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8B972B156441710099B79F /* ofxOscRouter.cpp */; };
@@ -140,6 +141,8 @@
 		FD084F3215AFB009001CC08F /* SyphonAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyphonAsset.cpp; sourceTree = "<group>"; };
 		FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CacheableAsset.cpp; sourceTree = "<group>"; };
 		FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskBasedAsset.cpp; sourceTree = "<group>"; };
+		FD0C343715E585E800840ADD /* ofxPSBlend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPSBlend.h; sourceTree = "<group>"; };
+		FD0C343D15E586F700840ADD /* ofxPSBlend_Mod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPSBlend_Mod.h; sourceTree = "<group>"; };
 		FD118AA615AE25A900532B54 /* ofxSyphon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphon.h; sourceTree = "<group>"; };
 		FD118AA715AE25A900532B54 /* ofxSyphonClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonClient.h; sourceTree = "<group>"; };
 		FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonClient.mm; sourceTree = "<group>"; };
@@ -205,6 +208,7 @@
 		FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouterEvent.cpp; sourceTree = "<group>"; };
 		FD6FD75D15AF62A300DABC38 /* CacheableAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheableAsset.h; sourceTree = "<group>"; };
 		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxLivedrawEngineInterface.h; path = utilities/ofxLivedrawEngineInterface.h; sourceTree = "<group>"; };
+		FD78004015E4596F0002D634 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../../../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
 		FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerRenderSink.h; sourceTree = "<group>"; };
 		FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerRenderSink.cpp; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
@@ -293,6 +297,7 @@
 				FD118B1515AE465500532B54 /* Syphon.framework in Frameworks */,
 				FD25AB5715DC4405002BC27A /* QuartzCore.framework in Frameworks */,
 				FD25AB5915DC4414002BC27A /* QTKit.framework in Frameworks */,
+				FD78004115E4596F0002D634 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +307,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				FD0C341D15E585E700840ADD /* ofxPSBlend */,
 				FDD38B0415D18F4F0066ABC1 /* ofxStringUtils */,
 				FD118A8A15AE25A900532B54 /* ofxSyphon */,
 				FD8DEB2A15A64AE000AD0DE3 /* ofxUtils */,
@@ -320,6 +326,7 @@
 		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FD78004015E4596F0002D634 /* Accelerate.framework */,
 				FD25AB5815DC4414002BC27A /* QTKit.framework */,
 				FD25AB5615DC4405002BC27A /* QuartzCore.framework */,
 				E4C2424410CC5A17004149E2 /* AppKit.framework */,
@@ -393,6 +400,24 @@
 				E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */,
 			);
 			name = openFrameworks;
+			sourceTree = "<group>";
+		};
+		FD0C341D15E585E700840ADD /* ofxPSBlend */ = {
+			isa = PBXGroup;
+			children = (
+				FD0C343615E585E800840ADD /* src */,
+			);
+			name = ofxPSBlend;
+			path = ../../ofxPSBlend;
+			sourceTree = "<group>";
+		};
+		FD0C343615E585E800840ADD /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FD0C343D15E586F700840ADD /* ofxPSBlend_Mod.h */,
+				FD0C343715E585E800840ADD /* ofxPSBlend.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		FD118A8A15AE25A900532B54 /* ofxSyphon */ = {
