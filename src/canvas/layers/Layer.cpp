@@ -80,8 +80,8 @@ void Layer::init() {
     // fbo
     useMSAA = true;
     
-    getTransform()->setWidth(80);
-    getTransform()->setHeight(60); // standard canvas layer size
+    getTransform()->setWidth(320);
+    getTransform()->setHeight(240); // standard canvas layer size
     
     addOscChild(&transform); // add the transform as an OSC child
     //    addOscChild(&effectsChain); // add the associated effects chain as a child
@@ -141,7 +141,7 @@ bool Layer::sendToBack() {
 //--------------------------------------------------------------
 void Layer::sinkInput(int index, const string& asset) {
     if(index >= inputs.size()) {
-        ofLogError() << "Layer::sinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
+        ofLogError("Layer") << "sinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
         return;
     }
     
@@ -156,20 +156,20 @@ void Layer::sinkInput(int index, const string& asset) {
                         unsinkInput(index); // release any current ones
                         src->attachToSink(&inputs[index]);
                     } else {
-                        ofLogError() << "Layer::sinkSource: " << asset << " was already attached.  Ignoring.";
+                        ofLogError("Layer") << "sinkSource: " << asset << " was already attached.  Ignoring.";
                     }
                     
                 } else {
-                    ofLogError() << "Layer::sinkSource: " << asset << " was not a valid source.";
+                    ofLogError("Layer") << "sinkSource: " << asset << " was not a valid source.";
                 }
             } else {
-                ofLogError() << "Layer::sinkSource: AssetManager was NULL.";
+                ofLogError("Layer") << "sinkSource: AssetManager was NULL.";
             }
         } else {
-            ofLogError() << "Layer::sinkSource: ofxLivedrawEngineInterface was NULL.";
+            ofLogError("Layer") << "sinkSource: ofxLivedrawEngineInterface was NULL.";
         }
     } else {
-        ofLogError() << "Layer::sinkSource: LayerManagerInterface was NULL.";
+        ofLogError("Layer") << "sinkSource: LayerManagerInterface was NULL.";
     }
 
 }
@@ -177,7 +177,7 @@ void Layer::sinkInput(int index, const string& asset) {
 //--------------------------------------------------------------
 void Layer::sinkMask(int index, const string& asset) {
     if(index >= masks.size()) {
-        ofLogError() << "Layer::sinkMask: invalid source index.  Must be less than " << masks.size() << ".";
+        ofLogError("Layer") << "sinkMask: invalid source index.  Must be less than " << masks.size() << ".";
         return;
     }
     
@@ -191,16 +191,16 @@ void Layer::sinkMask(int index, const string& asset) {
                     unsinkMask(index); // release any current ones
                     src->attachToSink(&masks[index]);
                 } else {
-                    ofLogError() << "Layer::sinkMask: " << asset << " was not a valid source.";
+                    ofLogError("Layer") << "sinkMask: " << asset << " was not a valid source.";
                 }
             } else {
-                ofLogError() << "Layer::sinkMask: AssetManager was NULL.";
+                ofLogError("Layer") << "sinkMask: AssetManager was NULL.";
             }
         } else {
-            ofLogError() << "Layer::sinkMask: ofxLivedrawEngineInterface was NULL.";
+            ofLogError("Layer") << "sinkMask: ofxLivedrawEngineInterface was NULL.";
         }
     } else {
-        ofLogError() << "Layer::sinkMask: LayerManagerInterface was NULL.";
+        ofLogError("Layer") << "sinkMask: LayerManagerInterface was NULL.";
     }
 
 }
@@ -210,7 +210,7 @@ void Layer::unsinkInput(int index) {
     if(index < inputs.size()) {
         inputs[index].detachFromSources();
     } else {
-        ofLogError() << "Layer::unsinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
+        ofLogError("Layer") << "unsinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
     }
 }
 
@@ -219,7 +219,7 @@ void Layer::unsinkMask(int index) {
     if(index < masks.size()) {
         masks[index].detachFromSources();
     } else {
-        ofLogError() << "Layer::unsinkMask: invalid source index.  Must be less than " << masks.size() << ".";
+        ofLogError("Layer") << "unsinkMask: invalid source index.  Must be less than " << masks.size() << ".";
         return;
     }
 }
@@ -229,7 +229,7 @@ void Layer::clearInput(int index) {
     if(index < inputs.size()) {
         inputs[index].clear();
     } else {
-        ofLogError() << "Layer::unsinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
+        ofLogError("Layer") << "unsinkSource: invalid source index.  Must be less than " << inputs.size() << ".";
     }
 }
 
@@ -238,7 +238,7 @@ void Layer::clearMask(int index) {
     if(index < masks.size()) {
         masks[index].clear();
     } else {
-        ofLogError() << "Layer::unsinkMask: invalid source index.  Must be less than " << masks.size() << ".";
+        ofLogError("Layer") << "unsinkMask: invalid source index.  Must be less than " << masks.size() << ".";
         return;
     }
 }
@@ -510,7 +510,7 @@ void Layer::draw() {
     }
     
     ofPoint p = xform->getPosition();
-    if(xform->isPositionNormalized()) ofLogWarning() << "Normalized position is not yet supported.";
+    if(xform->isPositionNormalized()) ofLogWarning("Layer") << "Normalized position is not yet supported.";
 
     ofPoint r = xform->getRotation();
     if(xform->isRotationNormalized()) r *= 360.0f;
@@ -656,7 +656,7 @@ void Layer::drawFrame(ofxSharedVideoFrame frame) {
         frame->draw(0,0,w,h);
     } else {
         frame->draw(0,0,w,h);
-        ofLogWarning() << "Layer::update(): Unknown layer stretch mode." << endl;
+        ofLogWarning("Layer") << "update(): Unknown layer stretch mode." << endl;
     }
 
 }
