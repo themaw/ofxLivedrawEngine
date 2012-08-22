@@ -85,8 +85,6 @@ protected:
     
     AssetManagerInterface* assetManager;
 
-
-    
     set<string> aliases; // normal ascending order, reverse iterate later
     
     MediaAssetType assetType;
