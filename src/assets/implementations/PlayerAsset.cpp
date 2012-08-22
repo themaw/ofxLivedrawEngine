@@ -35,8 +35,11 @@ PlayerAsset::PlayerAsset(AssetManagerInterface* man, const string& _name) : Base
     
     player = ofPtr<ofxVideoBufferPlayer>(new ofxVideoBufferPlayer());
     
-    //addOscMethod("buffer");
+    currentAssetLink = NULL;
     
+    //addOscMethod("buffer");
+
+    addOscMethod("play");
     addOscMethod("start");
     addOscMethod("stop");
     addOscMethod("pause");
@@ -73,6 +76,7 @@ void PlayerAsset::update() {
 //--------------------------------------------------------------
 bool PlayerAsset::dispose() {
     detachFromSinks();
+    
     if(currentAssetLink != NULL) {
         currentAssetLink->playerDisposed(this);
     }
@@ -189,7 +193,7 @@ void PlayerAsset::load(PlayableAsset* asset) {
                 movie->getCacheBuffer()->addPlayer(this); // link player to buffer
                 
                 // TODO, if buffer is deleted, attempt to buffer's parent file
-                
+                cout << "in here!" << endl;
                 player->loadVideoBuffer(movie->getCacheBuffer()->getBuffer());
             } else {
                 player->loadMovie(movie->getFilename());
@@ -217,15 +221,17 @@ void PlayerAsset::load(PlayableAsset* asset) {
 
 //--------------------------------------------------------------
 void PlayerAsset::cacheComplete(CacheableAsset* asset) {
-    ofLogError("PlayerAsset") << "::cacheComplete from " << getName() << " reported () " ;
+    //ofLogError("PlayerAsset") << "::cacheComplete from " << getName() << " reported () " ;
 
     if(currentAssetLink != NULL) {
         if(currentAssetLink->isCacheable()) {
             CacheableAsset* currentAssetLinkAsCachable = dynamic_cast<CacheableAsset*>(currentAssetLink);
             if(currentAssetLinkAsCachable == asset) {
-                cout << "0. >>" << player->toString() << endl;
+//                cout << "0. >>" << player->toString() << endl;
+//                cout << "hs0:="<<hasSinks() << endl;;
                 player->replaceMovieWithBuffer(asset->getCacheBuffer()->getBuffer());
-                cout << "1. >>" << player->toString() << endl;
+//                cout << "1. >>" << player->toString() << endl;
+//                cout << "hs1:="<<hasSinks() << endl;;
                 
                 
             } else {
@@ -243,7 +249,7 @@ void PlayerAsset::cacheComplete(CacheableAsset* asset) {
         // was null
     }
     
-    cout << "done." << endl;
+   // cout << "done." << endl;
 }
 
 //--------------------------------------------------------------
