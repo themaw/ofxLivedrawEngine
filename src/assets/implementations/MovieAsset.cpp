@@ -39,10 +39,10 @@ MovieAsset::~MovieAsset() {}
 void MovieAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     CacheableAsset::processOscCommand(command, m);
     
-    cout << "movie asset got a command" << endl;
+//    cout << "movie asset got a command" << endl;
     
     
-    cout << "MOVIEDASSET: " << getName() << " we are connected to : " << players.size() << " players." << endl;
+//    cout << "MOVIEDASSET: " << getName() << " we are connected to : " << players.size() << " players." << endl;
     
 }
 
