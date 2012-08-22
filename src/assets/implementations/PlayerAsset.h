@@ -67,9 +67,14 @@ public:
     void dump() {
         ofLogNotice("PlayerAsset") << "dump() : " << player->toString();
     }
-
+    
 protected:
     
+    bool isPlayingCached() {
+        
+    }
+    
     PlayableAsset* currentAssetLink;
+    
     ofPtr<ofxVideoBufferPlayer> player;
 };
