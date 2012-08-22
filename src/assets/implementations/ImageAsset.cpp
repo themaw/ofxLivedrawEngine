@@ -54,7 +54,7 @@ void ImageAsset::update() {
 
 //--------------------------------------------------------------
 void ImageAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    ofLogNotice() << "ImageAsset::processOscCommand() processing image asset command " << getName() << endl;
+    ofLogNotice() << "ImageAsset::processOscCommand() processing image asset command " << getName();
 }
 
 //--------------------------------------------------------------
