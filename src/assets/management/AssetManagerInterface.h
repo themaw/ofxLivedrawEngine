@@ -33,6 +33,9 @@ class CacheableAsset;
 
 class ofxLivedrawEngineInterface;
 
+class ofxVideoSourceInterface;
+class ofxVideoSinkInterface;
+
 class AssetManagerInterface {
 public:
     AssetManagerInterface() {}
@@ -41,6 +44,9 @@ public:
     virtual bool hasAlias(const string& alias) const = 0;
 
     virtual BaseMediaAsset* getAsset(const string& alias) const = 0;
+    
+    virtual ofxVideoSourceInterface* getSourceAsset(const string& alias) const = 0;
+    virtual ofxVideoSinkInterface* getSinkAsset(const string& alias) const = 0;
     
     virtual ofxLivedrawEngineInterface* getEngineInterface() = 0;
     
