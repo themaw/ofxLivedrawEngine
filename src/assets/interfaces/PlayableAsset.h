@@ -43,6 +43,7 @@ public:
     void loadedByPlayer(PlayerAssetInterface* player);
     void playerDisposed(PlayerAssetInterface* player);
     
+    bool hasPlayers() const;
     int  getNumPlayers() const;
     bool hasPlayer(PlayerAssetInterface* player) const;
     void addPlayer(PlayerAssetInterface* player);
@@ -51,6 +52,8 @@ public:
     void reportCacheComplete(CacheableAsset* asset);
     
     void detatchFromAllPlayers();
+    
+    std::set<PlayerAssetInterface*>& getPlayersRef();
     
 protected:
     

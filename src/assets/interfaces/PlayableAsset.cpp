@@ -51,6 +51,11 @@ void PlayableAsset::playerDisposed(PlayerAssetInterface* player) {
 }
 
 //--------------------------------------------------------------
+bool PlayableAsset::hasPlayers() const {
+    return !players.empty();
+}
+
+//--------------------------------------------------------------
 int  PlayableAsset::getNumPlayers() const {
     return players.size();
 }
@@ -80,7 +85,7 @@ void PlayableAsset::removePlayer(PlayerAssetInterface* player) {
 
 //--------------------------------------------------------------
 void PlayableAsset::reportCacheComplete(CacheableAsset* asset) {
-    cout << getName() << "  << I AM CONNECTED TO " << players.size() << " players." << endl;
+    //cout << getName() << "  << I AM CONNECTED TO " << players.size() << " players." << endl;
     for(playersIter  = players.begin();
         playersIter != players.end();
         playersIter++) {
@@ -97,5 +102,10 @@ void PlayableAsset::detatchFromAllPlayers() {
         (*playersIter)->close();
     }
     players.clear();
+}
+
+//--------------------------------------------------------------
+std::set<PlayerAssetInterface*>& PlayableAsset::getPlayersRef() {
+    return players;
 }
 
