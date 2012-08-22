@@ -74,7 +74,7 @@ ofxOscRouterNode("transform") {
 
     orientation = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     
-    opacity = 127;
+    opacity = 255;
     bIsOpacityNormalized = false;
 
 }
