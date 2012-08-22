@@ -50,6 +50,15 @@ public:
     BufferAsset* getCacheBuffer();
     void setCacheBuffer(BufferAsset* _cacheBuffer);
     
+    bool isCacheSinking() {
+        return getCacheBuffer()->isSinking();
+    }
+
+    bool isCachePlaying() {
+        return getCacheBuffer()->getNumPlayers() > 0;
+    }
+
+    
 protected:
 
     virtual void doCache()   = 0; // must implement in subclasses
