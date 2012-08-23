@@ -141,8 +141,6 @@
 		FD084F3215AFB009001CC08F /* SyphonAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SyphonAsset.cpp; sourceTree = "<group>"; };
 		FD084F3415AFB0E3001CC08F /* CacheableAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CacheableAsset.cpp; sourceTree = "<group>"; };
 		FD084F3615AFB156001CC08F /* DiskBasedAsset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskBasedAsset.cpp; sourceTree = "<group>"; };
-		FD0C343715E585E800840ADD /* ofxPSBlend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPSBlend.h; sourceTree = "<group>"; };
-		FD0C343D15E586F700840ADD /* ofxPSBlend_Mod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPSBlend_Mod.h; sourceTree = "<group>"; };
 		FD118AA615AE25A900532B54 /* ofxSyphon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphon.h; sourceTree = "<group>"; };
 		FD118AA715AE25A900532B54 /* ofxSyphonClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSyphonClient.h; sourceTree = "<group>"; };
 		FD118AA815AE25A900532B54 /* ofxSyphonClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxSyphonClient.mm; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				FD0C341D15E585E700840ADD /* ofxPSBlend */,
 				FDD38B0415D18F4F0066ABC1 /* ofxStringUtils */,
 				FD118A8A15AE25A900532B54 /* ofxSyphon */,
 				FD8DEB2A15A64AE000AD0DE3 /* ofxUtils */,
@@ -400,24 +397,6 @@
 				E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */,
 			);
 			name = openFrameworks;
-			sourceTree = "<group>";
-		};
-		FD0C341D15E585E700840ADD /* ofxPSBlend */ = {
-			isa = PBXGroup;
-			children = (
-				FD0C343615E585E800840ADD /* src */,
-			);
-			name = ofxPSBlend;
-			path = ../../ofxPSBlend;
-			sourceTree = "<group>";
-		};
-		FD0C343615E585E800840ADD /* src */ = {
-			isa = PBXGroup;
-			children = (
-				FD0C343D15E586F700840ADD /* ofxPSBlend_Mod.h */,
-				FD0C343715E585E800840ADD /* ofxPSBlend.h */,
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 		FD118A8A15AE25A900532B54 /* ofxSyphon */ = {
