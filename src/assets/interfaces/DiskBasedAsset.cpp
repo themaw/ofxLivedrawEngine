@@ -35,7 +35,7 @@ DiskBasedAsset::~DiskBasedAsset() {}
 
 //--------------------------------------------------------------
 void DiskBasedAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
-    cout << "Disk based asset got a osc." << endl;
+    ofLogVerbose("DiskBasedAsset") << "Disk based asset got a osc.";
 }
 
 //--------------------------------------------------------------

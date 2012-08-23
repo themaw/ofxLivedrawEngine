@@ -94,7 +94,7 @@ AssetManager::AssetManager() : ofxOscRouterNode("media") {
 
 //--------------------------------------------------------------
 AssetManager::~AssetManager() {
-    ofLog(OF_LOG_NOTICE, "AssetManager::~AssetManager() : Destroying Asset Manager.");
+    ofLogNotice("AssetManager") << "Destroying Asset Manager.";
 }
 
 //--------------------------------------------------------------
@@ -187,18 +187,18 @@ ofxVideoSourceInterface* AssetManager::getSourceAsset(const string& alias) const
     BaseMediaAsset* sourceAsset = getAsset(alias);
 
     if(sourceAsset == NULL) {
-        ofLogError() << "AssetManager::getSourceAsset : " << alias << " is not the name of a known asset.";
+        ofLogError("AssetManager") << "getSourceAsset: " << alias << " is not the name of a known asset.";
         return NULL;
     }
 
     if(!sourceAsset->isSource()) {
-        ofLogError() << "AssetManager::getSourceAsset : " << sourceAsset->getName() << " is not a source.";
+        ofLogError("AssetManager") << "getSourceAsset: " << sourceAsset->getName() << " is not a source.";
         return false;
     }
 
     ofxVideoSourceInterface* source = dynamic_cast<ofxVideoSourceInterface*>(sourceAsset);
     if(source == NULL) {
-        ofLogError() << "AssetManager::getSourceAsset : " << sourceAsset->getName() + " could not be cast to source.";
+        ofLogError("AssetManager") << "getSourceAsset: " << sourceAsset->getName() + " could not be cast to source.";
         return false;
     }
 
@@ -210,18 +210,18 @@ ofxVideoSinkInterface* AssetManager::getSinkAsset(const string& alias) const {
     BaseMediaAsset* sinkAsset = getAsset(alias);
     
     if(sinkAsset == NULL) {
-        ofLogError() << "AssetManager::getSinkAsset : " << alias << " is not the name of a known asset.";
+        ofLogError("AssetManager") << "getSinkAsset: " << alias << " is not the name of a known asset.";
         return NULL;
     }
     
     if(!sinkAsset->isSink()) {
-        ofLogError() << "AssetManager::getSinkAsset : " << sinkAsset->getName() << " is not a source.";
+        ofLogError("AssetManager") << "getSinkAsset: " << sinkAsset->getName() << " is not a source.";
         return false;
     }
     
     ofxVideoSinkInterface* sink = dynamic_cast<ofxVideoSinkInterface*>(sinkAsset);
     if(sink == NULL) {
-        ofLogError() << "AssetManager::getSinkAsset : " << sinkAsset->getName() + " could not be cast to source.";
+        ofLogError("AssetManager") << "getSinkAsset: " << sinkAsset->getName() + " could not be cast to source.";
         return false;
     }
     
@@ -259,12 +259,12 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
     if(!hasAlias(asset->getName())) { // double check
         assetAliases[asset->getName()] = asset;
     } else {
-        ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - alias already exists");
+        ofLogError("AssetManager") << "registerAsset - alias already exists";
         return false;
     }
     
     if(!addOscChild(asset)) {
-        ofLog(OF_LOG_ERROR, "AssetManager::registerAsset - failed to add as an osc child node");
+        ofLogError("AssetManager") << "registerAsset - failed to add as an osc child node";
         return false;
     }
 
@@ -285,11 +285,11 @@ bool AssetManager::registerAsset(BaseMediaAsset* asset) {
 //--------------------------------------------------------------
 bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
-    cout << "unregistering asset " << asset->getName() << endl;
+    ofLogVerbose("AssetManager") << "unregisterAsset: " << asset->getName();
     
     // is there a there there?
     if(asset == NULL) {
-        ofLogWarning("AssetManager") << "AssetManager::unregisterAsset - asset is NULL ";
+        ofLogWarning("AssetManager") << "unregisterAsset: asset is NULL ";
         return false;
     }
     
@@ -297,27 +297,19 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
     // tell the object to dispose of itself (free connections, kill other things, etc)
     if(!asset->dispose()) {
-        ofLogWarning("AssetManager") << "AssetManager::unregisterAsset - unable to dispose " << asset->getName();
+        ofLogWarning("AssetManager") << "unregisterAsset: unable to dispose " << asset->getName();
         return false;
     }
-    
-    cout << "1. unregistering asset " << asset->getName() << endl;
 
     // get rid of the alias
     if(hasAlias(asset->getName())) { // double check
         assetAliases.erase(asset->getName());
     }
     
-    cout << "2. unregistering asset " << asset->getName() << endl;
-
-    
     if(hasOscChild(asset) && !removeOscChild(asset)) {
-        ofLogError("AssetManager") << "AssetManager::registerAsset - failed to remove as an osc child node";
+        ofLogError("AssetManager") << "registerAsset: failed to remove as an osc child node";
         return false;
     }
-    
-    cout << "3. unregistering asset " << asset->getName() << endl;
-
     
     // remove the asset pointer from the assets set
     assets.erase(asset);
@@ -327,20 +319,18 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
     asset = NULL;
     // success
     
-    cout << "4. unregistering asset " << asset << endl;
-
     return true;
 }
 
 //--------------------------------------------------------------
 void AssetManager::cacheAsset(CacheableAsset* asset) {
     if(asset == NULL) {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Asset is NULL");
+        ofLogWarning("AssetManager") << "cacheAsset: - Asset is NULL";
         return;
     }
     
     if(asset->isCached()) {
-        ofLogError("AssetManager::cacheAsset - Asset is already cached.");
+        ofLogWarning("AssetManager") << "cacheAsset: Asset is already cached.";
         return;
     }
     
@@ -352,7 +342,7 @@ void AssetManager::cacheAsset(CacheableAsset* asset) {
         assetsBeingCached.insert(asset);
         return;
     } else {
-        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - could not create buffer.");
+        ofLogWarning("AssetManager") << "cacheAsset: could not create buffer.";
         return;
     }
 }
@@ -362,17 +352,17 @@ void AssetManager::cacheAsset(CacheableAsset* asset) {
 void AssetManager::uncacheAsset(CacheableAsset* asset) {
 
     if(asset == NULL) {
-        ofLogError("AssetManager") << "::uncacheAsset - Asset is NULL";
+        ofLogError("AssetManager") << "uncacheAsset: Asset is NULL";
         return;
     }
 
     if(!asset->isCached()) {
-        ofLogError("AssetManager") << "::uncacheAsset - Asset has no cache.";
+        ofLogError("AssetManager") << "uncacheAsset: Asset has no cache.";
         return;
     }
     
     if(!queueUnregisterAsset(asset->getCacheBuffer())) {
-        ofLogError("AssetManager") << "::uncacheAsset - Unable to uncache buffer.";
+        ofLogError("AssetManager") << "uncacheAsset: Unable to uncache buffer.";
         return;
     } else {
         asset->setCacheBuffer(NULL);
@@ -384,7 +374,7 @@ void AssetManager::uncacheAsset(CacheableAsset* asset) {
 bool AssetManager::startAsset(const string& alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
-        ofLogWarning("AssetManager") << "::startAsset - Asset not found " << alias;
+        ofLogWarning("AssetManager") << "startAsset: Asset not found " << alias;
         return false;
     }
 
@@ -405,7 +395,7 @@ bool AssetManager::startAsset(const string& alias) {
 bool AssetManager::stopAsset(const string& alias) {
     BaseMediaAsset* asset = getAsset(alias);
     if(asset == NULL) {
-        ofLogWarning("AssetManager") << "::stopAsset - Asset not found " << alias;
+        ofLogWarning("AssetManager") << "stopAsset: Asset not found " << alias;
         return false;
     }
 }
@@ -485,26 +475,26 @@ void AssetManager::loadFilesAssets() {
 		
         if(movieTypes.extract(name, 0, s) > 0) {
             if(addMovie(name, path) == NULL) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load :  " + path);
+                ofLogWarning("AssetManager") << "loadFilesAssets: Could not load :  " << path;
             }
         } else if(imageTypes.extract(name, 0, s) > 0) {
             if(addImage(name, path) == NULL) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load :  " + path);
+                ofLogWarning("AssetManager") << "loadFilesAssets: Could not load :  " << path;
             }
         } else if(otherTypes.extract(name, 0, s)) {
             // ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - other valid non-media " + path); 
         } else {
-            ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Unknown file type :  " + path);
+            ofLogWarning("AssetManager") << "loadFilesAssets: Unknown file type :  " << path;
         }
 	}
     
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_IMAGE)) + " images.");
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_MOVIE)) + " movies.");	
+    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_IMAGE) << " images.";
+    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_MOVIE) << " movies.";
 }
 
 //--------------------------------------------------------------
 void AssetManager::loadSyphonAssets() {
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_SYPHON)) + " syphon sources.");	
+    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_SYPHON) << " syphon sources.";
 }
 
 //--------------------------------------------------------------
@@ -531,17 +521,17 @@ void AssetManager::loadGrabberAssets() {
             int height = XML.getAttribute(tag, "height", 240, n);
             
             if(addGrabber(name,id,width,height) == NULL) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load grabber :  " + name );
+                ofLogWarning("AssetManager") << "loadFilesAssets: Could not load grabber : " << name;
             }
 		}
 		
 		XML.popTag();
 		
 	} else {
-		ofLog(OF_LOG_ERROR, "Unable to load media/streams.xml.");
+        ofLogError("AssetManager") << "loadFilesAssets: Unable to load media/grabbers.xml";
 	}
     
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_GRABBER)) + " grabbers.");
+    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_GRABBER) << " grabbers.";
 }
 
 
@@ -607,10 +597,10 @@ void AssetManager::loadStreamAssets(){
 		XML.popTag();
 		
 	} else {
-		ofLog(OF_LOG_ERROR, "Unable to load media/streams.xml.");
+        ofLogError("AssetManager") << "loadFilesAssets: Unable to load media/streams.xml";
 	}
 
-    ofLog(OF_LOG_NOTICE, "Loaded " + ofToString(getTotalNumAssets(MEDIA_ASSET_STREAM)) + " streams.");
+    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_STREAM) << " streams.";
 
 }
 

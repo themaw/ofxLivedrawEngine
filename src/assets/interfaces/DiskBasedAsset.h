@@ -34,7 +34,7 @@ public:
     virtual void processOscCommand(const string& command, const ofxOscMessage& m);
     virtual void update();
     string getFilename() const;
-//    void fileMoved(const string& newLocation) {};
+//    void fileMoved(const string& newLocation) {}; // TODO
     
 protected:
     string filename;

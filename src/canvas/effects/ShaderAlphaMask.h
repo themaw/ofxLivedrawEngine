@@ -51,9 +51,7 @@ public:
         
     }
     
-    virtual ~ShaderAlphaMaskSettings() {
-        
-    }
+    virtual ~ShaderAlphaMaskSettings() {}
     
     void processOscCommand(const string& command, const ofxOscMessage& m) {
         if(isMatch(command,"alphamode")) {
@@ -99,12 +97,12 @@ public:
 ///        maskTexture = tex;
  //   }
     
-    int getAlphaMode() {return alphaMode;}
-    bool getInvertMask() {return invertMask;}
-    bool getInvertSource() {return invertSource;}
-    float getThreshold() { return threshold;}
-    float getSpread() {return spread;}
-    float getGain() {return gain;}
+    int getAlphaMode() const {return alphaMode;}
+    bool getInvertMask() const {return invertMask;}
+    bool getInvertSource() const {return invertSource;}
+    float getThreshold() const { return threshold;}
+    float getSpread() const {return spread;}
+    float getGain() const {return gain;}
     
    // void setMaskTexture
     
@@ -151,13 +149,13 @@ public:
 
     }
     
-    void applySettings(ShaderAlphaMaskSettings* settings) {
-        setUniform1i("alphaMode",   settings->getAlphaMode()); 
-        setUniform1i("invertMask",  settings->getInvertMask());
-        setUniform1i("invertSource",settings->getInvertSource());
-        setUniform1f("thresh",      settings->getThreshold());
-        setUniform1f("spread",      settings->getSpread());
-        setUniform1f("gain",        settings->getGain());
+    void applySettings(const ShaderAlphaMaskSettings& settings) {
+        setUniform1i("alphaMode",   settings.getAlphaMode());
+        setUniform1i("invertMask",  settings.getInvertMask());
+        setUniform1i("invertSource",settings.getInvertSource());
+        setUniform1f("thresh",      settings.getThreshold());
+        setUniform1f("spread",      settings.getSpread());
+        setUniform1f("gain",        settings.getGain());
     }
 
     

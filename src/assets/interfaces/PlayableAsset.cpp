@@ -70,7 +70,7 @@ void PlayableAsset::addPlayer(PlayerAssetInterface* player) {
     if(!hasPlayer(player)) {
         players.insert(player);
     } else {
-        ofLogWarning() << "PlayableAsset::addPlayer() : Tried to add player, but player was already there.";
+        ofLogWarning("PlayableAsset") << "addPlayer() : Tried to add player, but player was already there.";
     }
 }
 
@@ -79,7 +79,7 @@ void PlayableAsset::removePlayer(PlayerAssetInterface* player) {
     if(hasPlayer(player)) {
         players.erase(player);
     } else {
-        ofLogWarning() << "PlayableAsset::removePlayer() : Tried to remove player, but player wasn't there.";
+        ofLogWarning("PlayableAsset") << "removePlayer() : Tried to remove player, but player wasn't there.";
     }
 }
 
