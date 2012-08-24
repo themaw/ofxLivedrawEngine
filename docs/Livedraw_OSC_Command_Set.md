@@ -1,85 +1,173 @@
-OSC Syntax:
-
+# ofxLivedrawEngine OSC Command Specification
+## Document Syntax
 * Optional arguments are in brackets e.g. [OPTIONAL_ITEM]
 * Variable or named items are in parenthesis e.g. (LAYER_NAME)
+* Variables in the namespace can be addressed as groups (see _OSC Message Dispatching and Pattern Matching_ in the [OSC Spec 1.0](http://opensoundcontrol.org/spec-1_0)).
 
-Notes:
-
-* Standard OSC is a uni-directional protocol based on UDP (in contrast to TCP, UDP offers no error checking or packet confirmation), i.e. no ability to do bi-directional queries out of the box.  In order to define a query language, a separate query protocol / transport method must be established.
-* Colors are expected in an 0-255 range.  
+## Standard Units, Scaling, etc.
+* Colors and numbers are generally in an absolute range, unless explicitly described as normalized (i.e. 0.0-1.0).  Some values can be set by issuing "normalized" commands.  For instance, when placing an anchor point, one can set normalized positions, which are determined based on the absolute width / height of the image.
+* Likewise, colors are normally expected in an 0-255 range, but can be set explicitly in a 0.0-1.0 range.  
 * Angles are expected degrees (0-360).
+* Often namespace items have been given shortcuts.  For example, `/livedraw/media/` can be shortened to `/l/m/`.  These node aliases are noted below, but the full namespace will be used below. 
 
-# Session Control
-## Presets
+## Basic Concepts
 
-Session presets are useful for saving and loading all values to an external XML configuration file. *10% Complete*
+### Media
+* Media assets are loaded from a media folder, usually located in `data/media`.  * Video cameras are defined in a file called `grabbers.xml`.  In the future, these cameras will be available dynamically, rather than via the `xml` config.  This is due to a few limitations within openFrameworks.
+* Streaming video (i.e. MJPEG, IPcameras, etc) are defined in a file called `streams.xml`.  MJPEG (IPCamera), RTSP and online Quicktime Movies are supported. 
+* Syphon Streams are detected automatically on the local system.
+* All other media assets, including video and images are detected via file name extensions.  Most common media file types are recognized.
 
-> **TODO**
->
-> 1. Persistence interface for all settable items (transforms, parameters, etc) 
-> 1. Persistence I/O for XML, etc (will likely mirror the OSC and layer trees)
-> 1. Design an XML schema for persistence.
+### Assets
+* An asset is any item within the Livedraw Engine world that can _sink_ or _source_ or _is playable_ (see below).  Some asset types have multiple abilities.
 
-	/livedraw/session/presets/new		PRESET_NAME
-	/livedraw/session/presets/delete	PRESET_NAME
-	/livedraw/session/presets/store		PRESET_NAME
-	/livedraw/session/presets/load		PRESET_NAME
+|Asset Type|Is Sink?|Is Source?|Is Playable?|Notes|
+|:-:|:-:|:-:|:-:|:--|
+|&nbsp;|*Can it receive and<br/> process shared frames?*|*Can this asset send<br/>shared frames?*|*Can this Asset Type be "Played"<br/>by a Player Asset*|&nbsp;|
+|**Image Asset**  |✔|✗|✔|An image asset is simply a single shared frame, usually loaded from disk.|
+|**Movie Asset**  |✗|✗|✔|A movie asset is a disk based asset that can be a source only when it is "played" with a player asset.|
+|**Grabber Asset**|✗|✔|✗|A grabber is a camera or frame grabber capable of providing "live" frames to a sink.|
+|**Streaming Asset** |✗|✔|✗|A streaming asset is like a grabber, but comes from a network source.|
+|**Syphon Asset** |✗|✔|✗|A Syphon asset is much like a grabber or a streaming asset.|
+|**Buffer Asset** |✔|✗|✔|A buffer asset is a collection of frames with a certain size and other properties.  It can _sink_ frames from any source (if it has room) and can only be a source if it is played with a _player asset_.|
+|**Player Asset** |✗|✔|✗|A player asset is a controllable source, but must "play" a playable asset in order to be a valid _source_.  If no playable asset is loaded, it will deliver blank frames to all attached _sinks_.|
+|**Layer Asset**  |✔|✔|✗|A composition layer asset can _sink_ frames via its inputs and masks and can also become a _source_ for other _sinks_.  This allows for complex feedback and video effects.|
 
-## Performance Creation and Storage
 
-Performances are best thought of as a presets in motion.  During a recording session, changes to all values are recorded if recording is enabled. *10% Complete (7 Mar 11)*
-> **TODO**
->
-> 1. In addition to persistence items above, the persistence interface needs an "animatable" interface so each item can be animated. 
+### Naming
+* All assets are named.  These names can be changed and allow easier access (as opposed of using long filenames, or hardware addresses).  Assets are automatically assigned names when they are loaded or created.  Users can specify specific names during creation.  If the name exists, the asset will be assigned a new name.  For instance, if the name `myimage` is already taken, the `myimage` would be changed to `myimage_0`.  Subsequently the numerical suffix is incremented.
 
-	/livedraw/session/performance/new    PERFORMANCE_NAME
-	/livedraw/session/performance/delete PERFORMANCE_NAME
-	/livedraw/session/performance/store  PERFORMANCE_NAME
-	/livedraw/session/performance/load   PERFORMANCE_NAME
 
-### Performance Playback and Control
+### Sinks and Sources 
+* At the core of the Livedraw Engine is a complex media and frame sharing system that seeks to increase speed by reduce unnecessary disk reads (i.e. playing a video file from disk) and leveraging the GPU.  
+* To achieve this goal Livedraw Engine employs the concept of _sources_ and _sinks_.  
+* _Sources_ are a smart objects that can provide shared frames that can be played, manipulated, buffered or saved.  A Webcam is a good example of a _source_ as it provides a stream of frames that can be used or ignored.  Each frame _source_ can be connected to any number of _sinks_.  Sources keep track of their attached _sinks_ and in the event of a source closing, all of the attached _sinks_ will be alerted and can take appropriate action.
+* _Sinks_ are objects that can _do_ something with the shared frames that come from _sources_.  For instance, a video buffer is a _sink_ because it can _do_ something with the incoming frame -- namely it can store it in a specified way.  In Livedraw Engine a Layer also contains several _sinks_.  A layer's _sinks_ listen for incoming shared frames and _does_ something with them -- namely it composites, positions, and then renders the results to a canvas.
+* Shared frames keep track of themselves.  If no _sinks_ are currently storing or using them they destroy themselves.  _Sources_ are not required to store their shared frames.  In most cases, after they have been _sinked_, the _source_ releases the frame to the care of the _sinks_ that will do something with it.
+* Generally, _sinks_ cannot "_source_" (i.e. receive) shared frames from multiple _sources_, but _sources_ can "_source_" (i.e. send) their frames to an endless number of _sinks_. 
 
-Performances can be played back, recorded and navigated in very basic ways using the +goto TIMESTAMP+ syntax. *10% Complete*
-> **TODO**
->
-> 1. This would be built into the "animatable" interface.
- 
-	/livedraw/session/performance/control/record
-	/livedraw/session/performance/control/play
-	/livedraw/session/performance/control/stop
-	/livedraw/session/performance/control/goto	TIMESTAMP
+### Playable
 
-# Canvas Rendering
-## Meta Canvas Control
 
-Meta controls affect the entire canvas. *100% Complete*
+# Livedraw
+The root _Livedraw_ node is the primary jumping off point for the rest of the commands.
 
-	/livedraw/canvas/position	SCREEN_X SCREEN_Y
+#### Node Aliases
 
-_Position_ controls the location of the rendering canvas in desktop screen space. *100% Complete*
+	/livedraw
+	/ld
+	/l
 
-	/livedraw/canvas/size		SCREEN_WIDTH SCREEN_HEIGHT
+# Canvas
+The _Canvas_ is the primary location for rendering.  The canvas might occupy the entire program window, or a subsection of the window.  This is application dependent.  The basic ofxLivedrawEngine addon treats the whole window as a canvas.
 
-_Size_ controls the size (in pixels) of the rendering canvas in desktop screen space. *100% Complete*
+#### Node Aliases
 
-	/livedraw/canvas/background 	R G B [A]
+	/canvas
+	/can
+	/c
+	
+## Canvas Controls
 
-_Background_ sets the default refresh background color. *100% Complete (11 Mar 11)*
+Meta controls affect the entire canvas.
 
-	/livedraw/canvas/fullscreen 	B_FS
+_Position_ controls the location of the rendering canvas in desktop screen space.
 
-_Fullscreen_ toggles fullscreen mode on the rendering canvas.  This is for full-screen exclusive mode and will fill the entirety of the canvas' current context. *100% Complete*
+	/livedraw/canvas/position X_POSITION Y_POSITION
 
-	/livedraw/canvas/fps		FPS
 
-_FPS_ sets the global rendering frame rate. *100% Complete*
+_Size_ controls the size (in pixels) of the rendering canvas in desktop screen space.
 
-## Canvas Layers
+	/livedraw/canvas/size WIDTH HEIGHT
 
-Canvas layers represent a single source and (optionally) a mask.  They can be created or destroyed.  Layers have associated transformation properties, effects and sources. *100% Complete*
+_Background_ sets the default refresh background color.
+
+	/livedraw/canvas/background	R G B [A]
+
+_Fullscreen_ toggles fullscreen mode on the rendering canvas.  This is for full-screen exclusive mode and will fill the entirety of the canvas' current context.
+
+	/livedraw/canvas/fullscreen B_FS
+
+_MSAA_ toggles multisample anti-aliasing.
+
+	/livedraw/canvas/msaa B_MSAA
+	
+_FPS_ sets the global rendering frame rate.
+
+	/livedraw/canvas/fps FPS
+
+
+# Layers
+
+Composition layers represent a set of inputs and (optionally) a corresponding set of masks.  Currently there can be pairs of input/masks per layer.  This allows A<->B style mixing between pairs.  Each input and mask acts as a _sink_ and must receive frames from a _source_.  Layers can have parent layers and child layers.  Child layers inherit transformation properties (like rotation, scaling, etc) from their parent layer.  At the base of the layer tree is a root layer.  Many layers can reside on the root layer and are only subject to their own transformations.  Layer render order is determined by a layer's location in the tree structure.  Layers can also be cloned -- that is -- rendered in the same location, but have multiple parents.  A layer can have many parents parent and many children.
+
+
+## Layer Creation and Destruction
 
 	/livedraw/layers/new	LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
 	/livedraw/layers/delete	LAYER_NAME
+
+## Layer Transforms
+
+#### Node Aliases
+
+	/transform
+	/xform
+	/t
+
+## Anchor Point
+
+Layer anchor points determine how a layer is stretched and rotated. *100% Complete*
+
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X_ANCHORPOINT [Y_ANCHORPOINT [Z_ANCHORPOINT]] 
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X X_ANCHORPOINT 
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Y Y_ANCHORPOINT 
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Z Z_ANCHORPOINT 
+
+#### Layer Position
+
+Layer position layer position determines the layer's placement on the rendering canvas. *100% Complete*
+
+	/livedraw/layers/(LAYER_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
+	/livedraw/layers/(LAYER_NAME)/transform/position X X_POSITION
+	/livedraw/layers/(LAYER_NAME)/transform/position Y Y_POSITION
+	/livedraw/layers/(LAYER_NAME)/transform/position Z Z_POSITION
+
+#### Layer Rotation
+
+Layer rotation determines the layer's rotation on the rendering canvas and given it's current anchor point. *100% Complete*
+
+	/livedraw/layers/(LAYER_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
+	/livedraw/layers/(LAYER_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
+	/livedraw/layers/(LAYER_NAME)/transform/rotate X X_ROTATE
+	/livedraw/layers/(LAYER_NAME)/transform/rotate Y Y_ROTATE
+	/livedraw/layers/(LAYER_NAME)/transform/rotate Z Z_ROTATE
+
+Layer orientation determines the layer's orientation on the rendering canvas and given it's current anchor point.  (N.B. Similar to Adobe After Effects and may be removed) *50% Complete*
+
+> **TODO**
+>
+> 1. Do we need "orientation"?
+
+	/livedraw/layers/(LAYER_NAME)/transform/orientation X_ORIENTATION [Y_ORIENTATION [Z_ORIENTATION]]
+	/livedraw/layers/(LAYER_NAME)/transform/orientation X X_ORIENTATION
+	/livedraw/layers/(LAYER_NAME)/transform/orientation Y Y_ORIENTATION
+	/livedraw/layers/(LAYER_NAME)/transform/orientation Z Z_ORIENTATION
+
+Scale determines the layer's scale *100% Complete*
+
+	/livedraw/layers/(LAYER_NAME)/transform/scale X_SCALE [Y_SCALE [Z_SCALE]]
+	/livedraw/layers/(LAYER_NAME)/transform/scale X X_SCALE
+	/livedraw/layers/(LAYER_NAME)/transform/scale Y Y_SCALE
+	/livedraw/layers/(LAYER_NAME)/transform/scale Z Z_SCALE
+
+#### Layer Opacity
+
+Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend. Layer rotation determines the layer's rotation on the rendering canvas and given it's current anchor point. *100% Complete*  Opacity ranges from 0-255.
+
+	/livedraw/layers/(LAYER_NAME)/transform/opacity OPACITY
+
+
 
 ### Layer Properties
 
@@ -99,38 +187,6 @@ Individual layers have stacking order, they can be locked, soloed or assigned a 
 	/livedraw/layers/(LAYER_NAME)/lock	B_LOCK
 	/livedraw/layers/(LAYER_NAME)/label	R G B [A]
 
-Layer parameters can be copied from on layer to another. *90% Complete*
-
-> **TODO**
->
-> 1. Interface needs to be implemented.  Could be integrated into the persistence / settings interface noted above.
-
-	/livedraw/layers/(LAYER_NAME)/.../PARAM_NAME COPYFROM LAYER_NAME_FROM
-
-e.g. Copy from Transform:
-
-	/livedraw/layers/(LAYER_NAME)/transform/position X COPYFROM LAYER_NAME_FROM
-or
-	/livedraw/layers/(LAYER_NAME)/transform/position COPYFROM LAYER_NAME_FROM
-
-e.g. Copy from Effect:
-
-	/livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness COPYFROM LAYER_NAME_FROM
-of
-	/livedraw/layers/(LAYER_NAME)/effect/brcosa COPYFROM LAYER_NAME_FROM
-
-
-Layer parameters can be LINKED from on layer to another. *8% Complete (7 Mar 11)*
-
-	/livedraw/layers/(LAYER_NAME)/.../PARAM_NAME LINKWITH LAYER_NAME_FROM
-
-e.g. Copy from Transform:
-
-	/livedraw/layers/(LAYER_NAME)/transform/position X LINKWITH LAYER_NAME_FROM
-
-e.g. Copy from Effect:
-
-	/livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness LINKWITH LAYER_NAME_FROM
 
 ### Layer Source
 
@@ -188,61 +244,6 @@ Layer masks are simply sources that are treated as masks / second sources.  Whil
 
 	/livedraw/layers/(LAYER_NAME)/mask ... (see source reference above)
 
-### Layer Transforms
-
-Each layer is controlled by its transform.
-
-#### Layer Anchor Point
-
-Layer anchor points determine how a layer is stretched and rotated. *100% Complete*
-
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X_ANCHORPOINT [Y_ANCHORPOINT [Z_ANCHORPOINT]] 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X X_ANCHORPOINT 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Y Y_ANCHORPOINT 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Z Z_ANCHORPOINT 
-
-#### Layer Position
-
-Layer position layer position determines the layer's placement on the rendering canvas. *100% Complete*
-
-	/livedraw/layers/(LAYER_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
-	/livedraw/layers/(LAYER_NAME)/transform/position X X_POSITION
-	/livedraw/layers/(LAYER_NAME)/transform/position Y Y_POSITION
-	/livedraw/layers/(LAYER_NAME)/transform/position Z Z_POSITION
-
-#### Layer Rotation
-
-Layer rotation determines the layer's rotation on the rendering canvas and given it's current anchor point. *100% Complete*
-
-	/livedraw/layers/(LAYER_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
-	/livedraw/layers/(LAYER_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
-	/livedraw/layers/(LAYER_NAME)/transform/rotate X X_ROTATE
-	/livedraw/layers/(LAYER_NAME)/transform/rotate Y Y_ROTATE
-	/livedraw/layers/(LAYER_NAME)/transform/rotate Z Z_ROTATE
-
-Layer orientation determines the layer's orientation on the rendering canvas and given it's current anchor point.  (N.B. Similar to Adobe After Effects and may be removed) *50% Complete*
-
-> **TODO**
->
-> 1. Do we need "orientation"?
-
-	/livedraw/layers/(LAYER_NAME)/transform/orientation X_ORIENTATION [Y_ORIENTATION [Z_ORIENTATION]]
-	/livedraw/layers/(LAYER_NAME)/transform/orientation X X_ORIENTATION
-	/livedraw/layers/(LAYER_NAME)/transform/orientation Y Y_ORIENTATION
-	/livedraw/layers/(LAYER_NAME)/transform/orientation Z Z_ORIENTATION
-
-Scale determines the layer's scale *100% Complete*
-
-	/livedraw/layers/(LAYER_NAME)/transform/scale X_SCALE [Y_SCALE [Z_SCALE]]
-	/livedraw/layers/(LAYER_NAME)/transform/scale X X_SCALE
-	/livedraw/layers/(LAYER_NAME)/transform/scale Y Y_SCALE
-	/livedraw/layers/(LAYER_NAME)/transform/scale Z Z_SCALE
-
-#### Layer Opacity
-
-Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend. Layer rotation determines the layer's rotation on the rendering canvas and given it's current anchor point. *100% Complete*  Opacity ranges from 0-255.
-
-	/livedraw/layers/(LAYER_NAME)/transform/opacity OPACITY
 
 
 ### Layer Effects *10% Complete (11 Mar 11)*
@@ -477,6 +478,55 @@ For example, one might set the tags associated with a given clip using the follo
 
 	/livedraw/media/VID_00982/metadata/tags	fast scary colorful people
 
+
+
+
+
+
+# IN PROGRESS
+---------------
+
+# Session Control
+## Presets
+
+Session presets are useful for saving and loading all values to an external XML configuration file. *10% Complete*
+
+> **TODO**
+>
+> 1. Persistence interface for all settable items (transforms, parameters, etc) 
+> 1. Persistence I/O for XML, etc (will likely mirror the OSC and layer trees)
+> 1. Design an XML schema for persistence.
+
+	/livedraw/session/presets/new		PRESET_NAME
+	/livedraw/session/presets/delete	PRESET_NAME
+	/livedraw/session/presets/store		PRESET_NAME
+	/livedraw/session/presets/load		PRESET_NAME
+
+## Performance Creation and Storage
+
+Performances are best thought of as a presets in motion.  During a recording session, changes to all values are recorded if recording is enabled. *10% Complete (7 Mar 11)*
+> **TODO**
+>
+> 1. In addition to persistence items above, the persistence interface needs an "animatable" interface so each item can be animated. 
+
+	/livedraw/session/performance/new    PERFORMANCE_NAME
+	/livedraw/session/performance/delete PERFORMANCE_NAME
+	/livedraw/session/performance/store  PERFORMANCE_NAME
+	/livedraw/session/performance/load   PERFORMANCE_NAME
+
+### Performance Playback and Control
+
+Performances can be played back, recorded and navigated in very basic ways using the +goto TIMESTAMP+ syntax. *10% Complete*
+> **TODO**
+>
+> 1. This would be built into the "animatable" interface.
+ 
+	/livedraw/session/performance/control/record
+	/livedraw/session/performance/control/play
+	/livedraw/session/performance/control/stop
+	/livedraw/session/performance/control/goto	TIMESTAMP
+
+
 ### GUI Layout
 
 GUI layouts can be save and are addressable: *75% Complete (7 Mar 11)*
@@ -487,3 +537,43 @@ GUI layouts can be save and are addressable: *75% Complete (7 Mar 11)*
 	/livedraw/layout/load	LAYOUT_NAME
 
 Check out the [[Discussion items]] where we can discuss some unresolved/suggested concepts
+
+
+
+
+-------
+
+Layer parameters can be copied from on layer to another. *90% Complete*
+
+> **TODO**
+>
+> 1. Interface needs to be implemented.  Could be integrated into the persistence / settings interface noted above.
+
+	/livedraw/layers/(LAYER_NAME)/.../PARAM_NAME COPYFROM LAYER_NAME_FROM
+
+e.g. Copy from Transform:
+
+	/livedraw/layers/(LAYER_NAME)/transform/position X COPYFROM LAYER_NAME_FROM
+or
+	/livedraw/layers/(LAYER_NAME)/transform/position COPYFROM LAYER_NAME_FROM
+
+e.g. Copy from Effect:
+
+	/livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness COPYFROM LAYER_NAME_FROM
+of
+	/livedraw/layers/(LAYER_NAME)/effect/brcosa COPYFROM LAYER_NAME_FROM
+
+
+Layer parameters can be LINKED from on layer to another. *8% Complete (7 Mar 11)*
+
+	/livedraw/layers/(LAYER_NAME)/.../PARAM_NAME LINKWITH LAYER_NAME_FROM
+
+e.g. Copy from Transform:
+
+	/livedraw/layers/(LAYER_NAME)/transform/position X LINKWITH LAYER_NAME_FROM
+
+e.g. Copy from Effect:
+
+	/livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness LINKWITH LAYER_NAME_FROM
+
+
