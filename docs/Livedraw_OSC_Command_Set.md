@@ -31,151 +31,128 @@
 |**Syphon Asset** |✗|✔|✗|A Syphon asset is much like a grabber or a streaming asset.|
 |**Buffer Asset** |✔|✗|✔|A buffer asset is a collection of frames with a certain size and other properties.  It can _sink_ frames from any source (if it has room) and can only be a source if it is played with a _player asset_.|
 |**Player Asset** |✗|✔|✗|A player asset is a controllable source, but must "play" a playable asset in order to be a valid _source_.  If no playable asset is loaded, it will deliver blank frames to all attached _sinks_.|
-|**Layer Asset**  |✔|✔|✗|A composition layer asset can _sink_ frames via its inputs and masks and can also become a _source_ for other _sinks_.  This allows for complex feedback and video effects.|
+|**Layer Asset _(in progress)_**  |✔|✔|✗|A composition layer asset can _sink_ frames via its inputs and masks and can also become a _source_ for other _sinks_.  This allows for complex feedback and video effects.|
 
 
 ### Naming
-* All assets are named.  These names can be changed and allow easier access (as opposed of using long filenames, or hardware addresses).  Assets are automatically assigned names when they are loaded or created.  Users can specify specific names during creation.  If the name exists, the asset will be assigned a new name.  For instance, if the name `myimage` is already taken, the `myimage` would be changed to `myimage_0`.  Subsequently the numerical suffix is incremented.
+* All assets are named.  These names can be changed and allow easier access (as opposed of using long filenames, or hardware addresses).  Assets are automatically assigned names when they are loaded or created.  Users can specify specific names during creation.  If the name exists, the asset will be assigned a new name.  For instance, if the name `myimage` is already taken, the `myimage` would be changed to `myimage_0`,`myimage_1`,`myimage_2`, etc.  Subsequently the numerical suffix is incremented.
 
 
 ### Sinks and Sources 
-* At the core of the Livedraw Engine is a complex media and frame sharing system that seeks to increase speed by reduce unnecessary disk reads (i.e. playing a video file from disk) and leveraging the GPU.  
-* To achieve this goal Livedraw Engine employs the concept of _sources_ and _sinks_.  
-* _Sources_ are a smart objects that can provide shared frames that can be played, manipulated, buffered or saved.  A Webcam is a good example of a _source_ as it provides a stream of frames that can be used or ignored.  Each frame _source_ can be connected to any number of _sinks_.  Sources keep track of their attached _sinks_ and in the event of a source closing, all of the attached _sinks_ will be alerted and can take appropriate action.
-* _Sinks_ are objects that can _do_ something with the shared frames that come from _sources_.  For instance, a video buffer is a _sink_ because it can _do_ something with the incoming frame -- namely it can store it in a specified way.  In Livedraw Engine a Layer also contains several _sinks_.  A layer's _sinks_ listen for incoming shared frames and _does_ something with them -- namely it composites, positions, and then renders the results to a canvas.
-* Shared frames keep track of themselves.  If no _sinks_ are currently storing or using them they destroy themselves.  _Sources_ are not required to store their shared frames.  In most cases, after they have been _sinked_, the _source_ releases the frame to the care of the _sinks_ that will do something with it.
-* Generally, _sinks_ cannot "_source_" (i.e. receive) shared frames from multiple _sources_, but _sources_ can "_source_" (i.e. send) their frames to an endless number of _sinks_. 
+* At the core of the Livedraw Engine is a complex media and frame sharing system that seeks to increase speed by reducing unnecessary disk reads (i.e. playing a video file from disk) and leveraging the GPU.  
+* To achieve this goal Livedraw Engine employs the concept of ___sources___ and ___sinks___.  
+* ___Sources___ are smart objects that can provide shared frames that can be played, manipulated, buffered or saved.  A Webcam is a good example of a _source_.  It provides a stream of frames that can be used or ignored.  Each frame _source_ can be connected to any number of _sinks_.  Sources keep track of their attached _sinks_ and in the event of a _source_ closing, all of the attached _sinks_ will be alerted and can then take appropriate action.
+* ___Sinks___ are objects that can ___do___ something with the shared frames delivered by _sources_.  For instance, a <b>Video Buffer Asset</b> is a _sink_ because it can ___do___ something with the incoming frame -- namely it can store it in pre-determined way.  A Composition Layer also contains several _sinks_.  A layer's _sinks_ listen for incoming shared frames and then _does_ something with them -- namely it composites, positions, and then renders the results to a _Canvas_.
+* Shared frames keep track of which _sinks_ currently sharing them.  If no _sinks_ are currently storing or using a given frame it destroys itself, freeing memory and computing resources.  _Sources_ are not required to store their shared frames.  In most cases, after they have been _sinked_, the _source_ transfers ownership of the frame to each of its _sinks_.
+* Generally, _sinks_ cannot "_source_" (i.e. receive) shared frames from multiple _sources_, but _sources_ can "_source_" (i.e. send) their frames to an endless number of _sinks_.  Once a shared frame has been allocated, there is almost no cost to use that frame in many _sinks_.
 
 ### Playable
 
+* ___Playable___ assets are those that cannot logically act as sources without some intervention.  For instance, Video and Buffer Assets are effectively collections of individual frames.  Without a Video Player Asset, it would be impossible for a Video or Buffer Asset to know how to deliver its frames (fast? slow? all? some? ordered? random?).  Thus, playable assets require a player to select each frame as it is sourced.  Likewise, without loading a playable asset, Video Players cannot source any useful frames.  They must work together. 
 
-# Livedraw
+# /livedraw (`ld`, `l`)
 The root _Livedraw_ node is the primary jumping off point for the rest of the commands.
 
-#### Node Aliases
-
-	/livedraw
-	/ld
-	/l
-
-# Canvas
-The _Canvas_ is the primary location for rendering.  The canvas might occupy the entire program window, or a subsection of the window.  This is application dependent.  The basic ofxLivedrawEngine addon treats the whole window as a canvas.
-
-#### Node Aliases
-
-	/canvas
-	/can
-	/c
+# /livedraw/canvas (`canvas`,`can`,`c`)
+The _Canvas_ is the primary location for rendering.  The canvas might occupy the entire program window, or a subsection of the window.  This is application dependent.  The basic Livedraw Engine treats the whole window as a canvas.
 	
-## Canvas Controls
+## Commands
 
-Meta controls affect the entire canvas.
-
-_Position_ controls the location of the rendering canvas in desktop screen space.
+### `position` controls the location of the rendering canvas in desktop screen space.
 
 	/livedraw/canvas/position X_POSITION Y_POSITION
 
 
-_Size_ controls the size (in pixels) of the rendering canvas in desktop screen space.
+### `size` controls the size (in pixels) of the rendering canvas in desktop screen space.
 
 	/livedraw/canvas/size WIDTH HEIGHT
 
-_Background_ sets the default refresh background color.
+### `background` sets the default refresh background color.
 
 	/livedraw/canvas/background	R G B [A]
 
-_Fullscreen_ toggles fullscreen mode on the rendering canvas.  This is for full-screen exclusive mode and will fill the entirety of the canvas' current context.
+### `fullscreen` toggles fullscreen mode on the rendering canvas.  This is for full-screen exclusive mode and will fill the entirety of the canvas' current context.
 
 	/livedraw/canvas/fullscreen B_FS
 
-_MSAA_ toggles multisample anti-aliasing.
+### `msaa` toggles multisample anti-aliasing.
 
 	/livedraw/canvas/msaa B_MSAA
 	
-_FPS_ sets the global rendering frame rate.
+### `fps` sets the global rendering frame rate.
 
 	/livedraw/canvas/fps FPS
 
 
-# Layers
+# /livedraw/layers (`lay`,`l`)
 
 Composition layers represent a set of inputs and (optionally) a corresponding set of masks.  Currently there can be pairs of input/masks per layer.  This allows A<->B style mixing between pairs.  Each input and mask acts as a _sink_ and must receive frames from a _source_.  Layers can have parent layers and child layers.  Child layers inherit transformation properties (like rotation, scaling, etc) from their parent layer.  At the base of the layer tree is a root layer.  Many layers can reside on the root layer and are only subject to their own transformations.  Layer render order is determined by a layer's location in the tree structure.  Layers can also be cloned -- that is -- rendered in the same location, but have multiple parents.  A layer can have many parents parent and many children.
 
+Individual layers can be addressed by name.
 
-## Layer Creation and Destruction
+## Commands
+###`new` Create a new layer.
 
 	/livedraw/layers/new	LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
+
+### `delete` Destroy a layer.
+
 	/livedraw/layers/delete	LAYER_NAME
 
-## Layer Transforms
+### /livedraw/layers/(LAYER_NAME)/ 
 
-#### Node Aliases
+Send commands to a named layer.
 
-	/transform
-	/xform
-	/t
+## Commands
+### `input` controls the input sinks for the named layer.
 
-## Anchor Point
+        /livedraw/layers/LAYER_NAME/inputsink ASSET_NAME [INPUT_NUMBER]
+        /livedraw/layers/LAYER_NAME/inputunsink [INPUT_NUMBER]
+        /livedraw/layers/LAYER_NAME/inputclear [INPUT_NUMBER]
 
-Layer anchor points determine how a layer is stretched and rotated. *100% Complete*
+### `mask` controls the mask sinks for the named layer.
 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X_ANCHORPOINT [Y_ANCHORPOINT [Z_ANCHORPOINT]] 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X X_ANCHORPOINT 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Y Y_ANCHORPOINT 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Z Z_ANCHORPOINT 
+`INPUT_NUMBER`
 
-#### Layer Position
+        /livedraw/layers/LAYER_NAME/mask sink ASSET_NAME [INPUT_NUMBER]
+        /livedraw/layers/LAYER_NAME/mask unsink [INPUT_NUMBER]
+        /livedraw/layers/LAYER_NAME/mask clear [INPUT_NUMBER]
 
-Layer position layer position determines the layer's placement on the rendering canvas. *100% Complete*
+### `input` controls the A/B mix of the layers.
 
-	/livedraw/layers/(LAYER_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
-	/livedraw/layers/(LAYER_NAME)/transform/position X X_POSITION
-	/livedraw/layers/(LAYER_NAME)/transform/position Y Y_POSITION
-	/livedraw/layers/(LAYER_NAME)/transform/position Z Z_POSITION
+`A` or `B`
 
-#### Layer Rotation
+        /livedraw/layers/LAYER_NAME/input A_OR_B
 
-Layer rotation determines the layer's rotation on the rendering canvas and given it's current anchor point. *100% Complete*
+### `swap` swaps A/B input. // TODO
 
-	/livedraw/layers/(LAYER_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
-	/livedraw/layers/(LAYER_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
-	/livedraw/layers/(LAYER_NAME)/transform/rotate X X_ROTATE
-	/livedraw/layers/(LAYER_NAME)/transform/rotate Y Y_ROTATE
-	/livedraw/layers/(LAYER_NAME)/transform/rotate Z Z_ROTATE
-
-Layer orientation determines the layer's orientation on the rendering canvas and given it's current anchor point.  (N.B. Similar to Adobe After Effects and may be removed) *50% Complete*
-
-> **TODO**
->
-> 1. Do we need "orientation"?
-
-	/livedraw/layers/(LAYER_NAME)/transform/orientation X_ORIENTATION [Y_ORIENTATION [Z_ORIENTATION]]
-	/livedraw/layers/(LAYER_NAME)/transform/orientation X X_ORIENTATION
-	/livedraw/layers/(LAYER_NAME)/transform/orientation Y Y_ORIENTATION
-	/livedraw/layers/(LAYER_NAME)/transform/orientation Z Z_ORIENTATION
-
-Scale determines the layer's scale *100% Complete*
-
-	/livedraw/layers/(LAYER_NAME)/transform/scale X_SCALE [Y_SCALE [Z_SCALE]]
-	/livedraw/layers/(LAYER_NAME)/transform/scale X X_SCALE
-	/livedraw/layers/(LAYER_NAME)/transform/scale Y Y_SCALE
-	/livedraw/layers/(LAYER_NAME)/transform/scale Z Z_SCALE
-
-#### Layer Opacity
-
-Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend. Layer rotation determines the layer's rotation on the rendering canvas and given it's current anchor point. *100% Complete*  Opacity ranges from 0-255.
-
-	/livedraw/layers/(LAYER_NAME)/transform/opacity OPACITY
+        /livedraw/layers/LAYER_NAME/swap
 
 
+### `stretchmode` controls how the input and mask relate are scaled given the layer's width and height.
 
-### Layer Properties
+Valid stretch modes are: `CENTER`, `FILL`, `FIT`, `STRETCH`;
 
-Individual layers have stacking order, they can be locked, soloed or assigned a color for easy organization. *75% Complete*
+	/livedraw/layers/(LAYER_NAME)/stretchmode STRETCH_MODE 
 
-> **TODO**
->
-> 1. Finish implementing in CanvasLayerManager.h/.cpp and CanvasLayer.h/.cpp.
+
+### `lock` prevent changes to the named layer.
+
+	/livedraw/layers/(LAYER_NAME)/lock	B_LOCK
+
+### `solo` render only the named layer.
+
+	/livedraw/layers/(LAYER_NAME)/solo	B_SOLO
+
+### `label` give the named layer a color (only useful in a GUI context).
+
+	/livedraw/layers/(LAYER_NAME)/label	R G B [A]
+
+### `clipping` control the layer clipping (relates to stretch mode)
+
+	/livedraw/layers/(LAYER_NAME)/clipping B_CLIP
+
+### `order` control the input for the named layer.
 
 	/livedraw/layers/(LAYER_NAME)/order ORDER_NUM
 	/livedraw/layers/(LAYER_NAME)/order forward
@@ -183,36 +160,86 @@ Individual layers have stacking order, they can be locked, soloed or assigned a 
 	/livedraw/layers/(LAYER_NAME)/order front
 	/livedraw/layers/(LAYER_NAME)/order back
 
-	/livedraw/layers/(LAYER_NAME)/solo	B_SOLO
-	/livedraw/layers/(LAYER_NAME)/lock	B_LOCK
-	/livedraw/layers/(LAYER_NAME)/label	R G B [A]
+
+# /livedraw/layers/(LAYER_NAME)/transform (`transform`, `xform`, `t`)
+
+Layer transforms determine the position, opacity and other characteristics of how a given layer is rendered.
+
+## Commands
+
+### `anchorpoint` (`ap`, `a`) Set a layer's anchor point.
+
+Layer anchor points determine the reference point in the layer for geometric transforms such as rotation, scaling and translation.
+
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X_ANCHORPOINT [Y_ANCHORPOINT [Z_ANCHORPOINT]] 
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X X_ANCHORPOINT 
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Y Y_ANCHORPOINT 
+	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Z Z_ANCHORPOINT 
+
+### `position` (`pos`, `p`) Set a layer's position.
+
+Layer position layer position determines the layer's placement on the rendering canvas.
+
+	/livedraw/layers/(LAYER_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
+	/livedraw/layers/(LAYER_NAME)/transform/position X X_POSITION
+	/livedraw/layers/(LAYER_NAME)/transform/position Y Y_POSITION
+	/livedraw/layers/(LAYER_NAME)/transform/position Z Z_POSITION
+
+### `rotation` (`rot`,`r`) Set a layer's rotation.
+
+Layer rotation determines the layer's rotation on the rendering canvas and given its current anchor point.
+
+	/livedraw/layers/(LAYER_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
+	/livedraw/layers/(LAYER_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
+	/livedraw/layers/(LAYER_NAME)/transform/rotate X X_ROTATE
+	/livedraw/layers/(LAYER_NAME)/transform/rotate Y Y_ROTATE
+	/livedraw/layers/(LAYER_NAME)/transform/rotate Z Z_ROTATE
+
+### `scale` (`s`) Set a layer's scale.
+
+Scale determines the layer's x, y, z scale on the rendering canvas given its anchor point.
+
+	/livedraw/layers/(LAYER_NAME)/transform/scale X_SCALE [Y_SCALE [Z_SCALE]]
+	/livedraw/layers/(LAYER_NAME)/transform/scale X X_SCALE
+	/livedraw/layers/(LAYER_NAME)/transform/scale Y Y_SCALE
+	/livedraw/layers/(LAYER_NAME)/transform/scale Z Z_SCALE
+
+### `opacity` (`o`) Set a layer's opacity.
+
+Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend with other layers.  Opacity ranges from 0-255.
+
+	/livedraw/layers/(LAYER_NAME)/transform/opacity OPACITY
+
+### `opacityn` (`on`) Set a layer's opacity (normalized).
+
+Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend with other layers.  Normalized opacity ranges from 0-1.
+
+	/livedraw/layers/(LAYER_NAME)/transform/opacityn OPACITY
+
+### `size` (`sz`) Set a layer's size.
+
+The layer size determines how larger the underlying frame buffer should be.
+
+	/livedraw/layers/(LAYER_NAME)/transform/size WIDTH HEIGHT
+
+### `width` (`w`) Set a layer's width.
+
+See `size` above.
+
+	/livedraw/layers/(LAYER_NAME)/transform/width WIDTH
+
+### `height` (`h`) Set a layer's width.
+
+See `size` above.
+
+	/livedraw/layers/(LAYER_NAME)/transform/height HEIGHT
 
 
-### Layer Source
 
-Layers are assigned sources from the source library.  These sources each have IDs and are addressed by their individual SOURCE_ID.  SOURCE_IDs can be set and changed by the user.  Sources can also represent linked or shared between layers to improve efficiency and create multiple effects. *89% Complete*
-
-> **TODO**
->
-> 1. Finish shared stream concept and create a more generic media asset interface (in progress).
-> 1. Finish "linking" interface.
-
-	/livedraw/layers/(LAYER_NAME)/input/linked	LAYER_NAME_FROM
-
-	/livedraw/layers/(LAYER_NAME)/input/file 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/layers/(LAYER_NAME)/input/stream 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/layers/(LAYER_NAME)/input/hardware 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
-	/livedraw/layers/(LAYER_NAME)/input/syphon 	SOURCE_ID [WIDTH HEIGHT [COLORSPACE]]
+### Layer Properties
 
 ### Layer Source Player
 
-The source player is a complex playback controller/looper/sampler that is created for a given source. *95% Complete*
-
-> **TODO**
->
-> 1. "loadram" load entire video (or selection) into a sharable sampler / buffer.
-> 1. "loadram" equivalent for streaming sources, such as live video into sharable sampler / buffer.
-> 1. Finish player code to implement all items below.
 
 	/livedraw/layers/(LAYER_NAME)/source buffer ASSET_ID [FROM_DISK]
 
