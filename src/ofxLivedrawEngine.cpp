@@ -50,6 +50,7 @@ void ofxLivedrawEngine::setup() {
     oscRouter.addOscChild(&canvas);
     
     effectsManager.setEngineInterface(this);
+    effectsManager.setup();
     oscRouter.addOscChild(&effectsManager);
 
     sessionManager.setEngineInterface(this);
