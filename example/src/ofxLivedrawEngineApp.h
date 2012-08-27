@@ -50,9 +50,6 @@ public:
 
 private:
     
-    ofxSharedVideoBuffer buffer;
-    ofxSharedVideoBufferPlayer player;
-    
     ofxLivedrawEngine livedraw;
   
 };
