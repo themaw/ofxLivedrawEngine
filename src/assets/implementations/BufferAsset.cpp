@@ -50,6 +50,8 @@ BufferAsset::~BufferAsset() {}
 //--------------------------------------------------------------
 void BufferAsset::update() {
     buffer->update(); // update the buffer
+
+    ofxVideoSinkInterface::update(); // update the sink (newness checks)
 }
 
 //--------------------------------------------------------------
