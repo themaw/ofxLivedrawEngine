@@ -1,5 +1,6 @@
 <streams>
     <!-- streaming ipcams -->
+    <!--
     <stream address="http://82.79.176.85:8081/axis-cgi/mjpg/video.cgi?resolution=320x240" name="ipcam0"  type="ipcam" username="" password=""/>
     <stream address="http://81.8.151.136:88/axis-cgi/mjpg/video.cgi?resolution=320x240"   name="ipcam1"  type="ipcam" username="" password=""/>
     <stream address="http://130.15.110.15/axis-cgi/mjpg/video.cgi?resolution=320x240"     name="ipcam2"  type="ipcam" username="" password=""/>
@@ -16,7 +17,7 @@
     <stream address="http://129.89.28.32/axis-cgi/mjpg/video.cgi?resolution=320x240"      name="ipcam13" type="ipcam" username="" password=""/>
     <stream address="http://129.171.176.150/axis-cgi/mjpg/video.cgi?resolution=320x240"   name="ipcam14" type="ipcam" username="" password=""/>
     <stream address="http://134.29.208.43/mjpg/video.mjpg?resolution=320x240"             name="ipcam15" type="ipcam" username="" password=""/>
-
+	-->
     <!-- video from remote location -->
     <!--
     <stream address="http://www.mediacollege.com/video/format/quicktime/videofilename.mov" name="video0" type="movie"/>
