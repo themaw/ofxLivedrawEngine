@@ -44,7 +44,6 @@ CanvasRenderer::CanvasRenderer() : ofxOscRouterNode("canvas") {
     addOscMethod("fps");
     addOscMethod("msaa");
     
-    
     useMSAA = true;
     
     bgColor = ofColor(0,0,0,255);
@@ -95,20 +94,7 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
         
     } else if(isMatch(command,"background")) {
         if(validateOscSignature("[if][if][if][if]?",m)) {
-            ofColor _bgColor;
-            if(m.getNumArgs() >= 3) {
-                int r = ofClamp(getArgAsIntUnchecked(m,0),0,255);
-                int g = ofClamp(getArgAsIntUnchecked(m,1),0,255);
-                int b = ofClamp(getArgAsIntUnchecked(m,2),0,255);
-                _bgColor = ofColor(r,g,b);
-            }
-            
-            if(m.getNumArgs() == 4) {
-                int a = ofClamp(getArgAsIntUnchecked(m,3),0,255);
-                _bgColor = ofColor(_bgColor, a);
-            }
-            
-            setBackground(_bgColor); // redundant ...
+            setBackground(getArgsAsColor(m, 0)); // redundant ...
         }
     } else if(isMatch(command,"fullscreen")) {
         if(validateOscSignature("[if]",m)) {
@@ -132,8 +118,7 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
 void CanvasRenderer::begin() {
     fbo.begin(); // start the FBO
     // clear the background
-    glClearColor(bgColor.r/255.0,bgColor.g/255.0,bgColor.b/255.0,bgColor.a/255.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    ofClear(bgColor);
 }
 
 //--------------------------------------------------------------
