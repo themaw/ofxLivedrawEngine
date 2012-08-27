@@ -39,13 +39,8 @@
 		FD118B1615AE465500532B54 /* SyphonNameboundClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FD118B1415AE465500532B54 /* SyphonNameboundClient.m */; };
 		FD25AB5715DC4405002BC27A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD25AB5615DC4405002BC27A /* QuartzCore.framework */; };
 		FD25AB5915DC4414002BC27A /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD25AB5815DC4414002BC27A /* QTKit.framework */; };
-		FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740D15607A6E006323C7 /* EffectsChain.cpp */; };
-		FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26740F15607A6E006323C7 /* EffectsManager.cpp */; };
 		FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741415607A6E006323C7 /* CanvasGroup.cpp */; };
 		FD26742515607A6E006323C7 /* CanvasGroupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741615607A6E006323C7 /* CanvasGroupManager.cpp */; };
-		FD26742615607A6E006323C7 /* Layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741915607A6E006323C7 /* Layer.cpp */; };
-		FD26742715607A6E006323C7 /* LayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741B15607A6E006323C7 /* LayerManager.cpp */; };
-		FD26742815607A6E006323C7 /* LayerTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26741D15607A6E006323C7 /* LayerTransform.cpp */; };
 		FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD26742015607A6E006323C7 /* CanvasRenderer.cpp */; };
 		FD3F84DC156064BC0022CE42 /* SessionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84AB156064BC0022CE42 /* SessionManager.cpp */; };
 		FD3F84DD156064BC0022CE42 /* SessionPerformance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3F84AD156064BC0022CE42 /* SessionPerformance.cpp */; };
@@ -61,7 +56,12 @@
 		FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD53218F15B0B68600B3517B /* ofxOscRouterNode.cpp */; };
 		FD6FD75615AF3ABD00DABC38 /* ofxOscRouterEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD6FD75515AF3ABD00DABC38 /* ofxOscRouterEvent.cpp */; };
 		FD78004115E4596F0002D634 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD78004015E4596F0002D634 /* Accelerate.framework */; };
-		FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */; };
+		FD838C8E15EAD61900554D3C /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD838C8115EAD61900554D3C /* ofxBaseGui.cpp */; };
+		FD838C8F15EAD61900554D3C /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD838C8315EAD61900554D3C /* ofxButton.cpp */; };
+		FD838C9015EAD61900554D3C /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD838C8615EAD61900554D3C /* ofxLabel.cpp */; };
+		FD838C9115EAD61900554D3C /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD838C8815EAD61900554D3C /* ofxPanel.cpp */; };
+		FD838C9215EAD61900554D3C /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD838C8A15EAD61900554D3C /* ofxSlider.cpp */; };
+		FD838C9315EAD61900554D3C /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD838C8C15EAD61900554D3C /* ofxToggle.cpp */; };
 		FD8B972F156441710099B79F /* osc_match.c in Sources */ = {isa = PBXBuildFile; fileRef = FD8B9727156441710099B79F /* osc_match.c */; };
 		FD8B9730156441710099B79F /* ofxOscRouter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8B972B156441710099B79F /* ofxOscRouter.cpp */; };
 		FD8B9731156441710099B79F /* ofxOscRouterBaseNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8B972D156441710099B79F /* ofxOscRouterBaseNode.cpp */; };
@@ -70,6 +70,13 @@
 		FD8DEAED15A6206700AD0DE3 /* ofxVideoBufferPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8DEAE415A6206700AD0DE3 /* ofxVideoBufferPlayer.cpp */; };
 		FD8DEB0015A629DC00AD0DE3 /* ofxVideoSinkInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8DEAF915A629DC00AD0DE3 /* ofxVideoSinkInterface.cpp */; };
 		FD8DEB0115A629DC00AD0DE3 /* ofxVideoSourceInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD8DEAFB15A629DC00AD0DE3 /* ofxVideoSourceInterface.cpp */; };
+		FDB70F8115E9CCB200828562 /* EffectsChain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70F7B15E9CCB200828562 /* EffectsChain.cpp */; };
+		FDB70F8215E9CCB200828562 /* EffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70F7D15E9CCB200828562 /* EffectsManager.cpp */; };
+		FDB70FAD15E9CCD500828562 /* Layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70FA115E9CCD500828562 /* Layer.cpp */; };
+		FDB70FAE15E9CCD500828562 /* LayerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70FA315E9CCD500828562 /* LayerManager.cpp */; };
+		FDB70FAF15E9CCD500828562 /* LayerSink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70FA615E9CCD500828562 /* LayerSink.cpp */; };
+		FDB70FB015E9CCD500828562 /* LayerTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70FA915E9CCD500828562 /* LayerTransform.cpp */; };
+		FDB70FB115E9CCD500828562 /* MaskedInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB70FAB15E9CCD500828562 /* MaskedInput.cpp */; };
 		FDB9C44115641551005AA48E /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C43015641551005AA48E /* ofxOscBundle.cpp */; };
 		FDB9C44215641551005AA48E /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C43215641551005AA48E /* ofxOscMessage.cpp */; };
 		FDB9C44315641551005AA48E /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C43415641551005AA48E /* ofxOscReceiver.cpp */; };
@@ -157,23 +164,10 @@
 		FD12C05315B720700031D2E6 /* ofxClampedPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxClampedPoint.h; sourceTree = "<group>"; };
 		FD25AB5615DC4405002BC27A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../../../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
 		FD25AB5815DC4414002BC27A /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = ../../../../../../../../../System/Library/Frameworks/QTKit.framework; sourceTree = "<group>"; };
-		FD26740C15607A6E006323C7 /* AbstractShaderEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractShaderEffect.h; sourceTree = "<group>"; };
-		FD26740D15607A6E006323C7 /* EffectsChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsChain.cpp; sourceTree = "<group>"; };
-		FD26740E15607A6E006323C7 /* EffectsChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsChain.h; sourceTree = "<group>"; };
-		FD26740F15607A6E006323C7 /* EffectsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsManager.cpp; sourceTree = "<group>"; };
-		FD26741015607A6E006323C7 /* EffectsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsManager.h; sourceTree = "<group>"; };
-		FD26741115607A6E006323C7 /* ShaderAlphaMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderAlphaMask.h; sourceTree = "<group>"; };
-		FD26741215607A6E006323C7 /* ShaderCurves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderCurves.h; sourceTree = "<group>"; };
 		FD26741415607A6E006323C7 /* CanvasGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasGroup.cpp; sourceTree = "<group>"; };
 		FD26741515607A6E006323C7 /* CanvasGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasGroup.h; sourceTree = "<group>"; };
 		FD26741615607A6E006323C7 /* CanvasGroupManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasGroupManager.cpp; sourceTree = "<group>"; };
 		FD26741715607A6E006323C7 /* CanvasGroupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasGroupManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FD26741915607A6E006323C7 /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Layer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		FD26741A15607A6E006323C7 /* Layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Layer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FD26741B15607A6E006323C7 /* LayerManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = LayerManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		FD26741C15607A6E006323C7 /* LayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LayerManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FD26741D15607A6E006323C7 /* LayerTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerTransform.cpp; sourceTree = "<group>"; };
-		FD26741E15607A6E006323C7 /* LayerTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LayerTransform.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD26742015607A6E006323C7 /* CanvasRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasRenderer.cpp; sourceTree = "<group>"; };
 		FD26742115607A6E006323C7 /* CanvasRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CanvasRenderer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD3F84AB156064BC0022CE42 /* SessionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SessionManager.cpp; sourceTree = "<group>"; };
@@ -207,8 +201,21 @@
 		FD6FD75D15AF62A300DABC38 /* CacheableAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheableAsset.h; sourceTree = "<group>"; };
 		FD731E50157DDE1F00D7256C /* ofxLivedrawEngineInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxLivedrawEngineInterface.h; path = utilities/ofxLivedrawEngineInterface.h; sourceTree = "<group>"; };
 		FD78004015E4596F0002D634 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../../../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
-		FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerRenderSink.h; sourceTree = "<group>"; };
-		FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerRenderSink.cpp; sourceTree = "<group>"; };
+		FD838C7F15EAD61900554D3C /* ofOscParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofOscParameter.h; sourceTree = "<group>"; };
+		FD838C8015EAD61900554D3C /* ofParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofParameter.h; sourceTree = "<group>"; };
+		FD838C8115EAD61900554D3C /* ofxBaseGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
+		FD838C8215EAD61900554D3C /* ofxBaseGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
+		FD838C8315EAD61900554D3C /* ofxButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
+		FD838C8415EAD61900554D3C /* ofxButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxButton.h; sourceTree = "<group>"; };
+		FD838C8515EAD61900554D3C /* ofxGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGui.h; sourceTree = "<group>"; };
+		FD838C8615EAD61900554D3C /* ofxLabel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxLabel.cpp; sourceTree = "<group>"; };
+		FD838C8715EAD61900554D3C /* ofxLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLabel.h; sourceTree = "<group>"; };
+		FD838C8815EAD61900554D3C /* ofxPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPanel.cpp; sourceTree = "<group>"; };
+		FD838C8915EAD61900554D3C /* ofxPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPanel.h; sourceTree = "<group>"; };
+		FD838C8A15EAD61900554D3C /* ofxSlider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSlider.cpp; sourceTree = "<group>"; };
+		FD838C8B15EAD61900554D3C /* ofxSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSlider.h; sourceTree = "<group>"; };
+		FD838C8C15EAD61900554D3C /* ofxToggle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxToggle.cpp; sourceTree = "<group>"; };
+		FD838C8D15EAD61900554D3C /* ofxToggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxToggle.h; sourceTree = "<group>"; };
 		FD8B9727156441710099B79F /* osc_match.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = osc_match.c; sourceTree = "<group>"; };
 		FD8B9728156441710099B79F /* osc_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = osc_match.h; sourceTree = "<group>"; };
 		FD8B972B156441710099B79F /* ofxOscRouter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscRouter.cpp; sourceTree = "<group>"; };
@@ -227,6 +234,24 @@
 		FD8DEAFB15A629DC00AD0DE3 /* ofxVideoSourceInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoSourceInterface.cpp; sourceTree = "<group>"; };
 		FD8DEAFC15A629DC00AD0DE3 /* ofxVideoSourceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoSourceInterface.h; sourceTree = "<group>"; };
 		FD8DEAFF15A629DC00AD0DE3 /* ofxVideoFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoFrame.h; sourceTree = "<group>"; };
+		FDB70F7B15E9CCB200828562 /* EffectsChain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsChain.cpp; sourceTree = "<group>"; };
+		FDB70F7C15E9CCB200828562 /* EffectsChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsChain.h; sourceTree = "<group>"; };
+		FDB70F7D15E9CCB200828562 /* EffectsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EffectsManager.cpp; sourceTree = "<group>"; };
+		FDB70F7E15E9CCB200828562 /* EffectsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectsManager.h; sourceTree = "<group>"; };
+		FDB70F7F15E9CCB200828562 /* AlphaMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaMask.h; sourceTree = "<group>"; };
+		FDB70F8015E9CCB200828562 /* Curves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Curves.h; sourceTree = "<group>"; };
+		FDB70FA115E9CCD500828562 /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layer.cpp; sourceTree = "<group>"; };
+		FDB70FA215E9CCD500828562 /* Layer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layer.h; sourceTree = "<group>"; };
+		FDB70FA315E9CCD500828562 /* LayerManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerManager.cpp; sourceTree = "<group>"; };
+		FDB70FA415E9CCD500828562 /* LayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerManager.h; sourceTree = "<group>"; };
+		FDB70FA515E9CCD500828562 /* LayerManagerInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerManagerInterface.h; sourceTree = "<group>"; };
+		FDB70FA615E9CCD500828562 /* LayerSink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerSink.cpp; sourceTree = "<group>"; };
+		FDB70FA715E9CCD500828562 /* LayerSink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerSink.h; sourceTree = "<group>"; };
+		FDB70FA815E9CCD500828562 /* LayerSinkCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerSinkCollection.h; sourceTree = "<group>"; };
+		FDB70FA915E9CCD500828562 /* LayerTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerTransform.cpp; sourceTree = "<group>"; };
+		FDB70FAA15E9CCD500828562 /* LayerTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayerTransform.h; sourceTree = "<group>"; };
+		FDB70FAB15E9CCD500828562 /* MaskedInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MaskedInput.cpp; sourceTree = "<group>"; };
+		FDB70FAC15E9CCD500828562 /* MaskedInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaskedInput.h; sourceTree = "<group>"; };
 		FDB9C40D15641551005AA48E /* IpEndpointName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IpEndpointName.h; sourceTree = "<group>"; };
 		FDB9C40E15641551005AA48E /* NetworkingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkingUtils.h; sourceTree = "<group>"; };
 		FDB9C40F15641551005AA48E /* PacketListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PacketListener.h; sourceTree = "<group>"; };
@@ -269,7 +294,6 @@
 		FDF978DF15A80FD2000ADECA /* AssetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AssetManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FDF978E115A80FD2000ADECA /* AssetMetaData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = AssetMetaData.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FDF978E215A80FD2000ADECA /* AssetMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = AssetMetaData.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		FDFAA0B815CC9189007577B9 /* LayerManagerInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayerManagerInterface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,6 +329,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				FD838C7D15EAD61800554D3C /* ofxGui */,
 				FDD38B0415D18F4F0066ABC1 /* ofxStringUtils */,
 				FD118A8A15AE25A900532B54 /* ofxSyphon */,
 				FD8DEB2A15A64AE000AD0DE3 /* ofxUtils */,
@@ -525,26 +550,10 @@
 		FD26740A15607A6D006323C7 /* canvas */ = {
 			isa = PBXGroup;
 			children = (
-				FD26740B15607A6E006323C7 /* effects */,
 				FD26741315607A6E006323C7 /* group */,
-				FD26741815607A6E006323C7 /* layers */,
 				FD26741F15607A6E006323C7 /* render */,
 			);
 			path = canvas;
-			sourceTree = "<group>";
-		};
-		FD26740B15607A6E006323C7 /* effects */ = {
-			isa = PBXGroup;
-			children = (
-				FD26740C15607A6E006323C7 /* AbstractShaderEffect.h */,
-				FD26740D15607A6E006323C7 /* EffectsChain.cpp */,
-				FD26740E15607A6E006323C7 /* EffectsChain.h */,
-				FD26740F15607A6E006323C7 /* EffectsManager.cpp */,
-				FD26741015607A6E006323C7 /* EffectsManager.h */,
-				FD26741115607A6E006323C7 /* ShaderAlphaMask.h */,
-				FD26741215607A6E006323C7 /* ShaderCurves.h */,
-			);
-			path = effects;
 			sourceTree = "<group>";
 		};
 		FD26741315607A6E006323C7 /* group */ = {
@@ -556,22 +565,6 @@
 				FD26741715607A6E006323C7 /* CanvasGroupManager.h */,
 			);
 			path = group;
-			sourceTree = "<group>";
-		};
-		FD26741815607A6E006323C7 /* layers */ = {
-			isa = PBXGroup;
-			children = (
-				FD26741915607A6E006323C7 /* Layer.cpp */,
-				FD26741A15607A6E006323C7 /* Layer.h */,
-				FD26741B15607A6E006323C7 /* LayerManager.cpp */,
-				FD26741C15607A6E006323C7 /* LayerManager.h */,
-				FD26741D15607A6E006323C7 /* LayerTransform.cpp */,
-				FD26741E15607A6E006323C7 /* LayerTransform.h */,
-				FDFAA0B815CC9189007577B9 /* LayerManagerInterface.h */,
-				FD85F5DE15D072AB005CA399 /* LayerRenderSink.h */,
-				FD85F5DF15D072B9005CA399 /* LayerRenderSink.cpp */,
-			);
-			path = layers;
 			sourceTree = "<group>";
 		};
 		FD26741F15607A6E006323C7 /* render */ = {
@@ -594,6 +587,8 @@
 		FD3F846A156064BC0022CE42 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				FDB70FA015E9CCD500828562 /* layers */,
+				FDB70F7915E9CCB200828562 /* effects */,
 				FD26740A15607A6D006323C7 /* canvas */,
 				FD3F846B156064BC0022CE42 /* assets */,
 				FD3F84AA156064BC0022CE42 /* sessions */,
@@ -713,6 +708,37 @@
 			name = ofxVideoBuffer;
 			sourceTree = "<group>";
 		};
+		FD838C7D15EAD61800554D3C /* ofxGui */ = {
+			isa = PBXGroup;
+			children = (
+				FD838C7E15EAD61900554D3C /* src */,
+			);
+			name = ofxGui;
+			path = ../../../addons/ofxGui;
+			sourceTree = "<group>";
+		};
+		FD838C7E15EAD61900554D3C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FD838C7F15EAD61900554D3C /* ofOscParameter.h */,
+				FD838C8015EAD61900554D3C /* ofParameter.h */,
+				FD838C8115EAD61900554D3C /* ofxBaseGui.cpp */,
+				FD838C8215EAD61900554D3C /* ofxBaseGui.h */,
+				FD838C8315EAD61900554D3C /* ofxButton.cpp */,
+				FD838C8415EAD61900554D3C /* ofxButton.h */,
+				FD838C8515EAD61900554D3C /* ofxGui.h */,
+				FD838C8615EAD61900554D3C /* ofxLabel.cpp */,
+				FD838C8715EAD61900554D3C /* ofxLabel.h */,
+				FD838C8815EAD61900554D3C /* ofxPanel.cpp */,
+				FD838C8915EAD61900554D3C /* ofxPanel.h */,
+				FD838C8A15EAD61900554D3C /* ofxSlider.cpp */,
+				FD838C8B15EAD61900554D3C /* ofxSlider.h */,
+				FD838C8C15EAD61900554D3C /* ofxToggle.cpp */,
+				FD838C8D15EAD61900554D3C /* ofxToggle.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		FD8B9722156441700099B79F /* ofxOscRouter */ = {
 			isa = PBXGroup;
 			children = (
@@ -793,6 +819,38 @@
 			);
 			name = ofxUtils;
 			path = ../../ofxUtils;
+			sourceTree = "<group>";
+		};
+		FDB70F7915E9CCB200828562 /* effects */ = {
+			isa = PBXGroup;
+			children = (
+				FDB70F7B15E9CCB200828562 /* EffectsChain.cpp */,
+				FDB70F7C15E9CCB200828562 /* EffectsChain.h */,
+				FDB70F7D15E9CCB200828562 /* EffectsManager.cpp */,
+				FDB70F7E15E9CCB200828562 /* EffectsManager.h */,
+				FDB70F7F15E9CCB200828562 /* AlphaMask.h */,
+				FDB70F8015E9CCB200828562 /* Curves.h */,
+			);
+			path = effects;
+			sourceTree = "<group>";
+		};
+		FDB70FA015E9CCD500828562 /* layers */ = {
+			isa = PBXGroup;
+			children = (
+				FDB70FA115E9CCD500828562 /* Layer.cpp */,
+				FDB70FA215E9CCD500828562 /* Layer.h */,
+				FDB70FA315E9CCD500828562 /* LayerManager.cpp */,
+				FDB70FA415E9CCD500828562 /* LayerManager.h */,
+				FDB70FA515E9CCD500828562 /* LayerManagerInterface.h */,
+				FDB70FA615E9CCD500828562 /* LayerSink.cpp */,
+				FDB70FA715E9CCD500828562 /* LayerSink.h */,
+				FDB70FA815E9CCD500828562 /* LayerSinkCollection.h */,
+				FDB70FA915E9CCD500828562 /* LayerTransform.cpp */,
+				FDB70FAA15E9CCD500828562 /* LayerTransform.h */,
+				FDB70FAB15E9CCD500828562 /* MaskedInput.cpp */,
+				FDB70FAC15E9CCD500828562 /* MaskedInput.h */,
+			);
+			path = layers;
 			sourceTree = "<group>";
 		};
 		FDB9C40715641551005AA48E /* ofxOsc */ = {
@@ -1087,13 +1145,8 @@
 				FD3F853A156066F40022CE42 /* tinyxmlerror.cpp in Sources */,
 				FD3F853B156066F40022CE42 /* tinyxmlparser.cpp in Sources */,
 				FD3F853C156066F40022CE42 /* ofxXmlSettings.cpp in Sources */,
-				FD26742215607A6E006323C7 /* EffectsChain.cpp in Sources */,
-				FD26742315607A6E006323C7 /* EffectsManager.cpp in Sources */,
 				FD26742415607A6E006323C7 /* CanvasGroup.cpp in Sources */,
 				FD26742515607A6E006323C7 /* CanvasGroupManager.cpp in Sources */,
-				FD26742615607A6E006323C7 /* Layer.cpp in Sources */,
-				FD26742715607A6E006323C7 /* LayerManager.cpp in Sources */,
-				FD26742815607A6E006323C7 /* LayerTransform.cpp in Sources */,
 				FD26742915607A6E006323C7 /* CanvasRenderer.cpp in Sources */,
 				FDB9C44115641551005AA48E /* ofxOscBundle.cpp in Sources */,
 				FDB9C44215641551005AA48E /* ofxOscMessage.cpp in Sources */,
@@ -1124,9 +1177,21 @@
 				FD084F3515AFB0E4001CC08F /* CacheableAsset.cpp in Sources */,
 				FD084F3715AFB157001CC08F /* DiskBasedAsset.cpp in Sources */,
 				FD53219015B0B68600B3517B /* ofxOscRouterNode.cpp in Sources */,
-				FD85F5E015D072BA005CA399 /* LayerRenderSink.cpp in Sources */,
 				FDD38B1515D1913E0066ABC1 /* ofxStringUtils.cpp in Sources */,
 				FD49220515D980EB00E72D68 /* PlayableAsset.cpp in Sources */,
+				FDB70F8115E9CCB200828562 /* EffectsChain.cpp in Sources */,
+				FDB70F8215E9CCB200828562 /* EffectsManager.cpp in Sources */,
+				FDB70FAD15E9CCD500828562 /* Layer.cpp in Sources */,
+				FDB70FAE15E9CCD500828562 /* LayerManager.cpp in Sources */,
+				FDB70FAF15E9CCD500828562 /* LayerSink.cpp in Sources */,
+				FDB70FB015E9CCD500828562 /* LayerTransform.cpp in Sources */,
+				FDB70FB115E9CCD500828562 /* MaskedInput.cpp in Sources */,
+				FD838C8E15EAD61900554D3C /* ofxBaseGui.cpp in Sources */,
+				FD838C8F15EAD61900554D3C /* ofxButton.cpp in Sources */,
+				FD838C9015EAD61900554D3C /* ofxLabel.cpp in Sources */,
+				FD838C9115EAD61900554D3C /* ofxPanel.cpp in Sources */,
+				FD838C9215EAD61900554D3C /* ofxSlider.cpp in Sources */,
+				FD838C9315EAD61900554D3C /* ofxToggle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
