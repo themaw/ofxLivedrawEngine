@@ -75,7 +75,6 @@ ofxOscRouterNode("transform") {
     orientation = ofxClampedPoint(ofPoint(1.0f, 1.0f, 1.0f));
     
     opacity = 255;
-    bIsOpacityNormalized = false;
 
 }
 
@@ -135,6 +134,7 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 
                 
             } else {
+                
                 setAnchorPointX(getArgAsFloatUnchecked(m,0));
                 if(m.getNumArgs() > 1) {
                     setAnchorPointY(getArgAsFloatUnchecked(m,1));
@@ -206,15 +206,12 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
         }
         
     } else if(isMatch(command,"opacity") || isMatch(command,"o")) {
-        if(validateOscSignature("[if]|[s][if]", m)) {
-            if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
-                char  c = tolower(getArgAsStringUnchecked(m,0)[0]);
-                if(c == 'n') {
-                    setOpacityNormalized(getArgAsBoolean(m,1));
-                }
-            } else {
-                setOpacity(getArgAsFloatUnchecked(m,0));
-            }
+        if(validateOscSignature("[if]", m)) {
+            setOpacity(getArgAsFloatUnchecked(m,0));
+        }
+    } else if(isMatch(command,"opacityn") || isMatch(command,"on")) {
+        if(validateOscSignature("[if]", m)) {
+            setOpacityNormalized(getArgAsFloatUnchecked(m,0));
         }
     } else if(isMatch(command,"size") || isMatch(command, "sz")) {
         if(validateOscSignature("[if][if]", m)) {
@@ -303,16 +300,16 @@ bool LayerTransform::isRotationNormalized() const { return bIsRotationNormalized
 //--------------------------------------------------------------
 void LayerTransform::setRotationNormalized(bool norm) { bIsRotationNormalized = norm;}
 
-//--------------------------------------------------------------
-ofPoint LayerTransform::getOrientation() const { return orientation.getClamped(); };
-//--------------------------------------------------------------
-void LayerTransform::setOrientation(const ofPoint& p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
-//--------------------------------------------------------------
-void LayerTransform::setOrientationX(float x) {orientation.x = x; onSetOrientation();}
-//--------------------------------------------------------------
-void LayerTransform::setOrientationY(float y) {orientation.y = y; onSetOrientation();}
-//--------------------------------------------------------------
-void LayerTransform::setOrientationZ(float z) {orientation.z = z; onSetOrientation();}
+////--------------------------------------------------------------
+//ofPoint LayerTransform::getOrientation() const { return orientation.getClamped(); };
+////--------------------------------------------------------------
+//void LayerTransform::setOrientation(const ofPoint& p) {orientation.set(p.x, p.y, p.z);onSetOrientation();}
+////--------------------------------------------------------------
+//void LayerTransform::setOrientationX(float x) {orientation.x = x; onSetOrientation();}
+////--------------------------------------------------------------
+//void LayerTransform::setOrientationY(float y) {orientation.y = y; onSetOrientation();}
+////--------------------------------------------------------------
+//void LayerTransform::setOrientationZ(float z) {orientation.z = z; onSetOrientation();}
 
 //--------------------------------------------------------------
 ofPoint LayerTransform::getScale() const { return scale.getClamped(); };
@@ -331,9 +328,10 @@ int LayerTransform::getOpacity() const { return opacity;}
 void LayerTransform::setOpacity(int o) { opacity = o; onSetOpacity();};
 
 //--------------------------------------------------------------
-bool LayerTransform::isOpacityNormalized() const { return bIsOpacityNormalized; }
-//--------------------------------------------------------------
-void LayerTransform::setOpacityNormalized(bool norm) { bIsOpacityNormalized = norm;}
+void LayerTransform::setOpacityNormalized(float n) {
+    opacity = n*255.0f;
+    onSetOpacity();
+};
 
 //--------------------------------------------------------------
 void LayerTransform::onSetSize() {

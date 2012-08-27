@@ -33,9 +33,11 @@
 
 #include "LayerManagerInterface.h"
 #include "LayerTransform.h"
-#include "AssetManager.h"
+//#include "AssetManager.h"
 
-#include "LayerRenderSink.h"
+#include "EffectsManager.h"
+
+#include "MaskedInput.h"
 
 #include "alphanum.hpp"
 
@@ -48,15 +50,15 @@ enum LayerStretchMode {
 
 
 class Layer : public ofxOscRouterNode,
-              public ofxVideoSourceInterface,
+              //public ofxVideoSourceInterface,
               public ofxEnablerInterface
 {
 	
 public:
 
-	Layer(LayerManagerInterface* clm, string name);
-	Layer(LayerManagerInterface* clm, string name, ofPoint pos);
-    Layer(LayerManagerInterface* clm, string name, ofPoint pos, Layer* layerParent);
+	Layer(LayerManagerInterface* clm, const string& name);
+	Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos);
+    Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos, Layer* layerParent);
 
 	virtual ~Layer();
 	
@@ -66,25 +68,25 @@ public:
     void init();
     bool dispose();
 
-    bool isFrameNew();
+//    bool isFrameNew();
 
-    ofPixelsRef getPixelsRef();
+//    ofPixelsRef getPixelsRef();
     
-    bool isLoaded();
+//    bool isLoaded();
     
     void render();
     void draw();
-    void drawFrame(ofxSharedVideoFrame frame);
+    void drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo);
 
-    // player assets
-    bool hasInputFrame(int index = 0) const;
-    bool hasMaskFrame(int index = 0) const;
-    LayerRenderSink& getInputSink(int index = 0);
-    LayerRenderSink& getMaskSink(int index = 0);
-    const LayerRenderSink& getInputSink(int index = 0) const;
-    const LayerRenderSink& getMaskSink(int index = 0) const;
+//    // player assets
+//    bool hasInputFrame(int index = 0) const;
+//    bool hasMaskFrame(int index = 0) const;
+//    LayerSink& getInputSink(int index = 0);
+//    LayerSink& getMaskSink(int index = 0);
+//    const LayerSink& getInputSink(int index = 0) const;
+//    const LayerSink& getMaskSink(int index = 0) const;
 
-    LayerTransform* getTransform();
+    LayerTransform& getTransformRef();
 	
     LayerStretchMode getLayerStretchMode();
     void setLayerStretchMode(LayerStretchMode mode);
@@ -129,17 +131,17 @@ public:
     bool bringToFront();
     bool sendToBack();
     
-    void sinkInput(int index, const string& asset);
-    void sinkMask(int index, const string& asset);
-    
-    void unsinkInput(int index);
-    void unsinkMask(int index);
-
-    void clearInput(int index);
-    void clearMask(int index);
-    
-    void unsinkInputs();
-    void unsinkMasks();
+//    void sinkInput(int index, const string& asset);
+//    void sinkMask(int index, const string& asset);
+//    
+//    void unsinkInput(int index);
+//    void unsinkMask(int index);
+//
+//    void clearInput(int index);
+//    void clearMask(int index);
+//    
+//    void unsinkInputs();
+//    void unsinkMasks();
     
     // node info
     Layer*          getLayerRoot();
@@ -170,15 +172,25 @@ private:
     bool bDrawOverFlow;
     
     ofPixels pix; // TODO:
-    ofPtr<ofFbo> fbo;
+    ofPtr<ofFbo> fboLayer;
+    ofPtr<ofFbo> fboInput;
+    ofPtr<ofFbo> fboMask;
+    
+    bool isFboLayerDirty;
+    bool isFboInputDirty;
+    bool isFboMaskDirty;
+
     
     string layerName;
     
-    vector<LayerRenderSink>::iterator sinkIter;
-    vector<LayerRenderSink> inputs;
-    vector<LayerRenderSink> masks;
+    MaskedInput* inputA;
+    MaskedInput* inputB;
     
-	LayerTransform transform;
+    
+    MaskedInput* getCurrentInput();
+    bool currentInputIsA;
+    
+	LayerTransform transform; // todo: make this shared
 	
 	bool solo;
 	bool locked;

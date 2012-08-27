@@ -22,42 +22,31 @@
  
  ==============================================================================*/
 
-#include "EffectsManager.h"
+#pragma once
 
-//--------------------------------------------------------------
-EffectsManager::EffectsManager() : ofxOscRouterNode("effects") {
-    engine = NULL;
+#include "ofxOscRouterNode.h"
+#include "ofxLivedrawEngineInterface.h"
+#include "LayerManagerInterface.h"
+#include "ofxVideoSinkInterface.h"
+#include "ofxVideoSourceInterface.h"
+#include "AssetManager.h"
+
+class LayerSink : public ofxVideoSinkInterface, public ofxOscRouterNode {
+public:
+    LayerSink(LayerManagerInterface* lmi, const string& name);
+    virtual ~LayerSink();
+    virtual void update();
+    void processOscCommand(const string& command, const ofxOscMessage& m);
+    bool frameReceived(ofxSharedVideoFrame _frame);
+    void clear();
+    bool hasFrame() const;
+    ofxSharedVideoFrame getFrame();
     
-    addOscNodeAlias("eff");
-    addOscNodeAlias("e");
-}
-
-//--------------------------------------------------------------
-EffectsManager::~EffectsManager() {
+    void sinkAsset(const string& asset);
+    void unsinkAsset();
     
-}
-
-// basic functions
-
-//--------------------------------------------------------------
-void EffectsManager::update() {
+protected:
+    LayerManagerInterface* lmi;
+    ofxSharedVideoFrame frame;
     
-}
-
-// deal with OSC
-
-//--------------------------------------------------------------
-void EffectsManager::processOscCommand(const string& command, const ofxOscMessage& m) {
-    ofLogNotice("EffectsManager") << "processOscCommand() : EFFECTS manager GOT AN OSC MESSAGE";
-}
-
-// get access to shaders
-//--------------------------------------------------------------
-ShaderAlphaMask* EffectsManager::getShaderAlphaMask() {
-    
-}
-
-//--------------------------------------------------------------
-ShaderAlphaMask* EffectsManager::getShaderCurves() {
-    
-}
+};

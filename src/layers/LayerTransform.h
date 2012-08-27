@@ -76,11 +76,11 @@ public:
     bool isRotationNormalized() const;
     void setRotationNormalized(bool norm);
 	
-	ofPoint getOrientation() const;
-	void setOrientation(const ofPoint& p);
-	void setOrientationX(float x);
-	void setOrientationY(float y);
-	void setOrientationZ(float z);
+//	ofPoint getOrientation() const;
+//	void setOrientation(const ofPoint& p);
+//	void setOrientationX(float x);
+//	void setOrientationY(float y);
+//	void setOrientationZ(float z);
 	
 	ofPoint getScale() const;
 	void setScale(const ofPoint& p);
@@ -90,8 +90,7 @@ public:
 	
     int  getOpacity() const;
 	void setOpacity(int o);
-    bool isOpacityNormalized() const;
-    void setOpacityNormalized(bool norm);
+    void setOpacityNormalized(float norm);
 
     void onSetSize();
 	void onSetPosition();
@@ -128,7 +127,6 @@ public:
     ofxClampedPoint size;
     
 	float opacity; // 0-255
-    bool bIsOpacityNormalized;
 	
 	/*
 	ofEvent<ofxLimitedPoint*> newPositionEvent;

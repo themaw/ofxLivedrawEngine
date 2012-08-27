@@ -24,15 +24,34 @@
 
 #pragma once
 
-#include "ofxVideoSinkInterface.h"
+#include "ofMain.h"
+#include "ofxOscRouterNode.h"
+#include "LayerManagerInterface.h"
+#include "AlphaMask.h"
+#include "LayerSink.h"
 
-class LayerRenderSink : public ofxVideoSinkInterface {
+class MaskedInput : public ofxOscRouterNode {
 public:
-    bool frameReceived(ofxSharedVideoFrame _frame);
-    void clear();
-    bool hasFrame() const;
-    ofxSharedVideoFrame getFrame();
-protected:
-    ofxSharedVideoFrame frame;
+    MaskedInput(LayerManagerInterface* lmi, const string& name);
+    virtual ~MaskedInput();
     
+    virtual void update();
+    
+    void processOscCommand(const string& command, const ofxOscMessage& m);
+
+    LayerSink& getInput();
+    LayerSink& getMask();
+    
+    bool dispose();
+    
+    AlphaMaskSettings& getAlphaMaskSettings();
+    
+protected:
+    LayerManagerInterface* lmi;
+    
+    AlphaMaskSettings* alphaMaskSettings;
+    
+    LayerSink* input;
+    LayerSink* mask;
+
 };

@@ -25,15 +25,14 @@
 #pragma once
 
 #include "ofMain.h"
-#include "AbstractShaderEffect.h"
 #include "ofxEnablerInterface.h"
 
 #define LUT_LENGTH 3 // assume 8 bit pis / color / pixel
 
-class ShaderCurvesSettings : public ofxOscRouterNode, public ofxEnablerInterface {
+class CurvesSettings : public ofxOscRouterNode, public ofxEnablerInterface {
     
 public:
-    ShaderCurvesSettings() : ofxOscRouterNode("curves"), ofxEnablerInterface(true) {
+    CurvesSettings() : ofxOscRouterNode("curves"), ofxEnablerInterface(true) {
         // just init a normal map
         for(int i = 0; i < LUT_LENGTH; i++) {
             dataLUT[i][0] = ofMap(i, 0, LUT_LENGTH-1, 0, 1);   // R low
@@ -45,7 +44,7 @@ public:
         addOscMethod("enable");
     }
     
-    ~ShaderCurvesSettings() {
+    virtual ~CurvesSettings() {
         
     }
     
@@ -104,27 +103,29 @@ private:
 };
 
 
-class ShaderCurves : public AbstractShaderEffect {
+class Curves : public ofShader {
     
 public:
     
-    ShaderCurves() : AbstractShaderEffect() {
-    }
+    Curves() : ofShader() {}
     
-    ~ShaderCurves() {};
+    ~Curves() {};
     
     
     void setup() {
-        load("application/shaders/maw.shader.passthrough.vert",   
-             "application/shaders/maw.shader.curves.frag");
+//        load("application/shaders/maw.shader.passthrough.vert",   
+//             "application/shaders/maw.shader.curves.frag");
+//        
+        
+        
     }
     
-    void applySettings(ShaderCurvesSettings* settings) {
+    void applySettings(CurvesSettings& settings) {
         
-        setUniform1i("LUT_LENGTH",settings->getLUTTexture());
+        setUniform1i("LUT_LENGTH",settings.getLUTTexture());
         
-        glBindTexture(GL_TEXTURE_1D, settings->getLUTTexture());	// Bind This Texture. From Now On It Will Be 1D
-        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, settings->getLUTLength(), 0, GL_RGB , GL_FLOAT, settings->getLUT());
+        glBindTexture(GL_TEXTURE_1D, settings.getLUTTexture());	// Bind This Texture. From Now On It Will Be 1D
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB, settings.getLUTLength(), 0, GL_RGB , GL_FLOAT, settings.getLUT());
         glDisable(GL_TEXTURE_1D);
     }
     

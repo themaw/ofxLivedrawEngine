@@ -25,15 +25,14 @@
 #pragma once
 
 #include "ofMain.h"
-#include "AbstractShaderEffect.h"
 #include "ofxOscRouterNode.h"
 #include "ofxEnablerInterface.h"
 
-class ShaderAlphaMaskSettings : public ofxOscRouterNode, public ofxEnablerInterface {
+class AlphaMaskSettings : public ofxOscRouterNode, public ofxEnablerInterface {
     
 public:
     
-    ShaderAlphaMaskSettings() : ofxOscRouterNode("alphamask"), ofxEnablerInterface(true) {
+    AlphaMaskSettings() : ofxOscRouterNode("alphamask"), ofxEnablerInterface(true) {
         alphaMode = 5;
         invertMask = 0; // 0 = dark-alpha, 1 = light-alpha
         invertSource = 0; // 1 = invert, 0 = thru
@@ -51,7 +50,7 @@ public:
         
     }
     
-    virtual ~ShaderAlphaMaskSettings() {}
+    virtual ~AlphaMaskSettings() {}
     
     void processOscCommand(const string& command, const ofxOscMessage& m) {
         if(isMatch(command,"alphamode")) {
@@ -91,7 +90,10 @@ public:
     void setInvertSource(bool is) {invertSource = is;}
     void setThreshold(float thresh) {threshold = ofClamp(thresh,0,1);}
     void setSpread(float s) {spread = ofClamp(s,0,1);}
-    void setGain(float g) {gain = ofClamp(g,0,1000);}
+    void setGain(float g) {
+        gain = g;//ofClamp(g,0,1000);
+    
+    }
     
 //    void setMaskTexture(int tex) {
 ///        maskTexture = tex;
@@ -121,20 +123,19 @@ private:
 };
 
 
-class ShaderAlphaMask : public AbstractShaderEffect {
+class AlphaMask : public ofShader {
     
 public:
     
-    ShaderAlphaMask() : AbstractShaderEffect() {
-    }
+    AlphaMask() : ofShader() {}
 
-    ~ShaderAlphaMask() {};
-    
+    ~AlphaMask() {};
     
     void setup() {
-        load("application/shaders/maw.shader.passthrough.vert",   
-             "application/shaders/maw.shader.alphamasker.frag");
-       
+
+        setupShaderFromFile(GL_FRAGMENT_SHADER, "application/shaders/maw.shader.alphamasker.frag");
+        linkProgram();
+
          //set the texture parameters for the maks shader. just do this at the beginning
          /*
          begin();
@@ -149,7 +150,10 @@ public:
 
     }
     
-    void applySettings(const ShaderAlphaMaskSettings& settings) {
+    void apply(ofTexture& input, ofTexture& mask, const AlphaMaskSettings& settings) {
+        setUniformTexture("sourceTexture", input, 1 );
+        setUniformTexture("maskTexture", mask, 2);
+        
         setUniform1i("alphaMode",   settings.getAlphaMode());
         setUniform1i("invertMask",  settings.getInvertMask());
         setUniform1i("invertSource",settings.getInvertSource());
@@ -157,11 +161,5 @@ public:
         setUniform1f("spread",      settings.getSpread());
         setUniform1f("gain",        settings.getGain());
     }
-
-    
-    void setMaskTexture(int i) {
-        setUniform1i("maskTexture", i);
-    }
-    
 
 };

@@ -22,37 +22,41 @@
  
  ==============================================================================*/
 
-
-#include "EffectsChain.h"
+#include "EffectsManager.h"
 
 //--------------------------------------------------------------
-EffectsChain::EffectsChain() : ofxOscRouterNode("effects") {
+EffectsManager::EffectsManager() : ofxOscRouterNode("effects") {
+    engine = NULL;
     
+    addOscNodeAlias("eff");
+    addOscNodeAlias("e");
 }
 
 //--------------------------------------------------------------
-EffectsChain::~EffectsChain() {
-    
+EffectsManager::~EffectsManager() {}
+
+// basic functions
+//--------------------------------------------------------------
+void EffectsManager::setup() {
+    alphaMask.setup();
+    curves.setup();
 }
 
 //--------------------------------------------------------------
-void EffectsChain::setup() {
-    addOscChild(&alphaMaskSettings);
-    addOscChild(&curvesSettings);
+void EffectsManager::update() {}
+
+//--------------------------------------------------------------
+void EffectsManager::processOscCommand(const string& command, const ofxOscMessage& m) {
+    ofLogNotice("EffectsManager") << "processOscCommand() : EFFECTS manager GOT AN OSC MESSAGE";
+}
+
+// get access to shaders
+//--------------------------------------------------------------
+AlphaMask& EffectsManager::getAlphaMaskRef() {
+    return alphaMask;
 }
 
 //--------------------------------------------------------------
-void EffectsChain::update() {}
-
-//--------------------------------------------------------------
-void EffectsChain::draw() {}
-
-//--------------------------------------------------------------
-void EffectsChain::processOscCommand(const string& command, const ofxOscMessage& m) {
-    ofLogNotice() << "EffectsChain::processOscCommand() : EFFECTS CHAIN GOT AN OSC MESSAGE";
-}
-
-//--------------------------------------------------------------
-void EffectsChain::setEffectsManager(EffectsManager* _effectsManager) {
-    effectsManager = _effectsManager;
+Curves& EffectsManager::getCurvesRef() {
+    return curves;
 }

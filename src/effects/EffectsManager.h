@@ -22,33 +22,48 @@
  
  ==============================================================================*/
 
-
 #pragma once
 
 #include "ofMain.h"
+#include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
-#include "EffectsManager.h"
-#include "ShaderCurves.h"
-#include "ShaderAlphaMask.h"
 
-class EffectsChain : public ofxOscRouterNode {
+#include "AlphaMask.h"
+#include "Curves.h"
+
+class EffectsManager : public ofxOscRouterNode {
+    
 public:
-    
-    EffectsChain();
-    virtual ~EffectsChain();
+    EffectsManager();
+    virtual ~EffectsManager();
 
+    // basic functions
     void setup();
-    void update();
-    void draw();
     
+    // basic functions
+    void update();
+    
+    // deal with OSC
     void processOscCommand(const string& command, const ofxOscMessage& m);
-    void setEffectsManager(EffectsManager* manager);
+
+    // get access to shaders
+    AlphaMask& getAlphaMaskRef();
+    Curves& getCurvesRef();
+   
+    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
+    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
+    
+protected:
+    
+    ofxLivedrawEngineInterface* engine;
     
 private:
+
+    // we keep a single collection of shaders here
+    // all shader use links back to these shaders so we don't 
+    // have to load multiple shaders onto the GPU
+    AlphaMask alphaMask;
+    Curves    curves;
     
-    EffectsManager* effectsManager;
-    
-    ShaderAlphaMaskSettings alphaMaskSettings;
-    ShaderCurvesSettings    curvesSettings;
     
 };

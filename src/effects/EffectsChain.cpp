@@ -22,45 +22,37 @@
  
  ==============================================================================*/
 
-#pragma once
 
-#include "ofMain.h"
-#include "ofxLivedrawEngineInterface.h"
-#include "ofxOscRouterNode.h"
+#include "EffectsChain.h"
 
-#include "ShaderAlphaMask.h"
-#include "ShaderCurves.h"
+//--------------------------------------------------------------
+EffectsChain::EffectsChain() : ofxOscRouterNode("effects") {
+    
+}
 
-class EffectsManager : public ofxOscRouterNode {
+//--------------------------------------------------------------
+EffectsChain::~EffectsChain() {
     
-public:
-    EffectsManager();
-    virtual ~EffectsManager();
-    
-    // basic functions
-    void update();
-    
-    // deal with OSC
-    void processOscCommand(const string& command, const ofxOscMessage& m);
+}
 
-    
-    // get access to shaders
-    ShaderAlphaMask* getShaderAlphaMask();
-    ShaderAlphaMask* getShaderCurves();
-   
-    ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
-    void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
-    
-protected:
-    
-    ofxLivedrawEngineInterface* engine;
-private:
+//--------------------------------------------------------------
+void EffectsChain::setup() {
+    addOscChild(&alphaMaskSettings);
+    addOscChild(&curvesSettings);
+}
 
-    // we keep a single collection of shaders here
-    // all shader use links back to these shaders so we don't 
-    // have to load multiple shaders onto the GPU
-    ShaderAlphaMask alphaMaskShader;
-    ShaderCurves    curvesShader;
-    
-    
-};
+//--------------------------------------------------------------
+void EffectsChain::update() {}
+
+//--------------------------------------------------------------
+void EffectsChain::draw() {}
+
+//--------------------------------------------------------------
+void EffectsChain::processOscCommand(const string& command, const ofxOscMessage& m) {
+    ofLogNotice("EffectsChain") << "processOscCommand() : EFFECTS CHAIN GOT AN OSC MESSAGE";
+}
+
+//--------------------------------------------------------------
+void EffectsChain::setEffectsManager(EffectsManager* _effectsManager) {
+    effectsManager = _effectsManager;
+}

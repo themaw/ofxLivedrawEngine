@@ -22,24 +22,33 @@
  
  ==============================================================================*/
 
-#include "LayerRenderSink.h"
 
-//--------------------------------------------------------------
-bool LayerRenderSink::frameReceived(ofxSharedVideoFrame _frame) {
-    frame = _frame;
-}
+#pragma once
 
-//--------------------------------------------------------------
-void LayerRenderSink::clear() {
-    frame.reset();
-}
+#include "ofMain.h"
+#include "ofxOscRouterNode.h"
+#include "EffectsManager.h"
+#include "Curves.h"
+#include "AlphaMask.h"
 
-//--------------------------------------------------------------
-bool LayerRenderSink::hasFrame() const {
-    return frame != NULL;
-}
+class EffectsChain : public ofxOscRouterNode {
+public:
+    
+    EffectsChain();
+    virtual ~EffectsChain();
 
-//--------------------------------------------------------------
-ofxSharedVideoFrame LayerRenderSink::getFrame() {
-    return frame;
-}
+    void setup();
+    void update();
+    void draw();
+    
+    void processOscCommand(const string& command, const ofxOscMessage& m);
+    void setEffectsManager(EffectsManager* manager);
+    
+private:
+    
+    EffectsManager* effectsManager;
+    
+    AlphaMaskSettings alphaMaskSettings;
+    CurvesSettings    curvesSettings;
+    
+};
