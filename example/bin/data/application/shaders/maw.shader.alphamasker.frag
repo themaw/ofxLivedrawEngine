@@ -33,14 +33,33 @@ float tanh(float val)
     return (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
 } 
 
+/*
+ void main (void){
+	 
+	 vec4 rTxt = texture2DRect(sourceTexture, pos);
+	 vec4 gTxt = texture2DRect(maskTexture, pos);
+	 
+	 vec4 color = vec4(0,0,0,0);
+	 color = mix(color, rTxt, gTxt.r );
+	 color = mix(color, rTxt, gTxt.g );
+	 color = mix(color, rTxt, gTxt.b );
+	 
+	 gl_FragColor = gTxt;
+ }
+*/
+
 
 void main (void)
 {
 	
 	// sample both textures
-	vec4 a = texture2DRect(sourceTexture, gl_TexCoord[0].st); // source texture
-	vec4 b = texture2DRect(maskTexture, gl_TexCoord[1].st); // mask texture
-    
+	
+	 vec2 pos = gl_TexCoord[0].st;
+
+	vec4 a = texture2DRect(sourceTexture, pos); // source texture
+	vec4 b = texture2DRect(maskTexture,   pos); // mask texture
+
+
     // TODO: INVERT SOURCE SHOULD GO IN ANOTHER SHADER ...
 
     // invert source
@@ -48,8 +67,9 @@ void main (void)
     // invert mask
     if(invertMask == 1) b = (1.0-b);
 
+
     float alpha = 1.0;
-       
+     
     if(alphaMode < ALPHA_LUMA) {
         alpha = b[alphaMode]; // channel based
     } else { 
@@ -61,18 +81,19 @@ void main (void)
             alpha = (0.5 * t) + .5; // MAD
         } 
     } 
-    
+
     // set new alpha
-    a = vec4(a.rgb, alpha);
+//    a = vec4(a.rgb, alpha);
+
+ vec4 color = vec4(0,0,0,0);
+ color = mix(color, a, alpha);//b.r );
+
 
     // apply gain
-    a *= gain;
-
+    color *= gain;
     // send it out!
-	gl_FragColor = a;  
+	gl_FragColor = color;  
 
 }
-
-
 
 
