@@ -162,36 +162,36 @@ int  LayerManager::getLayerIndex(Layer* layer) {
 
 //--------------------------------------------------------------
 bool LayerManager::bringLayerForward(Layer* layer) {
-    ofLogNotice() << "LayerManager::bringLayerForward() " << layer->getName() << endl;
+    ofLogNotice("LayerManager") << "bringLayerForward() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerBackward(Layer* layer) {
-    ofLogNotice() << "LayerManager::sendLayerBackward() " << layer->getName() << endl;
+    ofLogNotice("LayerManager") << "sendLayerBackward() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerToBack(Layer* layer) {
-    ofLogNotice() << "LayerManager::sendLayerToBack() " << layer->getName() << endl;
+    ofLogNotice("LayerManager") << "sendLayerToBack() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::bringLayerToFront(Layer* layer) {
-    ofLogNotice() << "LayerManager::bringLayerToFront() " << layer->getName() << endl;
+    ofLogNotice("LayerManager") << "bringLayerToFront() " << layer->getName() << endl;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerTo(Layer* layer, int targetLayerIndex) {
-    ofLogNotice() << "LayerManager::sendLayerTo() " << layer->getName() << " to " << targetLayerIndex << endl;
+    ofLogNotice("LayerManager") << "sendLayerTo() " << layer->getName() << " to " << targetLayerIndex << endl;
 }
 
 //--------------------------------------------------------------
 void LayerManager::setLayerSolo(Layer* layer, bool solo) {
-    ofLogNotice() << "LayerManager::setLayerSolo() " << layer->getName() << " solo = " << solo << endl;
+    ofLogNotice("LayerManager") << "setLayerSolo() " << layer->getName() << " solo = " << solo << endl;
 }
 //--------------------------------------------------------------
 void LayerManager::setLayerLock(Layer* layer, bool lock) {
-    ofLogNotice() << "LayerManager::setLayerLock() " << layer->getName() << " lock =" << lock <<  endl;
+    ofLogNotice("LayerManager") << "setLayerLock() " << layer->getName() << " lock =" << lock <<  endl;
 }
 
 //--------------------------------------------------------------
@@ -199,12 +199,12 @@ bool LayerManager::registerLayer(Layer* layer) {
     if(!hasAlias(layer->getName())) {
         aliases[layer->getName()] = layer;
     } else {
-        ofLogError() << "LayerManager::registerLayer - alias already exists";
+        ofLogError("LayerManager") << "registerLayer - alias already exists";
         return false;
     }
     
     if(!addOscChild(layer)) {
-        ofLogError() << "LayerManager::registerLayer - failed to add as an osc child node";
+        ofLogError("LayerManager") << "registerLayer - failed to add as an osc child node";
         return false;
     }
     
@@ -228,13 +228,13 @@ bool LayerManager::unregisterLayer(Layer* layer) {
     
     // is there a there there?
     if(layer == NULL) {
-        ofLogWarning() << "LayerManager::unregisterLayer - asset is NULL";
+        ofLogWarning("LayerManager") << "unregisterLayer - asset is NULL";
         return false;
     }
     
     // tell the object to dispose of itself (free connections, kill other things, etc)
     if(!layer->dispose()) {
-        ofLogWarning() << "LayerManager::unregisterLayer - unable to dispose " << layer->getName();
+        ofLogWarning("LayerManager") << "unregisterLayer - unable to dispose " << layer->getName();
         return false;
     }
     
@@ -245,7 +245,7 @@ bool LayerManager::unregisterLayer(Layer* layer) {
     
     
     if(hasOscChild(layer) && !removeOscChild(layer)) {
-        ofLogError() << "LayerManager::unregisterLayer - failed to remove as an osc child node";
+        ofLogError("LayerManager") << "unregisterLayer - failed to remove as an osc child node";
         return false;
     }
     
@@ -261,7 +261,7 @@ bool LayerManager::unregisterLayer(Layer* layer) {
     }
     
     if(layer->getLayerParent() == NULL && !foundIt) {
-        ofLogError() << "A layer had a null parent, but wasn't found in the render tree root.";
+        ofLogError("LayerManager") << "A layer had a null parent, but wasn't found in the render tree root.";
     }
     
     // free the memory
@@ -336,7 +336,7 @@ string LayerManager::validateAlias(const string& name) {
     
     // toss a warning if the asset id differs from the asset's original name
     if(!isMatch(assetName, assetId)) {
-        ofLogWarning() << "LayerManager::generateAssetId() - " << assetName << " produced variant : " << assetId + ".";
+        ofLogWarning("LayerManager") << "generateAssetId() - " << assetName << " produced variant : " << assetId + ".";
     }
     
     // return the generated asset id
@@ -347,18 +347,18 @@ string LayerManager::validateAlias(const string& name) {
 //--------------------------------------------------------------
 void LayerManager::dump() {
 
-    ofLogNotice() << "-------------------";
-    ofLogNotice() << "Layer Manager Dump:";
-    ofLogNotice() << "layers:";
+    ofLogNotice("LayerManager") << "-------------------";
+    ofLogNotice("LayerManager") << "Layer Manager Dump:";
+    ofLogNotice("LayerManager") << "layers:";
     for(it = layers.begin(); it != layers.end(); it++) {
-        ofLogNotice() << setw(4) << (*it)->toString();
+        ofLogNotice("LayerManager") << setw(4) << (*it)->toString();
     }
     
-    ofLogNotice() << "renderTree:";
+    ofLogNotice("LayerManager") << "renderTree:";
     for(renderTreeIter = renderTree.begin();
         renderTreeIter != renderTree.end();
         renderTreeIter++) {
-        ofLogNotice() << setw(4) << (*renderTreeIter)->toString();
+        ofLogNotice("LayerManager") << setw(4) << (*renderTreeIter)->toString();
     }
 
 }
