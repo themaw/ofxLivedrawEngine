@@ -49,7 +49,9 @@ GrabberAsset::~GrabberAsset() {}
 
 //--------------------------------------------------------------
 void GrabberAsset::update() {
-    grabber->update();
+    if(grabber->isInitialized()) {
+        grabber->update();
+    }
     
     // everybody has some work to do
     ofxVideoSourceInterface::update();
