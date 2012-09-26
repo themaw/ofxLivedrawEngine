@@ -60,7 +60,7 @@ public:
             }
         } else if(isMatch(command,"enable")) {
             if(validateOscSignature("[fi]", m)) {
-                setEnabled(getArgAsBoolean(m,0));
+                setEnabled(getArgAsBoolUnchecked(m,0));
             }
         }
     }

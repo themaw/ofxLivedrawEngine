@@ -33,12 +33,12 @@ class AlphaMaskSettings : public ofxOscRouterNode, public ofxEnablerInterface {
 public:
     
     AlphaMaskSettings() : ofxOscRouterNode("alphamask"), ofxEnablerInterface(true) {
-        alphaMode = 5;
-        invertMask = 0; // 0 = dark-alpha, 1 = light-alpha
+        alphaMode    = 5;
+        invertMask   = 0; // 0 = dark-alpha, 1 = light-alpha
         invertSource = 0; // 1 = invert, 0 = thru
-        threshold = 1.0; // range 0 - 1
-        spread = 0.01; //0.2);  //rtb runs between 0-1
-        gain = 1.0; // gain = 0 - 1000
+        threshold    = 1.0; // range 0 - 1
+        spread       = 0.01; //0.2);  //rtb runs between 0-1
+        gain         = 1.0; // gain = 0 - 1000
         
         addOscMethod("alphamode");
         addOscMethod("invertmask");
@@ -59,11 +59,11 @@ public:
             }
         } else if(isMatch(command,"invertmask")) {
             if(validateOscSignature("[sfi]", m)) {
-                setInvertMask(getArgAsBoolean(m,0));
+                setInvertMask(getArgAsBoolUnchecked(m,0));
             }
         } else if(isMatch(command,"invertsource")) {
             if(validateOscSignature("[sfi]", m)) {
-                setInvertSource(getArgAsBoolean(m,0));
+                setInvertSource(getArgAsBoolUnchecked(m,0));
             }
         } else if(isMatch(command,"threshold")) {
             if(validateOscSignature("[fi]", m)) {
@@ -85,37 +85,28 @@ public:
         }
     }
 
-    void setAlphaMode(int am) {alphaMode = ofClamp(am,0,5);}
-    void setInvertMask(bool im) {invertMask = im;}
-    void setInvertSource(bool is) {invertSource = is;}
-    void setThreshold(float thresh) {threshold = ofClamp(thresh,0,1);}
-    void setSpread(float s) {spread = ofClamp(s,0,1);}
-    void setGain(float g) {
-        gain = g;//ofClamp(g,0,1000);
+    void setAlphaMode(int am)       { alphaMode = ofClamp(am,0,5);}
+    void setInvertMask(bool im)     { invertMask = im;}
+    void setInvertSource(bool is)   { invertSource = is;}
+    void setThreshold(float thresh) { threshold = ofClamp(thresh,0,1);}
+    void setSpread(float s)         { spread = ofClamp(s,0,1);}
+    void setGain(float g)           { gain = g;} // TODO: clamp gain?
     
-    }
-    
-//    void setMaskTexture(int tex) {
-///        maskTexture = tex;
- //   }
-    
-    int getAlphaMode() const {return alphaMode;}
-    bool getInvertMask() const {return invertMask;}
-    bool getInvertSource() const {return invertSource;}
+    int   getAlphaMode() const {return alphaMode;}
+    bool  getInvertMask() const {return invertMask;}
+    bool  getInvertSource() const {return invertSource;}
     float getThreshold() const { return threshold;}
     float getSpread() const {return spread;}
     float getGain() const {return gain;}
     
-   // void setMaskTexture
-    
     void onEnabled(){}
 	void onDisabled(){}
-
     
 private:
-    int alphaMode;
-    bool invertMask;
-    bool invertSource;
+    
+    int   alphaMode;
+    bool  invertMask;
+    bool  invertSource;
     float threshold;
     float spread;
     float gain;
@@ -126,40 +117,35 @@ private:
 class AlphaMask : public ofShader {
     
 public:
-    
     AlphaMask() : ofShader() {}
-
     ~AlphaMask() {};
     
     void setup() {
-
         setupShaderFromFile(GL_FRAGMENT_SHADER, "application/shaders/maw.shader.alphamasker.frag");
         linkProgram();
-
-         //set the texture parameters for the maks shader. just do this at the beginning
-         /*
-         begin();
-         setUniform1i("alphaMode",   5); // 
-         setUniform1i("invertMask",  0);  // 0 = dark-alpha, 1 = light-alpha
-         setUniform1i("invertSource",0);  // 1 = invert, 0 = thru
-         setUniform1f("thresh",      1.0);  // range 0 - 1
-         setUniform1f("spread",      0.01);  //0.2);  //rtb runs between 0-1
-         setUniform1f("gain",        1.0);  // gain = 0 - 1000
-         end();
-        */
-
     }
     
     void apply(ofTexture& input, ofTexture& mask, const AlphaMaskSettings& settings) {
-        setUniformTexture("sourceTexture", input, 1 );
-        setUniformTexture("maskTexture", mask, 2);
         
-        setUniform1i("alphaMode",   settings.getAlphaMode());
-        setUniform1i("invertMask",  settings.getInvertMask());
-        setUniform1i("invertSource",settings.getInvertSource());
-        setUniform1f("thresh",      settings.getThreshold());
-        setUniform1f("spread",      settings.getSpread());
-        setUniform1f("gain",        settings.getGain());
+        bIsEnabled = settings.isEnabled();
+        
+        if(bIsEnabled) { // don't set anything unless it's enabled
+            setUniformTexture("sourceTexture", input, 1 );
+            setUniformTexture("maskTexture", mask, 2);
+            
+            setUniform1i("alphaMode",   settings.getAlphaMode());
+            setUniform1i("invertMask",  settings.getInvertMask());
+            setUniform1i("invertSource",settings.getInvertSource());
+            setUniform1f("thresh",      settings.getThreshold());
+            setUniform1f("spread",      settings.getSpread());
+            setUniform1f("gain",        settings.getGain());
+        }
     }
-
+    
+    bool isEnabled() const {
+        return bIsEnabled;
+    }
+    
+private:
+    bool bIsEnabled;
 };
