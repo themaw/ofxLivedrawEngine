@@ -52,15 +52,17 @@ public:
     void processOscCommand(const string& command, const ofxOscMessage& m);
 
     // adding layer schedules the addition of a layer
-	Layer* addLayer(const string& alias, ofPoint point = ofPoint(), Layer* parentLayer = NULL);
+	Layer* addLayer(const string& alias, const ofPoint& point, int width, int height, Layer* parentLayer = NULL);
+	Layer* addLayer(const string& alias, const ofPoint& point, Layer* parentLayer = NULL);
 
     //--------------------------------------------------------------
-    bool queueRegisterLayer(Layer* asset);
-    bool queueUnregisterLayer(const string& alias);
-    bool queueUnregisterLayer(Layer* asset);
+    bool queueAddLayer(Layer* asset);
+    bool queueDestroyLayer(const string& alias);
+    bool queueDestroyLayer(Layer* asset);
     
     //--------------------------------------------------------------
-    bool hasAlias(const string& alias);
+    bool hasLayer(const string& alias) const;
+    
     Layer* getLayer(const string& alias);
     
     //--------------------------------------------------------------
@@ -100,11 +102,8 @@ private:
     set<Layer*,layerSetOrder> registerQueue; // items are scheduled for registration here.
     set<Layer*,layerSetOrder> unregisterQueue; // items are scheduled for removal here.
 
-    set<Layer*,layerSetOrder>::iterator it;
-    set<Layer*,layerSetOrder> layers;  // a collection of all layers
-    
-    map<string, Layer*, doj::alphanum_less<std::string> >::iterator aliasesIt;
-    map<string, Layer*, doj::alphanum_less<std::string> > aliases;
+    map<string, Layer*, doj::alphanum_less<std::string> >::iterator it;
+    map<string, Layer*, doj::alphanum_less<std::string> > layers;
     
     vector<Layer*>::iterator renderTreeIter;
     vector<Layer*> renderTree; // root layers in here

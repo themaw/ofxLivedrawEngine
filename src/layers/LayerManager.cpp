@@ -40,7 +40,7 @@ LayerManager::LayerManager() : ofxOscRouterNode("layers") {
 //--------------------------------------------------------------
 LayerManager::~LayerManager() {
     for (it = layers.begin(); it != layers.end(); it++) {
-        delete *it; // free it
+        delete (*it).second; // free the layer
     }
     layers.clear(); // clear it;
 }
@@ -50,18 +50,38 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
     
     if(isMatch(command,"new")) {
         // /livedraw/canvas/layer/new      LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
-        if(validateOscSignature("s[fi][fi][fi]?", m)) {
+        // /livedraw/canvas/layer/new      LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]] [WIDTH HEIGHT]
+        if(validateOscSignature("s[fi][fi][fi]?[fi]?[fi]?", m)) {
             string layerName = getArgAsStringUnchecked(m,0);
-            ofPoint p = getArgsAsPoint(m, 1);
-            // make a new layer
-            addLayer(layerName, p);
+            vector<float> args = getArgsAsFloatArray(m,1);
+            size_t nArgs = args.size();
+            
+            if (nArgs == 5) {
+                ofPoint p(args[0],args[1],args[2]);
+                float width  = args[3];
+                float height = args[4];
+                addLayer(layerName, p, width, height);
+            } else if(nArgs == 4) {
+                ofPoint p(args[0],args[1]);
+                float width  = args[2];
+                float height = args[3];
+                addLayer(layerName, p, width, height);
+            } else if(nArgs == 3) {
+                ofPoint p(args[0],args[1],args[2]);
+                addLayer(layerName, p);
+            } else if(nArgs == 2) {
+                ofPoint p(args[0],args[1]);
+                addLayer(layerName, p);
+            } else {
+                ofLogError("LayerManager") << "Invalid number of arguments.";
+            }
         }
     } else if(isMatch(command, "delete")) {
         // /livedraw/canvas/layer/new      LAYER_NAME
         if(validateOscSignature("s", m)) {
             string layerName = getArgAsStringUnchecked(m,0);
             // delete a layer
-            queueUnregisterLayer(layerName);
+            queueDestroyLayer(layerName);
         }
     } else if(isMatch(command, "dump")) {
         dump();
@@ -70,35 +90,47 @@ void LayerManager::processOscCommand(const string& command, const ofxOscMessage&
 }
 
 //--------------------------------------------------------------
-Layer* LayerManager::addLayer(const string& layerName, ofPoint point, Layer* parentLayer) {
-    // rename if needed
+Layer* LayerManager::addLayer(const string& layerName, const ofPoint& point, Layer* parentLayer) {
     string validLayerName = validateAlias(layerName);
     Layer* layer = new Layer(this,validLayerName,point,parentLayer); // MAKE SURE THESE ARE DELETED
-    //queueRegisterLayer(layer);
+    registerLayer(layer);
+    return layer;
+}
+
+
+//--------------------------------------------------------------
+Layer* LayerManager::addLayer(const string& layerName, const ofPoint& point, int width, int height, Layer* parentLayer) {
+    string validLayerName = validateAlias(layerName);
+    Layer* layer = new Layer(this,validLayerName,point,width,height,parentLayer); // MAKE SURE THESE ARE DELETED
     registerLayer(layer);
     return layer;
 }
 
 //--------------------------------------------------------------
-bool LayerManager::queueRegisterLayer(Layer* layer) {
+bool LayerManager::queueAddLayer(Layer* layer) {
     layer->setNodeActive(false);
     return registerQueue.insert(layer).second;
 }
 
 //--------------------------------------------------------------
-bool LayerManager::queueUnregisterLayer(const string& alias) {
+bool LayerManager::queueDestroyLayer(const string& alias) {
     Layer* toDelete = getLayer(alias);
     if(toDelete != NULL) {
-        return queueUnregisterLayer(toDelete);
+        return queueDestroyLayer(toDelete);
     } else {
         return false;
     }
 }
 
 //--------------------------------------------------------------
-bool LayerManager::queueUnregisterLayer(Layer* layer) {
-    layer->setNodeActive(false);
-    return unregisterQueue.insert(layer).second;
+bool LayerManager::queueDestroyLayer(Layer* layer) {
+    if(layer != NULL) {
+        layer->setNodeActive(false);
+        return unregisterQueue.insert(layer).second;
+    } else {
+        ofLogError("LayerManager") << "queueDestroyLayer: Layer was NULL.";
+        return false;
+    }
 }
 
 ////--------------------------------------------------------------
@@ -108,16 +140,16 @@ bool LayerManager::queueUnregisterLayer(Layer* layer) {
 
 
 //--------------------------------------------------------------
-bool LayerManager::hasAlias(const string& alias) {
-    return aliases.find(alias) != aliases.end();
+bool LayerManager::hasLayer(const string& alias) const {
+    return layers.find(alias) != layers.end();
 }
 
 //--------------------------------------------------------------
 Layer* LayerManager::getLayer(const string& alias) {
-    aliasesIt = aliases.find(alias);
+    it = layers.find(alias);
     
-    if(aliasesIt != aliases.end()) {
-        return aliasesIt->second;
+    if(it != layers.end()) {
+        return it->second;
     } else {
         return NULL;
     }
@@ -196,35 +228,44 @@ void LayerManager::setLayerLock(Layer* layer, bool lock) {
 
 //--------------------------------------------------------------
 bool LayerManager::registerLayer(Layer* layer) {
-    if(!hasAlias(layer->getName())) {
-        aliases[layer->getName()] = layer;
+   
+    if(layer == NULL) {
+        ofLogError("LayerManager") << "registerLayer - layer is NULL";
+        return false;
+    }
+    
+    string layerName = layer->getName();
+    
+    if(!hasLayer(layerName)) {
+        layers[layerName] = layer; // add layer with given name
+    
+        // add it as an osc child
+        if(!addOscChild(layer)) {
+            ofLogError("LayerManager") << "registerLayer - failed to add as an osc child node";
+            queueDestroyLayer(layer);
+            return false;
+        }
+
+        // turn it on
+        layer->setNodeActive(true);
+
+        // if it is a null parent, then it belongs in the render tree
+        if(layer->getLayerParent() == NULL) {
+            renderTree.push_back(layer);
+        }
+
+        return true;
     } else {
         ofLogError("LayerManager") << "registerLayer - alias already exists";
+        queueDestroyLayer(layer);
         return false;
     }
-    
-    if(!addOscChild(layer)) {
-        ofLogError("LayerManager") << "registerLayer - failed to add as an osc child node";
-        return false;
-    }
-    
-    // turn it on
-    layer->setNodeActive(true);
-
-    // add it to the collection
-    layers.insert(layer);
-    
-    // if it is a null parent, then it belongs in the render tree
-    if(layer->getLayerParent() == NULL) {
-        renderTree.push_back(layer);
-    }
-    
-    return true;
     
 }
 
 //--------------------------------------------------------------
 bool LayerManager::unregisterLayer(Layer* layer) {
+    // TODO: this needs a bug check
     
     // is there a there there?
     if(layer == NULL) {
@@ -238,20 +279,16 @@ bool LayerManager::unregisterLayer(Layer* layer) {
         return false;
     }
     
-    // get rid of the alias
-    if(hasAlias(layer->getName())) { // double check
-        aliases.erase(layer->getName());
-    }
-    
-    
     if(hasOscChild(layer) && !removeOscChild(layer)) {
         ofLogError("LayerManager") << "unregisterLayer - failed to remove as an osc child node";
         return false;
     }
     
-    // remove the asset pointer from the assets set
-    layers.erase(layer);
-    
+    // get rid of the alias
+    if(hasLayer(layer->getName())) { // double check
+        layers.erase(layer->getName());
+    }
+
     // erase it from the render tree
     bool foundIt = false;
     int i = ofFind(renderTree, layer);
@@ -274,6 +311,8 @@ bool LayerManager::unregisterLayer(Layer* layer) {
 //--------------------------------------------------------------
 void LayerManager::processQueues() {
     // clear register queues
+    set<Layer*,layerSetOrder>::iterator it;
+
     if(!registerQueue.empty()) {
         for(it = registerQueue.begin();
             it != registerQueue.end();
@@ -297,50 +336,49 @@ void LayerManager::processQueues() {
 //--------------------------------------------------------------
 void LayerManager::updateLayers() {
     for ( it=layers.begin(); it != layers.end(); it++ ) {
-        (*it)->update();
+        (*it).second->update();
     }
 }
 
 //--------------------------------------------------------------
 string LayerManager::validateAlias(const string& name) {
-    // get the original asset name
-    string assetName = name;
-    
     // get the normalized name for OSC purposes
-    string assetId = normalizeOscNodeName(assetName);
+    string normName = normalizeOscNodeName(name);
+
+    it = layers.find(normName);
     
-    // if the alias exists, add an incremental
-    bool     foundIt = false;
-    int      maxSuffix = -1;
-    
-    // with the new natural ordering we probably don't need to
-    // go through all of the items, but rather reverse_iterator from the end
-    for ( it=layers.begin() ; it != layers.end(); it++ ) {
-        string thisName = (*it)->getName();
-        if(isMatch(assetId,thisName.substr(0,assetId.length()))) {
-            if(thisName.length() > assetId.length()) {
-                if(thisName[assetId.length()] == '_') {
-                    string number = thisName.substr(assetId.length() + 1);
-                    if(number.length() > 0) {
-                        maxSuffix = MAX(maxSuffix,ofToInt(number));
+    // if it needs a suffix, it will be added in here
+    if(it != layers.end()) {
+        int maxSuffix = -1;
+        
+        // pick up where find left off
+        for (; it != layers.end(); it++ ) {
+            string thisName = (*it).second->getName();
+            if(isMatch(normName,thisName.substr(0,normName.length()))) {
+                // found prefix match
+                if(thisName.length() > normName.length()) {
+                    // this match has a suffix
+                    if(thisName[normName.length()] == '_') {
+                        string number = thisName.substr(normName.length() + 1);
+                        if(number.length() > 0) {
+                            maxSuffix = MAX(maxSuffix,ofToInt(number));
+                        }
                     }
                 }
+            } else {
+                // there shouldn't be any more after this given our ordering
+                break;
             }
-            foundIt = true;
         }
+
+        string newName = normName + '_' + ofToString(maxSuffix + 1);
+        ofLogWarning("LayerManager") << "generateAssetId(): " << name << " produced variant : " << newName << ".";
+        return newName;
+    } else {
+        // the normName was unique.
+        return normName;
     }
     
-    if(foundIt) {
-        assetId +=  ('_' + ofToString(maxSuffix + 1));
-    }
-    
-    // toss a warning if the asset id differs from the asset's original name
-    if(!isMatch(assetName, assetId)) {
-        ofLogWarning("LayerManager") << "generateAssetId() - " << assetName << " produced variant : " << assetId + ".";
-    }
-    
-    // return the generated asset id
-    return assetId;
 }
 
 
@@ -351,7 +389,7 @@ void LayerManager::dump() {
     ofLogNotice("LayerManager") << "Layer Manager Dump:";
     ofLogNotice("LayerManager") << "layers:";
     for(it = layers.begin(); it != layers.end(); it++) {
-        ofLogNotice("LayerManager") << setw(4) << (*it)->toString();
+        ofLogNotice("LayerManager") << setw(4) << (*it).second->toString();
     }
     
     ofLogNotice("LayerManager") << "renderTree:";

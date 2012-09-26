@@ -35,6 +35,9 @@ public:
     LayerManagerInterface() {}
     virtual ~LayerManagerInterface() {}
     
+    virtual bool hasLayer(const string& alias) const = 0;
+    virtual Layer* getLayer(const string& alias) = 0;
+    
     // layer ordering
     virtual bool bringLayerForward(Layer* layer) = 0;
     virtual bool sendLayerBackward(Layer* layer) = 0;
