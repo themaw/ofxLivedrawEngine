@@ -55,110 +55,166 @@ The root _Livedraw_ node is the primary jumping off point for the rest of the co
 
 # /livedraw/canvas (`canvas`,`can`,`c`)
 The _Canvas_ is the primary location for rendering.  The canvas might occupy the entire program window, or a subsection of the window.  This is application dependent.  The basic Livedraw Engine treats the whole window as a canvas.
-	
+    
 ## Commands
 
 ### `position` controls the location of the rendering canvas in desktop screen space.
 
-	/livedraw/canvas/position X_POSITION Y_POSITION
-
+```
+/livedraw/canvas/position X_POSITION Y_POSITION
+```
 
 ### `size` controls the size (in pixels) of the rendering canvas in desktop screen space.
 
-	/livedraw/canvas/size WIDTH HEIGHT
+```
+/livedraw/canvas/size WIDTH HEIGHT
+```
 
 ### `background` sets the default refresh background color.
 
-	/livedraw/canvas/background	R G B [A]
+```
+/livedraw/canvas/background    R G B [A]
+```
 
 ### `fullscreen` toggles fullscreen mode on the rendering canvas.  This is for full-screen exclusive mode and will fill the entirety of the canvas' current context.
 
-	/livedraw/canvas/fullscreen B_FS
+```
+/livedraw/canvas/fullscreen B_FS
+```
 
 ### `msaa` toggles multisample anti-aliasing.
 
-	/livedraw/canvas/msaa B_MSAA
-	
+```
+/livedraw/canvas/msaa B_MSAA
+```
+    
 ### `fps` sets the global rendering frame rate.
 
-	/livedraw/canvas/fps FPS
-
+```
+/livedraw/canvas/fps FPS
+```
 
 # /livedraw/layers (`lay`,`l`)
 
-Composition layers represent a set of inputs and (optionally) a corresponding set of masks.  Currently there can be pairs of input/masks per layer.  This allows A<->B style mixing between pairs.  Each input and mask acts as a _sink_ and must receive frames from a _source_.  Layers can have parent layers and child layers.  Child layers inherit transformation properties (like rotation, scaling, etc) from their parent layer.  At the base of the layer tree is a root layer.  Many layers can reside on the root layer and are only subject to their own transformations.  Layer render order is determined by a layer's location in the tree structure.  Layers can also be cloned -- that is -- rendered in the same location, but have multiple parents.  A layer can have many parents parent and many children.
+Composition layers represent a set of inputs and (optionally) a corresponding set of masks.  Currently there can be pairs of input/masks per layer.  This allows A&harr;B style mixing between pairs.  Each input and mask acts as a _sink_ and must receive frames from a _source_.  Layers can have parent layers and child layers.  Child layers inherit transformation properties (like rotation, scaling, etc) from their parent layer.  At the base of the layer tree is a root layer.  Many layers can reside on the root layer and are only subject to their own transformations.  Layer render order is determined by a layer's location in the tree structure.  Layers can also be cloned -- that is -- rendered in the same location, but have multiple parents.  A layer can have many parents parent and many children.
 
 Individual layers can be addressed by name.
 
 ## Commands
 ###`new` Create a new layer.
 
-	/livedraw/layers/new	LAYER_NAME [X_POSITION Y_POSITION [Z_POSITION]]
+```
+/livedraw/layers/new    LAYER_NAME [X_POSITION Y_POSITION [[Z_POSITION] [WIDTH] [HEIGHT]]
+```
 
 ### `delete` Destroy a layer.
 
-	/livedraw/layers/delete	LAYER_NAME
+```
+/livedraw/layers/delete    LAYER_NAME
+```
+
+### `dump` Dump layer data to the console.
+
+```
+/livedraw/layers/dump
+```
 
 ### /livedraw/layers/(LAYER_NAME)/ 
 
 Send commands to a named layer.
 
 ## Commands
-### `input` controls the input sinks for the named layer.
+### `input` controls the input sinks for the named layer.  Choose either A or B layer.
 
-        /livedraw/layers/LAYER_NAME/inputsink ASSET_NAME [INPUT_NUMBER]
-        /livedraw/layers/LAYER_NAME/inputunsink [INPUT_NUMBER]
-        /livedraw/layers/LAYER_NAME/inputclear [INPUT_NUMBER]
+```
+/livedraw/layers/LAYER_NAME/A/input/sink ASSET_NAME
+/livedraw/layers/LAYER_NAME/A/input/unsink
+/livedraw/layers/LAYER_NAME/A/input/clear
+```
 
-### `mask` controls the mask sinks for the named layer.
+```
+/livedraw/layers/LAYER_NAME/B/input/sink ASSET_NAME
+/livedraw/layers/LAYER_NAME/B/input/unsink
+/livedraw/layers/LAYER_NAME/B/input/clear
+```
 
-`INPUT_NUMBER`
 
-        /livedraw/layers/LAYER_NAME/mask sink ASSET_NAME [INPUT_NUMBER]
-        /livedraw/layers/LAYER_NAME/mask unsink [INPUT_NUMBER]
-        /livedraw/layers/LAYER_NAME/mask clear [INPUT_NUMBER]
+### `mask` controls the mask sinks for the named layer.  Choose either A or B layer.
 
-### `input` controls the A/B mix of the layers.
+```
+/livedraw/layers/LAYER_NAME/A/mask/sink ASSET_NAME
+/livedraw/layers/LAYER_NAME/A/mask/unsink
+/livedraw/layers/LAYER_NAME/A/mask/clear
+```
 
-`A` or `B`
+```
+/livedraw/layers/LAYER_NAME/B/mask/sink ASSET_NAME
+/livedraw/layers/LAYER_NAME/B/mask/unsink
+/livedraw/layers/LAYER_NAME/B/mask/clear
+```
 
-        /livedraw/layers/LAYER_NAME/input A_OR_B
+### `xfade` Mix A/B input.
+
+```
+/livedraw/layers/LAYER_NAME/xfade N_XFADE
+```
+N_XFADE takes a value betweeo 0 (full A, and 1, full B);
 
 ### `swap` swaps A/B input. // TODO
 
-        /livedraw/layers/LAYER_NAME/swap
-
+```
+/livedraw/layers/LAYER_NAME/swap
+```
 
 ### `stretchmode` controls how the input and mask relate are scaled given the layer's width and height.
 
 Valid stretch modes are: `CENTER`, `FILL`, `FIT`, `STRETCH`;
 
-	/livedraw/layers/(LAYER_NAME)/stretchmode STRETCH_MODE 
-
+```
+/livedraw/layers/(LAYER_NAME)/stretchmode STRETCH_MODE 
+```
 
 ### `lock` prevent changes to the named layer.
 
-	/livedraw/layers/(LAYER_NAME)/lock	B_LOCK
+```
+/livedraw/layers/(LAYER_NAME)/lock    B_LOCK
+```
 
 ### `solo` render only the named layer.
 
-	/livedraw/layers/(LAYER_NAME)/solo	B_SOLO
+```
+/livedraw/layers/(LAYER_NAME)/solo    B_SOLO
+```
 
 ### `label` give the named layer a color (only useful in a GUI context).
 
-	/livedraw/layers/(LAYER_NAME)/label	R G B [A]
+```
+/livedraw/layers/(LAYER_NAME)/label    R G B [A]
+```
 
 ### `clipping` control the layer clipping (relates to stretch mode)
 
-	/livedraw/layers/(LAYER_NAME)/clipping B_CLIP
+```
+/livedraw/layers/(LAYER_NAME)/clipping B_CLIP
+```
 
 ### `order` control the input for the named layer.
 
-	/livedraw/layers/(LAYER_NAME)/order ORDER_NUM
-	/livedraw/layers/(LAYER_NAME)/order forward
-	/livedraw/layers/(LAYER_NAME)/order backward
-	/livedraw/layers/(LAYER_NAME)/order front
-	/livedraw/layers/(LAYER_NAME)/order back
+```
+/livedraw/layers/(LAYER_NAME)/order ORDER_NUM
+/livedraw/layers/(LAYER_NAME)/order forward
+/livedraw/layers/(LAYER_NAME)/order backward
+/livedraw/layers/(LAYER_NAME)/order front
+/livedraw/layers/(LAYER_NAME)/order back
+```
+
+### `debug` control the debug info for a given layer.
+
+```
+/livedraw/layers/LAYER_NAME/debug DEBUG_PARAM B_ENABLE
+```
+Debug params include `all`, `wireframe`, `axis`, and `info`.
+
 
 
 # /livedraw/layers/(LAYER_NAME)/transform (`transform`, `xform`, `t`)
@@ -171,106 +227,124 @@ Layer transforms determine the position, opacity and other characteristics of ho
 
 Layer anchor points determine the reference point in the layer for geometric transforms such as rotation, scaling and translation.
 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X_ANCHORPOINT [Y_ANCHORPOINT [Z_ANCHORPOINT]] 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X X_ANCHORPOINT 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Y Y_ANCHORPOINT 
-	/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Z Z_ANCHORPOINT 
+```
+/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X_ANCHORPOINT [Y_ANCHORPOINT [Z_ANCHORPOINT]] 
+/livedraw/layers/(LAYER_NAME)/transform/anchorpoint X X_ANCHORPOINT 
+/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Y Y_ANCHORPOINT 
+/livedraw/layers/(LAYER_NAME)/transform/anchorpoint Z Z_ANCHORPOINT 
+```
 
 ### `position` (`pos`, `p`) Set a layer's position.
 
 Layer position layer position determines the layer's placement on the rendering canvas.
 
-	/livedraw/layers/(LAYER_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
-	/livedraw/layers/(LAYER_NAME)/transform/position X X_POSITION
-	/livedraw/layers/(LAYER_NAME)/transform/position Y Y_POSITION
-	/livedraw/layers/(LAYER_NAME)/transform/position Z Z_POSITION
+```
+/livedraw/layers/(LAYER_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
+/livedraw/layers/(LAYER_NAME)/transform/position X X_POSITION
+/livedraw/layers/(LAYER_NAME)/transform/position Y Y_POSITION
+/livedraw/layers/(LAYER_NAME)/transform/position Z Z_POSITION
+```
 
 ### `rotation` (`rot`,`r`) Set a layer's rotation.
 
 Layer rotation determines the layer's rotation on the rendering canvas and given its current anchor point.
 
-	/livedraw/layers/(LAYER_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
-	/livedraw/layers/(LAYER_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
-	/livedraw/layers/(LAYER_NAME)/transform/rotate X X_ROTATE
-	/livedraw/layers/(LAYER_NAME)/transform/rotate Y Y_ROTATE
-	/livedraw/layers/(LAYER_NAME)/transform/rotate Z Z_ROTATE
+```
+/livedraw/layers/(LAYER_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
+/livedraw/layers/(LAYER_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
+/livedraw/layers/(LAYER_NAME)/transform/rotate X X_ROTATE
+/livedraw/layers/(LAYER_NAME)/transform/rotate Y Y_ROTATE
+/livedraw/layers/(LAYER_NAME)/transform/rotate Z Z_ROTATE
+```
 
 ### `scale` (`s`) Set a layer's scale.
 
 Scale determines the layer's x, y, z scale on the rendering canvas given its anchor point.
 
-	/livedraw/layers/(LAYER_NAME)/transform/scale X_SCALE [Y_SCALE [Z_SCALE]]
-	/livedraw/layers/(LAYER_NAME)/transform/scale X X_SCALE
-	/livedraw/layers/(LAYER_NAME)/transform/scale Y Y_SCALE
-	/livedraw/layers/(LAYER_NAME)/transform/scale Z Z_SCALE
+```
+/livedraw/layers/(LAYER_NAME)/transform/scale X_SCALE [Y_SCALE [Z_SCALE]]
+/livedraw/layers/(LAYER_NAME)/transform/scale X X_SCALE
+/livedraw/layers/(LAYER_NAME)/transform/scale Y Y_SCALE
+/livedraw/layers/(LAYER_NAME)/transform/scale Z Z_SCALE
+```
 
 ### `opacity` (`o`) Set a layer's opacity.
 
 Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend with other layers.  Opacity ranges from 0-255.
 
-	/livedraw/layers/(LAYER_NAME)/transform/opacity OPACITY
+```
+/livedraw/layers/(LAYER_NAME)/transform/opacity OPACITY
+```
 
 ### `opacityn` (`on`) Set a layer's opacity (normalized).
 
 Layer opacity determines how transparent a given layer is on the rendering canvas.  Opacity affects the way that a given layer will blend with other layers.  Normalized opacity ranges from 0-1.
 
-	/livedraw/layers/(LAYER_NAME)/transform/opacityn OPACITY
+```
+/livedraw/layers/(LAYER_NAME)/transform/opacityn OPACITY
+```
 
 ### `size` (`sz`) Set a layer's size.
 
 The layer size determines how larger the underlying frame buffer should be.
 
-	/livedraw/layers/(LAYER_NAME)/transform/size WIDTH HEIGHT
+```
+/livedraw/layers/(LAYER_NAME)/transform/size WIDTH HEIGHT
+```
 
 ### `width` (`w`) Set a layer's width.
 
 See `size` above.
 
-	/livedraw/layers/(LAYER_NAME)/transform/width WIDTH
+```
+/livedraw/layers/(LAYER_NAME)/transform/width WIDTH
+```
 
 ### `height` (`h`) Set a layer's width.
 
 See `size` above.
 
-	/livedraw/layers/(LAYER_NAME)/transform/height HEIGHT
-
-
+```
+/livedraw/layers/(LAYER_NAME)/transform/height HEIGHT
+```
 
 ### Layer Properties
 
 ### Layer Source Player
 
+```
+/livedraw/layers/(LAYER_NAME)/source buffer ASSET_ID [FROM_DISK]
 
-	/livedraw/layers/(LAYER_NAME)/source buffer ASSET_ID [FROM_DISK]
+/livedraw/layers/(LAYER_NAME)/source start
+/livedraw/layers/(LAYER_NAME)/source pause
+/livedraw/layers/(LAYER_NAME)/source stop
+/livedraw/layers/(LAYER_NAME)/source loopmode     {LIVE, LOOP, PALINDROME}
 
-	/livedraw/layers/(LAYER_NAME)/source start
-	/livedraw/layers/(LAYER_NAME)/source pause
-	/livedraw/layers/(LAYER_NAME)/source stop
-	/livedraw/layers/(LAYER_NAME)/source loopmode	{LIVE, LOOP, PALINDROME}
+/livedraw/layers/(LAYER_NAME)/source frame              FRAME
+/livedraw/layers/(LAYER_NAME)/source framen             FRAME_NORM
 
-	/livedraw/layers/(LAYER_NAME)/source frame	    FRAME
-	/livedraw/layers/(LAYER_NAME)/source framen	    FRAME_NORM
+/livedraw/layers/(LAYER_NAME)/source looppointsn        START_POINT_NORM END_POINT_NORM
+/livedraw/layers/(LAYER_NAME)/source looppointstartn   START_POINT_NORM
+/livedraw/layers/(LAYER_NAME)/source looppointendn     START_POINT_NORM
 
-	/livedraw/layers/(LAYER_NAME)/source looppointsn	    START_POINT_NORM END_POINT_NORM
-	/livedraw/layers/(LAYER_NAME)/source looppointstartn	    START_POINT_NORM
-	/livedraw/layers/(LAYER_NAME)/source looppointendn	    START_POINT_NORM
+/livedraw/layers/(LAYER_NAME)/source looppoints        START_POINT END_POINT
+/livedraw/layers/(LAYER_NAME)/source looppointstart    START_POINT
+/livedraw/layers/(LAYER_NAME)/source looppointsend     START_POINT
 
-	/livedraw/layers/(LAYER_NAME)/source looppoints	    START_POINT END_POINT
-	/livedraw/layers/(LAYER_NAME)/source looppointstart	    START_POINT
-	/livedraw/layers/(LAYER_NAME)/source looppointsend	    START_POINT
+/livedraw/layers/(LAYER_NAME)/source looppointsn       START_POINT_NORM END_POINT_NORM
+/livedraw/layers/(LAYER_NAME)/source looppointstartn   START_POINT_NORM
+/livedraw/layers/(LAYER_NAME)/source looppointendn     START_POINT_NORM
 
-	/livedraw/layers/(LAYER_NAME)/source looppointsn	    START_POINT_NORM END_POINT_NORM
-	/livedraw/layers/(LAYER_NAME)/source looppointstartn	    START_POINT_NORM
-	/livedraw/layers/(LAYER_NAME)/source looppointendn	    START_POINT_NORM
-
-	/livedraw/layers/(LAYER_NAME)/source speed	PLAYBACK_RATE
+/livedraw/layers/(LAYER_NAME)/source speed    PLAYBACK_RATE
+```
 
 ### Layer Mask / Second Source
 
 Layer masks are simply sources that are treated as masks / second sources.  While usually just a static image source, the mask sources can be as complex as a normal source. 90% Complete (7 Mar 11)
 
-	/livedraw/layers/(LAYER_NAME)/mask ... (see source reference above)
-
+```
+/livedraw/layers/(LAYER_NAME)/mask ... (see source reference above)
+```
 
 
 ### Layer Effects *10% Complete (11 Mar 11)*
@@ -281,17 +355,17 @@ Layer effects are modules that affect the visible qualities of a layer.  These a
 > 1. Finish implementing effects
 > 1. Alpha blending (shader based work exists in other sketches)
 
-	/livedraw/layers/(LAYER_NAME)/effects/(EFFECT_NAME)/(INSTANCE_NUM)/(KEY) VALUE_0 [VALUE_1 ... VALUE_N]
+    /livedraw/layers/(LAYER_NAME)/effects/(EFFECT_NAME)/(INSTANCE_NUM)/(KEY) VALUE_0 [VALUE_1 ... VALUE_N]
 
 e.g for a LAYER_NAME called BACKGROUND and and EFFECT_NAME called GAUSSIAN_BLUR you might use
  
-	/livedraw/layers/BACKGROUND/effects/GAUSSIAN_BLUR/0/blur 50.0 40.0
+    /livedraw/layers/BACKGROUND/effects/GAUSSIAN_BLUR/0/blur 50.0 40.0
 
 Each effect will define its specific OSC addressing on the [[OSC Effects Command Set]]
 
 TODO: Generally these effects are shaders but can also include pixel-based Freeframe plugins etc.
 
-## Canvas Groups				
+## Canvas Groups                
 
 Canvas groups allow layers to be gathered into logical groupings.  Each layer can only belong to one group. *100% Complete (7 Mar 11)*
 
@@ -299,8 +373,8 @@ Canvas groups allow layers to be gathered into logical groupings.  Each layer ca
 >
 > 1. Grouping has been removed, in favor of tagging and a full tree-structure for rendering canvas layers.  Canvas layers inherit transforms from parents.
 
-	/livedraw/canvas/group/new   	GROUP_NAME
-	/livedraw/canvas/group/delete	GROUP_NAME
+    /livedraw/canvas/group/new       GROUP_NAME
+    /livedraw/canvas/group/delete    GROUP_NAME
 
 ## Canvas Group-wise Commands
 
@@ -310,27 +384,27 @@ Canvas groups can be labeled to allow easier onscreen visibility. *10% Complete 
 >
 > 1. Implement a tag-based system for grouping.  This affects the next few items related to "grouping" below.
 
-	/livedraw/canvas/group/(GROUP_NAME)/label	R G B [A]
+    /livedraw/canvas/group/(GROUP_NAME)/label    R G B [A]
 
 ### Adding Items to Groups
 
 Layers can be added to groups.  *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/add/layer	LAYER_NAME
-	/livedraw/canvas/group/(GROUP_NAME)/add/layers	LAYER_NAME_0 ... LAYER_NAME_N
+    /livedraw/canvas/group/(GROUP_NAME)/add/layer    LAYER_NAME
+    /livedraw/canvas/group/(GROUP_NAME)/add/layers    LAYER_NAME_0 ... LAYER_NAME_N
 
 ### Removing Items from Groups 
 
 Layers can be removed from groups. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/remove/layer	LAYER_NAME
+    /livedraw/canvas/group/(GROUP_NAME)/remove/layer    LAYER_NAME
 
-	/livedraw/canvas/group/(GROUP_NAME)/remove/layers	LAYER_NAME_0 ... LAYER_NAME_N
+    /livedraw/canvas/group/(GROUP_NAME)/remove/layers    LAYER_NAME_0 ... LAYER_NAME_N
 
 In later versions, groups can become subgroups of other groups. *0% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/remove/group	GROUP_NAME
-	/livedraw/canvas/group/(GROUP_NAME)/remove/groups	GROUP_NAME_0 ... GROUP_NAME_N
+    /livedraw/canvas/group/(GROUP_NAME)/remove/group    GROUP_NAME
+    /livedraw/canvas/group/(GROUP_NAME)/remove/groups    GROUP_NAME_0 ... GROUP_NAME_N
 
 ### Group-wise Transforms
 
@@ -340,53 +414,53 @@ In later versions, groups can become subgroups of other groups. *0% Complete (7 
 
 Group-wise transformations are applied _in addition_ to the layer-wise transformations.  Layer-wise transformations are carried out _inside_ of group-wise transformations. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/show	B_SHOW [EASING_DURATION] [EASING_TYPE]
+    /livedraw/canvas/group/(GROUP_NAME)/transform/show    B_SHOW [EASING_DURATION] [EASING_TYPE]
 
 #### Group-wise Anchor Point
 
 This is an anchor point that is measured by the offset from the upper-left-hand corner of the group's bounding box.  Thus, unless specified otherwise, the anchor point must be adjusted if new layers are added to a group. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint X_ANCHOR [Y_ANCHOR [Z_ANCHOR]]
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint X X_ANCHOR
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint Y Y_ANCHOR
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint Z Z_ANCHOR
+    /livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint X_ANCHOR [Y_ANCHOR [Z_ANCHOR]]
+    /livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint X X_ANCHOR
+    /livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint Y Y_ANCHOR
+    /livedraw/canvas/group/(GROUP_NAME)/transform/anchorpoint Z Z_ANCHOR
 
 Thus, to reset an anchor point you would use:
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/anchor_point 0 0 0
+    /livedraw/canvas/group/(GROUP_NAME)/transform/anchor_point 0 0 0
 
 #### Group-wise Position
 
 This position is based upon the anchor point above. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
-	/livedraw/canvas/group/(GROUP_NAME)/transform/position X X_POSITION
-	/livedraw/canvas/group/(GROUP_NAME)/transform/position Y Y_POSITION
-	/livedraw/canvas/group/(GROUP_NAME)/transform/position Z Z_POSITION
+    /livedraw/canvas/group/(GROUP_NAME)/transform/position X_POSITION [Y_POSITION [Z_POSITION]]
+    /livedraw/canvas/group/(GROUP_NAME)/transform/position X X_POSITION
+    /livedraw/canvas/group/(GROUP_NAME)/transform/position Y Y_POSITION
+    /livedraw/canvas/group/(GROUP_NAME)/transform/position Z Z_POSITION
 
 #### Group-wise Rotation *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
-	/livedraw/canvas/group/(GROUP_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
-	/livedraw/canvas/group/(GROUP_NAME)/transform/rotate X X_ROTATE
-	/livedraw/canvas/group/(GROUP_NAME)/transform/rotate Y Y_ROTATE
-	/livedraw/canvas/group/(GROUP_NAME)/transform/rotate Z Z_ROTATE
+    /livedraw/canvas/group/(GROUP_NAME)/transform/rotate DEGREES X_AMOUNT Y_AMOUNT Z_AMOUNT
+    /livedraw/canvas/group/(GROUP_NAME)/transform/rotate X_ROTATE Y_ROTATE [Z_ROTATE]
+    /livedraw/canvas/group/(GROUP_NAME)/transform/rotate X X_ROTATE
+    /livedraw/canvas/group/(GROUP_NAME)/transform/rotate Y Y_ROTATE
+    /livedraw/canvas/group/(GROUP_NAME)/transform/rotate Z Z_ROTATE
 
 #### Group-wise Opacity 
 
 Individual layer opacities are computed as a function of their group-wise opacity and their individual layer opacity. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/transform/opacity OPACITY
+    /livedraw/canvas/group/(GROUP_NAME)/transform/opacity OPACITY
 
 #### Group Level Layer Addressing
 
 More complex control of layers can be carried out using Group-Level Layer addressing. *10% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/(GROUP_NAME)/(LAYER_NAME)/ ...
+    /livedraw/canvas/group/(GROUP_NAME)/(LAYER_NAME)/ ...
 
 For example, to control all groups that start with AX* and all Layers within those groups that start with BB* one might issue a command such as: *5% Complete (7 Mar 11)*
 
-	/livedraw/canvas/group/AX*/BB*/transform/x 88
+    /livedraw/canvas/group/AX*/BB*/transform/x 88
 
 This command would move all of the selected groups' anchor points to an x-position of 88 pixels.
 
@@ -398,9 +472,9 @@ This command would move all of the selected groups' anchor points to an x-positi
 
 Parameter animation is carried out by defining an animation recording session.  Any transform parameter on a layer or group can be animated with this syntax.  Additionally, any parameter used to control a layer effect can be similarly animated. e.g.
 
-	/livedraw/layers/(LAYER_NAME)/transform/(PARAMETER)/animate record
-	/livedraw/layers/(LAYER_NAME)/transform/(PARAMETER)/animate stop
-	/livedraw/layers/(LAYER_NAME)/transform/(PARAMETER)/animate play [{NONE, LOOP, PALINDROME}]
+    /livedraw/layers/(LAYER_NAME)/transform/(PARAMETER)/animate record
+    /livedraw/layers/(LAYER_NAME)/transform/(PARAMETER)/animate stop
+    /livedraw/layers/(LAYER_NAME)/transform/(PARAMETER)/animate play [{NONE, LOOP, PALINDROME}]
 
 Group parameters and layer effects follow a similar OSC pattern syntax.
 
@@ -410,50 +484,50 @@ For example, to animate the position and scale of a layer called MY_LAYER, the f
 >
 > 1. Implement a bundle based processing.
 
-	[begin OSC bundle]
-	/livedraw/layers/MY_LAYER/transform/position/animate record
-	/livedraw/layers/MY_LAYER/transform/scale/animate record
-	[end OSC bundle]
+    [begin OSC bundle]
+    /livedraw/layers/MY_LAYER/transform/position/animate record
+    /livedraw/layers/MY_LAYER/transform/scale/animate record
+    [end OSC bundle]
 
-	[begin OSC bundle]
-	/livedraw/layers/MY_LAYER/transform/scale 1.0 1.0
-	/livedraw/layers/MY_LAYER/transform/position 100.0 100.0
-	[end OSC bundle]
+    [begin OSC bundle]
+    /livedraw/layers/MY_LAYER/transform/scale 1.0 1.0
+    /livedraw/layers/MY_LAYER/transform/position 100.0 100.0
+    [end OSC bundle]
 
-	[begin OSC bundle]
-	/livedraw/layers/MY_LAYER/transform/scale 1.1 1.1
-	/livedraw/layers/MY_LAYER/transform/position 200.0 200.0
-	[end OSC bundle]
+    [begin OSC bundle]
+    /livedraw/layers/MY_LAYER/transform/scale 1.1 1.1
+    /livedraw/layers/MY_LAYER/transform/position 200.0 200.0
+    [end OSC bundle]
 
-	...
+    ...
 
-	[begin OSC bundle]
-	/livedraw/layers/MY_LAYER/transform/scale 2.0 2.0
-	/livedraw/layers/MY_LAYER/transform/position 1000.0 1000.0
-	[end OSC bundle]
+    [begin OSC bundle]
+    /livedraw/layers/MY_LAYER/transform/scale 2.0 2.0
+    /livedraw/layers/MY_LAYER/transform/position 1000.0 1000.0
+    [end OSC bundle]
 
-	[begin OSC bundle]
-	/livedraw/layers/MY_LAYER/transform/scale/animate stop
-	/livedraw/layers/MY_LAYER/transform/position/animate stop
-	[end OSC bundle]
+    [begin OSC bundle]
+    /livedraw/layers/MY_LAYER/transform/scale/animate stop
+    /livedraw/layers/MY_LAYER/transform/position/animate stop
+    [end OSC bundle]
 
 To replay the animation:
 
-	/livedraw/layers/MY_LAYER/transform/scale/animate play loop
-	/livedraw/layers/MY_LAYER/transform/position/animate play loop
+    /livedraw/layers/MY_LAYER/transform/scale/animate play loop
+    /livedraw/layers/MY_LAYER/transform/position/animate play loop
 
 
 ### media
-#### Aliasing 	and IDs
+#### Aliasing     and IDs
 
 Normally asset IDs are set automatically and conformed to OSC namespace friendly naming specs (i.e. no ' ', #, *, , / ?  [ ] { }).  When automatically generating these source IDs, all illegal characters are replaced with underscores '_'.  e.g.
 
-	A movie file called "Animated Robot[22].mov" would become "Animated-Robot-22-.mov".
+    A movie file called "Animated Robot[22].mov" would become "Animated-Robot-22-.mov".
 
 Alternatively, if the file has associated meta-data that includes a pre-defined SOURCE_ID, that source ID will be used.
 
-	/livedraw/media/alias	ORIGINAL_ASSET_ID NEW_ASSET_ID
-	
+    /livedraw/media/alias    ORIGINAL_ASSET_ID NEW_ASSET_ID
+    
 Generated Asset Id's will follow the convention of source-type_source-name; for example:
 
     Animated Robot[22].mov    >>>   movie_NAME
@@ -467,43 +541,43 @@ Generated Asset Id's will follow the convention of source-type_source-name; for 
 
 ### Buffers
 #### Recording
-	/livedraw/media/(ASSET_ID)/clear
-	/livedraw/media/(ASSET_ID)/record	ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
-	/livedraw/media/(ASSET_ID)/stop
-	
-	/livedraw/media/(ASSET_ID)/clear
-	/livedraw/media/(ASSET_ID)/size   	  NEW_MAX_SIZE
-	/livedraw/media/(ASSET_ID)/framerate  FRAMERATE
-	/livedraw/media/(ASSET_ID)/type		  BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
-	/livedraw/media/(ASSET_ID)/usetexture B_USE_TEXTURE
-	
-	
+    /livedraw/media/(ASSET_ID)/clear
+    /livedraw/media/(ASSET_ID)/record    ASSET_ID [TYPE NUM] (TYPE : frames OR time) Time is in ms
+    /livedraw/media/(ASSET_ID)/stop
+    
+    /livedraw/media/(ASSET_ID)/clear
+    /livedraw/media/(ASSET_ID)/size         NEW_MAX_SIZE
+    /livedraw/media/(ASSET_ID)/framerate  FRAMERATE
+    /livedraw/media/(ASSET_ID)/type          BUFFER_TYPE (FIXED, CIRCULAR, PASSTHROUGH)
+    /livedraw/media/(ASSET_ID)/usetexture B_USE_TEXTURE
+    
+    
 #### Camera Settings *90% Complete (11 Mar 11)*
 
 Camera settings can be changed via OSC.
 
-	/livedraw/media/(ASSET_ID)/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
+    /livedraw/media/(ASSET_ID)/settings [KEY VALUE_0 [VALUE_1 ... VALUE_N]]
 
 #### Camera Capture
 
 Camera capture is user controllable. *85% Complete (11 Mar 11)*
 
-	/livedraw/media/(ASSET_ID)/open	[CAPTURE_WIDTH CAPTURE_HEIGHT]
-	/livedraw/media/(ASSET_ID)/close
-	/livedraw/media/(ASSET_ID)/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
+    /livedraw/media/(ASSET_ID)/open    [CAPTURE_WIDTH CAPTURE_HEIGHT]
+    /livedraw/media/(ASSET_ID)/close
+    /livedraw/media/(ASSET_ID)/size [CAPTURE_WIDTH CAPTURE_HEIGHT]
 
 #### Assigning Metadata
 
 All source material can be assigned meta data using the (KEY) VALUE_0 sets. *40% Complete (11 Mar 11)*
 
-	/livedraw/media/(ASSET_ID)/metadata/add keywords	VALUE_0 [VALUE_1 ... VALUE_N]
-	/livedraw/media/(ASSET_ID)/metadata/remove keywords	VALUE_0 [VALUE_1 ... VALUE_N]
-	/livedraw/media/(ASSET_ID)/metadata/description "Description"
-	
+    /livedraw/media/(ASSET_ID)/metadata/add keywords    VALUE_0 [VALUE_1 ... VALUE_N]
+    /livedraw/media/(ASSET_ID)/metadata/remove keywords    VALUE_0 [VALUE_1 ... VALUE_N]
+    /livedraw/media/(ASSET_ID)/metadata/description "Description"
+    
 
 For example, one might set the tags associated with a given clip using the following syntax:
 
-	/livedraw/media/VID_00982/metadata/tags	fast scary colorful people
+    /livedraw/media/VID_00982/metadata/tags    fast scary colorful people
 
 
 
@@ -524,10 +598,10 @@ Session presets are useful for saving and loading all values to an external XML 
 > 1. Persistence I/O for XML, etc (will likely mirror the OSC and layer trees)
 > 1. Design an XML schema for persistence.
 
-	/livedraw/session/presets/new		PRESET_NAME
-	/livedraw/session/presets/delete	PRESET_NAME
-	/livedraw/session/presets/store		PRESET_NAME
-	/livedraw/session/presets/load		PRESET_NAME
+    /livedraw/session/presets/new        PRESET_NAME
+    /livedraw/session/presets/delete    PRESET_NAME
+    /livedraw/session/presets/store        PRESET_NAME
+    /livedraw/session/presets/load        PRESET_NAME
 
 ## Performance Creation and Storage
 
@@ -536,10 +610,10 @@ Performances are best thought of as a presets in motion.  During a recording ses
 >
 > 1. In addition to persistence items above, the persistence interface needs an "animatable" interface so each item can be animated. 
 
-	/livedraw/session/performance/new    PERFORMANCE_NAME
-	/livedraw/session/performance/delete PERFORMANCE_NAME
-	/livedraw/session/performance/store  PERFORMANCE_NAME
-	/livedraw/session/performance/load   PERFORMANCE_NAME
+    /livedraw/session/performance/new    PERFORMANCE_NAME
+    /livedraw/session/performance/delete PERFORMANCE_NAME
+    /livedraw/session/performance/store  PERFORMANCE_NAME
+    /livedraw/session/performance/load   PERFORMANCE_NAME
 
 ### Performance Playback and Control
 
@@ -548,20 +622,20 @@ Performances can be played back, recorded and navigated in very basic ways using
 >
 > 1. This would be built into the "animatable" interface.
  
-	/livedraw/session/performance/control/record
-	/livedraw/session/performance/control/play
-	/livedraw/session/performance/control/stop
-	/livedraw/session/performance/control/goto	TIMESTAMP
+    /livedraw/session/performance/control/record
+    /livedraw/session/performance/control/play
+    /livedraw/session/performance/control/stop
+    /livedraw/session/performance/control/goto    TIMESTAMP
 
 
 ### GUI Layout
 
 GUI layouts can be save and are addressable: *75% Complete (7 Mar 11)*
 
-	/livedraw/layout/new	LAYOUT_NAME
-	/livedraw/layout/delete	LAYOUT_NAME
-	/livedraw/layout/store	LAYOUT_NAME
-	/livedraw/layout/load	LAYOUT_NAME
+    /livedraw/layout/new    LAYOUT_NAME
+    /livedraw/layout/delete    LAYOUT_NAME
+    /livedraw/layout/store    LAYOUT_NAME
+    /livedraw/layout/load    LAYOUT_NAME
 
 Check out the [[Discussion items]] where we can discuss some unresolved/suggested concepts
 
@@ -576,31 +650,31 @@ Layer parameters can be copied from on layer to another. *90% Complete*
 >
 > 1. Interface needs to be implemented.  Could be integrated into the persistence / settings interface noted above.
 
-	/livedraw/layers/(LAYER_NAME)/.../PARAM_NAME COPYFROM LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/.../PARAM_NAME COPYFROM LAYER_NAME_FROM
 
 e.g. Copy from Transform:
 
-	/livedraw/layers/(LAYER_NAME)/transform/position X COPYFROM LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/transform/position X COPYFROM LAYER_NAME_FROM
 or
-	/livedraw/layers/(LAYER_NAME)/transform/position COPYFROM LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/transform/position COPYFROM LAYER_NAME_FROM
 
 e.g. Copy from Effect:
 
-	/livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness COPYFROM LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness COPYFROM LAYER_NAME_FROM
 of
-	/livedraw/layers/(LAYER_NAME)/effect/brcosa COPYFROM LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/effect/brcosa COPYFROM LAYER_NAME_FROM
 
 
 Layer parameters can be LINKED from on layer to another. *8% Complete (7 Mar 11)*
 
-	/livedraw/layers/(LAYER_NAME)/.../PARAM_NAME LINKWITH LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/.../PARAM_NAME LINKWITH LAYER_NAME_FROM
 
 e.g. Copy from Transform:
 
-	/livedraw/layers/(LAYER_NAME)/transform/position X LINKWITH LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/transform/position X LINKWITH LAYER_NAME_FROM
 
 e.g. Copy from Effect:
 
-	/livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness LINKWITH LAYER_NAME_FROM
+    /livedraw/layers/(LAYER_NAME)/effect/brcosa/brightness LINKWITH LAYER_NAME_FROM
 
 
