@@ -60,3 +60,8 @@ AlphaMask& EffectsManager::getAlphaMaskRef() {
 Curves& EffectsManager::getCurvesRef() {
     return curves;
 }
+
+//--------------------------------------------------------------
+XFader& EffectsManager::getXFaderRef() {
+    return xfader;
+}

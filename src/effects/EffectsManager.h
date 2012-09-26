@@ -30,6 +30,7 @@
 
 #include "AlphaMask.h"
 #include "Curves.h"
+#include "XFader.h"
 
 class EffectsManager : public ofxOscRouterNode {
     
@@ -49,7 +50,9 @@ public:
     // get access to shaders
     AlphaMask& getAlphaMaskRef();
     Curves& getCurvesRef();
-   
+    XFader& getXFaderRef();
+    
+    
     ofxLivedrawEngineInterface* getEngineInterface() { return engine;}
     void setEngineInterface(ofxLivedrawEngineInterface* _engine) {engine = _engine;}
     
@@ -64,6 +67,7 @@ private:
     // have to load multiple shaders onto the GPU
     AlphaMask alphaMask;
     Curves    curves;
+    XFader     xfader;
     
     
 };
