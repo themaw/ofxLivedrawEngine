@@ -98,11 +98,11 @@ void CanvasRenderer::processOscCommand(const string& command, const ofxOscMessag
         }
     } else if(isMatch(command,"fullscreen")) {
         if(validateOscSignature("[if]",m)) {
-            ofSetFullscreen(getArgAsBoolean(m,0));
+            ofSetFullscreen(getArgAsBoolUnchecked(m,0));
         }
     } else if(isMatch(command,"msaa")) {
         if(validateOscSignature("[if]",m)) {
-            setMsaa(getArgAsBoolean(m,0));
+            setMsaa(getArgAsBoolUnchecked(m,0));
         }
     } else if(isMatch(command,"fps")) {
         if(validateOscSignature("[if]",m)) {
