@@ -66,7 +66,7 @@ bool BufferAsset::dispose() {
 void BufferAsset::processOscCommand(const string& command, const ofxOscMessage& m) {
     if(isMatch(command,"record")) {
         if(validateOscSignature("[sfi]",m)) {
-            setSinking(getArgAsBoolean(m,0));
+            setSinking(getArgAsBoolUnchecked(m,0));
         }
     } else if(isMatch(command,"sink")) {
         if(validateOscSignature("[s]",m)) {

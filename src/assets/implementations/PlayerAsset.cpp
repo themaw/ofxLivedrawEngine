@@ -119,7 +119,7 @@ void PlayerAsset::processOscCommand(const string& command, const ofxOscMessage& 
         player->stop();
     } else if(isMatch(command,"pause")) {
         if(validateOscSignature("[sfi]", m)) {
-            player->setPaused(getArgAsBoolean(m,0));
+            player->setPaused(getArgAsBoolUnchecked(m,0));
         }
     } else if(isMatch(command,"loopmode")) {
         if(validateOscSignature("s", m)) {
