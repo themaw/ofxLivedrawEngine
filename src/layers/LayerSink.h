@@ -31,6 +31,14 @@
 #include "ofxVideoSourceInterface.h"
 #include "AssetManager.h"
 
+enum LayerStretchMode {
+    CENTER = 0, // centers in layer at actual size
+    FILL, // zooms to no remaining white space, aspect ratio preserved
+    FIT, // fits maximum size to screen without losing any image
+    STRETCH, // stretches in X / Y to fit layer dimensions
+};
+
+
 class LayerSink : public ofxVideoSinkInterface, public ofxOscRouterNode {
 public:
     LayerSink(LayerManagerInterface* lmi, const string& name);
@@ -44,8 +52,18 @@ public:
     
     void sinkAsset(const string& asset);
     void unsinkAsset();
+
+//    void setScaleMode(LayerStretchMode scaleMode);
+//    LayerStretchMode getScaleMode() const;
+
+    void setScaleMode(ofRectScaleMode scaleMode);
+    ofRectScaleMode getScaleMode() const;
     
 protected:
+  
+//    LayerStretchMode scaleMode;
+    ofRectScaleMode scaleMode;
+    
     LayerManagerInterface* lmi;
     ofxSharedVideoFrame frame;
     

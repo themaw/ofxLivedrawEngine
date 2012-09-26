@@ -29,11 +29,14 @@ LayerSink::LayerSink(LayerManagerInterface* _lmi, const string& name) : ofxOscRo
     lmi = _lmi;
     
     addOscMethod("sink");
-    addOscMethod("s");
     addOscMethod("unsink");
-    addOscMethod("u");
     addOscMethod("clear");
-    addOscMethod("c");
+    
+    addOscMethod("stretchmode");
+    addOscMethod("clipping");
+    
+    scaleMode = OF_RECTSCALEMODE_FIT;
+//    scaleMode = FIT;
     
 }
 
@@ -48,14 +51,35 @@ void LayerSink::update() {
 //--------------------------------------------------------------
 void LayerSink::processOscCommand(const string& command, const ofxOscMessage& m) {
 
-    if(isMatch(command, "sink") || isMatch(command, "s")) {
+    if(isMatch(command, "sink")) {
         if(validateOscSignature("[s]", m)) {
             sinkAsset(getArgAsStringUnchecked(m,0));
         }
-    } else if(isMatch(command,"unsink") || isMatch(command,"u")) {
+    } else if(isMatch(command,"unsink")) {
         unsinkAsset();
-    } else if(isMatch(command,"clear") || isMatch(command,"c")) {
+    } else if(isMatch(command,"clear")) {
         clear();
+    } else if(isMatch(command,"stretchmode")) {
+        if(validateOscSignature("[s]", m)) {
+            string mode = getArgAsStringUnchecked(m,0);
+            if(isMatch(mode,"center")) {
+                setScaleMode(OF_RECTSCALEMODE_CENTER);
+//                setScaleMode(FIT);
+            } else if(isMatch(mode,"fill")) {
+                setScaleMode(OF_RECTSCALEMODE_FILL);
+//                setScaleMode(FILL);
+            } else if(isMatch(mode,"fit")) {
+                setScaleMode(OF_RECTSCALEMODE_FIT);
+//                setScaleMode(FIT);
+            } else if(isMatch(mode,"stretch")) {
+                setScaleMode(OF_RECTSCALEMODE_STRETCH_TO_FILL);
+//                setScaleMode(STRETCH);
+            } else {
+                ofLogWarning("LayerSink") << "Unknown scale mode " << mode << "." << endl;
+            }
+        }
+    } else if(isMatch(command,"clipping")) {
+
     } else {
         ofLogWarning("LayerSink") << "Unknown osc command : " << command << ".";
     }
@@ -111,4 +135,24 @@ void LayerSink::sinkAsset(const string& asset) {
 //--------------------------------------------------------------
 void LayerSink::unsinkAsset() {
     detachFromSources();
+}
+//
+////--------------------------------------------------------------
+//void LayerSink::setScaleMode(LayerStretchMode _scaleMode) {
+//    scaleMode = _scaleMode;
+//}
+//
+////--------------------------------------------------------------
+//LayerStretchMode LayerSink::getScaleMode() const {
+//    return scaleMode;
+//}
+
+//--------------------------------------------------------------
+void LayerSink::setScaleMode(ofRectScaleMode _scaleMode) {
+    scaleMode = _scaleMode;
+}
+
+//--------------------------------------------------------------
+ofRectScaleMode LayerSink::getScaleMode() const {
+    return scaleMode;
 }

@@ -24,48 +24,61 @@
 
 #include "Layer.h"
 
+//Layer(LayerManagerInterface* clm, const string& name, const ofRectangle& rect, Layer* layerParent = NULL);
+//Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos, Layer* layerParent = NULL);
+//Layer(LayerManagerInterface* clm, const string& name);
+
+
+//--------------------------------------------------------------
+Layer::Layer(LayerManagerInterface* _layerManager, const string& name, const ofPoint& pos, int width, int height, Layer* _layerParent) : ofxOscRouterNode(name) {
+    layerManager = _layerManager;
+    layerName = name;
+    transform.setPosition(pos);
+    transform.setSize(width,height);
+    layerParent = _layerParent;
+    init();
+}
 
 //--------------------------------------------------------------
 Layer::Layer(LayerManagerInterface* _layerManager, const string& name, const ofPoint& pos, Layer* _layerParent) : ofxOscRouterNode(name) {
     layerManager = _layerManager;
     layerName = name;
+    transform.setPosition(pos);
+    transform.setSize(DEFAULT_LAYER_WIDTH,DEFAULT_LAYER_HEIGHT);
     layerParent = _layerParent;
-    setPosition(pos);
     init();
 }
 
-//--------------------------------------------------------------
-Layer::Layer(LayerManagerInterface* _layerManager, const string& name, const ofPoint& pos) : ofxOscRouterNode(name) {
-    layerManager = _layerManager;
-    layerName = name;
-    layerParent = NULL;
-    setPosition(pos);
-    init();
-}
 
 //--------------------------------------------------------------
 Layer::Layer(LayerManagerInterface* _layerManager, const string& name) : ofxOscRouterNode(name) {
     layerManager = _layerManager;
     layerName = name;
+    transform.setPosition(ofPoint(0,0));
+    transform.setSize(DEFAULT_LAYER_WIDTH,DEFAULT_LAYER_HEIGHT);
     layerParent = NULL;
     init();
 }
+
 
 //--------------------------------------------------------------
 Layer::~Layer() {
     delete inputA;
     delete inputB;
+    ofRemoveListener(transform.sizeChangeEvent,this,&Layer::onSizeChange);
 }
 
 //--------------------------------------------------------------
 void Layer::init() {
+    
+    xfade = 0;
     
     bDrawDebugInfo = true;
     bDrawWireframe = true;
     bDrawAxis = true;
     bDrawOverFlow = false;
     
-    currentInputIsA = true;
+//    currentInputIsA = true;
     
     isFboLayerDirty = true; // TODO: implement dirty layer
     isFboInputDirty = true; // TODO: implement dirty input
@@ -76,8 +89,6 @@ void Layer::init() {
     
     addOscChild(inputA);
     addOscChild(inputB);
-
-    layerStretchMode = FIT;
     
     //    effectsChain.setup();
     solo = false;
@@ -86,8 +97,6 @@ void Layer::init() {
     // fbo
     useMSAA = true;
     
-    getTransformRef().setWidth(640);
-    getTransformRef().setHeight(480); // standard canvas layer size
     
     addOscChild(&transform); // add the transform as an OSC child
     //    addOscChild(&effectsChain); // add the associated effects chain as a child
@@ -96,9 +105,8 @@ void Layer::init() {
     addOscMethod("lock");
     addOscMethod("solo");
     addOscMethod("label");
-        
-    addOscMethod("stretchmode");
-    addOscMethod("clipping");
+    addOscMethod("swap");
+    addOscMethod("xfade");
     
     fboInput = ofPtr<ofFbo>(new ofFbo());
     fboInput->allocate(transform.getWidth(), transform.getHeight());
@@ -121,7 +129,7 @@ void Layer::init() {
     ofClear(0,0,0,0);
     fboLayer->end();
     
-    // TODO: fbos need callbacks from the transform to make sure they resize correctly
+    ofAddListener(transform.sizeChangeEvent,this,&Layer::onSizeChange);
 
 }
 
@@ -129,6 +137,7 @@ void Layer::init() {
 bool Layer::dispose() {
     inputA->dispose();
     inputB->dispose();
+    ofRemoveListener(transform.sizeChangeEvent,this,&Layer::onSizeChange);
     return true;
 }
 
@@ -190,40 +199,17 @@ unsigned int Layer::findChild(Layer* _layerChild) const {
 }
 
 //--------------------------------------------------------------
-void Layer::setPosition(const ofPoint& pos) {
-    transform.setPosition(pos);
-}
-
-//--------------------------------------------------------------
-void Layer::setRectangle(const ofRectangle& rect) {
-    transform.setPosition(ofPoint(rect.x,rect.y));
-    transform.setSize(rect.width,rect.height);
-}
-
-//--------------------------------------------------------------
 void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
     
-    if(isMatch(command, "clipping")) {
-        if(validateOscSignature("[sfi]", m)) {
-            setDrawOverflow(getArgAsBoolean(m,0));
+    if(isMatch(command,"swap")) {
+        swapInput();
+        ofLogWarning("Layer") << "A/B swapping is still not implemented fully.";
+    } else if(isMatch(command,"xfade")) {
+        if(validateOscSignature("[fi]", m)) {
+            xfade = getArgAsFloatUnchecked(m,0);
         }
-    }
-    if(isMatch(command, "stretchmode") ) {
-        if(validateOscSignature("[s]", m)) {
-            string mode = getArgAsStringUnchecked(m,0);
-            if(isMatch(mode,"center")) {
-                setLayerStretchMode(CENTER);
-            } else if(isMatch(mode,"fill")) {
-                setLayerStretchMode(FILL);
-            } else if(isMatch(mode,"fit")) {
-                setLayerStretchMode(FIT);
-            } else if(isMatch(mode,"stretch")) {
-                setLayerStretchMode(STRETCH);
-            }
-        }
-
-
-    } if(isMatch(command,"order")) {
+        ofLogWarning("Layer") << "A/B xfade is still not implemented fully.";
+    } else if(isMatch(command,"order")) {
         if(validateOscSignature("[sfi]", m)) {
             if(m.getArgType(0) == OFXOSC_TYPE_STRING) {
                 string command = toLower(getArgAsStringUnchecked(m,0));
@@ -239,15 +225,16 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
             } else {
                 int targetLayer = getArgAsIntUnchecked(m,0);
                 // TODO::
+                // TODO::
             }
         }
     } else if(isMatch(command,"lock")) {
         if(validateOscSignature("[fi]", m)) {
-            layerManager->setLayerLock(this, getArgAsBoolean(m,0));
+            layerManager->setLayerLock(this, getArgAsBoolUnchecked(m,0));
         }
     } else if(isMatch(command,"solo")) {
         if(validateOscSignature("[fi]", m)) {
-            layerManager->setLayerSolo(this, getArgAsBoolean(m,0));
+            layerManager->setLayerSolo(this, getArgAsBoolUnchecked(m,0));
         }
     } else if(isMatch(command,"label")) {
         if(validateOscSignature("[fi][fi][fi][fi]?", m)) {
@@ -257,16 +244,16 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
         if(validateOscSignature("[s][fi]", m)) {
             string e = getArgAsStringUnchecked(m,0);
             if(isMatch(e,"all")) {
-                bool val = getArgAsBoolean(m, 1);
+                bool val = getArgAsBoolUnchecked(m, 1);
                 setDrawWireframe(val);
                 setDrawAxis(val);
                 setDrawDebugInfo(val);
             } else if(isMatch(e,"wireframe")) {
-                setDrawWireframe(getArgAsBoolean(m,1));
+                setDrawWireframe(getArgAsBoolUnchecked(m,1));
             } else if(isMatch(e,"axis")) {
-                setDrawAxis(getArgAsBoolean(m, 1));
+                setDrawAxis(getArgAsBoolUnchecked(m, 1));
             } else if(isMatch(e,"info")) {
-                setDrawDebugInfo(getArgAsBoolean(m, 1));
+                setDrawDebugInfo(getArgAsBoolUnchecked(m, 1));
             }
         }
     }
@@ -365,13 +352,13 @@ void Layer::draw() {
 
     // clear the layer fbo
 
-    MaskedInput* currentInput = getCurrentInput();
+    MaskedInput* currentInput = inputA;
     
     // TODO, we don't need to write image tex into FBOs if the shared images are not new
     
     if(currentInput->getInput().hasFrame()) {
         if(isFboInputDirty || currentInput->getInput().isFrameNew()) {
-            drawFrameIntoFbo(currentInput->getInput().getFrame(),fboInput);
+            drawFrameIntoFbo(currentInput->getInput().getFrame(),fboInput,currentInput->getInput().getScaleMode());
             isFboLayerDirty = true;
         } else {
             // fbo does not need to be updated
@@ -379,7 +366,7 @@ void Layer::draw() {
         
         if(currentInput->getMask().hasFrame()) {
             if(isFboMaskDirty || currentInput->getMask().isFrameNew()) {
-                drawFrameIntoFbo(currentInput->getMask().getFrame(),fboMask);
+                drawFrameIntoFbo(currentInput->getMask().getFrame(),fboMask,currentInput->getMask().getScaleMode());
                 isFboLayerDirty = true;
             } else {
                 // fbo does not need to be updated
@@ -391,12 +378,19 @@ void Layer::draw() {
             fboLayer->begin();
             ofClear(0,0,0,0);
             ///// shade!
-            alphaMask.begin();
-            alphaMask.apply(fboInput->getTextureReference(),
-                            fboMask->getTextureReference(),
-                            settings);
-            fboLayer->draw(0,0); // use this image to map the pix
-            alphaMask.end();
+            
+            if(settings.isEnabled()) {
+                alphaMask.begin();
+                alphaMask.apply(fboInput->getTextureReference(),
+                                fboMask->getTextureReference(),
+                                settings);
+                fboLayer->draw(0,0); // use this image to map the pix
+                alphaMask.end();
+            } else {
+                fboInput->draw(0,0); // draw w/o compositing
+                fboMask->draw(0,0); // draw w/o compositing
+            }
+            
             ///// end shade
             fboLayer->end();
             
@@ -457,48 +451,63 @@ void Layer::draw() {
 }
 
 //--------------------------------------------------------------
-void Layer::drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo) {
+void Layer::drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo, ofRectScaleMode layerStretchMode) {
 //    cout << "drawing frame!" << frame->getWidth() << "/" << frame->getHeight() << endl;
+    
+    if(!frame->isAllocated()) {
+        // this sometimes happens when a camera is turned on etc
+        // TODO: this should go earlier in pipeline?
+        return;
+    }
     
     fbo->begin();
     ofClear(0,0,0,0);
     
-    float w = transform.getWidth();
-    float h = transform.getHeight();
+//    float w = transform.getWidth();
+//    float h = transform.getHeight();
+//    
+//    float fw = frame->getWidth();
+//    float fh = frame->getHeight();
+//
+    ofRectangle subjectRect(0,0,frame->getWidth(),frame->getHeight());
+    subjectRect.scaleTo(ofRectangle(0,0,transform.getWidth(),transform.getHeight()),layerStretchMode);
+  
+//    cout << "sub=" << subjectRect.x << "/" << dstRect.y << "/" << dstRect.width << "/" << dstRect.height << endl;
+//    cout << "--- " << endl;
     
-    float fw = frame->getWidth();
-    float fh = frame->getHeight();
-
-    if(layerStretchMode == CENTER) {
-        frame->draw((w - fw) * 0.5f,
-                    (h - fh) * 0.5f,
-                    fw,
-                    fh);
-    } else if(layerStretchMode == FILL) {
-        float resultScale = MAX(fabs(w) / fabs(fw),
-                                fabs(h) / fabs(fh));
-        
-        frame->draw(( w - fw * resultScale ) * 0.5f,
-                    ( h - fh * resultScale ) * 0.5f,
-                    ( fw * resultScale ),
-                    ( fh * resultScale ));
-    } else if(layerStretchMode == FIT) {
-        // find the scaling factor, fabs for -w and/or -h
-        float resultScale = MIN(fabs(w) / fabs(fw),
-                                fabs(h) / fabs(fh));
-        
-        frame->draw(( w - fw * resultScale ) * 0.5f,
-                    ( h - fh * resultScale ) * 0.5f,
-                    ( fw * resultScale ),
-                    ( fh * resultScale ));
-        
-    } else if(layerStretchMode == STRETCH) {
-        frame->draw(0,0,w,h);
-    } else {
-        frame->draw(0,0,w,h);
-        ofLogWarning("Layer") << "update(): Unknown layer stretch mode." << endl;
-    }
+    frame->draw(subjectRect);
     
+//    
+//    if(layerStretchMode == CENTER) {
+//        frame->draw((w - fw) * 0.5f,
+//                    (h - fh) * 0.5f,
+//                    fw,
+//                    fh);
+//    } else if(layerStretchMode == FILL) {
+//        float resultScale = MAX(fabs(w) / fabs(fw),
+//                                fabs(h) / fabs(fh));
+//        
+//        frame->draw(( w - fw * resultScale ) * 0.5f,
+//                    ( h - fh * resultScale ) * 0.5f,
+//                    ( fw * resultScale ),
+//                    ( fh * resultScale ));
+//    } else if(layerStretchMode == FIT) {
+//        // find the scaling factor, fabs for -w and/or -h
+//        float resultScale = MIN(fabs(w) / fabs(fw),
+//                                fabs(h) / fabs(fh));
+//        
+//        frame->draw(( w - fw * resultScale ) * 0.5f,
+//                    ( h - fh * resultScale ) * 0.5f,
+//                    ( fw * resultScale ),
+//                    ( fh * resultScale ));
+//        
+//    } else if(layerStretchMode == STRETCH) {
+//        frame->draw(0,0,w,h);
+//    } else {
+//        frame->draw(0,0,w,h);
+//        ofLogWarning("Layer") << "update(): Unknown layer stretch mode." << endl;
+//    }
+//    
     
     fbo->end(); // end the fbo
 }
@@ -536,15 +545,15 @@ void Layer::drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo) {
 //--------------------------------------------------------------
 LayerTransform& Layer::getTransformRef() { return transform; };
 
-//--------------------------------------------------------------
-LayerStretchMode Layer::getLayerStretchMode() {
-    return layerStretchMode;
-}
-
-//--------------------------------------------------------------
-void Layer::setLayerStretchMode(LayerStretchMode mode) {
-    layerStretchMode = mode;
-}
+////--------------------------------------------------------------
+//LayerStretchMode Layer::getLayerStretchMode() {
+//    return layerStretchMode;
+//}
+//
+////--------------------------------------------------------------
+//void Layer::setLayerStretchMode(LayerStretchMode mode) {
+//    layerStretchMode = mode;
+//}
 
 //--------------------------------------------------------------
 bool Layer::isSolo() const {return solo;};
@@ -575,15 +584,15 @@ bool Layer::getDrawWireframe() { return bDrawWireframe; }
 void Layer::setDrawAxis(bool b) { bDrawAxis = b; }
 //--------------------------------------------------------------
 bool Layer::getDrawAxis() { return bDrawAxis; }
-//--------------------------------------------------------------
-void Layer::setDrawOverflow(bool b) { bDrawOverFlow = b; }
-//--------------------------------------------------------------
-bool Layer::getDrawOverflow() { return bDrawOverFlow; }
+////--------------------------------------------------------------
+//void Layer::setDrawOverflow(bool b) { bDrawOverFlow = b; }
+////--------------------------------------------------------------
+//bool Layer::getDrawOverflow() { return bDrawOverFlow; }
 
-//--------------------------------------------------------------
-MaskedInput* Layer::getCurrentInput() {
-    return currentInputIsA ? inputA : inputB;
-}
+////--------------------------------------------------------------
+//MaskedInput* Layer::getCurrentInput() {
+//    return currentInputIsA ? inputA : inputB;
+//}
 
 //--------------------------------------------------------------
 string Layer::toString() const {

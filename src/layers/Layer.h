@@ -24,6 +24,9 @@
 
 #pragma once
 
+#define DEFAULT_LAYER_WIDTH 640
+#define DEFAULT_LAYER_HEIGHT 480
+
 #include "ofMain.h"
 #include "ofxLivedrawEngineInterface.h"
 #include "ofxVideoSourceInterface.h"
@@ -41,14 +44,6 @@
 
 #include "alphanum.hpp"
 
-enum LayerStretchMode {
-    CENTER = 0, // centers in layer at actual size
-    FILL, // zooms to no remaining white space, aspect ratio preserved
-    FIT, // fits maximum size to screen without losing any image
-    STRETCH, // stretches in X / Y to fit layer dimensions
-};
-
-
 class Layer : public ofxOscRouterNode,
               //public ofxVideoSourceInterface,
               public ofxEnablerInterface
@@ -56,9 +51,9 @@ class Layer : public ofxOscRouterNode,
 	
 public:
 
+    Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos, int width, int height, Layer* layerParent = NULL);
+    Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos, Layer* layerParent = NULL);
 	Layer(LayerManagerInterface* clm, const string& name);
-	Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos);
-    Layer(LayerManagerInterface* clm, const string& name, const ofPoint& pos, Layer* layerParent);
 
 	virtual ~Layer();
 	
@@ -76,7 +71,8 @@ public:
     
     void render();
     void draw();
-    void drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo);
+    void drawInput(MaskedInput* input, float xfade);
+    void drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo, ofRectScaleMode layerStretchMode);
 
 //    // player assets
 //    bool hasInputFrame(int index = 0) const;
@@ -88,10 +84,6 @@ public:
 
     LayerTransform& getTransformRef();
 	
-    LayerStretchMode getLayerStretchMode();
-    void setLayerStretchMode(LayerStretchMode mode);
-    
-    
     string getName() const;
     void setName(const string& name);
     
@@ -120,10 +112,6 @@ public:
 	
     void onEnabled();
     void onDisabled();
-    
-    void setPosition(const ofPoint& pos);
-    void setSize(int width, int height);
-    void setRectangle(const ofRectangle& rect);
 	
     // layer position
     bool bringFoward();
@@ -159,10 +147,38 @@ public:
     bool getDrawWireframe();
     void setDrawAxis(bool b);
     bool getDrawAxis();
-    void setDrawOverflow(bool b);
-    bool getDrawOverflow();
+//    void setDrawOverflow(bool b);
+//    bool getDrawOverflow();
     
     string toString() const;
+    
+protected:
+    
+    void onSizeChange(ofRectangle& size) {
+        // resize all fbos on size change.
+        
+        fboInput = ofPtr<ofFbo>(new ofFbo());
+        fboInput->allocate(transform.getWidth(), transform.getHeight());
+        
+        fboInput->begin();
+        ofClear(0,0,0,0);
+        fboInput->end();
+        
+        fboMask = ofPtr<ofFbo>(new ofFbo());
+        fboMask->allocate(transform.getWidth(), transform.getHeight());
+        
+        fboMask->begin();
+        ofClear(0,0,0,0);
+        fboMask->end();
+        
+        fboLayer = ofPtr<ofFbo>(new ofFbo());
+        fboLayer->allocate(transform.getWidth(), transform.getHeight());
+        
+        fboLayer->begin();
+        ofClear(0,0,0,0);
+        fboLayer->end();
+    }
+    
     
 private:
 	
@@ -183,12 +199,17 @@ private:
     
     string layerName;
     
+    void swapInput() {
+        swap(inputA,inputB);
+    }
+    
+    float xfade;
     MaskedInput* inputA;
     MaskedInput* inputB;
     
     
-    MaskedInput* getCurrentInput();
-    bool currentInputIsA;
+//    MaskedInput* getCurrentInput();
+//    bool currentInputIsA;
     
 	LayerTransform transform; // todo: make this shared
 	
@@ -205,7 +226,5 @@ private:
     // node
     Layer*         layerParent;
     vector<Layer*> layerChildren;
-    
-    LayerStretchMode layerStretchMode;
-    
+        
 };
