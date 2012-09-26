@@ -97,9 +97,9 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 } else if(c == 'z') {
                     setPositionZ(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'n') {
-                    setPositionNormalized(getArgAsBoolean(m,1));
+                    setPositionNormalized(getArgAsBoolUnchecked(m,1));
                 } else {
-                    ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
+                    ofLogError("LayerTransform") << "invalid arg type: " << c << " " << command << ".";
                 }
                 
             } else {
@@ -127,7 +127,7 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 } else if(c == 'z') {
                     setAnchorPointZ(getArgAsFloatUnchecked(m,1));
                 } else if(c == 'n') {
-                    setAnchorPointNormalized(getArgAsBoolean(m,1));
+                    setAnchorPointNormalized(getArgAsBoolUnchecked(m,1));
                 } else {
                     ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
@@ -161,7 +161,7 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
                 } else if(c == 'd') {
                     setRotation(getArgsAsPoint(m, 1));
                 } else if(c == 'n') {
-                    setRotationNormalized(getArgAsBoolean(m,1));
+                    setRotationNormalized(getArgAsBoolUnchecked(m,1));
                 } else {
                     ofLog(OF_LOG_ERROR, "LayerTransform: invalid arg type: " + ofToString(c) + " " + command);
                 }
@@ -229,8 +229,10 @@ void LayerTransform::processOscCommand(const string& command, const ofxOscMessag
     
 }
 
-
-
+//--------------------------------------------------------------
+ofRectangle LayerTransform::getRectangle() const {
+    return ofRectangle(getX(),getY(),getWidth(),getHeight());
+}
 //--------------------------------------------------------------
 int LayerTransform::getWidth() const {return size.getClampedX(); };
 //--------------------------------------------------------------
@@ -238,11 +240,26 @@ int LayerTransform::getHeight() const {return size.getClampedY(); };
 //--------------------------------------------------------------
 ofPoint LayerTransform::getSize() const {return size.getClamped(); };
 //--------------------------------------------------------------
-void LayerTransform::setSize(float w, float h) {this->size.set(w, h, 0); onSetSize();}
+void LayerTransform::setSize(float w, float h) {
+    this->size.set(w, h, 0);
+    onSetSize();
+    ofRectangle rect = getRectangle();
+    ofNotifyEvent(sizeChangeEvent,rect,this);
+}
+
 //--------------------------------------------------------------
-void LayerTransform::setWidth(float w) {this->size.x = w; onSetSize();}
+void LayerTransform::setWidth(float w) {
+    this->size.x = w;
+    onSetSize();
+    ofRectangle rect = getRectangle();
+    ofNotifyEvent(sizeChangeEvent,rect,this);
+}
 //--------------------------------------------------------------
-void LayerTransform::setHeight(float h) {this->size.y = h; onSetSize();}
+void LayerTransform::setHeight(float h) {
+    this->size.y = h;
+    ofRectangle rect = getRectangle();
+    ofNotifyEvent(sizeChangeEvent,rect,this);
+}
 
 
 //--------------------------------------------------------------

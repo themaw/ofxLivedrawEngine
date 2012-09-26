@@ -42,6 +42,8 @@ public:
         
     void processOscCommand(const string& command, const ofxOscMessage& m);
     
+    ofRectangle getRectangle() const;
+    
     int getWidth() const;
     int getHeight() const;
     ofPoint getSize() const;
@@ -128,6 +130,8 @@ public:
     
 	float opacity; // 0-255
 	
+    ofEvent<ofRectangle> sizeChangeEvent;
+    
 	/*
 	ofEvent<ofxLimitedPoint*> newPositionEvent;
 	ofEvent<ofxLimitedPoint*> newAnchorPointEvent;
