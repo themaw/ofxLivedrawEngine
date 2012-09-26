@@ -1,5 +1,5 @@
 <grabbers>
     <!-- listing grabbers until core has better support -->
-    <grabber name="cam" id="4" width="640" height="480"/>
+    <grabber name="cam" id="0" width="640" height="480"/>
 
 </grabbers>

@@ -238,6 +238,7 @@
 		FD8DEAFC15A629DC00AD0DE3 /* ofxVideoSourceInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoSourceInterface.h; sourceTree = "<group>"; };
 		FD8DEAFF15A629DC00AD0DE3 /* ofxVideoFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoFrame.h; sourceTree = "<group>"; };
 		FDAF08E6160FA8EC0033CA4D /* MAW-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MAW-icon.icns"; sourceTree = "<group>"; };
+		FDAF08FA16110C900033CA4D /* XFader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XFader.h; sourceTree = "<group>"; };
 		FDAFA318160FA6DA0033CA4D /* alphanum.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = alphanum.hpp; sourceTree = "<group>"; };
 		FDAFA31F160FA6DA0033CA4D /* LayoutEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutEngine.h; sourceTree = "<group>"; };
 		FDAFA320160FA6DA0033CA4D /* LEFontInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEFontInstance.h; sourceTree = "<group>"; };
@@ -1281,6 +1282,7 @@
 				FDB70F7E15E9CCB200828562 /* EffectsManager.h */,
 				FDB70F7F15E9CCB200828562 /* AlphaMask.h */,
 				FDB70F8015E9CCB200828562 /* Curves.h */,
+				FDAF08FA16110C900033CA4D /* XFader.h */,
 			);
 			path = effects;
 			sourceTree = "<group>";
