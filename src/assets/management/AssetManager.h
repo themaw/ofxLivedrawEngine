@@ -72,7 +72,7 @@ protected:
     ofxLivedrawEngineInterface* engine;
 
     //--------------------------------------------------------------
-    bool hasAlias(const string& alias) const;
+    bool hasAsset(const string& alias) const;
     
     //--------------------------------------------------------------
     ImageAsset*         addImage(const string& name, const string& filename);
@@ -91,8 +91,8 @@ protected:
     BaseMediaAsset* getAsset(const string& alias) const;
 
     //--------------------------------------------------------------
-    bool queueUnregisterAsset(const string& alias);
-    bool queueUnregisterAsset(BaseMediaAsset* asset);
+    bool queueDestroyAsset(const string& alias);
+    bool queueDestroyAsset(BaseMediaAsset* asset);
     
     //--------------------------------------------------------------
     void cacheAsset(CacheableAsset* asset);
@@ -113,6 +113,7 @@ protected:
     int getTotalNumAssets(MediaAssetType assetType);
     int getNumAssetsInUnregisterQueue(MediaAssetType assetType);
     int getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset*> _assets);
+    int getNumAssetsInMap(MediaAssetType assetType, map<string,BaseMediaAsset*> _assets);
 
 	//  TODO: for file watchers	
 	//	void onNewAsset(MediaAsset* asset);
@@ -132,11 +133,10 @@ private:
 
     //set<BaseMediaAsset*> registerQueue; // items are scheduled for registration here.
     set<BaseMediaAsset*> unregisterQueue; // items are scheduled for removal here.
+    set<BaseMediaAsset*>::iterator queueIter;
     
-	set<BaseMediaAsset*> assets;   // this is the actual collection of assets that have been allocated
-	set<BaseMediaAsset*>::iterator assetsIter;   // this is the actual collection of assets that have been allocated
-    
-    map<string,BaseMediaAsset*> assetAliases;   // this is a mapping of names / aliases back to the asset itself
+    map<string,BaseMediaAsset*>::iterator it;
+    map<string,BaseMediaAsset*> assets;       // this is a mapping of names / aliases back to the asset itself
     
     
     set<CacheableAsset*> assetsBeingCached;   // this is the actual collection of assets that have been allocated

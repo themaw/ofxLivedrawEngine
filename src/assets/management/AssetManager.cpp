@@ -32,16 +32,6 @@ RegularExpression movieTypes(validMovieTypes,RegularExpression::RE_CASELESS);
 RegularExpression imageTypes(validImageTypes,RegularExpression::RE_CASELESS);
 RegularExpression otherTypes(validOtherTypes,RegularExpression::RE_CASELESS);
 
-bool isUndefinedAsset(BaseMediaAsset* m)    { return m->getAssetType() == MEDIA_ASSET_UNDEFINED; }
-bool isImageAsset(BaseMediaAsset* m)        { return m->getAssetType() == MEDIA_ASSET_IMAGE;     }
-bool isGrabberAsset(BaseMediaAsset* m)      { return m->getAssetType() == MEDIA_ASSET_GRABBER;   }
-bool isMovieAsset(BaseMediaAsset* m)        { return m->getAssetType() == MEDIA_ASSET_MOVIE;     }
-bool isStreamAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_STREAM;    }
-bool isBufferAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_BUFFER;    }
-bool isPlayerAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_PLAYER;    }
-bool isSyphonAsset(BaseMediaAsset* m)       { return m->getAssetType() == MEDIA_ASSET_SYPHON;    }
-
-
 ImageAsset*   toImageAsset(BaseMediaAsset* asset)   { return dynamic_cast<ImageAsset*>(asset);   }
 MovieAsset*   toMovieAsset(BaseMediaAsset* asset)   { return dynamic_cast<MovieAsset*>(asset);   }
 BufferAsset*  toBufferAsset(BaseMediaAsset* asset)  { return dynamic_cast<BufferAsset*>(asset);  }
@@ -111,6 +101,8 @@ void AssetManager::update() {
 //--------------------------------------------------------------
 void AssetManager::processOscCommand(const string& command, const ofxOscMessage& m) {
     
+    cout << "in here => " <<  command << endl;
+    
     if(isMatch(command,"new")) {
         // /livedraw/media/new player NAME
         // /livedraw/media/new buffer NAME [SIZE [TYPE]]
@@ -157,7 +149,7 @@ void AssetManager::processOscCommand(const string& command, const ofxOscMessage&
     } else if(isMatch(command,"delete")) {
         if(validateOscSignature("s", m)) {
             string alias = getArgAsStringUnchecked(m,0);
-            bool ret = queueUnregisterAsset(alias);
+            bool ret = queueDestroyAsset(alias);
             if(!ret) {
                 cout << "error deleting " << alias << endl; 
             }
@@ -238,17 +230,17 @@ void AssetManager::attachSourceToSink(const string& sourceAlias, const string& s
 }
 
 //--------------------------------------------------------------
-bool AssetManager::queueUnregisterAsset(const string& alias) {
+bool AssetManager::queueDestroyAsset(const string& alias) {
     BaseMediaAsset* toDelete = getAsset(alias);
     if(toDelete != NULL) {
-        return queueUnregisterAsset(toDelete);
+        return queueDestroyAsset(toDelete);
     } else {
         return false;   
     }
 }
 
 //--------------------------------------------------------------
-bool AssetManager::queueUnregisterAsset(BaseMediaAsset* asset) {
+bool AssetManager::queueDestroyAsset(BaseMediaAsset* asset) {
     asset->setNodeActive(false);
     return unregisterQueue.insert(asset).second;
 }
@@ -256,36 +248,43 @@ bool AssetManager::queueUnregisterAsset(BaseMediaAsset* asset) {
 //--------------------------------------------------------------
 bool AssetManager::registerAsset(BaseMediaAsset* asset) {
     
-    if(!hasAlias(asset->getName())) { // double check
-        assetAliases[asset->getName()] = asset;
+    if(asset == NULL) {
+        ofLogError("AssetManager") << "registerAsset - asset is NULL";
+        return false;
+    }
+    
+    string assetName = asset->getName();
+    
+    if(!hasAsset(assetName)) { // double check
+        assets[assetName] = asset;
+    
+        if(!addOscChild(asset)) {
+            ofLogError("AssetManager") << "registerAsset - failed to add as an osc child node";
+            queueDestroyAsset(asset);
+            return false;
+        }
+        
+        // turn it on
+        asset->setNodeActive(true);
+        
+        //    // special procedures
+        //    if(isMovieAsset(asset)) {
+        //        toMovieAsset(asset)->setCacheProvider(this);
+        //    }
+        //
+
+        return true;
     } else {
         ofLogError("AssetManager") << "registerAsset - alias already exists";
+        queueDestroyAsset(asset);
         return false;
     }
     
-    if(!addOscChild(asset)) {
-        ofLogError("AssetManager") << "registerAsset - failed to add as an osc child node";
-        return false;
-    }
-
-    // turn it on
-    asset->setNodeActive(true);
-
-    // add it to our collection
-    assets.insert(asset);
-    
-//    // special procedures
-//    if(isMovieAsset(asset)) {
-//        toMovieAsset(asset)->setCacheProvider(this);
-//    }
-//
-    return true;
 }
 
 //--------------------------------------------------------------
 bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
 
-    ofLogVerbose("AssetManager") << "unregisterAsset: " << asset->getName();
     
     // is there a there there?
     if(asset == NULL) {
@@ -293,7 +292,7 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
         return false;
     }
     
-    cout << "0. unregistering asset " << asset->getName() << endl;
+    ofLogVerbose("AssetManager") << "unregisterAsset: " << asset->getName();
 
     // tell the object to dispose of itself (free connections, kill other things, etc)
     if(!asset->dispose()) {
@@ -301,19 +300,17 @@ bool AssetManager::unregisterAsset(BaseMediaAsset* asset) {
         return false;
     }
 
-    // get rid of the alias
-    if(hasAlias(asset->getName())) { // double check
-        assetAliases.erase(asset->getName());
-    }
-    
     if(hasOscChild(asset) && !removeOscChild(asset)) {
         ofLogError("AssetManager") << "registerAsset: failed to remove as an osc child node";
         return false;
     }
     
-    // remove the asset pointer from the assets set
-    assets.erase(asset);
     
+    // get rid of the alias
+    if(hasAsset(asset->getName())) { // double check
+        assets.erase(asset->getName());
+    }
+        
     // free the memory
     delete asset; // free the memory
     asset = NULL;
@@ -361,7 +358,7 @@ void AssetManager::uncacheAsset(CacheableAsset* asset) {
         return;
     }
     
-    if(!queueUnregisterAsset(asset->getCacheBuffer())) {
+    if(!queueDestroyAsset(asset->getCacheBuffer())) {
         ofLogError("AssetManager") << "uncacheAsset: Unable to uncache buffer.";
         return;
     } else {
@@ -423,6 +420,7 @@ StreamAsset* AssetManager::addStream(const string& name, StreamType type, const 
 
 //--------------------------------------------------------------
 BufferAsset* AssetManager::addBuffer(const string& name, int size, ofxVideoBufferType t) {
+    cout << "Adding buffer" << endl;
     BufferAsset* asset = new BufferAsset(this, validateAssetId(name), size, t);
     registerAsset(asset);
     return asset;
@@ -448,8 +446,8 @@ SyphonAsset* AssetManager::addSyphon(const string& name) {
 }
 
 //--------------------------------------------------------------
-bool AssetManager::hasAlias(const string& alias) const {
-    return assetAliases.find(alias) != assetAliases.end();
+bool AssetManager::hasAsset(const string& alias) const {
+    return assets.find(alias) != assets.end();
 }
 
 //--------------------------------------------------------------
@@ -554,17 +552,17 @@ void AssetManager::loadStreamAssets(){
 			string type     = XML.getAttribute(tag,"type","",n);
 
             if(name.empty()) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load stream - empty name.");
+                ofLogWarning("AssetManager") << "loadFilesAssets() - Could not load stream - empty name.";
                 continue;
             }
 
             if(address.empty()) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load stream - empty address.");
+                ofLogWarning("AssetManager") << "loadFilesAssets() - Could not load stream - empty address.";
                 continue;
             }
             
             if(type.empty()) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load stream " + address + " type not specified.");
+                ofLogWarning("AssetManager") << "loadFilesAssets() - Could not load stream " << address << " type not specified.";
                 continue;
             }
             
@@ -577,7 +575,7 @@ void AssetManager::loadStreamAssets(){
             } else if(Poco::icompare(type, "qt") == 0) {
                 streamType = STREAM_TYPE_QT;
             } else {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load stream " + address + " type " + type + " unknown.");
+                ofLogWarning("AssetManager") << "loadFilesAssets() - Could not load stream " << address << " type " << type << " unknown.";
                 continue;
             }
             
@@ -589,7 +587,7 @@ void AssetManager::loadStreamAssets(){
             // TODO: URL support for username / password, type
             
             if(addStream(name, streamType, address,username,password) == NULL) {
-                ofLog(OF_LOG_WARNING, "AssetManager::loadFilesAssets() - Could not load stream :  " + address);
+                ofLogWarning("AssetManager") << "loadFilesAssets() - Could not load stream :  " << address;
             }
 
 		}
@@ -611,7 +609,7 @@ int AssetManager::getTotalNumAssets() {
 
 //--------------------------------------------------------------
 int AssetManager::getTotalNumAssets(MediaAssetType assetType) {
-    return getNumAssetsInSet(assetType, assets) -
+    return getNumAssetsInMap(assetType, assets) -
            getNumAssetsInUnregisterQueue(assetType);
 }
 
@@ -623,36 +621,30 @@ int AssetManager::getNumAssetsInUnregisterQueue(MediaAssetType assetType) {
 
 //--------------------------------------------------------------
 int AssetManager::getNumAssetsInSet(MediaAssetType assetType, set<BaseMediaAsset*> _assets) {
-    
-    switch (assetType) {
-        case MEDIA_ASSET_UNDEFINED:
-            return count_if(_assets.begin(), _assets.end(), isUndefinedAsset);
-        case MEDIA_ASSET_IMAGE:
-            return count_if(_assets.begin(), _assets.end(), isImageAsset);
-        case MEDIA_ASSET_MOVIE:
-            return count_if(_assets.begin(), _assets.end(), isMovieAsset);
-        case MEDIA_ASSET_GRABBER:
-            return count_if(_assets.begin(), _assets.end(), isGrabberAsset);
-        case MEDIA_ASSET_STREAM:
-            return count_if(_assets.begin(), _assets.end(), isStreamAsset);
-        case MEDIA_ASSET_BUFFER:
-            return count_if(_assets.begin(), _assets.end(), isBufferAsset);
-        case MEDIA_ASSET_PLAYER:
-            return count_if(_assets.begin(), _assets.end(), isPlayerAsset);
-        case MEDIA_ASSET_SYPHON:
-            return count_if(_assets.begin(), _assets.end(), isSyphonAsset);
-        default:
-            ofLog(OF_LOG_ERROR, "AssetManager::getNumAssetsInSet() - unknwon asset type " + ofToString(assetType));
-            return -1;
+    int num = 0;
+    for(queueIter = _assets.begin(); queueIter != _assets.end(); queueIter++) {
+        if((*queueIter)->getAssetType() == assetType) num++;
     }
+    return num;
+}
+
+//--------------------------------------------------------------
+int AssetManager::getNumAssetsInMap(MediaAssetType assetType, map<string,BaseMediaAsset*> _assets) {
+    int num = 0;
+    for(it = _assets.begin(); it != _assets.end(); it++) {
+        if((*it).second->getAssetType() == assetType) num++;
+    }
+    return num;
 }
 
 //--------------------------------------------------------------
 BaseMediaAsset* AssetManager::getAsset(const string& alias) const {
-    map<string,BaseMediaAsset*>::const_iterator iter = assetAliases.find(alias);
+    map<string,BaseMediaAsset*>::const_iterator const_it;
+
+    const_it = assets.find(alias);
     
-    if(iter!=assetAliases.end()) {
-        return iter->second;
+    if(const_it != assets.end()) {
+        return const_it->second;
     } else {
         return NULL;
     }
@@ -660,51 +652,50 @@ BaseMediaAsset* AssetManager::getAsset(const string& alias) const {
 
 //--------------------------------------------------------------
 void AssetManager::dump() {
-    for(assetsIter = assets.begin(); assetsIter != assets.end(); assetsIter++) {
-        ofLogNotice() << (*assetsIter)->toString() << endl;
+    for(it = assets.begin(); it != assets.end(); it++) {
+        ofLogNotice("AssetManager") << (*it).second->toString() << endl;
     }
 }
 
 //--------------------------------------------------------------
 string AssetManager::validateAssetId(const string& name) {
-    // get the original asset name
-    string assetName = name;
-    
     // get the normalized name for OSC purposes
-    string assetId = normalizeOscNodeName(assetName);
+    string normName = normalizeOscNodeName(name);
     
-    // if the alias exists, add an incremental
-    bool     foundIt = false;
-    int      maxSuffix = -1;
+    it = assets.find(normName);
     
-    // with the new natural ordering we probably don't need to
-    // go through all of the items, but rather reverse_iterator from the end
-    for(assetsIter=assets.begin();
-        assetsIter != assets.end();
-        assetsIter++) {
+    // if it needs a suffix, it will be added in here
+    if(it != assets.end()) {
+        int maxSuffix = -1;
         
-        string thisName = (*assetsIter)->getName();
-        if(isMatch(assetId,thisName.substr(0,assetId.length()))) {
-            if(thisName.length() > assetId.length()) {
-                string suffix = thisName.substr(assetId.length()+1);
-                string number = suffix.substr(suffix.find_first_of("0123456789"));
-                if(number.length() > 0) maxSuffix = MAX(maxSuffix,ofToInt(number));
+        // pick up where find left off
+        for (; it != assets.end(); it++ ) {
+            string thisName = (*it).second->getName();
+            if(isMatch(normName,thisName.substr(0,normName.length()))) {
+                // found prefix match
+                if(thisName.length() > normName.length()) {
+                    // this match has a suffix
+                    if(thisName[normName.length()] == '_') {
+                        string number = thisName.substr(normName.length() + 1);
+                        if(number.length() > 0) {
+                            maxSuffix = MAX(maxSuffix,ofToInt(number));
+                        }
+                    }
+                }
+            } else {
+                // there shouldn't be any more after this given our ordering
+                break;
             }
-            foundIt = true;
         }
-    }
-    
-    if(foundIt) {
-        assetId +=  ("_" + ofToString(maxSuffix + 1));
-    }
         
-    // toss a warning if the asset id differs from the asset's original name
-    if(!isMatch(assetName, assetId)) {
-        ofLog(OF_LOG_WARNING, "AssetManager::generateAssetId() - " + assetName + " produced variant : " + assetId + ".");
+        string newName = normName + '_' + ofToString(maxSuffix + 1);
+        ofLogWarning("LayerManager") << "generateAssetId(): " << name << " produced variant : " << newName << ".";
+        return newName;
+    } else {
+        // the normName was unique.
+        return normName;
     }
     
-    // return the generated asset id
-    return assetId;
 }
 
 //--------------------------------------------------------------
@@ -712,10 +703,10 @@ void AssetManager::processQueues() {
     
     // clear unregister queue
     if(!unregisterQueue.empty()) {
-        for(assetsIter = unregisterQueue.begin(); 
-            assetsIter != unregisterQueue.end(); 
-            assetsIter++) {
-            unregisterAsset(*assetsIter);
+        for(queueIter = unregisterQueue.begin(); 
+            queueIter != unregisterQueue.end(); 
+            queueIter++) {
+            unregisterAsset(*queueIter);
         }
         unregisterQueue.clear(); // done!
     }
@@ -726,10 +717,10 @@ void AssetManager::updateAssets() {
     
     // clear register queues
     if(!assets.empty()) {
-        for(assetsIter = assets.begin(); 
-            assetsIter != assets.end(); 
-            assetsIter++) {
-            (*assetsIter)->update();
+        for(it = assets.begin();
+            it != assets.end();
+            it++) {
+            (*it).second->update();
         }
     }
     

@@ -41,7 +41,7 @@ public:
     AssetManagerInterface() {}
     virtual ~AssetManagerInterface() {}
     
-    virtual bool hasAlias(const string& alias) const = 0;
+    virtual bool hasAsset(const string& alias) const = 0;
 
     virtual BaseMediaAsset* getAsset(const string& alias) const = 0;
     
