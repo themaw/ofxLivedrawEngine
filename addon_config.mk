@@ -12,7 +12,7 @@ common:
 	ADDON_DEPENDENCIES += ofxIpVideoGrabber
 	ADDON_DEPENDENCIES += ofxOsc
 	ADDON_DEPENDENCIES += ofxOscRouter
-	ADDON_DEPENDENCIES += ofxUnicode
+#	ADDON_DEPENDENCIES += ofxUnicode
 	ADDON_DEPENDENCIES += ofxUtils
 	ADDON_DEPENDENCIES += ofxVideoUtils
 	ADDON_DEPENDENCIES += ofxVideoBuffer
