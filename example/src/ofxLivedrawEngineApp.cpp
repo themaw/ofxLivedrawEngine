@@ -29,7 +29,9 @@ void ofxLivedrawEngineApp::setup(){
 	// main window setup
 	ofSetFrameRate(60);
 	ofBackground(0);
-	//ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
+//    ofLogToFile("ofxLivedrawLog.log");
+    
     livedraw.setup();
     
 }
@@ -55,7 +57,7 @@ void ofxLivedrawEngineApp::keyPressed (int key){
 //        LayerManager* man = livedraw.getLayerManager();
 //        man->dump();
     } else if(key == 's') {
-        int i = 0;
+//        int i = 0;
 //        string s = livedraw.getOscRouter()->schemaToString(i);
 //        cout << s << endl;
     }
