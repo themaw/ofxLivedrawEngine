@@ -32,7 +32,7 @@
 
 
 
-class LayerTransform : public ofxOscRouterNode, public ofxEnablerInterface {
+class LayerTransform : public ofxEnablerInterface, public ofxOscRouterNode {
 	
 public:
 	

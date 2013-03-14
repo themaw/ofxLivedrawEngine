@@ -28,7 +28,8 @@
 //--------------------------------------------------------------
 LayerTransform::LayerTransform() : 
 ofxEnablerInterface(true), 
-ofxOscRouterNode("transform") {
+ofxOscRouterNode("transform")
+{
     
     addOscNodeAlias("t");
     addOscNodeAlias("xform");
