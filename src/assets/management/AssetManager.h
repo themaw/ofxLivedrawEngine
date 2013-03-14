@@ -41,7 +41,7 @@
 #include "PlayerAsset.h"
 #include "GrabberAsset.h"
 #include "StreamAsset.h"
-#include "SyphonAsset.h"
+//#include "SyphonAsset.h"
 
 class AssetManager : public ofxOscRouterNode, 
                      public AssetManagerInterface
@@ -85,7 +85,7 @@ protected:
     BufferAsset*        addBuffer(const string& name, int size, ofxVideoBufferType t);
     PlayerAsset*        addPlayer(const string& name);
     GrabberAsset*       addGrabber(const string& name, int devId, int width, int height);
-    SyphonAsset*        addSyphon(const string& name);
+//    SyphonAsset*        addSyphon(const string& name);
     
     //--------------------------------------------------------------
     BaseMediaAsset* getAsset(const string& alias) const;
@@ -107,7 +107,7 @@ protected:
     void loadFilesAssets();
     void loadGrabberAssets(); 
     void loadStreamAssets();
-	void loadSyphonAssets();
+//	void loadSyphonAssets();
     
     int getTotalNumAssets();
     int getTotalNumAssets(MediaAssetType assetType);

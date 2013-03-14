@@ -40,7 +40,7 @@ PlayableAsset*  toPlayableAsset(BaseMediaAsset* asset)  { return dynamic_cast<Pl
 CacheableAsset*  toCacheableAsset(BaseMediaAsset* asset)  { return dynamic_cast<CacheableAsset*>(asset);  }
 GrabberAsset* toGrabberAsset(BaseMediaAsset* asset) { return dynamic_cast<GrabberAsset*>(asset); }
 StreamAsset*  toStreamAsset(BaseMediaAsset* asset)  { return dynamic_cast<StreamAsset*>(asset);  }
-SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<SyphonAsset*>(asset);  }
+//SyphonAsset*  toSyphonAsset(BaseMediaAsset* asset)  { return dynamic_cast<SyphonAsset*>(asset);  }
 
 
 //--------------------------------------------------------------
@@ -185,13 +185,13 @@ ofxVideoSourceInterface* AssetManager::getSourceAsset(const string& alias) const
 
     if(!sourceAsset->isSource()) {
         ofLogError("AssetManager") << "getSourceAsset: " << sourceAsset->getName() << " is not a source.";
-        return false;
+        return NULL;
     }
 
     ofxVideoSourceInterface* source = dynamic_cast<ofxVideoSourceInterface*>(sourceAsset);
     if(source == NULL) {
         ofLogError("AssetManager") << "getSourceAsset: " << sourceAsset->getName() + " could not be cast to source.";
-        return false;
+        return NULL;
     }
 
     return source;
@@ -208,13 +208,13 @@ ofxVideoSinkInterface* AssetManager::getSinkAsset(const string& alias) const {
     
     if(!sinkAsset->isSink()) {
         ofLogError("AssetManager") << "getSinkAsset: " << sinkAsset->getName() << " is not a source.";
-        return false;
+        return NULL;
     }
     
     ofxVideoSinkInterface* sink = dynamic_cast<ofxVideoSinkInterface*>(sinkAsset);
     if(sink == NULL) {
         ofLogError("AssetManager") << "getSinkAsset: " << sinkAsset->getName() + " could not be cast to source.";
-        return false;
+        return NULL;
     }
     
     return sink;
@@ -385,6 +385,9 @@ bool AssetManager::startAsset(const string& alias) {
 //        ofLog(OF_LOG_WARNING, "AssetManager::cacheAsset - Only live assets can be started " + alias);
 //        return false;
 //    }
+    
+    // TODO: nothin has happened here
+    return true;
 
 }
 
@@ -395,6 +398,8 @@ bool AssetManager::stopAsset(const string& alias) {
         ofLogWarning("AssetManager") << "stopAsset: Asset not found " << alias;
         return false;
     }
+    // TODO nothing has happened here
+    return true;
 }
 
 //--------------------------------------------------------------
@@ -440,10 +445,10 @@ GrabberAsset* AssetManager::addGrabber(const string& name, int devId, int width,
     return asset;
 }
 
-//--------------------------------------------------------------
-SyphonAsset* AssetManager::addSyphon(const string& name) {
-    return NULL;
-}
+////--------------------------------------------------------------
+//SyphonAsset* AssetManager::addSyphon(const string& name) {
+//    return NULL;
+//}
 
 //--------------------------------------------------------------
 bool AssetManager::hasAsset(const string& alias) const {
@@ -455,7 +460,7 @@ void AssetManager::loadAssets() {
 	loadFilesAssets();
     loadGrabberAssets();
     loadStreamAssets();
-    loadSyphonAssets();
+//    loadSyphonAssets();
 }
 
 //--------------------------------------------------------------
@@ -490,10 +495,10 @@ void AssetManager::loadFilesAssets() {
     ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_MOVIE) << " movies.";
 }
 
-//--------------------------------------------------------------
-void AssetManager::loadSyphonAssets() {
-    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_SYPHON) << " syphon sources.";
-}
+////--------------------------------------------------------------
+//void AssetManager::loadSyphonAssets() {
+//    ofLogNotice("AssetManager") << getTotalNumAssets(MEDIA_ASSET_SYPHON) << " syphon sources.";
+//}
 
 //--------------------------------------------------------------
 void AssetManager::loadGrabberAssets() {
