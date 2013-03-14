@@ -35,7 +35,7 @@ LayerSink::LayerSink(LayerManagerInterface* _lmi, const string& name) : ofxOscRo
     addOscMethod("stretchmode");
     addOscMethod("clipping");
     
-    scaleMode = OF_RECTSCALEMODE_FIT;
+    scaleMode = OF_SCALEMODE_FIT;
 //    scaleMode = FIT;
     
 }
@@ -63,16 +63,16 @@ void LayerSink::processOscCommand(const string& command, const ofxOscMessage& m)
         if(validateOscSignature("[s]", m)) {
             string mode = getArgAsStringUnchecked(m,0);
             if(isMatch(mode,"center")) {
-                setScaleMode(OF_RECTSCALEMODE_CENTER);
+                setScaleMode(OF_SCALEMODE_CENTER);
 //                setScaleMode(FIT);
             } else if(isMatch(mode,"fill")) {
-                setScaleMode(OF_RECTSCALEMODE_FILL);
+                setScaleMode(OF_SCALEMODE_FILL);
 //                setScaleMode(FILL);
             } else if(isMatch(mode,"fit")) {
-                setScaleMode(OF_RECTSCALEMODE_FIT);
+                setScaleMode(OF_SCALEMODE_FIT);
 //                setScaleMode(FIT);
             } else if(isMatch(mode,"stretch")) {
-                setScaleMode(OF_RECTSCALEMODE_STRETCH_TO_FILL);
+                setScaleMode(OF_SCALEMODE_STRETCH_TO_FILL);
 //                setScaleMode(STRETCH);
             } else {
                 ofLogWarning("LayerSink") << "Unknown scale mode " << mode << "." << endl;
@@ -88,6 +88,8 @@ void LayerSink::processOscCommand(const string& command, const ofxOscMessage& m)
 //--------------------------------------------------------------
 bool LayerSink::frameReceived(ofxSharedVideoFrame _frame) {
     frame = _frame;
+    // TODO
+    return true;
 }
 
 //--------------------------------------------------------------
@@ -148,11 +150,11 @@ void LayerSink::unsinkAsset() {
 //}
 
 //--------------------------------------------------------------
-void LayerSink::setScaleMode(ofRectScaleMode _scaleMode) {
+void LayerSink::setScaleMode(ofScaleMode _scaleMode) {
     scaleMode = _scaleMode;
 }
 
 //--------------------------------------------------------------
-ofRectScaleMode LayerSink::getScaleMode() const {
+ofScaleMode LayerSink::getScaleMode() const {
     return scaleMode;
 }

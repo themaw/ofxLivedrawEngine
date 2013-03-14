@@ -56,13 +56,13 @@ public:
 //    void setScaleMode(LayerStretchMode scaleMode);
 //    LayerStretchMode getScaleMode() const;
 
-    void setScaleMode(ofRectScaleMode scaleMode);
-    ofRectScaleMode getScaleMode() const;
+    void setScaleMode(ofScaleMode scaleMode);
+    ofScaleMode getScaleMode() const;
     
 protected:
   
 //    LayerStretchMode scaleMode;
-    ofRectScaleMode scaleMode;
+    ofScaleMode scaleMode;
     
     LayerManagerInterface* lmi;
     ofxSharedVideoFrame frame;
