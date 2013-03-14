@@ -1,4 +1,4 @@
-## Basic Livedraw Engine Concepts
+## Livedraw Engine Concepts
 
 ### Media
 * Media assets are loaded from a media folder, usually located in `data/media`.  * Video cameras are defined in a file called `grabbers.xml`.  In the future, these cameras will be available dynamically, rather than via the `xml` config.  This is due to a few limitations within openFrameworks.
@@ -9,17 +9,17 @@
 ### Assets
 * An asset is any item within the Livedraw Engine world that can _sink_ or _source_ or _is playable_ (see below).  Some asset types have multiple abilities.
 
-|Asset Type|Is Sink?|Is Source?|Is Playable?|Notes|
-|:-:|:-:|:-:|:-:|:--|
-|&nbsp;|*Can it receive and<br/> process shared frames?*|*Can this asset send<br/>shared frames?*|*Can this Asset Type be "Played"<br/>by a Player Asset*|&nbsp;|
-|**Image Asset**  |✔|✗|✔|An image asset is simply a single shared frame, usually loaded from disk.|
-|**Movie Asset**  |✗|✗|✔|A movie asset is a disk based asset that can be a source only when it is "played" with a player asset.|
-|**Grabber Asset**|✗|✔|✗|A grabber is a camera or frame grabber capable of providing "live" frames to a sink.|
-|**Streaming Asset** |✗|✔|✗|A streaming asset is like a grabber, but comes from a network source.|
-|**Syphon Asset** |✗|✔|✗|A Syphon asset is much like a grabber or a streaming asset.|
-|**Buffer Asset** |✔|✗|✔|A buffer asset is a collection of frames with a certain size and other properties.  It can _sink_ frames from any source (if it has room) and can only be a source if it is played with a _player asset_.|
-|**Player Asset** |✗|✔|✗|A player asset is a controllable source, but must "play" a playable asset in order to be a valid _source_.  If no playable asset is loaded, it will deliver blank frames to all attached _sinks_.|
-|**Layer Asset _(in progress)_**  |✔|✔|✗|A composition layer asset can _sink_ frames via its inputs and masks and can also become a _source_ for other _sinks_.  This allows for complex feedback and video effects.|
+|Asset Type|Is Sink?|Is Source?|Is Playable?|Is Cacheable?|Notes|
+|:-:|:-:|:-:|:-:|:-:|:--|
+|&nbsp;|*Can it receive and<br/> process shared frames?*|*Can this asset send<br/>shared frames?*|*Can this Asset Type be "Played"<br/>by a Player Asset*|*Can this Asset Type be "Cached"<br/> in a Read Only Buffer Asset?*|&nbsp;|
+|**Image Asset**  |✔|✗|✔|✗|An image asset is simply a single shared frame, usually loaded from disk.|
+|**Movie Asset**  |✗|✗|✔|✔|A movie asset is a disk based asset that can be a source only when it is "played" with a player asset.|
+|**Grabber Asset**|✗|✔|✗|✗|A grabber is a camera or frame grabber capable of providing "live" frames to a sink.|
+|**Streaming Asset** |✗|✔|✗|✗|A streaming asset is like a grabber, but comes from a network source.|
+|**Syphon Asset** |✗|✔|✗|✗|A Syphon asset is much like a grabber or a streaming asset.|
+|**Buffer Asset** |✔|✗|✔|✗|A buffer asset is a collection of frames with a certain size and other properties.  It can _sink_ frames from any source (if it has room) and can only be a source if it is played with a _player asset_.|
+|**Player Asset** |✗|✔|✗|✗|A player asset is a controllable source, but must "play" a playable asset in order to be a valid _source_.  If no playable asset is loaded, it will deliver blank frames to all attached _sinks_.|
+|**Layer Asset _(in progress)_**  |✔|✔|✗|✗|A composition layer asset can _sink_ frames via its inputs and masks and can also become a _source_ for other _sinks_.  This allows for complex feedback and video effects.|
 
 
 ### Naming
