@@ -24,19 +24,19 @@
 
 #pragma once
 
-#include "ofMain.h"
 #include "ofxLivedrawEngineInterface.h"
 #include "ofxOscRouterNode.h"
 #include "LayerManagerInterface.h"
 #include "Layer.h"
 
-#include "alphanum.hpp"
+// TODO
+//#include "alphanum.hpp"
 
-struct layerSetOrder {
-    bool operator()(const Layer* l0, const Layer* l1) const {
-        return doj::alphanum_comp(l0->getName(), l1->getName()) < 0;
-    }
-};
+//struct layerSetOrder {
+//    bool operator()(const Layer* l0, const Layer* l1) const {
+//        return doj::alphanum_comp(l0->getName(), l1->getName()) < 0;
+//    }
+//};
 
 class LayerManager : public ofxOscRouterNode,
                      public LayerManagerInterface
@@ -99,11 +99,11 @@ private:
     
     string validateAlias(const string& name);
     
-    set<Layer*,layerSetOrder> registerQueue; // items are scheduled for registration here.
-    set<Layer*,layerSetOrder> unregisterQueue; // items are scheduled for removal here.
+    set<Layer*/*,layerSetOrder*/> registerQueue; // items are scheduled for registration here.
+    set<Layer*/*,layerSetOrder*/> unregisterQueue; // items are scheduled for removal here.
 
-    map<string, Layer*, doj::alphanum_less<std::string> >::iterator it;
-    map<string, Layer*, doj::alphanum_less<std::string> > layers;
+    map<string, Layer*/*, doj::alphanum_less<std::string> */>::iterator it;
+    map<string, Layer*/*, doj::alphanum_less<std::string> */> layers;
     
     vector<Layer*>::iterator renderTreeIter;
     vector<Layer*> renderTree; // root layers in here

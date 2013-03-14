@@ -42,7 +42,7 @@
 
 #include "MaskedInput.h"
 
-#include "alphanum.hpp"
+//#include "alphanum.hpp"
 
 class Layer : public ofxOscRouterNode,
               //public ofxVideoSourceInterface,
@@ -72,7 +72,7 @@ public:
     void render();
     void draw();
     void drawInput(MaskedInput* input, float xfade);
-    void drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo, ofRectScaleMode layerStretchMode);
+    void drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo, ofScaleMode layerStretchMode);
 
 //    // player assets
 //    bool hasInputFrame(int index = 0) const;
@@ -105,10 +105,10 @@ public:
 
 	// settings
 	bool isSolo() const;
-	bool setSolo(bool _solo);
+	void setSolo(bool _solo);
 
 	bool isLocked() const;
-	bool setLocked(bool _locked);
+	void setLocked(bool _locked);
 	
     void onEnabled();
     void onDisabled();

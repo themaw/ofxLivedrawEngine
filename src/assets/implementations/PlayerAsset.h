@@ -70,9 +70,10 @@ public:
     
 protected:
     
-    bool isPlayingCached() {
-        
-    }
+//    bool isPlayingCached() {
+//        // TODO:
+//        return false;
+//    }
     
     PlayableAsset* currentAssetLink;
     

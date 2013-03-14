@@ -195,35 +195,48 @@ int  LayerManager::getLayerIndex(Layer* layer) {
 //--------------------------------------------------------------
 bool LayerManager::bringLayerForward(Layer* layer) {
     ofLogNotice("LayerManager") << "bringLayerForward() " << layer->getName() << endl;
+    // TODO
+    return false;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerBackward(Layer* layer) {
     ofLogNotice("LayerManager") << "sendLayerBackward() " << layer->getName() << endl;
+    // TODO
+    return false;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerToBack(Layer* layer) {
     ofLogNotice("LayerManager") << "sendLayerToBack() " << layer->getName() << endl;
+    // TODO
+    return false;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::bringLayerToFront(Layer* layer) {
     ofLogNotice("LayerManager") << "bringLayerToFront() " << layer->getName() << endl;
+    // TODO
+    return false;
 }
 
 //--------------------------------------------------------------
 bool LayerManager::sendLayerTo(Layer* layer, int targetLayerIndex) {
     ofLogNotice("LayerManager") << "sendLayerTo() " << layer->getName() << " to " << targetLayerIndex << endl;
+    // TODO
+    return false;
 }
 
 //--------------------------------------------------------------
 void LayerManager::setLayerSolo(Layer* layer, bool solo) {
     ofLogNotice("LayerManager") << "setLayerSolo() " << layer->getName() << " solo = " << solo << endl;
+    // TODO
 }
+
 //--------------------------------------------------------------
 void LayerManager::setLayerLock(Layer* layer, bool lock) {
     ofLogNotice("LayerManager") << "setLayerLock() " << layer->getName() << " lock =" << lock <<  endl;
+    // TODO
 }
 
 //--------------------------------------------------------------
@@ -311,7 +324,7 @@ bool LayerManager::unregisterLayer(Layer* layer) {
 //--------------------------------------------------------------
 void LayerManager::processQueues() {
     // clear register queues
-    set<Layer*,layerSetOrder>::iterator it;
+    set<Layer*/*,layerSetOrder*/>::iterator it;
 
     if(!registerQueue.empty()) {
         for(it = registerQueue.begin();

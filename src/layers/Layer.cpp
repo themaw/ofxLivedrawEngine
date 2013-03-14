@@ -223,7 +223,7 @@ void Layer::processOscCommand(const string& command, const ofxOscMessage& m) {
                     sendToBack();
                 }
             } else {
-                int targetLayer = getArgAsIntUnchecked(m,0);
+                //int targetLayer = getArgAsIntUnchecked(m,0);
                 // TODO::
                 // TODO::
             }
@@ -451,7 +451,7 @@ void Layer::draw() {
 }
 
 //--------------------------------------------------------------
-void Layer::drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo, ofRectScaleMode layerStretchMode) {
+void Layer::drawFrameIntoFbo(ofxSharedVideoFrame frame, ofPtr<ofFbo> fbo, ofScaleMode layerStretchMode) {
 //    cout << "drawing frame!" << frame->getWidth() << "/" << frame->getHeight() << endl;
     
     if(!frame->isAllocated()) {
@@ -558,12 +558,12 @@ LayerTransform& Layer::getTransformRef() { return transform; };
 //--------------------------------------------------------------
 bool Layer::isSolo() const {return solo;};
 //--------------------------------------------------------------
-bool Layer::setSolo(bool _solo) {solo = _solo;};
+void Layer::setSolo(bool _solo) {solo = _solo;};
 
 //--------------------------------------------------------------
 bool Layer::isLocked() const {return locked;};
 //--------------------------------------------------------------
-bool Layer::setLocked(bool _locked) {locked = _locked;};
+void Layer::setLocked(bool _locked) {locked = _locked;};
 
 
 //--------------------------------------------------------------
