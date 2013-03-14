@@ -38,7 +38,8 @@
 #include "EffectsManager.h"
 #include "SessionManager.h"
 
-class ofxLivedrawEngine : public ofxLivedrawEngineInterface {
+class ofxLivedrawEngine : public ofxLivedrawEngineInterface,
+                          public ofxOscRouterNode {
 public:
     
     ofxLivedrawEngine();
@@ -47,6 +48,8 @@ public:
     void setup();
     void update();
     void draw();
+    
+    void processOscCommand(const string& command, const ofxOscMessage& m);
     
     void windowResized(int w, int h);
     

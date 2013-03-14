@@ -25,7 +25,7 @@
 #include "ofxLivedrawEngine.h"
 
 //--------------------------------------------------------------
-ofxLivedrawEngine::ofxLivedrawEngine() {
+ofxLivedrawEngine::ofxLivedrawEngine() : ofxOscRouterNode("engine"){
 }
 
 //--------------------------------------------------------------
@@ -35,11 +35,17 @@ ofxLivedrawEngine::~ofxLivedrawEngine() {
 
 //--------------------------------------------------------------
 void ofxLivedrawEngine::setup() {
-    
+        
     oscRouter.setup("livedraw", OSC_PORT);
     oscRouter.addOscNodeAlias("l");
     oscRouter.addOscNodeAlias("ld");
 
+    addOscNodeAlias("e");
+    
+    this->dumpOscNodeNameAlisases();
+    
+    oscRouter.addOscChild(this);
+    
     assetManager.setEngineInterface(this);
     oscRouter.addOscChild(&assetManager);
     
@@ -97,6 +103,10 @@ void ofxLivedrawEngine::draw() {
     // draw gui here.
     // gui.draw();
 
+}
+
+void ofxLivedrawEngine::processOscCommand(const string& command, const ofxOscMessage& m) {
+    cout << "in engine - " << command << " message=" << m.getAddress() << endl;
 }
 
 //--------------------------------------------------------------
