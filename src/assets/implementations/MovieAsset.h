@@ -29,8 +29,8 @@
 #include "PlayableAsset.h"
 
 class MovieAsset : public virtual BaseMediaAsset,
-                   public virtual CacheableAsset,
-                   public virtual PlayableAsset
+                   public virtual PlayableAsset,
+                   public virtual CacheableAsset
 {
 public:
     MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename);

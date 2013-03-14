@@ -25,9 +25,13 @@
 #include "MovieAsset.h"
 
 //--------------------------------------------------------------
-MovieAsset::MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename) : BaseMediaAsset(man),CacheableAsset(man, _filename),
-                                                                       DiskBasedAsset(man, _filename),
-                                                                       PlayableAsset(man) {
+MovieAsset::MovieAsset(AssetManagerInterface* man, const string& _name, const string& _filename)
+:
+BaseMediaAsset(man),
+PlayableAsset(man),
+DiskBasedAsset(man, _filename),
+CacheableAsset(man, _filename)
+ {
     assetType = MEDIA_ASSET_MOVIE;
     addAlias(_name);
 }

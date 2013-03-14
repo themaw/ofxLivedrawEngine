@@ -124,6 +124,8 @@ bool BufferAsset::frameReceived(ofxSharedVideoFrame frame) {
     if(isSinking()) {
         buffer->bufferFrame(frame);
     }
+    // TODO
+    return true;
 }
 
 //--------------------------------------------------------------
@@ -138,7 +140,7 @@ CacheableAsset* BufferAsset::getCacheSource() {
 
 //--------------------------------------------------------------
 void BufferAsset::unlinkCacheSource() {
-    return cacheSource = NULL;
+    cacheSource = NULL;
 }
 
 //--------------------------------------------------------------

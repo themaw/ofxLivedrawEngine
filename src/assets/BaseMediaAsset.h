@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include "ofMain.h"
-
 #include "ofxOscRouterBaseNode.h"
 #include "AssetManagerInterface.h"
 #include "AssetMetaData.h"
